@@ -10,6 +10,8 @@ bookToc: true
 # bookSearchExclude: false
 ---
 
+# About
+
 ## Goals
 
 This is an open-source project for making, tracking and improving personal
