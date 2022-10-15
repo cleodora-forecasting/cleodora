@@ -16,11 +16,19 @@ Open a [ticket on
 GitHub](https://github.com/cleodora-forecasting/cleodora/issues) or [send an
 e-mail (info@cleodora.org)](mailto:info@cleodora.org).
 
-* Cleodora is for personal predictions, not for aggregating data of multiple people
-* Cleodora is for tracking your own performance and systematically improving it
-* With Manifold Markets your performance is hidden with all the other ways of
-  getting mana plus there is no easy way to measure whether you are improving
-  or which areas you need to work on
-* With Metaculus only certain kinds of general interest predictions are
-  allowed, not personal ones
-* Privacy is important so self-deployment is the default
+Cleodora is different from Manifold Markets because:
+
+* Running it locally on your computer will be the default and all forecasts are
+  private whereas, on Manifold everything is public
+* Cleodora is about your own forecasts, not other people's
+* You can directly measure the quality of your forecasts instead of only
+  indirectly via the amount of M$ (mana) you earn over time, meaning you can
+  better drill down where exactly you failed in specific instances
+
+Cleodora is different from Metaculus because:
+
+* Running it locally on your computer will be the default and all forecasts are
+  private, whereas on Metaculus everything is public
+* Cleodora is about your own forecasts, not other people's
+* You are able to make forecasts that are not of public interest, whereas on
+  Metaculus all forecasts are carefully curated
