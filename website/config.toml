@@ -5,3 +5,11 @@ title = 'Cleodora Forecasting'
 [module]
 [[module.imports]]
 path = 'github.com/alex-shpak/hugo-book'
+
+[params]
+  BookLogo = 'logo.png'
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
