@@ -48,8 +48,8 @@ On August 1st 2022 Mindy updates her forecast again:
 
 * Confidence: 30% → 85%
 * Reasoning: I am sure he will leave, just not completely sure whether it will
-  be before the end of the. The door to this office was not closed and I
-  overheard him talking with a competitor.
+  be before the end of the year. The door to this office was not closed and I
+  overheard him talking to a competitor.
 
 On November 4th 2022 Mindy resolves the forecast to "Yes":
 
@@ -68,5 +68,5 @@ Mindy analyzes how her Brier score evolved over time and sees that it tanked on
 June 30th. Reading her reasoning at the time she decides that she should not
 have adjusted down her prediction so strongly given the other evidence she had.
 Instead she should have adjusted to maybe 55%. In the future she will be more
-careful in such situations and in general will trust her gut feeling about
-people a little more, because she was right in her forecast after all.
+careful in such situations. In general will trust her gut feeling about people
+a little more, because she was right in her forecast after all.
