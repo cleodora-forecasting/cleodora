@@ -1,6 +1,6 @@
 ---
 title: "Comparison with other tools"
-weight: 1
+weight: 3
 # bookFlatSection: false
 # bookToc: true
 # bookHidden: false
