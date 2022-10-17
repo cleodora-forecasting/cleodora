@@ -68,5 +68,5 @@ Mindy analyzes how her Brier score evolved over time and sees that it tanked on
 June 30th. Reading her reasoning at the time she decides that she should not
 have adjusted down her prediction so strongly given the other evidence she had.
 Instead she should have adjusted to maybe 55%. In the future she will be more
-careful in such situations. In general will trust her gut feeling about people
-a little more, because she was right in her forecast after all.
+careful in such situations. In general she will trust her gut feeling about
+people a little more, because she was right in her forecast after all.
