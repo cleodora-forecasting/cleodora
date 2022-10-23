@@ -12,3 +12,12 @@ Examples of such forecasts:
 
 All information, including development guidelines, requirements and roadmap can
 be found on the website https://cleodora.org .
+
+# Run
+
+```bash
+cd frontend
+npm run build
+cd ..
+go run main.go
+```
