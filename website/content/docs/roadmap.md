@@ -21,23 +21,23 @@ e-mail (info@cleodora.org)](mailto:info@cleodora.org).
 The MVP (Minimal Viable Product) must implement the following features.
 
 * Web-based
-* Make binary (yes/no) predictions (title, description, probability of being
-  true 0 - 100, datetime, reason for probability, resolution date)
-* Edit question. Modify prediction title, description and resolution date
+* Make binary (yes/no) forecasts (title, description, probability of being
+  true 0 - 100, datetime, reason for probability, closing date)
+* Edit forecast. Modify title, description and closing date
 * Update prediction. Allow modifying the probability 0 - 100 and attach a
   datetime to it. Add a reason for that probability.
-* Allow viewing the history of probabilities for a prediction, including
+* Allow viewing the history of probabilities for a forecast, including
   datetimes and the reason given at the time.
-* Allow resolving a prediction as true, false or N/A. Add a comment when
+* Allow resolving a forecast as true, false or N/A. Add a comment when
   resolving.
-* Calculate the Brier score for every probability of a prediction in the past
-* Calculate the avg Brier score for the entire prediction
-* Calculate the avg Brier score across all predictions
+* Calculate the Brier score for every probability of a forecast in the past
+* Calculate the avg Brier score for the entire forecast
+* Calculate the avg Brier score across all forecasts
 * For personal usage at home
 * Single binary, easy deployment cross platform desktop/server
 * High degree of test automation and good documentation to make future
   development easy for busy and lazy people like myself
-* Have an overview page with all predictions.
+* Have an overview page with all forecasts.
 	* Sortable by:
 		* Last prediction update
 		* Creation date
@@ -49,7 +49,7 @@ The MVP (Minimal Viable Product) must implement the following features.
 		* Resolution
 * Display some statistics, possibly on the home page:
 	* Current average Brier score and evolution over time
-	* Predictions added over time
+	* Forecasts added over time
 	* Number of updates over time
 
 
