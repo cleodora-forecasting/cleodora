@@ -12,6 +12,7 @@ var embeddedFiles embed.FS
 
 func main() {
 	fmt.Println("Starting Server")
+	http.HandleFunc("/api/", apiHandler)
 	http.Handle("/", http.FileServer(getFileSystem()))
 	http.ListenAndServe(":8080", nil)
 }
@@ -27,4 +28,8 @@ func getFileSystem() http.FileSystem {
 	}
 
 	return http.FS(fsys)
+}
+
+func apiHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello World!")
 }
