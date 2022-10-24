@@ -1,5 +1,7 @@
 # Cleodora Forecasting
 
+<img align="left" src="./logo_full.png">
+
 Software to track personal forecasts/predictions and systematically improve at
 making them.
 

@@ -13,7 +13,7 @@ bookToc: true
 
 # About
 
-<img align="right" src="/logo_whole.png">
+<img align="right" src="/logo_full.png">
 
 Cleodora is an **open source** piece of software that does not exist yet. I am
 looking for people to **collaborate** in creating it.
