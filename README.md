@@ -15,9 +15,17 @@ be found on the website https://cleodora.org .
 
 # Run
 
+Without embedded frontend:
+
+```bash
+go run .
+```
+
+With statically embedded frontend:
+
 ```bash
 cd frontend
 npm run build
 cd ..
-go run main.go
+go run -tags frontend .
 ```

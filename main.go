@@ -1,33 +1,15 @@
 package main
 
 import (
-	"embed"
 	"fmt"
-	"io/fs"
 	"net/http"
 )
 
-//go:embed frontend/build
-var embeddedFiles embed.FS
-
 func main() {
-	fmt.Println("Starting Server")
+    fmt.Println("Starting Server http://localhost:8080")
 	http.HandleFunc("/api/", apiHandler)
-	http.Handle("/", http.FileServer(getFileSystem()))
+    serveFrontend()
 	http.ListenAndServe(":8080", nil)
-}
-
-func getFileSystem() http.FileSystem {
-
-    // Get the build subdirectory as the
-    // root directory so that it can be passed
-    // to the http.FileServer
-	fsys, err := fs.Sub(embeddedFiles, "frontend/build")
-	if err != nil {
-		panic(err)
-	}
-
-	return http.FS(fsys)
 }
 
 func apiHandler(w http.ResponseWriter, r *http.Request) {
