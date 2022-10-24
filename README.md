@@ -31,3 +31,9 @@ npm run build
 cd ..
 go run -tags frontend .
 ```
+
+# Build
+
+```bash
+make build
+```

@@ -5,13 +5,18 @@ import (
 	"net/http"
 )
 
+var VERSION = "dev"
+
 func main() {
-    fmt.Println("Starting Server http://localhost:8080")
+	fmt.Printf(
+		"Starting Cleodora (version: %s) http://localhost:8080\n",
+		VERSION,
+	)
 	http.HandleFunc("/api/", apiHandler)
-    serveFrontend()
+	serveFrontend()
 	http.ListenAndServe(":8080", nil)
 }
 
 func apiHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World!")
+    fmt.Fprintf(w, "Cleodora (version: %s)", VERSION)
 }
