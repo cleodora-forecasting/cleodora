@@ -11,7 +11,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client
 reportWebVitals();
 
 const client = new ApolloClient({
-  uri: 'https://flyby-gateway.herokuapp.com/',
+  uri: 'http://localhost:8080/query',
   cache: new InMemoryCache(),
 });
 
