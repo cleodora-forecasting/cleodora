@@ -2,20 +2,7 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
-}
-
-type User {
-  id: ID!
-  name: String!
-}
-
 type Query {
-  todos: [Todo!]!
   forecasts: [Forecast!]!
 }
 
@@ -27,11 +14,6 @@ type Forecast {
   closes: Time!
 }
 
-input NewTodo {
-  text: String!
-  userId: String!
-}
-
 input NewForecast {
   summary: String!
   description: String!
@@ -39,7 +21,6 @@ input NewForecast {
 }
 
 type Mutation {
-  createTodo(input: NewTodo!): Todo!
   createForecast(input: NewForecast!): Forecast!
 }
 
