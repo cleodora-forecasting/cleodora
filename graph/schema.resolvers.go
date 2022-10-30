@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"math/rand"
+	"time"
 
 	"github.com/cleodora-forecasting/cleodora/graph/generated"
 	"github.com/cleodora-forecasting/cleodora/graph/model"
@@ -24,9 +25,27 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 	return todo, nil
 }
 
+// CreateForecast is the resolver for the createForecast field.
+func (r *mutationResolver) CreateForecast(ctx context.Context, input model.NewForecast) (*model.Forecast, error) {
+	forecast := &model.Forecast{
+		ID:          fmt.Sprintf("T%d", rand.Int()),
+		Summary:     input.Summary,
+		Description: input.Description,
+		Closes:      input.Closes,
+		Created:     time.Now(),
+	}
+	r.forecasts = append(r.forecasts, forecast)
+	return forecast, nil
+}
+
 // Todos is the resolver for the todos field.
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	return r.todos, nil
+}
+
+// Forecasts is the resolver for the forecasts field.
+func (r *queryResolver) Forecasts(ctx context.Context) ([]*model.Forecast, error) {
+	return r.forecasts, nil
 }
 
 // User is the resolver for the user field.

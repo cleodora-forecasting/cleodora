@@ -2,6 +2,24 @@
 
 package model
 
+import (
+	"time"
+)
+
+type Forecast struct {
+	ID          string    `json:"id"`
+	Summary     string    `json:"summary"`
+	Description string    `json:"description"`
+	Created     time.Time `json:"created"`
+	Closes      time.Time `json:"closes"`
+}
+
+type NewForecast struct {
+	Summary     string    `json:"summary"`
+	Description string    `json:"description"`
+	Closes      time.Time `json:"closes"`
+}
+
 type NewTodo struct {
 	Text   string `json:"text"`
 	UserID string `json:"userId"`

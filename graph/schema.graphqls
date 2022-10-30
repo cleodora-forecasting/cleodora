@@ -16,6 +16,15 @@ type User {
 
 type Query {
   todos: [Todo!]!
+  forecasts: [Forecast!]!
+}
+
+type Forecast {
+  id: ID!
+  summary: String!
+  description: String!
+  created: Time!
+  closes: Time!
 }
 
 input NewTodo {
@@ -23,6 +32,15 @@ input NewTodo {
   userId: String!
 }
 
+input NewForecast {
+  summary: String!
+  description: String!
+  closes: Time!
+}
+
 type Mutation {
   createTodo(input: NewTodo!): Todo!
+  createForecast(input: NewForecast!): Forecast!
 }
+
+scalar Time
