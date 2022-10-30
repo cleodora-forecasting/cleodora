@@ -2,7 +2,11 @@ package graph
 
 //go:generate go run github.com/99designs/gqlgen generate
 
-import "github.com/cleodora-forecasting/cleodora/graph/model"
+import (
+	"time"
+
+	"github.com/cleodora-forecasting/cleodora/graph/model"
+)
 
 // This file will not be regenerated automatically.
 //
@@ -10,4 +14,51 @@ import "github.com/cleodora-forecasting/cleodora/graph/model"
 
 type Resolver struct {
 	forecasts []*model.Forecast
+}
+
+func (r *Resolver) AddDummyData() {
+	r.forecasts = append(
+		r.forecasts,
+		&model.Forecast{
+			ID:          "1",
+			Summary:     "Will \"The Fabelmans\" win \"Best Picture\" at the Oscars 2023?",
+			Description: "",
+			Created:     time.Now(),
+			Closes: timeParseOrPanic(
+				time.RFC3339,
+				"2023-03-11T23:59:00+00:00",
+			),
+		},
+		&model.Forecast{
+			ID:      "2",
+			Summary: "Will I get an A in my upcoming exam?",
+			Description: "The forecast resolves as true if and only if I get" +
+				" the highest marks.",
+			Created: time.Now(),
+			Closes: timeParseOrPanic(
+				time.RFC3339,
+				"2022-11-11T23:59:00+00:00",
+			),
+		},
+		&model.Forecast{
+			ID:      "3",
+			Summary: "Will the number of contributors for \"Cleodora\" be more than 3 at the end of 2022?",
+			Description: "A contributor is any person who has made a commit" +
+				" in any Git repository of the cleodora-forecasting GitHub" +
+				" organization.",
+			Created: time.Now(),
+			Closes: timeParseOrPanic(
+				time.RFC3339,
+				"2022-12-31T23:59:00+00:00",
+			),
+		},
+	)
+}
+
+func timeParseOrPanic(layout string, value string) time.Time {
+	t, err := time.Parse(layout, value)
+	if err != nil {
+		panic(err)
+	}
+	return t
 }
