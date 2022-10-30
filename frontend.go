@@ -7,14 +7,16 @@ import (
 	"fmt"
 	"io/fs"
 	"net/http"
+
+	"github.com/go-chi/chi"
 )
 
 //go:embed frontend/build
 var embeddedFiles embed.FS
 
-func serveFrontend() {
+func serveFrontend(router chi.Router) {
 	fmt.Println("Serving with frontend")
-	http.Handle("/", http.FileServer(getFileSystem()))
+	router.Handle("/", http.FileServer(getFileSystem()))
 }
 
 func getFileSystem() http.FileSystem {

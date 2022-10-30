@@ -5,11 +5,13 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/go-chi/chi"
 )
 
-func serveFrontend() {
+func serveFrontend(router chi.Router) {
 	fmt.Println("Serving without frontend")
-	http.HandleFunc("/", dummyFrontendHandler)
+	router.HandleFunc("/", dummyFrontendHandler)
 }
 
 func dummyFrontendHandler(w http.ResponseWriter, r *http.Request) {

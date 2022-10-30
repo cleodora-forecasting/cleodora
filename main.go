@@ -60,7 +60,7 @@ func main() {
 	)
 	router.Handle("/query", srv)
 
-	serveFrontend() // does this still work?
+	serveFrontend(router)
 
 	http.ListenAndServe(":8080", router)
 }
