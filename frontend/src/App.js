@@ -19,18 +19,37 @@ function DisplayForecasts() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-  return data.forecasts.map(({ id, summary, description, created, closes }) => (
-      <div key={id}>
-        <h3>{summary}</h3>
-        <p>{description}</p>
-      </div>
-  ));
+  return (
+      <table>
+          <thead>
+          <tr>
+              <th>ID</th>
+              <th>Summary</th>
+              <th>Description</th>
+              <th>Created</th>
+              <th>Closes</th>
+          </tr>
+          </thead>
+          <tbody>
+          {
+              data.forecasts.map(({ id, summary, description, created, closes }) => (
+                  <tr key={id}>
+                      <td>{id}</td>
+                      <td>{summary}</td>
+                      <td>{description}</td>
+                      <td>{created}</td>
+                      <td>{closes}</td>
+                  </tr>
+              ))
+          }
+          </tbody>
+      </table>);
 }
 
 export default function App() {
   return (
       <div>
-        <h2>My first Apollo app 🚀</h2>
+        <h2>Cleodora</h2>
         <br/>
         <DisplayForecasts />
       </div>
