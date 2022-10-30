@@ -37,3 +37,38 @@ go run -tags frontend .
 ```bash
 make build
 ```
+
+# Playing around
+
+One console:
+```bash
+go run .
+```
+
+Another console:
+```bash
+cd frontend
+npm start
+```
+
+Open http://localhost:8080/playground/ in a browser and create some forecasts:
+
+```graphql
+mutation createForecast {
+  createForecast(
+    input: {
+        summary: "Will Fabelmans win?",
+        description: "Oscars 2023",
+        closes: "2023-03-01T12:00:00+01:00",
+    }
+  ) {
+    id
+    summary
+    description
+    created
+    closes
+  }
+}
+```
+
+Open http://localhost:3000 in a browser and see the list of forecasts.
