@@ -27,7 +27,11 @@ func main() {
 	// Add CORS middleware around every request
 	// See https://github.com/rs/cors for full option listing
 	router.Use(cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedOrigins: []string{
+			"http://localhost:3000",
+			"http://localhost:8080",
+		},
+		AllowedHeaders:   []string{"*"},
 		AllowCredentials: true,
 		Debug:            true,
 	}).Handler)
@@ -40,6 +44,8 @@ func main() {
 	)
 	srv.AddTransport(&transport.Websocket{
 		Upgrader: websocket.Upgrader{
+			// TODO it's unclear what the purpose of this is and whether it's
+			// correct
 			CheckOrigin: func(r *http.Request) bool {
 				// Check against your desired domains here
 				return r.Host == "localhost:3000"
