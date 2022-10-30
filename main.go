@@ -60,6 +60,9 @@ func main() {
 	)
 	router.Handle("/query", srv)
 
+	// TODO it's not working when building and running the app alone,
+	// the frontend appears empty. It seems the .
+	//js file has the wrong MIME type and the browser blocks it or something...
 	serveFrontend(router)
 
 	http.ListenAndServe(":8080", router)
