@@ -8,6 +8,7 @@ path = 'github.com/alex-shpak/hugo-book'
 
 [params]
   BookLogo = 'logo.png'
+  images = ['/logo_full.png']
 
 [markup]
   [markup.goldmark]
