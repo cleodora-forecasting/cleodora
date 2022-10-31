@@ -54,5 +54,8 @@ them.
 Read some more detailed [examples how to use Cleodora]({{< ref "use-cases"
 >}}), [how to contribute]({{< ref "contributing" >}}), the [development
 guidelines]({{< ref "dev-guidelines" >}}) and [technology]({{< ref "technology"
->}}) used, the [roadmap]({{< ref "roadmap" >}}) or how Cleodora [compares to
+>}}) used, the [roadmap]({{< ref "roadmap" >}}), some [mockups]({{< ref
+"mockups" >}}) or how Cleodora [compares to
 other tools]({{< ref "comparison" >}}).
+
+[Find us on GitHub](https://github.com/cleodora-forecasting/cleodora).
