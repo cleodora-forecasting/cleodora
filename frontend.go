@@ -16,7 +16,7 @@ var embeddedFiles embed.FS
 
 func serveFrontend(router chi.Router) {
 	fmt.Println("Serving with frontend")
-	router.Handle("/", http.FileServer(getFileSystem()))
+	router.Handle("/*", http.FileServer(getFileSystem()))
 }
 
 func getFileSystem() http.FileSystem {
