@@ -1,15 +1,15 @@
 tasks:
-  - name: Backend
+  - name: Backend Console
     init: go get
     command: go run .
-  - name: Frontend
+  - name: Frontend Console
     init: cd frontend && npm install
-    command: cd frontend && npm start
+    command: npm start
 
 ports:
-  - port: 3000
-    onOpen: open-preview
-    name: Frontend
-  - port: 8080
-    onOpen: open-preview
-    name: Backend
+  - name: Frontend
+    port: 3000
+    onOpen: open-browser
+  - name: Backend
+    port: 8080
+    onOpen: open-browser
