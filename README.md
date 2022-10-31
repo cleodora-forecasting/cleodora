@@ -17,6 +17,13 @@ be found on the website https://cleodora.org .
 
 # Dev Setup
 
+<a href="https://gitpod.io/#https://github.com/cleodora-forecasting/cleodora">
+  <img
+    src="https://img.shields.io/badge/Contribute%20with-Gitpod-908a85?logo=gitpod"
+    alt="Contribute with Gitpod"
+  />
+</a>
+
 * [Install Go](https://go.dev/doc/install) 1.18 or higher
 * [Install npm](https://nodejs.org/en/download/) v16.18.0 or higher
 
