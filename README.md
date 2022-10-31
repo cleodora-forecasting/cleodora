@@ -15,6 +15,19 @@ Examples of such forecasts:
 All information, including development guidelines, requirements and roadmap can
 be found on the website https://cleodora.org .
 
+# Dev Setup
+
+* [Install Go](https://go.dev/doc/install) 1.18 or higher
+* [Install npm](https://nodejs.org/en/download/) v16.18.0 or higher
+
+```bash
+git clone https://github.com/cleodora-forecasting/cleodora
+cd cleodora
+go get
+cd frontend
+npm install
+```
+
 # Run
 
 Without embedded frontend:
@@ -37,6 +50,9 @@ go run -tags frontend .
 ```bash
 make build
 ```
+
+You can find the binary containing everything under `build/cleodora` . Run it
+and access http://localhost:8080 in the browser.
 
 # Playing around
 
