@@ -1,0 +1,15 @@
+tasks:
+  - name: Backend
+    init: go get
+    command: go run .
+  - name: Frontend
+    init: cd frontend && npm install
+    command: cd frontend && npm start
+
+ports:
+  - port: 3000
+    onOpen: open-preview
+    name: Frontend
+  - port: 8080
+    onOpen: open-preview
+    name: Backend
