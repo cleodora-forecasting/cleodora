@@ -97,3 +97,19 @@ mutation createForecast {
 ```
 
 Open http://localhost:3000 in a browser and see the list of forecasts.
+
+# Tests
+
+## Setup
+
+```bash
+sudo apt install firefox-geckodriver
+```
+
+## Execution
+
+```bash
+cd e2e_tests
+npm install
+node_modules/.bin/mocha --timeout 15000 defaultSeleniumTest.spec.js
+```
