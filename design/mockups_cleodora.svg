@@ -1,0 +1,1302 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2 (1:1.2.1+202207142221+cd75a1ee6d)"
+   sodipodi:docname="mockups_cleodora.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="true"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#ffffff"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.125"
+     inkscape:cx="3036"
+     inkscape:cy="836"
+     inkscape:window-width="1856"
+     inkscape:window-height="1016"
+     inkscape:window-x="1144"
+     inkscape:window-y="867"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     showborder="false"
+     borderlayer="true"
+     showguides="true" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Export"
+     sodipodi:insensitive="true">
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:0.465;stroke-linecap:round;stop-color:#000000"
+       id="rect6102"
+       width="345.54291"
+       height="493.59396"
+       x="-83.819351"
+       y="15.772927"
+       inkscape:label="new-forecast" />
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:0.465;stroke-linecap:round;stop-color:#000000"
+       id="rect6104"
+       width="329.73303"
+       height="327.55905"
+       x="275.32413"
+       y="17.532675"
+       inkscape:label="update-probability" />
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:0.465;stroke-linecap:round;stop-color:#000000"
+       id="rect6106"
+       width="338.46771"
+       height="287.60419"
+       x="656.01227"
+       y="12.533708"
+       inkscape:label="edit-forecast" />
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:0.465;stroke-linecap:round;stop-color:#000000"
+       id="rect6108"
+       width="326.2236"
+       height="480.7644"
+       x="1115.0861"
+       y="-1.748589"
+       inkscape:label="history" />
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:0.465;stroke-linecap:round;stop-color:#000000"
+       id="rect1662"
+       width="329.73303"
+       height="287.96518"
+       x="275.32413"
+       y="529.89337"
+       inkscape:label="resolve-forecast" />
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:0.465;stroke-linecap:round;stop-color:#000000"
+       id="rect2829"
+       width="326.2236"
+       height="504.89609"
+       x="1601.7153"
+       y="-1.748589"
+       inkscape:label="history-resolved" />
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:0.465;stroke-linecap:round;stop-color:#000000"
+       id="rect7858"
+       width="620.96729"
+       height="504.89609"
+       x="2045.8098"
+       y="-1.748589"
+       inkscape:label="list" />
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="-60.658993"
+       y="86.165535"
+       id="text184"><tspan
+         sodipodi:role="line"
+         id="tspan182"
+         style="stroke-width:0.264583"
+         x="-60.658993"
+         y="86.165535">Summary</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="-60.97649"
+       y="129.51569"
+       id="text188"><tspan
+         sodipodi:role="line"
+         id="tspan186"
+         style="stroke-width:0.264583"
+         x="-60.97649"
+         y="129.51569">Description</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="-60.97649"
+       y="334.86417"
+       id="text192"><tspan
+         sodipodi:role="line"
+         id="tspan190"
+         style="stroke-width:0.264583"
+         x="-60.97649"
+         y="334.86417">Reasoning</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="-60.97649"
+       y="283.23663"
+       id="text362"><tspan
+         sodipodi:role="line"
+         id="tspan360"
+         style="stroke-width:0.264583"
+         x="-60.97649"
+         y="283.23663">Probability</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16.9333px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="-61.154289"
+       y="47.838989"
+       id="text366"><tspan
+         sodipodi:role="line"
+         id="tspan364"
+         style="font-size:16.9333px;stroke-width:0.264583"
+         x="-61.154289"
+         y="47.838989">New forecast</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16.9333px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="290.45325"
+       y="49.488995"
+       id="text2908"><tspan
+         sodipodi:role="line"
+         id="tspan2906"
+         style="font-size:16.9333px;stroke-width:0.264583"
+         x="290.45325"
+         y="49.488995">Update probability</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="-60.97649"
+       y="224.64833"
+       id="text2989"><tspan
+         sodipodi:role="line"
+         id="tspan2987"
+         style="stroke-width:0.264583"
+         x="-60.97649"
+         y="224.64833">Closing date</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16.9333px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1139.9425"
+       y="37.785007"
+       id="text3249"><tspan
+         sodipodi:role="line"
+         id="tspan3247"
+         style="font-size:16.9333px;stroke-width:0.264583"
+         x="1139.9425"
+         y="37.785007">History</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1269.9912"
+       y="226.86226"
+       id="text3257"><tspan
+         sodipodi:role="line"
+         id="tspan3255"
+         style="stroke-width:0.264583"
+         x="1269.9912"
+         y="226.86226">Time</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="-175.96127"
+       y="1144.6555"
+       id="text3261"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         id="tspan3259"
+         style="stroke-width:0.264583"
+         x="-175.96127"
+         y="1144.6555">Probability</tspan></text>
+    <g
+       id="g10600"
+       transform="translate(1.4101563)">
+      <rect
+         style="fill:#ececec;stroke:#000000;stroke-width:0.465001;stroke-linecap:round"
+         id="rect3923"
+         width="256.84427"
+         height="75.063148"
+         x="1151.7382"
+         y="310.49292" />
+      <text
+         xml:space="preserve"
+         style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="1163.7808"
+         y="254.78444"
+         id="text3341"><tspan
+           sodipodi:role="line"
+           id="tspan3339"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.46667px;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP Bold';stroke-width:0.264583"
+           x="1163.7808"
+           y="254.78444">13. May 2022 10:03 am</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="1163.9755"
+         y="272.56134"
+         id="text3423"><tspan
+           sodipodi:role="line"
+           id="tspan3756"
+           x="1163.9755"
+           y="272.56134">30% → 35%</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;white-space:pre;inline-size:251.592;display:inline;stroke-width:0.264583"
+         x="1189.9125"
+         y="307.53601"
+         id="text3427"
+         transform="translate(-25.51328,-18.781321)"><tspan
+           x="1189.9125"
+           y="307.53601"
+           id="tspan1433">An article was published in the NYT that supported the </tspan><tspan
+           x="1189.9125"
+           y="318.11935"
+           id="tspan1435">prediction.</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="1163.6802"
+         y="329.4451"
+         id="text3611"><tspan
+           sodipodi:role="line"
+           id="tspan3609"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.46667px;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP Bold';stroke-width:0.264583"
+           x="1163.6802"
+           y="329.4451">14. May 2022 2:03 pm</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="1163.8749"
+         y="347.22202"
+         id="text3615"><tspan
+           sodipodi:role="line"
+           id="tspan3613"
+           style="stroke-width:0.264583"
+           x="1163.8749"
+           y="347.22202">35% → 36%</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;white-space:pre;inline-size:232.77;display:inline;stroke-width:0.264583"
+         x="1189.9125"
+         y="307.53601"
+         id="text3619"
+         transform="translate(-25.613849,55.879347)"><tspan
+           x="1189.9125"
+           y="307.53601"
+           id="tspan1437">I simply had a gut feeling that the probability was too </tspan><tspan
+           x="1189.9125"
+           y="318.11935"
+           id="tspan1439">low.</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="1164.2837"
+         y="404.1058"
+         id="text3625"><tspan
+           sodipodi:role="line"
+           id="tspan3623"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.46667px;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP Bold';stroke-width:0.264583"
+           x="1164.2837"
+           y="404.1058">20. May 2022 8:05 am</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="1164.4784"
+         y="421.88272"
+         id="text3629"><tspan
+           sodipodi:role="line"
+           id="tspan3627"
+           style="stroke-width:0.264583"
+           x="1164.4784"
+           y="421.88272">36% → 25%</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;white-space:pre;inline-size:231.508;display:inline;stroke-width:0.264583"
+         x="1189.9125"
+         y="307.53601"
+         id="text3633"
+         transform="translate(-25.01032,130.54005)"><tspan
+           x="1189.9125"
+           y="307.53601"
+           id="tspan1441">The report published by the NASA disproves the </tspan><tspan
+           x="1189.9125"
+           y="318.11935"
+           id="tspan1443">hypothesis put forward by Dr. Reeper.</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1174.9714"
+       y="372.397"
+       id="text3639"><tspan
+         sodipodi:role="line"
+         id="tspan3637"
+         style="stroke-width:0.264583" /></text>
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#000000;stroke-width:0.963999;stroke-linecap:round;stroke-opacity:1;stop-color:#000000"
+       id="rect1594"
+       width="191.95392"
+       height="27.721756"
+       x="27.774036"
+       y="68.108376" />
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#000000;stroke-width:0.964;stroke-linecap:round;stroke-opacity:1;stop-color:#000000"
+       id="rect1596"
+       width="191.95392"
+       height="84.299347"
+       x="27.774036"
+       y="108.84298" />
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#000000;stroke-width:0.963999;stroke-linecap:round;stroke-opacity:1;stop-color:#000000"
+       id="rect1598"
+       width="191.95392"
+       height="27.721756"
+       x="27.774036"
+       y="206.59117" />
+    <g
+       id="g2032"
+       transform="translate(0,-50.275701)">
+      <text
+         xml:space="preserve"
+         style="font-size:5.64444px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="66.405022"
+         y="322.34155"
+         id="text200"><tspan
+           sodipodi:role="line"
+           id="tspan198"
+           style="font-size:5.64444px;stroke-width:0.264583"
+           x="66.405022"
+           y="322.34155">30%</tspan></text>
+      <path
+         style="fill:none;stroke:#000000;stroke-width:2.165;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+         d="M 27.574446,336.36365 H 163.74556"
+         id="path1602" />
+      <circle
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.165;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+         id="path1760"
+         cx="72.00148"
+         cy="336.36365"
+         r="6.8674359" />
+    </g>
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#000000;stroke-width:0.964;stroke-linecap:round;stroke-opacity:1;stop-color:#000000"
+       id="rect3939"
+       width="191.95392"
+       height="84.299347"
+       x="27.774036"
+       y="318.35202" />
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="33.98333"
+       y="84.272186"
+       id="text4293"><tspan
+         sodipodi:role="line"
+         id="tspan4291"
+         style="font-size:8.46667px;stroke-width:0.264583"
+         x="33.98333"
+         y="84.272186">Will I make the deadline for project Bubble?</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;white-space:pre;inline-size:180.999;display:inline;stroke-width:0.264583"
+       x="33.98333"
+       y="124.68671"
+       id="text4407"><tspan
+         x="33.98333"
+         y="124.68671"
+         id="tspan1445">&quot;Bubble&quot; is due soon and I have some </tspan><tspan
+         x="33.98333"
+         y="135.27004"
+         id="tspan1447">doubts whether I can make the deadline, </tspan><tspan
+         x="33.98333"
+         y="145.85338"
+         id="tspan1449">but I am getting a lot of pressure. The </tspan><tspan
+         x="33.98333"
+         y="156.43672"
+         id="tspan1451">project will be considered done if I have a </tspan><tspan
+         x="33.98333"
+         y="167.02007"
+         id="tspan1453">deliverable.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:11.2889px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="40.963936"
+       y="223.52827"
+       id="text4533"><tspan
+         sodipodi:role="line"
+         id="tspan4531"
+         style="font-size:11.2889px;stroke-width:0.264583"
+         x="40.963936"
+         y="223.52827">December 20   2022    23:59 pm</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;white-space:pre;inline-size:180.999;display:inline;stroke-width:0.264583"
+       x="33.98333"
+       y="124.68671"
+       id="text4661"
+       transform="translate(0,209.89312)"><tspan
+         x="33.98333"
+         y="124.68671"
+         id="tspan1455">A similar project two years ago took me four </tspan><tspan
+         x="33.98333"
+         y="135.27004"
+         id="tspan1457">weeks longer. On the other hand the </tspan><tspan
+         x="33.98333"
+         y="145.85338"
+         id="tspan1459">specification is better and I feel confident </tspan><tspan
+         x="33.98333"
+         y="156.43672"
+         id="tspan1461">that I am aware of all the major pitfalls.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12.7px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="291.08401"
+       y="74.643578"
+       id="text5174"><tspan
+         sodipodi:role="line"
+         id="tspan5172"
+         style="font-size:12.7px;stroke-width:0.264583"
+         x="291.08401"
+         y="74.643578">Will I make the deadline for project Bubble?</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="290.68185"
+       y="162.27171"
+       id="text5178"><tspan
+         sodipodi:role="line"
+         id="tspan5176"
+         style="stroke-width:0.264583"
+         x="290.68185"
+         y="162.27171">Reasoning</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="290.68185"
+       y="110.64419"
+       id="text5182"><tspan
+         sodipodi:role="line"
+         id="tspan5180"
+         style="stroke-width:0.264583"
+         x="290.68185"
+         y="110.64419">Probability</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:5.64444px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="436.87769"
+       y="99.473412"
+       id="text5186"><tspan
+         sodipodi:role="line"
+         id="tspan5184"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         x="436.87769"
+         y="99.473412">45%</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2.165;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+       d="M 379.23281,113.4955 H 515.40392"
+       id="path5188" />
+    <circle
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.165;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+       id="circle5190"
+       cx="442.47415"
+       cy="113.49551"
+       r="6.8674359" />
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#000000;stroke-width:0.964;stroke-linecap:round;stroke-opacity:1;stop-color:#000000"
+       id="rect5194"
+       width="191.95392"
+       height="84.299347"
+       x="379.4324"
+       y="145.75957" />
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;white-space:pre;inline-size:180.999;display:inline;stroke-width:0.264583"
+       x="33.98333"
+       y="124.68671"
+       id="text5198"
+       transform="translate(351.65836,37.300672)"><tspan
+         x="33.98333"
+         y="124.68671"
+         id="tspan1463">I reached the first milestone 2 days head of </tspan><tspan
+         x="33.98333"
+         y="135.27004"
+         id="tspan1465">schedule.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="671.88025"
+       y="86.165535"
+       id="text5667"><tspan
+         sodipodi:role="line"
+         id="tspan5665"
+         style="stroke-width:0.264583"
+         x="671.88025"
+         y="86.165535">Summary</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="671.56274"
+       y="129.51569"
+       id="text5671"><tspan
+         sodipodi:role="line"
+         id="tspan5669"
+         style="stroke-width:0.264583"
+         x="671.56274"
+         y="129.51569">Description</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16.9333px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="671.38495"
+       y="47.838989"
+       id="text5675"><tspan
+         sodipodi:role="line"
+         id="tspan5673"
+         style="font-size:16.9333px;stroke-width:0.264583"
+         x="671.38495"
+         y="47.838989">Edit forecast</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="671.56274"
+       y="224.64833"
+       id="text5679"><tspan
+         sodipodi:role="line"
+         id="tspan5677"
+         style="stroke-width:0.264583"
+         x="671.56274"
+         y="224.64833">Closing date</tspan></text>
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#000000;stroke-width:0.963999;stroke-linecap:round;stroke-opacity:1;stop-color:#000000"
+       id="rect5681"
+       width="191.95392"
+       height="27.721756"
+       x="760.31329"
+       y="68.108376" />
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#000000;stroke-width:0.964;stroke-linecap:round;stroke-opacity:1;stop-color:#000000"
+       id="rect5683"
+       width="191.95392"
+       height="84.299347"
+       x="760.31329"
+       y="108.84298" />
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#000000;stroke-width:0.963999;stroke-linecap:round;stroke-opacity:1;stop-color:#000000"
+       id="rect5685"
+       width="191.95392"
+       height="27.721756"
+       x="760.31329"
+       y="206.59117" />
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="766.52258"
+       y="84.272186"
+       id="text5689"><tspan
+         sodipodi:role="line"
+         id="tspan5687"
+         style="font-size:8.46667px;stroke-width:0.264583"
+         x="766.52258"
+         y="84.272186">Will I make the deadline for project Bubble?</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;white-space:pre;inline-size:180.999;display:inline;stroke-width:0.264583"
+       x="33.98333"
+       y="124.68671"
+       id="text5693"
+       transform="translate(732.53926)"><tspan
+         x="33.98333"
+         y="124.68671"
+         id="tspan1467">&quot;Bubble&quot; is due soon and I have some </tspan><tspan
+         x="33.98333"
+         y="135.27004"
+         id="tspan1469">doubts whether I can make the deadline, </tspan><tspan
+         x="33.98333"
+         y="145.85338"
+         id="tspan1471">but I am getting a lot of pressure. The </tspan><tspan
+         x="33.98333"
+         y="156.43672"
+         id="tspan1473">project will be considered done if I have a </tspan><tspan
+         x="33.98333"
+         y="167.02007"
+         id="tspan1475">deliverable and at least 80% test coverage.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:11.2889px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="773.50317"
+       y="223.52827"
+       id="text5697"><tspan
+         sodipodi:role="line"
+         id="tspan5695"
+         style="font-size:11.2889px;stroke-width:0.264583"
+         x="773.50317"
+         y="223.52827">December 23   2022    23:59 pm</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="-60.97649"
+       y="437.79089"
+       id="text6276"><tspan
+         id="tspan6274"
+         style="stroke-width:0.264583"
+         x="-60.97649"
+         y="437.79089"
+         sodipodi:role="line">Prediction date</tspan></text>
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#000000;stroke-width:0.963999;stroke-linecap:round;stroke-opacity:1;stop-color:#000000"
+       id="rect6278"
+       width="191.95392"
+       height="27.721756"
+       x="27.774036"
+       y="419.73373" />
+    <text
+       xml:space="preserve"
+       style="font-size:11.2889px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="40.963936"
+       y="436.67084"
+       id="text6282"><tspan
+         sodipodi:role="line"
+         id="tspan6280"
+         style="font-size:11.2889px;stroke-width:0.264583"
+         x="40.963936"
+         y="436.67084">October 18   2022    20:23 pm</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="290.68185"
+       y="270.64877"
+       id="text6445"><tspan
+         sodipodi:role="line"
+         id="tspan6443"
+         style="stroke-width:0.264583"
+         x="290.68185"
+         y="270.64877">Prediction date</tspan></text>
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#000000;stroke-width:0.963999;stroke-linecap:round;stroke-opacity:1;stop-color:#000000"
+       id="rect6447"
+       width="191.95392"
+       height="27.721756"
+       x="379.43237"
+       y="252.59161" />
+    <text
+       xml:space="preserve"
+       style="font-size:11.2889px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="392.62228"
+       y="269.52872"
+       id="text6451"><tspan
+         sodipodi:role="line"
+         id="tspan6449"
+         style="font-size:11.2889px;stroke-width:0.264583"
+         x="392.62228"
+         y="269.52872">November 1   2022    17:01 pm</tspan></text>
+    <g
+       id="g7559"
+       transform="translate(339.67548,-165.35054)">
+      <rect
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+         id="rect6945"
+         width="61.914246"
+         height="21.437515"
+         x="188.06558"
+         y="467.70453"
+         ry="9.2501602" />
+      <text
+         xml:space="preserve"
+         style="font-size:12.4822px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="205.52945"
+         y="482.97928"
+         id="text7365"><tspan
+           sodipodi:role="line"
+           id="tspan7363"
+           style="font-size:12.4822px;stroke-width:0.264583"
+           x="205.52945"
+           y="482.97928">Save</tspan></text>
+    </g>
+    <g
+       id="g7564"
+       transform="translate(339.67548,-165.35054)">
+      <rect
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+         id="rect7534"
+         width="61.914246"
+         height="21.437515"
+         x="113.77774"
+         y="467.70453"
+         ry="9.2501602" />
+      <text
+         xml:space="preserve"
+         style="font-size:12.4822px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="124.06432"
+         y="482.97928"
+         id="text7538"><tspan
+           sodipodi:role="line"
+           id="tspan7536"
+           style="font-size:12.4822px;stroke-width:0.264583"
+           x="124.06432"
+           y="482.97928">Cancel</tspan></text>
+    </g>
+    <g
+       id="g8260"
+       transform="translate(-9.6419729,-0.39957038)">
+      <rect
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+         id="rect8254"
+         width="61.914246"
+         height="21.437515"
+         x="188.06558"
+         y="467.70453"
+         ry="9.2501602" />
+      <text
+         xml:space="preserve"
+         style="font-size:12.4822px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="205.52945"
+         y="482.97928"
+         id="text8258"><tspan
+           sodipodi:role="line"
+           id="tspan8256"
+           style="font-size:12.4822px;stroke-width:0.264583"
+           x="205.52945"
+           y="482.97928">Save</tspan></text>
+    </g>
+    <g
+       id="g8268"
+       transform="translate(-9.6419729,-0.39957038)">
+      <rect
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+         id="rect8262"
+         width="61.914246"
+         height="21.437515"
+         x="113.77774"
+         y="467.70453"
+         ry="9.2501602" />
+      <text
+         xml:space="preserve"
+         style="font-size:12.4822px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="124.06432"
+         y="482.97928"
+         id="text8266"><tspan
+           sodipodi:role="line"
+           id="tspan8264"
+           style="font-size:12.4822px;stroke-width:0.264583"
+           x="124.06432"
+           y="482.97928">Cancel</tspan></text>
+    </g>
+    <g
+       id="g8636"
+       transform="translate(724.58132,-212.60423)">
+      <rect
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+         id="rect8630"
+         width="61.914246"
+         height="21.437515"
+         x="188.06558"
+         y="467.70453"
+         ry="9.2501602" />
+      <text
+         xml:space="preserve"
+         style="font-size:12.4822px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="205.52945"
+         y="482.97928"
+         id="text8634"><tspan
+           sodipodi:role="line"
+           id="tspan8632"
+           style="font-size:12.4822px;stroke-width:0.264583"
+           x="205.52945"
+           y="482.97928">Save</tspan></text>
+    </g>
+    <g
+       id="g8644"
+       transform="translate(724.58132,-212.60423)">
+      <rect
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+         id="rect8638"
+         width="61.914246"
+         height="21.437515"
+         x="113.77774"
+         y="467.70453"
+         ry="9.2501602" />
+      <text
+         xml:space="preserve"
+         style="font-size:12.4822px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="124.06432"
+         y="482.97928"
+         id="text8642"><tspan
+           sodipodi:role="line"
+           id="tspan8640"
+           style="font-size:12.4822px;stroke-width:0.264583"
+           x="124.06432"
+           y="482.97928">Cancel</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:12.7px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1140.6326"
+       y="57.634876"
+       id="text8836"><tspan
+         sodipodi:role="line"
+         id="tspan8834"
+         style="font-size:12.7px;stroke-width:0.264583"
+         x="1140.6326"
+         y="57.634876">Will aliens be found on the moon in 2022?</tspan></text>
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+       id="rect8838"
+       width="259.84763"
+       height="132.84167"
+       x="1153.1483"
+       y="80.992081"
+       ry="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1153.3818,170.20296 c 10.5422,-12.73578 20.5439,-26.92563 29.5063,-40.80117 8.7229,-13.21788 14.1286,-17.79366 20.405,-9.58691 8.9721,11.01512 11.495,21.08375 16.8386,9.04854 7.8367,-15.73408 15.1692,-7.19004 17.3574,5.8556 10.7186,14.02852 30.5386,15.53837 44.6802,25.65358 12.0213,5.20354 18.528,-9.58164 20.0715,-19.04816 3.3035,-10.11364 6.3388,-20.63292 12.8381,-29.25017 8.1427,-0.15049 13.3302,28.29639 20.9418,13.96459 8.1578,-11.18575 9.2703,-13.63913 16.3253,4.96797 5.6062,9.65241 15.7371,15.11488 23.6707,22.55917 10.5332,-0.29313 13.2461,-12.07798 17.4556,-19.59002 5.5162,-7.55726 11.4117,-15.33038 18.9081,-21.10233"
+       id="path8905"
+       sodipodi:nodetypes="ccccccccccccc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:1.05833197,1.05833197;stroke-dashoffset:0"
+       d="m 1196.8795,115.05082 v 98.25051 l -0.1763,0.30542"
+       id="path9365" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-variation-settings:normal;opacity:1;vector-effect:none;fill-opacity:1;stroke-miterlimit:4;stroke-dasharray:1.05833,1.05833;stroke-dashoffset:0;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
+       d="m 1196.4984,115.90182 h -43.4829"
+       id="path9367" />
+    <text
+       xml:space="preserve"
+       style="font-size:16.9333px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="290.45325"
+       y="561.84967"
+       id="text1666"><tspan
+         sodipodi:role="line"
+         id="tspan1664"
+         style="font-size:16.9333px;stroke-width:0.264583"
+         x="290.45325"
+         y="561.84967">Resolve forecast</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12.7px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="291.08401"
+       y="587.00427"
+       id="text1670"><tspan
+         sodipodi:role="line"
+         id="tspan1668"
+         style="font-size:12.7px;stroke-width:0.264583"
+         x="291.08401"
+         y="587.00427">Will I make the deadline for project Bubble?</tspan></text>
+    <g
+       id="g1712"
+       transform="translate(294.82126,142.89048)">
+      <rect
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+         id="rect1706"
+         width="61.914246"
+         height="21.437515"
+         x="188.06558"
+         y="467.70453"
+         ry="9.2501602" />
+      <text
+         xml:space="preserve"
+         style="font-size:12.4822px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="207.85115"
+         y="482.97928"
+         id="text1710"><tspan
+           sodipodi:role="line"
+           id="tspan1708"
+           style="font-size:12.4822px;stroke-width:0.264583"
+           x="207.85115"
+           y="482.97928">N/A</tspan></text>
+    </g>
+    <rect
+       style="fill:#b3b3b3;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+       id="rect1714"
+       width="61.914246"
+       height="21.437515"
+       x="408.599"
+       y="610.59503"
+       ry="9.2501602" />
+    <text
+       xml:space="preserve"
+       style="font-size:12.4822px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="430.99335"
+       y="625.86975"
+       id="text1718"><tspan
+         sodipodi:role="line"
+         id="tspan1716"
+         style="font-size:12.4822px;stroke-width:0.264583"
+         x="430.99335"
+         y="625.86975">No</tspan></text>
+    <g
+       id="g1884"
+       transform="translate(222.06507,142.89048)">
+      <rect
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+         id="rect1878"
+         width="61.914246"
+         height="21.437515"
+         x="113.77774"
+         y="467.70453"
+         ry="9.2501602" />
+      <text
+         xml:space="preserve"
+         style="font-size:12.4822px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="134.86769"
+         y="482.97928"
+         id="text1882"><tspan
+           sodipodi:role="line"
+           id="tspan1880"
+           style="font-size:12.4822px;stroke-width:0.264583"
+           x="134.86769"
+           y="482.97928">Yes</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="290.68185"
+       y="677.84827"
+       id="text2102"><tspan
+         sodipodi:role="line"
+         id="tspan2100"
+         style="stroke-width:0.264583"
+         x="290.68185"
+         y="677.84827">Reasoning</tspan></text>
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#000000;stroke-width:0.964;stroke-linecap:round;stroke-opacity:1;stop-color:#000000"
+       id="rect2104"
+       width="191.95392"
+       height="84.299347"
+       x="379.4324"
+       y="661.33612" />
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;white-space:pre;inline-size:180.999;display:inline;stroke-width:0.264583"
+       x="33.98333"
+       y="124.68671"
+       id="text2110"
+       transform="translate(351.65836,552.87728)"><tspan
+         x="33.98333"
+         y="124.68671"
+         id="tspan1477">The date has passed and I do not have a </tspan><tspan
+         x="33.98333"
+         y="135.27004"
+         id="tspan1479">deliverable nor tests.</tspan></text>
+    <g
+       id="g2128"
+       transform="translate(339.67548,301.99822)">
+      <rect
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+         id="rect2122"
+         width="61.914246"
+         height="21.437515"
+         x="188.06558"
+         y="467.70453"
+         ry="9.2501602" />
+      <text
+         xml:space="preserve"
+         style="font-size:12.4822px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="205.52945"
+         y="482.97928"
+         id="text2126"><tspan
+           sodipodi:role="line"
+           id="tspan2124"
+           style="font-size:12.4822px;stroke-width:0.264583"
+           x="205.52945"
+           y="482.97928">Save</tspan></text>
+    </g>
+    <g
+       id="g2136"
+       transform="translate(339.67548,301.99822)">
+      <rect
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+         id="rect2130"
+         width="61.914246"
+         height="21.437515"
+         x="113.77774"
+         y="467.70453"
+         ry="9.2501602" />
+      <text
+         xml:space="preserve"
+         style="font-size:12.4822px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+         x="124.06432"
+         y="482.97928"
+         id="text2134"><tspan
+           sodipodi:role="line"
+           id="tspan2132"
+           style="font-size:12.4822px;stroke-width:0.264583"
+           x="124.06432"
+           y="482.97928">Cancel</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:16.9333px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1626.5718"
+       y="37.785007"
+       id="text2833"><tspan
+         sodipodi:role="line"
+         id="tspan2831"
+         style="font-size:16.9333px;stroke-width:0.264583"
+         x="1626.5718"
+         y="37.785007">History</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1756.6205"
+       y="257.1337"
+       id="text2837"><tspan
+         sodipodi:role="line"
+         id="tspan2835"
+         style="stroke-width:0.264583"
+         x="1756.6205"
+         y="257.1337">Time</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="-238.54877"
+       y="1631.2848"
+       id="text2841"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         id="tspan2839"
+         style="stroke-width:0.264583"
+         x="-238.54877"
+         y="1631.2848">Probability / Brier score</tspan></text>
+    <rect
+       style="fill:#ececec;stroke:#000000;stroke-width:0.465001;stroke-linecap:round"
+       id="rect2843"
+       width="256.84427"
+       height="75.063148"
+       x="1639.7776"
+       y="340.76437" />
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1651.8202"
+       y="285.05588"
+       id="text2847"><tspan
+         sodipodi:role="line"
+         id="tspan2845"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.46667px;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP Bold';stroke-width:0.264583"
+         x="1651.8202"
+         y="285.05588">13. May 2022 10:03 am</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1652.0149"
+       y="302.83279"
+       id="text2851"><tspan
+         sodipodi:role="line"
+         id="tspan2849"
+         x="1652.0149"
+         y="302.83279">30% → 35% (Brier score: 0.12)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;white-space:pre;inline-size:251.592;display:inline;stroke-width:0.264583"
+       x="1189.9125"
+       y="307.53601"
+       id="text2857"
+       transform="translate(462.52613,11.490129)"><tspan
+         x="1189.9125"
+         y="307.53601"
+         id="tspan1481">An article was published in the NYT that supported the </tspan><tspan
+         x="1189.9125"
+         y="318.11935"
+         id="tspan1483">prediction.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1651.7196"
+       y="359.71655"
+       id="text2861"><tspan
+         sodipodi:role="line"
+         id="tspan2859"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.46667px;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP Bold';stroke-width:0.264583"
+         x="1651.7196"
+         y="359.71655">14. May 2022 2:03 pm</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1651.9143"
+       y="377.49347"
+       id="text2865"><tspan
+         sodipodi:role="line"
+         id="tspan2863"
+         style="stroke-width:0.264583"
+         x="1651.9143"
+         y="377.49347">35% → 36% (Brier score: 0.13)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;white-space:pre;inline-size:232.77;display:inline;stroke-width:0.264583"
+       x="1189.9125"
+       y="307.53601"
+       id="text2871"
+       transform="translate(462.42556,86.150797)"><tspan
+         x="1189.9125"
+         y="307.53601"
+         id="tspan1485">I simply had a gut feeling that the probability was too </tspan><tspan
+         x="1189.9125"
+         y="318.11935"
+         id="tspan1487">low.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1652.3231"
+       y="434.37726"
+       id="text2875"><tspan
+         sodipodi:role="line"
+         id="tspan2873"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.46667px;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP Bold';stroke-width:0.264583"
+         x="1652.3231"
+         y="434.37726">20. May 2022 8:05 am</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1652.5178"
+       y="452.15417"
+       id="text2879"><tspan
+         sodipodi:role="line"
+         id="tspan2877"
+         style="stroke-width:0.264583"
+         x="1652.5178"
+         y="452.15417">36% → 25% (Brier score: 0.06)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;white-space:pre;inline-size:231.508;display:inline;stroke-width:0.264583"
+       x="1189.9125"
+       y="307.53601"
+       id="text2885"
+       transform="translate(463.02909,160.8115)"><tspan
+         x="1189.9125"
+         y="307.53601"
+         id="tspan1489">The report published by the NASA disproves the </tspan><tspan
+         x="1189.9125"
+         y="318.11935"
+         id="tspan1491">hypothesis put forward by Dr. Reeper.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12.7px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1627.2618"
+       y="57.634876"
+       id="text2891"><tspan
+         sodipodi:role="line"
+         id="tspan2889"
+         style="font-size:12.7px;stroke-width:0.264583"
+         x="1627.2618"
+         y="57.634876">Will aliens be found on the moon in 2022?</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1640.0111,200.47441 c 10.5422,-12.73578 20.5439,-26.92563 29.5063,-40.80117 8.7229,-13.21788 14.1286,-17.79366 20.405,-9.58691 8.9721,11.01512 11.495,21.08375 16.8386,9.04854 7.8367,-15.73408 15.1692,-7.19004 17.3574,5.8556 10.7186,14.02852 30.5386,15.53837 44.6802,25.65358 12.0213,5.20354 18.528,-9.58164 20.0715,-19.04816 3.3035,-10.11364 6.3388,-20.63292 12.8381,-29.25017 8.1427,-0.15049 13.3302,28.29639 20.9418,13.96459 8.1578,-11.18575 9.2703,-13.63913 16.3253,4.96797 5.6062,9.65241 15.7371,15.11488 23.6707,22.55917 10.5332,-0.29313 13.2461,-12.07798 17.4556,-19.59002 5.5162,-7.55726 11.4117,-15.33038 18.9081,-21.10233"
+       id="path2895"
+       sodipodi:nodetypes="ccccccccccccc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:1.05833, 1.05833;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 1683.5088,145.32227 v 98.25051 l -0.1763,0.30542"
+       id="path2897" />
+    <path
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.05833, 1.05833;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
+       d="m 1683.1277,146.17327 h -43.4829"
+       id="path2899" />
+    <text
+       xml:space="preserve"
+       style="font-size:12.7px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="1627.2618"
+       y="80.055069"
+       id="text2903"><tspan
+         sodipodi:role="line"
+         id="tspan2901"
+         style="font-weight:normal;font-size:12.7px;stroke-width:0.264583"
+         x="1627.2618"
+         y="80.055069">Resolved: <tspan
+   style="font-weight:bold"
+   id="tspan7284">No</tspan></tspan><tspan
+         sodipodi:role="line"
+         style="font-weight:normal;font-size:12.7px;stroke-width:0.264583"
+         x="1627.2618"
+         y="95.930069"
+         id="tspan2905">Average Brier Score: <tspan
+   style="font-weight:bold"
+   id="tspan7286">0.15</tspan></tspan></text>
+    <circle
+       style="fill:#000000;stroke-width:0.264583px;stroke-dasharray:1.05833, 1.05833;-inkscape-stroke:none;stop-color:#000000;stroke:none"
+       id="path3239"
+       cx="1196.8806"
+       cy="115.81631"
+       r="1.8986318" />
+    <path
+       style="fill:none;stroke:#800080;stroke-width:0.565;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+       d="m 1639.8562,220.7528 c 10.5422,-12.73578 18.6835,10.589 27.6459,-3.28654 8.7229,-13.21788 14.0442,-17.59412 18.3287,-26.96473 7.821,-33.31836 15.393,32.13407 20.7366,20.09886 7.8367,-15.73408 17.8282,-10.78488 20.0164,2.26076 10.7186,14.02852 24.6021,-27.30145 38.7437,-17.18624 12.0213,5.20354 22.2602,5.57305 23.8037,-3.89347 3.3035,-10.11364 9.5758,18.00914 16.0751,9.39189 8.1427,-0.15049 12.9676,-17.37145 20.5792,-31.70325 8.1578,-11.18575 4.552,11.32695 11.607,29.93405 14.8907,-36.86171 17.581,-2.82542 25.5146,4.61887 10.5332,-0.29313 15.4619,-8.15966 19.6714,-15.6717 5.5162,-7.55726 9.3231,18.75634 16.8195,12.98439"
+       id="path3902"
+       sodipodi:nodetypes="ccccccccccccc" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.964999;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"
+       id="rect2893"
+       width="259.84763"
+       height="132.84167"
+       x="1639.7776"
+       y="111.26353"
+       ry="0" />
+    <circle
+       style="fill:#000000;stroke:none;stroke-width:0.264583px;stroke-dasharray:1.05833, 1.05833;-inkscape-stroke:none;stop-color:#000000"
+       id="circle6997"
+       cx="1683.4528"
+       cy="146.06651"
+       r="1.8986318" />
+    <circle
+       style="fill:#000000;stroke:none;stroke-width:0.264583px;stroke-dasharray:1.05833, 1.05833;-inkscape-stroke:none;stop-color:#000000"
+       id="circle6999"
+       cx="1683.4528"
+       cy="194.69391"
+       r="1.8986318" />
+    <rect
+       style="fill:#e6e6e6;stroke:none;stroke-width:0.564997;stroke-dasharray:none;stroke-dashoffset:0;stop-color:#000000"
+       id="rect7912"
+       width="72.513817"
+       height="27.635725"
+       x="2051.2029"
+       y="41.308346" />
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="2070.0396"
+       y="58.153042"
+       id="text7916"><tspan
+         sodipodi:role="line"
+         id="tspan7914"
+         style="font-size:8.46667px;stroke-width:0.264583"
+         x="2070.0396"
+         y="58.153042">Forecast</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:21.1667px;line-height:1.25;font-family:'Noto Serif CJK JP';-inkscape-font-specification:'Noto Serif CJK JP';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="-174.44102"
+       y="-209.40373"
+       id="text1068"><tspan
+         sodipodi:role="line"
+         id="tspan1066"
+         style="font-size:21.1667px;stroke-width:0.264583"
+         x="-174.44102"
+         y="-209.40373">Export instructions:</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:21.1667px;stroke-width:0.264583"
+         x="-174.44102"
+         y="-182.94536"
+         id="tspan1070">* Select the rectangles in the 'Export' layer</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:21.1667px;stroke-width:0.264583"
+         x="-174.44102"
+         y="-156.48698"
+         id="tspan1122">* Ctrl+Shift+E</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:21.1667px;stroke-width:0.264583"
+         x="-174.44102"
+         y="-130.02861"
+         id="tspan1124">* JPG</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:21.1667px;stroke-width:0.264583"
+         x="-174.44102"
+         y="-103.57024"
+         id="tspan1126">* 60dpi</tspan></text>
+  </g>
+</svg>

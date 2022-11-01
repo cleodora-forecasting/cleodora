@@ -1,4 +1,4 @@
-<img align="right" src="./logo_full.png">
+<img align="right" src="./design/logo_full.png">
 
 # Cleodora Forecasting
 
