@@ -50,6 +50,8 @@ type ComplexityRoot struct {
 		Created     func(childComplexity int) int
 		Description func(childComplexity int) int
 		ID          func(childComplexity int) int
+		Resolution  func(childComplexity int) int
+		Resolves    func(childComplexity int) int
 		Summary     func(childComplexity int) int
 	}
 
@@ -111,6 +113,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Forecast.ID(childComplexity), true
+
+	case "Forecast.resolution":
+		if e.complexity.Forecast.Resolution == nil {
+			break
+		}
+
+		return e.complexity.Forecast.Resolution(childComplexity), true
+
+	case "Forecast.resolves":
+		if e.complexity.Forecast.Resolves == nil {
+			break
+		}
+
+		return e.complexity.Forecast.Resolves(childComplexity), true
 
 	case "Forecast.summary":
 		if e.complexity.Forecast.Summary == nil {
@@ -221,12 +237,15 @@ type Forecast {
   description: String!
   created: Time!
   closes: Time!
+  resolves: Time!
+  resolution: Resolution!
 }
 
 input NewForecast {
   summary: String!
   description: String!
   closes: Time!
+  resolves: Time!
 }
 
 type Mutation {
@@ -234,6 +253,13 @@ type Mutation {
 }
 
 scalar Time
+
+enum Resolution {
+  TRUE
+  FALSE
+  NOT_APPLICABLE
+  UNRESOLVED
+}
 `, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -530,6 +556,94 @@ func (ec *executionContext) fieldContext_Forecast_closes(ctx context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Forecast_resolves(ctx context.Context, field graphql.CollectedField, obj *model.Forecast) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Forecast_resolves(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Resolves, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Forecast_resolves(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Forecast",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Forecast_resolution(ctx context.Context, field graphql.CollectedField, obj *model.Forecast) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Forecast_resolution(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Resolution, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.Resolution)
+	fc.Result = res
+	return ec.marshalNResolution2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐResolution(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Forecast_resolution(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Forecast",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Resolution does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createForecast(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createForecast(ctx, field)
 	if err != nil {
@@ -579,6 +693,10 @@ func (ec *executionContext) fieldContext_Mutation_createForecast(ctx context.Con
 				return ec.fieldContext_Forecast_created(ctx, field)
 			case "closes":
 				return ec.fieldContext_Forecast_closes(ctx, field)
+			case "resolves":
+				return ec.fieldContext_Forecast_resolves(ctx, field)
+			case "resolution":
+				return ec.fieldContext_Forecast_resolution(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Forecast", field.Name)
 		},
@@ -646,6 +764,10 @@ func (ec *executionContext) fieldContext_Query_forecasts(ctx context.Context, fi
 				return ec.fieldContext_Forecast_created(ctx, field)
 			case "closes":
 				return ec.fieldContext_Forecast_closes(ctx, field)
+			case "resolves":
+				return ec.fieldContext_Forecast_resolves(ctx, field)
+			case "resolution":
+				return ec.fieldContext_Forecast_resolution(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Forecast", field.Name)
 		},
@@ -2562,7 +2684,7 @@ func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj i
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"summary", "description", "closes"}
+	fieldsInOrder := [...]string{"summary", "description", "closes", "resolves"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -2590,6 +2712,14 @@ func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj i
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("closes"))
 			it.Closes, err = ec.unmarshalNTime2timeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "resolves":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("resolves"))
+			it.Resolves, err = ec.unmarshalNTime2timeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2648,6 +2778,20 @@ func (ec *executionContext) _Forecast(ctx context.Context, sel ast.SelectionSet,
 		case "closes":
 
 			out.Values[i] = ec._Forecast_closes(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "resolves":
+
+			out.Values[i] = ec._Forecast_resolves(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "resolution":
+
+			out.Values[i] = ec._Forecast_resolution(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -3176,6 +3320,16 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 func (ec *executionContext) unmarshalNNewForecast2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐNewForecast(ctx context.Context, v interface{}) (model.NewForecast, error) {
 	res, err := ec.unmarshalInputNewForecast(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNResolution2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐResolution(ctx context.Context, v interface{}) (model.Resolution, error) {
+	var res model.Resolution
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNResolution2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐResolution(ctx context.Context, sel ast.SelectionSet, v model.Resolution) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {

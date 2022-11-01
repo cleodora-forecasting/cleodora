@@ -12,12 +12,15 @@ type Forecast {
   description: String!
   created: Time!
   closes: Time!
+  resolves: Time!
+  resolution: Resolution!
 }
 
 input NewForecast {
   summary: String!
   description: String!
   closes: Time!
+  resolves: Time!
 }
 
 type Mutation {
@@ -25,3 +28,10 @@ type Mutation {
 }
 
 scalar Time
+
+enum Resolution {
+  TRUE
+  FALSE
+  NOT_APPLICABLE
+  UNRESOLVED
+}

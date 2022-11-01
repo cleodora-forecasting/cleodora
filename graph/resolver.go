@@ -28,6 +28,11 @@ func (r *Resolver) AddDummyData() {
 				time.RFC3339,
 				"2023-03-11T23:59:00+00:00",
 			),
+			Resolves: timeParseOrPanic(
+				time.RFC3339,
+				"2023-03-11T23:59:00+00:00",
+			),
+			Resolution: model.ResolutionUnresolved,
 		},
 		&model.Forecast{
 			ID:      "2",
@@ -39,6 +44,11 @@ func (r *Resolver) AddDummyData() {
 				time.RFC3339,
 				"2022-11-11T23:59:00+00:00",
 			),
+			Resolves: timeParseOrPanic(
+				time.RFC3339,
+				"2022-12-01T09:00:00+00:00",
+			),
+			Resolution: model.ResolutionUnresolved,
 		},
 		&model.Forecast{
 			ID:      "3",
@@ -51,6 +61,11 @@ func (r *Resolver) AddDummyData() {
 				time.RFC3339,
 				"2022-12-31T23:59:00+00:00",
 			),
+			Resolves: timeParseOrPanic(
+				time.RFC3339,
+				"2022-12-31T23:59:00+00:00",
+			),
+			Resolution: model.ResolutionUnresolved,
 		},
 	)
 }

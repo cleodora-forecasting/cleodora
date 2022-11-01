@@ -3,19 +3,70 @@
 package model
 
 import (
+	"fmt"
+	"io"
+	"strconv"
 	"time"
 )
 
 type Forecast struct {
-	ID          string    `json:"id"`
-	Summary     string    `json:"summary"`
-	Description string    `json:"description"`
-	Created     time.Time `json:"created"`
-	Closes      time.Time `json:"closes"`
+	ID          string     `json:"id"`
+	Summary     string     `json:"summary"`
+	Description string     `json:"description"`
+	Created     time.Time  `json:"created"`
+	Closes      time.Time  `json:"closes"`
+	Resolves    time.Time  `json:"resolves"`
+	Resolution  Resolution `json:"resolution"`
 }
 
 type NewForecast struct {
 	Summary     string    `json:"summary"`
 	Description string    `json:"description"`
 	Closes      time.Time `json:"closes"`
+	Resolves    time.Time `json:"resolves"`
+}
+
+type Resolution string
+
+const (
+	ResolutionTrue          Resolution = "TRUE"
+	ResolutionFalse         Resolution = "FALSE"
+	ResolutionNotApplicable Resolution = "NOT_APPLICABLE"
+	ResolutionUnresolved    Resolution = "UNRESOLVED"
+)
+
+var AllResolution = []Resolution{
+	ResolutionTrue,
+	ResolutionFalse,
+	ResolutionNotApplicable,
+	ResolutionUnresolved,
+}
+
+func (e Resolution) IsValid() bool {
+	switch e {
+	case ResolutionTrue, ResolutionFalse, ResolutionNotApplicable, ResolutionUnresolved:
+		return true
+	}
+	return false
+}
+
+func (e Resolution) String() string {
+	return string(e)
+}
+
+func (e *Resolution) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Resolution(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Resolution", str)
+	}
+	return nil
+}
+
+func (e Resolution) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }

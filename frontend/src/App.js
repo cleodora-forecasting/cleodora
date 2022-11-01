@@ -9,6 +9,8 @@ const GET_FORECASTS = gql`
       description
       created
       closes
+      resolves
+      resolution
     }
   }
 `;
@@ -28,17 +30,21 @@ function DisplayForecasts() {
               <th>Description</th>
               <th>Created</th>
               <th>Closes</th>
+              <th>Resolves</th>
+              <th>Resolution</th>
           </tr>
           </thead>
           <tbody>
           {
-              data.forecasts.map(({ id, summary, description, created, closes }) => (
+              data.forecasts.map(({ id, summary, description, created, closes, resolves, resolution }) => (
                   <tr key={id}>
                       <td>{id}</td>
                       <td>{summary}</td>
                       <td>{description}</td>
                       <td>{created}</td>
                       <td>{closes}</td>
+                      <td>{resolves}</td>
+                      <td>{resolution}</td>
                   </tr>
               ))
           }
