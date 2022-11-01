@@ -111,5 +111,5 @@ sudo apt install firefox-geckodriver
 ```bash
 cd e2e_tests
 npm install
-node_modules/.bin/mocha --timeout 15000 defaultSeleniumTest.spec.js
+node_modules/.bin/mocha --timeout 15000 frontPageTest.spec.js
 ```
