@@ -41,9 +41,9 @@ function DisplayForecasts() {
                       <td>{id}</td>
                       <td>{summary}</td>
                       <td>{description}</td>
-                      <td>{created}</td>
-                      <td>{closes}</td>
-                      <td>{resolves}</td>
+                      <td>{ new Date(created).toLocaleString() }</td>
+                      <td>{ new Date(closes).toLocaleString() }</td>
+                      <td>{ new Date(resolves).toLocaleString() }</td>
                       <td>{resolution}</td>
                   </tr>
               ))
