@@ -66,7 +66,12 @@ const ADD_FORECAST = gql`
 
 function AddForecast() {
     let summary, description, closes, resolves;
-    const [addForecast, { data, loading, error }] = useMutation(ADD_FORECAST);
+    const [addForecast, { data, loading, error }] = useMutation(ADD_FORECAST, {
+        refetchQueries: [
+            {query: GET_FORECASTS}, // DocumentNode object parsed with gql
+            'GetForecasts' // Query name
+        ],
+    });
 
     if (loading) return 'Submitting...';
     if (error) return `Submission error! ${error.message}`;
