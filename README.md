@@ -17,15 +17,6 @@ be found on the website https://cleodora.org .
 
 # Dev Setup
 
-<a href="https://gitpod.io/#https://github.com/cleodora-forecasting/cleodora">
-  <img
-    src="https://img.shields.io/badge/Contribute%20with-Gitpod-908a85?logo=gitpod"
-    alt="Contribute with Gitpod"
-  />
-</a> (Note: the frontend won't currently work with Gitpod because the backend
-URL is hardcoded to localhost:8080).
-<!-- https://github.com/gitpod-io/gitpod/issues/2466 -->
-
 * [Install Go](https://go.dev/doc/install) 1.18 or higher
 * [Install npm](https://nodejs.org/en/download/) v16.18.0 or higher
 
@@ -36,6 +27,19 @@ go get
 cd frontend
 npm install
 ```
+
+## Gitpod
+
+A simple dev environment, directly in the browser.
+
+<a href="https://gitpod.io/#https://github.com/cleodora-forecasting/cleodora">
+  <img
+    src="https://img.shields.io/badge/Contribute%20with-Gitpod-908a85?logo=gitpod"
+    alt="Contribute with Gitpod"
+  />
+</a> (Note: the frontend won't currently work with Gitpod because the backend
+URL is hardcoded to localhost:8080).
+<!-- https://github.com/gitpod-io/gitpod/issues/2466 -->
 
 # Run
 
