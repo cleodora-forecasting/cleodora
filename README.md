@@ -39,13 +39,27 @@ npm install
 
 # Run
 
-Without embedded frontend:
+## Backend (GraphQL API)
 
 ```bash
 go run .
 ```
 
-With statically embedded frontend:
+* GraphQL playground: http://localhost:8080/playground/
+* GraphQL API: http://localhost:8080/query
+
+## Frontend (React app)
+
+```bash
+cd frontend
+npm start
+```
+
+Open http://localhost:3000
+
+The backend should also be running, otherwise you will get an error.
+
+## Backend with statically embedded frontend
 
 ```bash
 cd frontend
@@ -53,6 +67,8 @@ npm run build
 cd ..
 go run -tags frontend .
 ```
+
+Open http://localhost:8080
 
 # Build
 
@@ -63,18 +79,9 @@ make build
 You can find the binary containing everything under `build/cleodora` . Run it
 and access http://localhost:8080 in the browser.
 
-# Playing around
+# GraphQL playground (GraphiQL)
 
-One console:
-```bash
-go run .
-```
-
-Another console:
-```bash
-cd frontend
-npm start
-```
+Start frontend and backend as described above.
 
 Open http://localhost:8080/playground/ in a browser and create some forecasts:
 
