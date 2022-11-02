@@ -24,7 +24,7 @@ func (r *Resolver) AddDummyData() {
 			Summary:     "Will \"The Fabelmans\" win \"Best Picture\" at the Oscars 2023?",
 			Description: "",
 			Created:     time.Now(),
-			Closes: timeParseOrPanic(
+			Closes: timeParseOrPanicPtr(
 				time.RFC3339,
 				"2023-03-11T23:59:00+00:00",
 			),
@@ -40,7 +40,7 @@ func (r *Resolver) AddDummyData() {
 			Description: "The forecast resolves as true if and only if I get" +
 				" the highest marks.",
 			Created: time.Now(),
-			Closes: timeParseOrPanic(
+			Closes: timeParseOrPanicPtr(
 				time.RFC3339,
 				"2022-11-11T23:59:00+00:00",
 			),
@@ -57,7 +57,7 @@ func (r *Resolver) AddDummyData() {
 				" in any Git repository of the cleodora-forecasting GitHub" +
 				" organization.",
 			Created: time.Now(),
-			Closes: timeParseOrPanic(
+			Closes: timeParseOrPanicPtr(
 				time.RFC3339,
 				"2022-12-31T23:59:00+00:00",
 			),
@@ -76,4 +76,9 @@ func timeParseOrPanic(layout string, value string) time.Time {
 		panic(err)
 	}
 	return t
+}
+
+func timeParseOrPanicPtr(layout string, value string) *time.Time {
+	t := timeParseOrPanic(layout, value)
+	return &t
 }

@@ -14,16 +14,16 @@ type Forecast struct {
 	Summary     string     `json:"summary"`
 	Description string     `json:"description"`
 	Created     time.Time  `json:"created"`
-	Closes      time.Time  `json:"closes"`
 	Resolves    time.Time  `json:"resolves"`
+	Closes      *time.Time `json:"closes"`
 	Resolution  Resolution `json:"resolution"`
 }
 
 type NewForecast struct {
-	Summary     string    `json:"summary"`
-	Description string    `json:"description"`
-	Closes      time.Time `json:"closes"`
-	Resolves    time.Time `json:"resolves"`
+	Summary     string     `json:"summary"`
+	Description string     `json:"description"`
+	Resolves    time.Time  `json:"resolves"`
+	Closes      *time.Time `json:"closes"`
 }
 
 type Resolution string

@@ -19,11 +19,12 @@ func (r *mutationResolver) CreateForecast(ctx context.Context, input model.NewFo
 		ID:          fmt.Sprintf("T%d", rand.Int()),
 		Summary:     input.Summary,
 		Description: input.Description,
-		Closes:      input.Closes,
 		Created:     time.Now(),
 		Resolves:    input.Resolves,
+		Closes:      input.Closes,
 		Resolution:  model.ResolutionUnresolved,
 	}
+
 	r.forecasts = append(r.forecasts, forecast)
 	return forecast, nil
 }

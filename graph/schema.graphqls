@@ -11,16 +11,16 @@ type Forecast {
   summary: String!
   description: String!
   created: Time!
-  closes: Time!
   resolves: Time!
+  closes: Time
   resolution: Resolution!
 }
 
 input NewForecast {
   summary: String!
   description: String!
-  closes: Time!
   resolves: Time!
+  closes: Time
 }
 
 type Mutation {
