@@ -52,7 +52,7 @@ be making personal, private forecasts and systematically improving at making
 them.
 
 Read some more detailed [examples how to use Cleodora]({{< ref "use-cases"
->}}), [how to contribute]({{< ref "contributing" >}}), the [development
+>}}), [how to contribute]({{< ref "development" >}}), the [development
 guidelines]({{< ref "dev-guidelines" >}}) and [technology]({{< ref "technology"
 >}}) used, the [roadmap]({{< ref "roadmap" >}}), some [mockups]({{< ref
 "mockups" >}}) or how Cleodora [compares to

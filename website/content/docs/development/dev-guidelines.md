@@ -7,14 +7,11 @@ weight: 4
 # bookCollapseSection: false
 # bookComments: false
 # bookSearchExclude: false
+aliases:
+  - /docs/dev-guidelines/
 ---
 
 # Dev Guidelines
-
-Everything is a work in progress. Feedback and suggestions are very welcome!
-Open a [ticket on
-GitHub](https://github.com/cleodora-forecasting/cleodora/issues) or [send an
-e-mail (info@cleodora.org)](mailto:info@cleodora.org).
 
 The following should be prioritized, in particular over feature completeness:
 

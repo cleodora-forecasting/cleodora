@@ -11,11 +11,6 @@ bookToc: true
 
 # Roadmap & Requirements
 
-Everything is a work in progress. Feedback and suggestions are very welcome!
-Open a [ticket on
-GitHub](https://github.com/cleodora-forecasting/cleodora/issues) or [send an
-e-mail (info@cleodora.org)](mailto:info@cleodora.org).
-
 ## Version 1
 
 The MVP (Minimal Viable Product) must implement the following features.

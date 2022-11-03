@@ -1,5 +1,5 @@
 ---
-title: "Contributing"
+title: "Development"
 weight: 6
 # bookFlatSection: false
 # bookToc: true
@@ -7,9 +7,13 @@ weight: 6
 # bookCollapseSection: false
 # bookComments: false
 # bookSearchExclude: false
+aliases:
+  - docs/contributing/
 ---
 
-# Contributing
+# Development
+
+## Contributing
 
 If you think you can help, please get in touch!
 

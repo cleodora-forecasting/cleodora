@@ -11,11 +11,6 @@ weight: 1
 
 # Use Cases
 
-Everything is a work in progress. Feedback and suggestions are very welcome!
-Open a [ticket on
-GitHub](https://github.com/cleodora-forecasting/cleodora/issues) or [send an
-e-mail (info@cleodora.org)](mailto:info@cleodora.org).
-
 Some examples how Cleodora could be used.
 
 ## Mindy the engineer

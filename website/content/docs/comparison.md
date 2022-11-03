@@ -11,12 +11,6 @@ bookToc: true
 
 # Comparison with other tools
 
-Everything is a work in progress. Feedback and suggestions are very welcome!
-Open a [ticket on
-GitHub](https://github.com/cleodora-forecasting/cleodora/issues) or [send an
-e-mail (info@cleodora.org)](mailto:info@cleodora.org).
-
-
 ## Manifold Markets
 
 Cleodora is different from [Manifold Markets](https://manifold.markets)
