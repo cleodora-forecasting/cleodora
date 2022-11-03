@@ -8,7 +8,7 @@ weight: 6
 # bookComments: false
 # bookSearchExclude: false
 aliases:
-  - docs/contributing/
+  - /docs/contributing/
 ---
 
 # Development
