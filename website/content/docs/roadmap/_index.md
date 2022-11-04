@@ -46,6 +46,9 @@ The MVP (Minimal Viable Product) must implement the following features.
 	* Current average Brier score and evolution over time
 	* Forecasts added over time
 	* Number of updates over time
+* It needs to be very easy and fast to add simple forecasts e.g. 'Will I feel
+  better tomorrow?'. These kinds of forecasts are rarely updated and require
+  very little additional data.
 
 
 ## Possible later features
@@ -85,3 +88,5 @@ The MVP (Minimal Viable Product) must implement the following features.
     * When editing a question and adding new answers then those new answers get
       0 probability initially. This can lead to drastic changes in Brier score
       (if 'other' was rather large before), but that is fine.
+* Notification when a forecast needs to be resolved. e.g. e-mail or push
+  message in the browser, toast message in the corner etc.
