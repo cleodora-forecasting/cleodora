@@ -15,8 +15,8 @@ bookToc: true
 
 <img align="right" src="/logo_full.png">
 
-Cleodora is an **open source** piece of software that does not exist yet. I am
-looking for people to **collaborate** in creating it.
+Cleodora is an **open source** piece of software that is in the early stages of
+development. I am looking for people to [**collaborate**]({{< ref "development" >}}) in creating it.
 
 It's a **web application** that you can download to your computer and then
 access via your web browser
