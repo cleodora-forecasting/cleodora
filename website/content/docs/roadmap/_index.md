@@ -49,6 +49,7 @@ The MVP (Minimal Viable Product) must implement the following features.
 * It needs to be very easy and fast to add simple forecasts e.g. 'Will I feel
   better tomorrow?'. These kinds of forecasts are rarely updated and require
   very little additional data.
+  [Issue #20](https://github.com/cleodora-forecasting/cleodora/issues/20)
 
 
 ## Possible later features
