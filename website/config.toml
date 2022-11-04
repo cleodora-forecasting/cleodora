@@ -2,6 +2,8 @@ baseURL = 'https://cleodora.org/'
 languageCode = 'en-us'
 title = 'Cleodora Forecasting'
 
+enableGitInfo = true
+
 [module]
 [[module.imports]]
 path = 'github.com/alex-shpak/hugo-book'
@@ -9,6 +11,8 @@ path = 'github.com/alex-shpak/hugo-book'
 [params]
   BookLogo = 'logo.png'
   images = ['/logo_full.png']
+  BookRepo = 'https://github.com/cleodora-forecasting/cleodora'
+  BookEditPath = 'edit/main/website'
 
 [markup]
   [markup.goldmark]
