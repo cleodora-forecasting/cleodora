@@ -46,10 +46,10 @@ The MVP (Minimal Viable Product) must implement the following features.
 	* Current average Brier score and evolution over time
 	* Forecasts added over time
 	* Number of updates over time
-* It needs to be very easy and fast to add simple forecasts e.g. 'Will I feel
+* [Issue #20](https://github.com/cleodora-forecasting/cleodora/issues/20): It
+  needs to be very easy and fast to add simple forecasts e.g. 'Will I feel
   better tomorrow?'. These kinds of forecasts are rarely updated and require
   very little additional data.
-  [Issue #20](https://github.com/cleodora-forecasting/cleodora/issues/20)
 
 
 ## Possible later features
@@ -84,7 +84,8 @@ The MVP (Minimal Viable Product) must implement the following features.
   they can predict in their own Cleodora instance. What to do when editing a
   question? New export that contains version information and can be merged?
 * Allow exporting nice reports or graphs to brag and show other people
-* Multi-answer questions. Always have one answer 'other' that has 100 -
+* [Issue #23](https://github.com/cleodora-forecasting/cleodora/issues/23):
+  Multi-answer questions. Always have one answer 'other' that has 100 -
   sum(others) by default.
     * When editing a question and adding new answers then those new answers get
       0 probability initially. This can lead to drastic changes in Brier score
