@@ -22,6 +22,9 @@ because:
 * You can directly measure the quality of your forecasts instead of only
   indirectly via the amount of M$ (mana) you earn over time, meaning you can
   better drill down where exactly you failed in specific instances.
+* If the probability you currently predict is the same as the market, then in
+  Manifold there is nothing you can do. Your ability to make a forecast depends
+  on other people, whereas in Cleodora it's only about you.
 
 
 ## Metaculus
