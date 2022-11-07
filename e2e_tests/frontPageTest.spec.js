@@ -2,7 +2,7 @@ const { By, Builder } = require('selenium-webdriver');
 const { suite } = require('selenium-webdriver/testing');
 const assert = require("assert");
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://localhost:8080';
 
 suite(function(env) {
     describe('Verify front page', function() {

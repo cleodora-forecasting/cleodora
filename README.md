@@ -121,6 +121,15 @@ sudo apt install firefox-geckodriver
 
 ## Execution
 
+Start the app
+
+```bash
+make build
+./build/cleodora
+```
+
+Run the tests
+
 ```bash
 cd e2e_tests
 npm install
