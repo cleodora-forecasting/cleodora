@@ -9,7 +9,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/cleodora-forecasting/cleodora/graph"
 	"github.com/cleodora-forecasting/cleodora/graph/generated"
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/websocket"
 	"github.com/rs/cors"
 )

@@ -8,7 +8,7 @@ import (
 	"io/fs"
 	"net/http"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 )
 
 //go:embed frontend/build
