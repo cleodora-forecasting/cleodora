@@ -37,9 +37,7 @@ A simple dev environment, directly in the browser.
     src="https://img.shields.io/badge/Contribute%20with-Gitpod-908a85?logo=gitpod"
     alt="Contribute with Gitpod"
   />
-</a> (Note: the frontend won't currently work with Gitpod because the backend
-URL is hardcoded to localhost:8080).
-<!-- https://github.com/gitpod-io/gitpod/issues/2466 -->
+</a>
 
 # Run
 
