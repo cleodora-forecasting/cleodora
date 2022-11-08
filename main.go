@@ -31,6 +31,7 @@ func main() {
 		AllowedHeaders:   []string{"*"},
 		AllowCredentials: true,
 		Debug:            true,
+		AllowOriginFunc:  func(origin string) bool { return true },
 	}).Handler)
 
 	resolver := graph.Resolver{}
