@@ -10,8 +10,20 @@ import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
+// Default for production, use the same server as the frontend
+let API_URL = "/query";
+
+if (process.env.REACT_APP_API_URL) {
+    API_URL = process.env.REACT_APP_API_URL + "/query";
+} else if (process.env.NODE_ENV !== 'production') {
+    // For dev, maybe add another condition for tests
+    API_URL = "http://localhost:8080/query";
+}
+
+console.log('API_URL: ' + API_URL);
+
 const client = new ApolloClient({
-  uri: 'http://localhost:8080/query',
+  uri: API_URL,
   cache: new InMemoryCache(),
 });
 
