@@ -13,3 +13,4 @@ ports:
   - name: Backend
     port: 8080
     onOpen: open-browser
+    visibility: public
