@@ -4,7 +4,7 @@ tasks:
     command: go run .
   - name: Frontend Console
     init: cd frontend && npm install
-    command: npm start
+    command: REACT_APP_API_URL=`gp url 8080` npm start
 
 ports:
   - name: Frontend
