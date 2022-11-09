@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ApolloClient, InMemoryCache, ApolloProvider, gql, createHttpLink } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
@@ -22,14 +22,9 @@ if (process.env.REACT_APP_API_URL) {
 
 console.log('API_URL: ' + API_URL);
 
-const link = createHttpLink({
-    uri: API_URL,
-    credentials: 'include'
-});
-
 const client = new ApolloClient({
+  uri: API_URL,
   cache: new InMemoryCache(),
-  link,
 });
 
 // Supported in React 18+
