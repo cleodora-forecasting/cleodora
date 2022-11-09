@@ -6,7 +6,11 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/go-chi/chi/v5"
+	"github.com/gorilla/websocket"
+	"github.com/rs/cors"
 )
 
 func serveFrontend(router chi.Router) {
@@ -44,4 +48,45 @@ to make those changes visible.
 </p>
 `,
 	)
+}
+
+// configureCORS allows everything during development/testing.
+func configureCORS(router *chi.Mux, srv *handler.Server) {
+	fmt.Println("Enabling very permissive CORS")
+	// Add CORS middleware around every request
+	// See https://github.com/rs/cors for full option listing
+	router.Use(cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedHeaders: []string{"*"},
+		AllowedMethods: []string{
+			http.MethodHead,
+			http.MethodGet,
+			http.MethodPost,
+			http.MethodPut,
+			http.MethodPatch,
+			http.MethodDelete,
+		},
+		// It's against the CORS spec to allow credentialed requests and
+		// asterisk * for Access-Control-Allow-Origin,
+		// Access-Control-Allow-Headers or Access-Control-Allow-Methods .
+		// https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+		AllowCredentials: false,
+		Debug:            true,
+	}).Handler)
+
+	// The following code was copied and slightly modified from the following
+	// link, but it's not clear if or why it's needed since we are not using
+	// websockets right now. Just in case, I'll leave it.
+	// https://gqlgen.com/recipes/cors/
+	// See also: https://github.com/99designs/gqlgen/issues/1250
+	srv.AddTransport(&transport.Websocket{
+		Upgrader: websocket.Upgrader{
+			CheckOrigin: func(r *http.Request) bool {
+				// Check against your desired domains here
+				return true
+			},
+			ReadBufferSize:  1024,
+			WriteBufferSize: 1024,
+		},
+	})
 }

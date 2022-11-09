@@ -31,3 +31,12 @@ func getFileSystem() http.FileSystem {
 
 	return http.FS(fsys)
 }
+
+// configureCORS disables CORS for production
+func configureCORS(router *chi.Mux, srv *handler.Server) {
+	// We don't support CORS because the backend and fronted are bundled as a
+	// single server and right now there is no plan or need to separate them.
+	// Later more granular configuration can be introduced.
+	// Probably it makes no sense without authentication for the backend.
+	fmt.Println("Disabling CORS")
+}
