@@ -1,4 +1,4 @@
-//go:build !frontend
+//go:build !production
 
 package main
 

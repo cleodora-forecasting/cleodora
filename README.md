@@ -69,7 +69,7 @@ The backend should also be running, otherwise you will get an error.
 cd frontend
 npm run build
 cd ..
-go run -tags frontend .
+go run -tags production .
 ```
 
 Open http://localhost:8080
