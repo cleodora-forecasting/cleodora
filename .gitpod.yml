@@ -8,9 +8,11 @@ tasks:
 
 ports:
   - name: Frontend
+    description: React frontend to interact with the GraphQL API
     port: 3000
     onOpen: open-browser
   - name: Backend
+    description: GraphQL API
     port: 8080
     onOpen: open-browser
     visibility: public
