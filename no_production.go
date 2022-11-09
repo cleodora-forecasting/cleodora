@@ -41,7 +41,7 @@ cd ..
 </pre>
 Then start the server with frontend:
 <pre>
-go run -tags frontend .
+go run -tags production .
 </pre>
 Note that if you make any changes to the frontend code you will have to rebuild
 to make those changes visible.
