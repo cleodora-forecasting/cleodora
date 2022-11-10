@@ -8,15 +8,14 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/cleodora-forecasting/cleodora/graph"
 	"github.com/cleodora-forecasting/cleodora/graph/generated"
+	"github.com/cleodora-forecasting/cleodora/utils"
 	"github.com/go-chi/chi/v5"
 )
-
-var VERSION = "dev"
 
 func main() {
 	fmt.Printf(
 		"Starting Cleodora (version: %s) http://localhost:8080\n",
-		VERSION,
+		utils.Version,
 	)
 
 	router := chi.NewRouter()
