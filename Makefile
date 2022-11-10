@@ -43,3 +43,4 @@ build: ## Build Cleodora binary
 	@cd frontend; npm run build
 	@mkdir -p build
 	@go build -ldflags "-X main.VERSION=`git describe --always --dirty`" -tags production -o build/cleosrv .
+	@go build -ldflags "-X main.VERSION=`git describe --always --dirty`" -tags production -o build/cleoc github.com/cleodora-forecasting/cleodora/client
