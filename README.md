@@ -80,7 +80,7 @@ Open http://localhost:8080
 make build
 ```
 
-You can find the binary containing everything under `build/cleodora` . Run it
+You can find the binary containing everything under `build/cleosrv` . Run it
 and access http://localhost:8080 in the browser.
 
 # GraphQL playground (GraphiQL)
@@ -125,7 +125,7 @@ Start the app
 
 ```bash
 make build
-./build/cleodora
+./build/cleosrv
 ```
 
 Run the tests
