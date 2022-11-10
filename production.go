@@ -8,6 +8,7 @@ import (
 	"io/fs"
 	"net/http"
 
+	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/go-chi/chi/v5"
 )
 
