@@ -15,6 +15,7 @@ Examples of such forecasts:
 All information, including development guidelines, requirements and roadmap can
 be found on the website https://cleodora.org .
 
+
 # Table of Content
 
 - [Dev Setup](#dev-setup)
@@ -89,6 +90,7 @@ go run .
 * GraphQL playground: http://localhost:8080/playground/
 * GraphQL API: http://localhost:8080/query
 
+
 ## Frontend (React app)
 
 ```bash
@@ -121,9 +123,12 @@ make build
 ```
 
 You can find the binary containing frontend and backend under `build/cleosrv` .
-Run it and access http://localhost:8080 in the browser.
+Run it and access http://localhost:8080 in the browser. The frontend is
+embedded as static files inside the binary, so this binary contains the
+entire Cleodora backend and frontend.
 
 The client binary is `build/cleoc` .
+
 
 # GraphQL playground (GraphiQL)
 
@@ -153,6 +158,7 @@ mutation createForecast {
 
 Open http://localhost:3000 in a browser and see the list of forecasts.
 
+
 # Tests
 
 ## Setup
@@ -160,6 +166,7 @@ Open http://localhost:3000 in a browser and see the list of forecasts.
 ```bash
 sudo apt install firefox-geckodriver
 ```
+
 
 ## Execution
 
