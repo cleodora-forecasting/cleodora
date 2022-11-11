@@ -1,6 +1,8 @@
 tasks:
   - name: Backend Console
-    init: ./installDependencies.sh
+    init: |
+        ./installDependencies.sh
+        brew install hugo # Will install the extended flavor
     command: |
         gp sync-done install-dependencies
         printf "\n\n"
