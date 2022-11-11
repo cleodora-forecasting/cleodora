@@ -7,7 +7,8 @@
 		},
 		"ghcr.io/devcontainers/features/go:1": {},
 		"ghcr.io/devcontainers/features/hugo:1": {},
-		"ghcr.io/guiyomh/features/golangci-lint:0": {}
+		"ghcr.io/guiyomh/features/golangci-lint:0": {},
+        "github-cli": "latest"
 	},
 
 	// Configure tool-specific properties.
