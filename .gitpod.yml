@@ -1,11 +1,9 @@
 tasks:
-  - name: Install dependencies
-    init: ./installDependencies.sh
-    command: gp sync-done install-dependencies
-
   - name: Backend Console
-    init: gp sync-await install-dependencies
+    init: ./installDependencies.sh
     command: |
+        gp sync-done install-dependencies
+        printf "\n\n"
         echo "# Execute the following command to start the backend:"
         echo 'go run .'
 
@@ -13,6 +11,7 @@ tasks:
     init: gp sync-await install-dependencies
     command: |
         cd frontend
+        printf "\n\n"
         echo "# Execute the following command to start the frontend:"
         echo 'REACT_APP_API_URL=`gp url 8080` npm start'
 
@@ -20,6 +19,7 @@ tasks:
     init: gp sync-await install-dependencies
     command: |
         cd website
+        printf "\n\n"
         echo "# Execute the following command to start the website:"
         echo 'hugo server'
 
