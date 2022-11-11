@@ -64,7 +64,7 @@ gh codespace ports visibility 8080:public -c $CODESPACE_NAME
 
 # Run
 
-## Backend (GraphQL API)
+## Backend (GraphQL API written in Go)
 
 ```bash
 # Top level directory
@@ -85,18 +85,19 @@ npm start
 
 Open http://localhost:3000
 
-The backend should also be running, otherwise you will get an error.
+The backend must also be running, otherwise you will get an error. This is
+because the frontend queries the backend for data.
 
-## Backend with statically embedded frontend
+
+## Client (CLI written in Go)
+
+The purpose is to interact with the API.
 
 ```bash
-cd frontend
-npm run build
-cd ..
-go run -tags production .
+cd client
+go run .
 ```
 
-Open http://localhost:8080
 
 # Build
 
@@ -104,8 +105,10 @@ Open http://localhost:8080
 make build
 ```
 
-You can find the binary containing everything under `build/cleosrv` . Run it
-and access http://localhost:8080 in the browser.
+You can find the binary containing frontend and backend under `build/cleosrv` .
+Run it and access http://localhost:8080 in the browser.
+
+The client binary is `build/cleoc` .
 
 # GraphQL playground (GraphiQL)
 
