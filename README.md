@@ -177,7 +177,7 @@ make build
 ./build/cleosrv
 ```
 
-Run the tests
+Run the end to end Selenium browser tests.
 
 ```bash
 cd e2e_tests
