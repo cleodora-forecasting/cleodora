@@ -15,6 +15,22 @@ Examples of such forecasts:
 All information, including development guidelines, requirements and roadmap can
 be found on the website https://cleodora.org .
 
+# Table of Content
+
+- [Dev Setup](#dev-setup)
+  * [Manual setup](#manual-setup)
+  * [Gitpod](#gitpod)
+  * [GitHub Codespaces](#github-codespaces)
+- [Run](#run)
+  * [Backend (GraphQL API written in Go)](#backend--graphql-api-written-in-go-)
+  * [Frontend (React app)](#frontend--react-app-)
+  * [Client (CLI written in Go)](#client--cli-written-in-go-)
+- [Build](#build)
+- [GraphQL playground (GraphiQL)](#graphql-playground--graphiql-)
+- [Tests](#tests)
+  * [Setup](#setup)
+  * [Execution](#execution)
+
 # Dev Setup
 
 ## Manual setup
