@@ -2,7 +2,7 @@
 title: "About"
 weight: 1
 description: "Software to track personal forecasts/predictions and
-  systematically improve at making them"
+  systematically improve at making them."
 # bookFlatSection: false
 bookToc: true
 # bookHidden: false
