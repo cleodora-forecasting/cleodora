@@ -24,15 +24,23 @@ tasks:
         echo 'hugo server'
 
 ports:
-    # Note both ports have visiblity public i.e. anyone with the Gitpod URL
-    # could access them. This is because with private ports CORS prevents the
-    # GUI from interacting with the API. See:
+  - name: Website
+    description: Instance of cleodora.org website
+    port: 1313
+    onOpen: open-browser
+    visibility: private
+
+    # Note both ports below have visiblity public i.e. anyone with the Gitpod
+    # URL could access them. This is because with private ports CORS prevents
+    # the GUI from interacting with the API. See:
     # https://github.com/cleodora-forecasting/cleodora/issues/27
+
   - name: Frontend
     description: React frontend to interact with the GraphQL API
     port: 3000
     onOpen: open-browser
     visibility: public
+
   - name: Backend
     description: GraphQL API
     port: 8080
