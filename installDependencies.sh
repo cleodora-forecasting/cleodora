@@ -3,6 +3,10 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+# Script to install all dependencies. Execute it from the top level directory
+# of the Git repository.
+# You already need to have 'Go' and 'npm' installed.
+
 go mod download
 
 cd frontend
