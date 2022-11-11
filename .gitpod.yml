@@ -1,10 +1,27 @@
 tasks:
+  - name: Install dependencies
+    init: ./installDependencies.sh
+    command: gp sync-done install-dependencies
+
   - name: Backend Console
-    init: go get
-    command: go run .
+    init: gp sync-await install-dependencies
+    command: |
+        echo "# Execute the following command to start the backend:"
+        echo 'go run .'
+
   - name: Frontend Console
-    init: cd frontend && npm install
-    command: REACT_APP_API_URL=`gp url 8080` npm start
+    init: gp sync-await install-dependencies
+    command: |
+        cd frontend
+        echo "# Execute the following command to start the frontend:"
+        echo 'REACT_APP_API_URL=`gp url 8080` npm start'
+
+  - name: Website Console
+    init: gp sync-await install-dependencies
+    command: |
+        cd website
+        echo "# Execute the following command to start the website:"
+        echo 'hugo server'
 
 ports:
     # Note both ports have visiblity public i.e. anyone with the Gitpod URL
