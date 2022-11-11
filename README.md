@@ -16,7 +16,7 @@ All information, including development guidelines, requirements and roadmap can
 be found on the website https://cleodora.org .
 
 
-# Table of Content
+# Table of Contents
 
 - [Dev Setup](#dev-setup)
   * [Manual setup](#manual-setup)
