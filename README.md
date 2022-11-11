@@ -17,15 +17,21 @@ be found on the website https://cleodora.org .
 
 # Dev Setup
 
+## Manual setup
+
+Note that instead of setting all this up on your computer, you can use
+**Gitpod** or **GitHub Codespaces** for pre-configured dev environments
+directly in your browser. See below.
+
 * [Install Go](https://go.dev/doc/install) 1.18 or higher
 * [Install npm](https://nodejs.org/en/download/) v16.18.0 or higher
+* (optional) [Install hugo](https://gohugo.io/installation/) (extended flavor)
+  v0.97.3 or higher to make changes to the cleodora.org website
 
 ```bash
 git clone https://github.com/cleodora-forecasting/cleodora
 cd cleodora
-go get
-cd frontend
-npm install
+./installDependencies.sh
 ```
 
 ## Gitpod
@@ -39,11 +45,23 @@ A simple dev environment, directly in the browser.
   />
 </a>
 
+
+## GitHub Codespaces
+
+**IMPORTANT:** Codespaces ports are always _private_ by default. After starting
+your workspace you need to set the API port (8080) to public if you want to
+access it from the frontend. For example with this command `gh codespace ports
+visibility 8080:public -c $CODESPACE_NAME` .
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=548549126&machine=basicLinux32gb)
+
+
 # Run
 
 ## Backend (GraphQL API)
 
 ```bash
+# Top level directory
 go run .
 ```
 
