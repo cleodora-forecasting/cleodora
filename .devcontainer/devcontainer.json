@@ -24,7 +24,22 @@
 	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [8080, 3000, 1313]
+	"forwardPorts": [
+		8080,
+		3000,
+		1313
+	],
+	"portsAttributes": {
+		"1313": {
+			"label": "Website"
+		},
+		"3000": {
+			"label": "GUI"
+		},
+		"8080": {
+			"label": "API"
+		}
+	}
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "go version",
