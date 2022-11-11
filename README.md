@@ -69,8 +69,8 @@ A simple dev environment, directly in the browser.
 **IMPORTANT:** Codespaces ports are always _private_ by default
 ([source](https://github.com/community/community/discussions/4068)). After
 starting the codespace you need to set the API port (8080) to public if you
-want to access it from the frontend (
-[technical background](https://github.com/community/community/discussions/4068)).
+want to access it from the frontend
+([technical background](https://github.com/community/community/discussions/4068)).
 For example by clicking on the `PORTS`
 tab, right click on `API (8080)` and then `Port Visibility` / `Public`.
 
