@@ -49,7 +49,7 @@ A simple dev environment, directly in the browser.
 ## GitHub Codespaces
 
 **IMPORTANT:** Codespaces ports are always _private_ by default. After starting
-your workspace you need to set the API port (8080) to public if you want to
+the API server you need to set the API port (8080) to public if you want to
 access it from the frontend. For example with this command `gh codespace ports
 visibility 8080:public -c $CODESPACE_NAME` .
 
