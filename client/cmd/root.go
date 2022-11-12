@@ -10,6 +10,7 @@ import (
 )
 
 var cfgFile string
+var URL string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -40,7 +41,7 @@ func init() {
 		"config file (default is $HOME/.cleoc.yml)",
 	)
 	rootCmd.PersistentFlags().StringVarP(
-		&cfgFile,
+		&URL,
 		"url",
 		"u",
 		"http://localhost:8080",
