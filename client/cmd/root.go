@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/cleodora-forecasting/cleodora/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -12,12 +13,12 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "client",
-	Short: "WARNING: For now this CLI app is only a bare skeleton!",
-	Long:  `WARNING: For now this CLI app is only a bare skeleton!`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Use:   "cleoc",
+	Short: "Command line tool to interact with a Cleodora server",
+	Long: fmt.Sprintf(`Create and modify forecasts in Cleodora server.
+
+cleoc version: %s
+`, utils.Version),
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
