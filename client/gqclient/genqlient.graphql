@@ -1,0 +1,11 @@
+query GetForecasts {
+  forecasts {
+    id
+    summary
+    description
+    created
+    closes
+    resolves
+    resolution
+  }
+}
