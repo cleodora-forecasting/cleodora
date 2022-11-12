@@ -97,7 +97,7 @@ go run .
 cd frontend
 npm start
 ## Optionally, you can override the backend URL
-# REACT_APP_API_URL = http://localhost:5555 npm start
+# REACT_APP_API_URL=http://localhost:5555 npm start
 ```
 
 Open http://localhost:3000
