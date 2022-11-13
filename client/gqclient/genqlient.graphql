@@ -9,3 +9,9 @@ query GetForecasts {
     resolution
   }
 }
+
+mutation CreateForecast($input: NewForecast!) {
+  createForecast(input: $input) {
+    id
+  }
+}
