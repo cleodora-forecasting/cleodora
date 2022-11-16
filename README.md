@@ -18,6 +18,7 @@ be found on the website https://cleodora.org .
 
 # Table of Contents
 
+- [Features](#features)
 - [Dev Setup](#dev-setup)
   * [Manual setup](#manual-setup)
   * [Gitpod](#gitpod)
@@ -31,6 +32,17 @@ be found on the website https://cleodora.org .
 - [Tests](#tests)
   * [Setup](#setup)
   * [Execution](#execution)
+
+
+# Features
+
+Concrete next steps can be found as GitHub issues.
+
+Less detailed possible future features can be found on the
+[website](https://cleodora.org/docs/roadmap/) (or also in here under
+[./website/content/docs/roadmap.md](./website/content/docs/roadmap.md)) or
+under [./docs/features/overvdiew.md](./docs/features/overvdiew.md).
+
 
 # Dev Setup
 
