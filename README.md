@@ -182,17 +182,8 @@ sudo apt install firefox-geckodriver
 
 ## Execution
 
-Start the app
-
-```bash
-make build
-./build/cleosrv
-```
-
 Run the end to end Selenium browser tests.
 
 ```bash
-cd e2e_tests
-npm install
-node_modules/.bin/mocha --timeout 15000 frontPageTest.spec.js
+./runE2ETests.sh
 ```
