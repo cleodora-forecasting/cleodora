@@ -51,4 +51,4 @@ build: ## Build Cleodora binary
 		-ldflags "-X github.com/cleodora-forecasting/cleodora/utils.Version=`git describe --always --dirty`" \
 		-tags production \
 		-o build/cleoc \
-		github.com/cleodora-forecasting/cleodora/client
+		github.com/cleodora-forecasting/cleodora/cleoc

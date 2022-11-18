@@ -9,7 +9,7 @@ import (
 	"github.com/Khan/genqlient/graphql"
 	"github.com/spf13/cobra"
 
-	"github.com/cleodora-forecasting/cleodora/client/gqclient"
+	"github.com/cleodora-forecasting/cleodora/cleoc/gqclient"
 )
 
 // forecastCmd represents the forecast command
