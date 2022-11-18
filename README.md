@@ -95,7 +95,7 @@ tab, right click on `API (8080)` and then `Port Visibility` / `Public`.
 ## Backend (GraphQL API written in Go)
 
 ```bash
-# Top level directory
+cd cleosrv
 go run .
 ```
 

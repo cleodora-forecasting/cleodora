@@ -9,8 +9,8 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/cleodora-forecasting/cleodora/graph/generated"
-	"github.com/cleodora-forecasting/cleodora/graph/model"
+	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
+	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/model"
 )
 
 // CreateForecast is the resolver for the createForecast field.

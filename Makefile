@@ -41,14 +41,16 @@ SHELL=/bin/bash
 build: ## Build Cleodora binary
 	@rm -rf frontend/build
 	@cd frontend; npm run build
+	@cp -r frontend/build cleosrv/frontend_build
 	@mkdir -p build
 	@go build \
 		-ldflags "-X github.com/cleodora-forecasting/cleodora/utils.Version=`git describe --always --dirty`" \
 		-tags production \
 		-o build/cleosrv \
-		github.com/cleodora-forecasting/cleodora
+		github.com/cleodora-forecasting/cleodora/cleosrv
 	@go build \
 		-ldflags "-X github.com/cleodora-forecasting/cleodora/utils.Version=`git describe --always --dirty`" \
 		-tags production \
 		-o build/cleoc \
 		github.com/cleodora-forecasting/cleodora/cleoc
+	@rm -rf cleosrv/frontend_build

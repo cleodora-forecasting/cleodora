@@ -5,7 +5,7 @@ package graph
 import (
 	"time"
 
-	"github.com/cleodora-forecasting/cleodora/graph/model"
+	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/model"
 )
 
 // This file will not be regenerated automatically.

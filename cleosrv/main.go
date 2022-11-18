@@ -6,9 +6,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/cleodora-forecasting/cleodora/cleosrv/graph"
+	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
-	"github.com/cleodora-forecasting/cleodora/graph"
-	"github.com/cleodora-forecasting/cleodora/graph/generated"
 	"github.com/go-chi/chi/v5"
 )
 

@@ -15,8 +15,8 @@ type Forecast struct {
 	Description string     `json:"description"`
 	Created     time.Time  `json:"created"`
 	Resolves    time.Time  `json:"resolves"`
-	Closes      *time.Time `json:"closes"`
-	Resolution  Resolution `json:"resolution"`
+	Closes     *time.Time `json:"closes"`
+	Resolution Resolution `json:"resolution"`
 }
 
 type NewForecast struct {
