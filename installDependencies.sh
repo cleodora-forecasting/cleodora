@@ -20,3 +20,6 @@ cd -
 cd website
 go mod download
 cd -
+
+export GOBIN=$PWD/bin
+go install github.com/golangci/golangci-lint/cmd/golangci-lint
