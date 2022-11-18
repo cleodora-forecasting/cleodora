@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/cleodora-forecasting/cleodora/utils"
+	"github.com/cleodora-forecasting/cleodora/cleoutils"
 	"github.com/spf13/cobra"
 )
 
@@ -12,7 +12,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the client version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(utils.Version)
+		fmt.Println(cleoutils.Version)
 	},
 }
 

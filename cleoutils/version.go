@@ -1,3 +1,3 @@
-package utils
+package cleoutils
 
 var Version string = "dev"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/cleodora-forecasting/cleodora/utils"
+	"github.com/cleodora-forecasting/cleodora/cleoutils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -19,7 +19,7 @@ var rootCmd = &cobra.Command{
 	Long: fmt.Sprintf(`Create and modify forecasts in Cleodora server.
 
 cleoc version: %s
-`, utils.Version),
+`, cleoutils.Version),
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
