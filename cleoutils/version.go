@@ -1,3 +1,3 @@
 package cleoutils
 
-var Version string = "dev"
+var Version = "dev"

@@ -75,10 +75,12 @@ func timeParseOrPanic(layout string, value string) time.Time {
 	if err != nil {
 		panic(err)
 	}
+
 	return t
 }
 
 func timeParseOrPanicPtr(layout string, value string) *time.Time {
 	t := timeParseOrPanic(layout, value)
+
 	return &t
 }
