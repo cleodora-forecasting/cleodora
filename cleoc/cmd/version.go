@@ -3,8 +3,9 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/cleodora-forecasting/cleodora/cleoutils"
 	"github.com/spf13/cobra"
+
+	"github.com/cleodora-forecasting/cleodora/cleoutils"
 )
 
 // versionCmd represents the version command

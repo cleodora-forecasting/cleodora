@@ -7,10 +7,12 @@ run:
     - e2e_tests
     - frontend
     - website
+
 linters:
   disable-all: true
   enable:
     - errcheck
+    - gci
     - gosimple
     - govet
     - ineffassign
@@ -18,3 +20,10 @@ linters:
     - typecheck
     - unused
   disable:
+
+linters-settings:
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/cleodora-forecasting/cleodora)
