@@ -10,10 +10,12 @@ import (
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
 )
 
-var cfgFile string
-var URL string
+var (
+	cfgFile string
+	URL     string
+)
 
-// rootCmd represents the base command when called without any subcommands
+// rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Use:   "cleoc",
 	Short: "Command line tool to interact with a Cleodora server",

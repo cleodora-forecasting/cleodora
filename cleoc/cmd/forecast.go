@@ -12,7 +12,7 @@ import (
 	"github.com/cleodora-forecasting/cleodora/cleoc/gqclient"
 )
 
-// forecastCmd represents the forecast command
+// forecastCmd represents the forecast command.
 var forecastCmd = &cobra.Command{
 	Use:   "forecast SUMMARY RESOLUTION_DATE [DESCRIPTION]",
 	Short: "Add a new forecast",
