@@ -36,5 +36,8 @@ func main() {
 
 	serveFrontend(router)
 
-	http.ListenAndServe(":8080", router)
+	err := http.ListenAndServe(":8080", router)
+	if err != nil {
+		panic(err)
+	}
 }
