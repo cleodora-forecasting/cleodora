@@ -1,0 +1,20 @@
+run:
+  skip-dirs:
+    - bin
+    - build
+    - design
+    - docs
+    - e2e_tests
+    - frontend
+    - website
+linters:
+  disable-all: true
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - typecheck
+    - unused
+  disable:
