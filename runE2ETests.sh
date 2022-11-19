@@ -6,6 +6,8 @@ set -o nounset
 # Execute from the top level directory of the repository.
 # Build the app, run it, and execute end to end tests against it.
 
+trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+
 make build
 ./build/cleosrv &
 CLEOSRV_PID=$!
