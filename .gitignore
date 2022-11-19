@@ -1,4 +1,5 @@
-/build/
 /.idea/
-oryxBuildBinary
 /bin/
+/build/
+/cleosrv/frontend_build/
+oryxBuildBinary
