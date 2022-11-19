@@ -25,7 +25,7 @@ func getFileSystem() http.FileSystem {
 	// Get the build subdirectory as the
 	// root directory so that it can be passed
 	// to the http.FileServer
-	fsys, err := fs.Sub(embeddedFiles, "frontend/build")
+	fsys, err := fs.Sub(embeddedFiles, "frontend_build")
 	if err != nil {
 		panic(err)
 	}
