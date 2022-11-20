@@ -54,3 +54,8 @@ build: ## Build Cleodora binary
 		-o build/cleoc \
 		github.com/cleodora-forecasting/cleodora/cleoc
 	@rm -rf cleosrv/frontend_build
+
+
+.PHONY: lint
+lint: ## Run golangci-lint with auto fix
+	@./bin/golangci-lint run --fix
