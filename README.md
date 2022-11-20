@@ -2,6 +2,9 @@
 
 # Cleodora Forecasting
 
+![Website Build](https://github.com/cleodora-forecasting/cleodora/actions/workflows/gh-pages.yml/badge.svg)
+![golangci-lint](https://github.com/cleodora-forecasting/cleodora/actions/workflows/golangci-lint.yml/badge.svg)
+
 Software to track personal forecasts/predictions and systematically improve at
 making them.
 
