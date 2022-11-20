@@ -1,6 +1,6 @@
 //go:build !production
 
-package main
+package cleosrv
 
 import (
 	"fmt"
