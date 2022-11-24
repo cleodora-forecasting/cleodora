@@ -1,6 +1,7 @@
 package integrationtest
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -28,10 +29,35 @@ func TestGetForecasts_LowLevel(t *testing.T) {
 	)
 
 	// Prepare the request
-	body := "{\"operationName\":\"GetForecasts\",\"variables\":{}," +
-		"\"query\":\"query GetForecasts {\\n  forecasts {\\n    id" +
-		"\\n    summary\\n    description\\n    created\\n    closes" +
-		"\\n    resolves\\n    resolution\\n    __typename\\n  }\\n}\"}"
+	//body := "{\"operationName\":\"GetForecasts\",\"variables\":{}," +
+	//	"\"query\":\"query GetForecasts {\\n  forecasts {\\n    id" +
+	//	"\\n    summary\\n    description\\n    created\\n    closes" +
+	//	"\\n    resolves\\n    resolution\\n    __typename\\n  }\\n}\"}"
+
+	query := `
+		query GetForecasts {
+			forecasts {
+				id
+				summary
+				description
+				created
+				closes
+				resolves
+				resolution
+				__typename
+			}
+		}`
+	query = strings.ReplaceAll(query, "\n", `\n`)
+	query = strings.ReplaceAll(query, "\t", "    ")
+
+	body := `{
+		"operationName": "GetForecasts",
+		"variables": {},
+		"query": "%s"
+	}`
+	body = fmt.Sprintf(body, query)
+	t.Log("body", body)
+
 	req, err := http.NewRequest(
 		"POST",
 		"localhost:8080/query",
@@ -68,17 +94,17 @@ func TestGetForecasts_GQClient(t *testing.T) {
 	c := client.New(srv)
 
 	query := `
-			query GetForecasts {
-				forecasts {
-					id
-					summary
-					description
-					created
-					closes
-					resolves
-					resolution
-				}
-			}`
+		query GetForecasts {
+			forecasts {
+				id
+				summary
+				description
+				created
+				closes
+				resolves
+				resolution
+			}
+		}`
 
 	var resp struct {
 		Forecasts []struct {
