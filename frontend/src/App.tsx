@@ -1,5 +1,6 @@
 // Import everything needed to use the `useQuery` hook
 import { useQuery, useMutation, gql } from '@apollo/client';
+import {useState} from "react";
 
 const GET_FORECASTS = gql`
   query GetForecasts {
@@ -38,7 +39,20 @@ function DisplayForecasts() {
               </thead>
               <tbody>
               {
-                  data.forecasts.map(({ id, summary, description, created, closes, resolves, resolution }) => (
+                  data.forecasts.map(
+                      ({id,
+                           summary,
+                           description,
+                           created, closes,
+                           resolves,
+                           resolution }:
+                           {id:string,
+                               summary:string,
+                               description:string,
+                               created:Date,
+                               closes:Date,
+                               resolves:Date,
+                               resolution:string }) => (
                       <tr key={id}>
                           <td>{id}</td>
                           <td>{summary}</td>
@@ -64,51 +78,60 @@ const ADD_FORECAST = gql`
     }
 `;
 
-function AddForecast() {
-    let summary, description, closes, resolves;
-    const [addForecast, { /*data,*/ loading, error }] = useMutation(ADD_FORECAST, {
+const AddForecast = () => {
+    const [summary, setSummary] = useState('');
+    const [description, setDescription] = useState('');
+    const [closes, setCloses] = useState(''); // TODO date
+    const [resolves, setResolves] = useState(''); // TODO date
+    const [addForecast, { error, data }] = useMutation(ADD_FORECAST, {
         refetchQueries: [
             {query: GET_FORECASTS}, // DocumentNode object parsed with gql
             'GetForecasts' // Query name
         ],
+        variables: {
+            input: {
+                summary,
+                description,
+                closes,
+                resolves,
+            },
+        },
     });
-
-    if (loading) return 'Submitting...';
-    if (error) return `Submission error! ${error.message}`;
 
     return (
         <div>
             <h3>Add Forecast</h3>
+            {error ? <p style={{color: "red"}}>Oh no! {error.message}</p> : null}
+            {data && data.createForecast ?
+                <p style={{color: "green"}}>
+                    Saved "{data.createForecast.summary}" with ID {data.createForecast.id}.
+                </p>
+                : null}
             <form
                 onSubmit={e => {
                     e.preventDefault();
-                    addForecast({
-                        variables: {
-                            input: {
-                                summary: summary.value,
-                                description: description.value,
-                                closes: closes.value,
-                                resolves: resolves.value,
-                            },
-                        },
+                    addForecast().then(() => {
+                        setSummary('');
+                        setDescription('');
+                        setCloses('');
+                        setResolves('');
                     });
-                    summary.value = '';
                 }}
             >
                 <p>
                     <label>Summary</label>
                     <input
-                        ref={node => {
-                            summary = node;
-                        }}
+                        name="summary"
+                        value={summary}
+                        onChange={e => setSummary(e.target.value)}
                     />
                 </p>
                 <p>
                     <label>Description</label>
                     <textarea
-                        ref={node => {
-                            description = node;
-                        }}
+                        name="description"
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
                     />
                 </p>
                 <p>
@@ -116,17 +139,17 @@ function AddForecast() {
                     <br />
                     <label>Closes</label>
                     <input
-                        ref={node => {
-                            closes = node;
-                        }}
+                        name="closes"
+                        value={closes}
+                        onChange={e => setCloses(e.target.value)}
                     />
                 </p>
                 <p>
                     <label>Resolves</label>
                     <input
-                        ref={node => {
-                            resolves = node;
-                        }}
+                        name="resolves"
+                        value={resolves}
+                        onChange={e => setResolves(e.target.value)}
                     />
                 </p>
                 <button type="submit">Add Forecast</button>
