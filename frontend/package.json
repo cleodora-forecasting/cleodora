@@ -28,9 +28,14 @@
       "react-app",
       "react-app/jest",
       "eslint:recommended",
-      "plugin:@typescript-eslint/recommended"
+      "plugin:@typescript-eslint/recommended",
+      "plugin:@typescript-eslint/recommended-requiring-type-checking"
     ],
     "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "tsconfigRootDir": ".",
+      "project": ["./tsconfig.json"]
+    },
     "plugins": ["@typescript-eslint"],
     "root": true
   },
