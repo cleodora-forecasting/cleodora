@@ -1,6 +1,6 @@
 // Import everything needed to use the `useQuery` hook
 import { useQuery, useMutation, gql } from '@apollo/client';
-import {useState} from "react";
+import {FC, useState} from "react";
 
 const GET_FORECASTS = gql`
   query GetForecasts {
@@ -16,7 +16,7 @@ const GET_FORECASTS = gql`
   }
 `;
 
-function DisplayForecasts() {
+const DisplayForecasts: FC = () => {
   const { loading, error, data } = useQuery(GET_FORECASTS);
 
   if (loading) return <p>Loading...</p>;
@@ -78,7 +78,7 @@ const ADD_FORECAST = gql`
     }
 `;
 
-const AddForecast = () => {
+const AddForecast: FC = () => {
     const [summary, setSummary] = useState('');
     const [description, setDescription] = useState('');
     const [closes, setCloses] = useState(''); // TODO date
