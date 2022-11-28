@@ -1,7 +1,8 @@
 import {FC} from "react";
-import {gql, useQuery} from "@apollo/client";
+import {useQuery} from "@apollo/client";
+import {gql} from "./__generated__"
 
-export const GET_FORECASTS = gql`
+export const GET_FORECASTS = gql(`
     query GetForecasts {
         forecasts {
             id
@@ -13,14 +14,14 @@ export const GET_FORECASTS = gql`
             resolution
         }
     }
-`;
+`);
 
 export const ForecastList: FC = () => {
     const {loading, error, data} = useQuery(GET_FORECASTS);
 
     if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error :(</p>;
-
+    if (error) return <p>Error :-(</p>;
+    if (data === undefined) return <p>Error :-(</p>
     return (
         <div>
             <h3>Forecasts</h3>
@@ -39,33 +40,18 @@ export const ForecastList: FC = () => {
                 <tbody>
                 {
                     data.forecasts.map(
-                        ({
-                             id,
-                             summary,
-                             description,
-                             created, closes,
-                             resolves,
-                             resolution
-                         }:
-                             {
-                                 id: string,
-                                 summary: string,
-                                 description: string,
-                                 created: Date,
-                                 closes: Date,
-                                 resolves: Date,
-                                 resolution: string
-                             }) => (
-                            <tr key={id}>
-                                <td>{id}</td>
-                                <td>{summary}</td>
-                                <td>{description}</td>
-                                <td>{new Date(created).toLocaleString()}</td>
-                                <td>{new Date(closes).toLocaleString()}</td>
-                                <td>{new Date(resolves).toLocaleString()}</td>
-                                <td>{resolution}</td>
+                        f => (
+                            <tr key={f.id}>
+                                <td>{f.id}</td>
+                                <td>{f.summary}</td>
+                                <td>{f.description}</td>
+                                <td>{new Date(f.created as string).toLocaleString()}</td>
+                                <td>{new Date(f.closes as string).toLocaleString()}</td>
+                                <td>{new Date(f.resolves as string).toLocaleString()}</td>
+                                <td>{f.resolution}</td>
                             </tr>
-                        ))
+                        )
+                    )
                 }
                 </tbody>
             </table>
