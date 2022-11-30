@@ -8,7 +8,7 @@ const reportWebVitals = (onPerfEntry?: ReportHandler) => {
       getFCP(onPerfEntry);
       getLCP(onPerfEntry);
       getTTFB(onPerfEntry);
-    });
+    }).catch(reason => console.log("error importing web-vitals", reason));
   }
 };
 
