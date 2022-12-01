@@ -6,7 +6,7 @@ export const GET_FORECASTS = gql(`
     query GetForecasts {
         forecasts {
             id
-            summary
+            title
             description
             created
             closes
@@ -29,7 +29,7 @@ export const ForecastList: FC = () => {
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Summary</th>
+                    <th>Title</th>
                     <th>Description</th>
                     <th>Created</th>
                     <th>Closes</th>
@@ -43,7 +43,7 @@ export const ForecastList: FC = () => {
                         f => (
                             <tr key={f.id}>
                                 <td>{f.id}</td>
-                                <td>{f.summary}</td>
+                                <td>{f.title}</td>
                                 <td>{f.description}</td>
                                 <td>{new Date(f.created as string).toLocaleString()}</td>
                                 <td>{new Date(f.closes as string).toLocaleString()}</td>

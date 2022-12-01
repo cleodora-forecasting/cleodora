@@ -7,7 +7,7 @@
 query GetForecasts {
   forecasts {
     id
-    summary
+    title
     description
     created
     closes

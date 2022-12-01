@@ -32,7 +32,7 @@ Example:
 `,
 	Args: cobra.RangeArgs(2, 3),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		summary := args[0]
+		title := args[0]
 		resolves, err := time.Parse(time.RFC3339, args[1])
 		if err != nil {
 			return err // todo wrap
@@ -47,7 +47,7 @@ Example:
 			http.DefaultClient,
 		)
 		f := gqclient.NewForecast{
-			Summary:     summary,
+			Title:       title,
 			Description: description,
 			Resolves:    resolves,
 			Closes:      resolves, // should be optional

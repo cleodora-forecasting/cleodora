@@ -17,7 +17,7 @@ import (
 func (r *mutationResolver) CreateForecast(ctx context.Context, input model.NewForecast) (*model.Forecast, error) {
 	forecast := &model.Forecast{
 		ID:          fmt.Sprintf("T%d", rand.Int()),
-		Summary:     input.Summary,
+		Title:       input.Title,
 		Description: input.Description,
 		Created:     time.Now(),
 		Resolves:    input.Resolves,

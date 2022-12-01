@@ -52,7 +52,7 @@ type ComplexityRoot struct {
 		ID          func(childComplexity int) int
 		Resolution  func(childComplexity int) int
 		Resolves    func(childComplexity int) int
-		Summary     func(childComplexity int) int
+		Title       func(childComplexity int) int
 	}
 
 	Mutation struct {
@@ -128,12 +128,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Forecast.Resolves(childComplexity), true
 
-	case "Forecast.summary":
-		if e.complexity.Forecast.Summary == nil {
+	case "Forecast.title":
+		if e.complexity.Forecast.Title == nil {
 			break
 		}
 
-		return e.complexity.Forecast.Summary(childComplexity), true
+		return e.complexity.Forecast.Title(childComplexity), true
 
 	case "Mutation.createForecast":
 		if e.complexity.Mutation.CreateForecast == nil {
@@ -233,7 +233,7 @@ type Query {
 
 type Forecast {
   id: ID!
-  summary: String!
+  title: String!
   description: String!
   created: Time!
   resolves: Time!
@@ -242,7 +242,7 @@ type Forecast {
 }
 
 input NewForecast {
-  summary: String!
+  title: String!
   description: String!
   resolves: Time!
   closes: Time
@@ -380,8 +380,8 @@ func (ec *executionContext) fieldContext_Forecast_id(ctx context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _Forecast_summary(ctx context.Context, field graphql.CollectedField, obj *model.Forecast) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Forecast_summary(ctx, field)
+func (ec *executionContext) _Forecast_title(ctx context.Context, field graphql.CollectedField, obj *model.Forecast) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Forecast_title(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -394,7 +394,7 @@ func (ec *executionContext) _Forecast_summary(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Summary, nil
+		return obj.Title, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -411,7 +411,7 @@ func (ec *executionContext) _Forecast_summary(ctx context.Context, field graphql
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Forecast_summary(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Forecast_title(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Forecast",
 		Field:      field,
@@ -682,8 +682,8 @@ func (ec *executionContext) fieldContext_Mutation_createForecast(ctx context.Con
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Forecast_id(ctx, field)
-			case "summary":
-				return ec.fieldContext_Forecast_summary(ctx, field)
+			case "title":
+				return ec.fieldContext_Forecast_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Forecast_description(ctx, field)
 			case "created":
@@ -753,8 +753,8 @@ func (ec *executionContext) fieldContext_Query_forecasts(ctx context.Context, fi
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Forecast_id(ctx, field)
-			case "summary":
-				return ec.fieldContext_Forecast_summary(ctx, field)
+			case "title":
+				return ec.fieldContext_Forecast_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Forecast_description(ctx, field)
 			case "created":
@@ -2681,18 +2681,18 @@ func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj i
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"summary", "description", "resolves", "closes"}
+	fieldsInOrder := [...]string{"title", "description", "resolves", "closes"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "summary":
+		case "title":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("summary"))
-			it.Summary, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			it.Title, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2751,9 +2751,9 @@ func (ec *executionContext) _Forecast(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "summary":
+		case "title":
 
-			out.Values[i] = ec._Forecast_summary(ctx, field, obj)
+			out.Values[i] = ec._Forecast_title(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++

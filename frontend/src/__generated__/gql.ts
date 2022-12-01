@@ -13,18 +13,18 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
-    "\n    mutation createForecast($input: NewForecast!) {\n        createForecast(input: $input) {\n            id\n            summary\n        }\n    }\n": types.CreateForecastDocument,
-    "\n    query GetForecasts {\n        forecasts {\n            id\n            summary\n            description\n            created\n            closes\n            resolves\n            resolution\n        }\n    }\n": types.GetForecastsDocument,
+    "\n    mutation createForecast($input: NewForecast!) {\n        createForecast(input: $input) {\n            id\n            title\n        }\n    }\n": types.CreateForecastDocument,
+    "\n    query GetForecasts {\n        forecasts {\n            id\n            title\n            description\n            created\n            closes\n            resolves\n            resolution\n        }\n    }\n": types.GetForecastsDocument,
 };
 
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n    mutation createForecast($input: NewForecast!) {\n        createForecast(input: $input) {\n            id\n            summary\n        }\n    }\n"): (typeof documents)["\n    mutation createForecast($input: NewForecast!) {\n        createForecast(input: $input) {\n            id\n            summary\n        }\n    }\n"];
+export function gql(source: "\n    mutation createForecast($input: NewForecast!) {\n        createForecast(input: $input) {\n            id\n            title\n        }\n    }\n"): (typeof documents)["\n    mutation createForecast($input: NewForecast!) {\n        createForecast(input: $input) {\n            id\n            title\n        }\n    }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n    query GetForecasts {\n        forecasts {\n            id\n            summary\n            description\n            created\n            closes\n            resolves\n            resolution\n        }\n    }\n"): (typeof documents)["\n    query GetForecasts {\n        forecasts {\n            id\n            summary\n            description\n            created\n            closes\n            resolves\n            resolution\n        }\n    }\n"];
+export function gql(source: "\n    query GetForecasts {\n        forecasts {\n            id\n            title\n            description\n            created\n            closes\n            resolves\n            resolution\n        }\n    }\n"): (typeof documents)["\n    query GetForecasts {\n        forecasts {\n            id\n            title\n            description\n            created\n            closes\n            resolves\n            resolution\n        }\n    }\n"];
 
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

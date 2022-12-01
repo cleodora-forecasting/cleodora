@@ -21,7 +21,7 @@ func (r *Resolver) AddDummyData() {
 		r.forecasts,
 		&model.Forecast{
 			ID:          "1",
-			Summary:     "Will \"The Fabelmans\" win \"Best Picture\" at the Oscars 2023?",
+			Title:       "Will \"The Fabelmans\" win \"Best Picture\" at the Oscars 2023?",
 			Description: "",
 			Created:     time.Now(),
 			Closes: timeParseOrPanicPtr(
@@ -35,8 +35,8 @@ func (r *Resolver) AddDummyData() {
 			Resolution: model.ResolutionUnresolved,
 		},
 		&model.Forecast{
-			ID:      "2",
-			Summary: "Will I get an A in my upcoming exam?",
+			ID:    "2",
+			Title: "Will I get an A in my upcoming exam?",
 			Description: "The forecast resolves as true if and only if I get" +
 				" the highest marks.",
 			Created: time.Now(),
@@ -51,8 +51,8 @@ func (r *Resolver) AddDummyData() {
 			Resolution: model.ResolutionUnresolved,
 		},
 		&model.Forecast{
-			ID:      "3",
-			Summary: "Will the number of contributors for \"Cleodora\" be more than 3 at the end of 2022?",
+			ID:    "3",
+			Title: "Will the number of contributors for \"Cleodora\" be more than 3 at the end of 2022?",
 			Description: "A contributor is any person who has made a commit" +
 				" in any Git repository of the cleodora-forecasting GitHub" +
 				" organization.",

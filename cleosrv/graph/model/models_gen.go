@@ -11,7 +11,7 @@ import (
 
 type Forecast struct {
 	ID          string     `json:"id"`
-	Summary     string     `json:"summary"`
+	Title       string     `json:"title"`
 	Description string     `json:"description"`
 	Created     time.Time  `json:"created"`
 	Resolves    time.Time  `json:"resolves"`
@@ -20,7 +20,7 @@ type Forecast struct {
 }
 
 type NewForecast struct {
-	Summary     string     `json:"summary"`
+	Title       string     `json:"title"`
 	Description string     `json:"description"`
 	Resolves    time.Time  `json:"resolves"`
 	Closes      *time.Time `json:"closes"`

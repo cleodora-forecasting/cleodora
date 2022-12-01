@@ -30,7 +30,7 @@ func (v *CreateForecastResponse) GetCreateForecast() CreateForecastCreateForecas
 // GetForecastsForecastsForecast includes the requested fields of the GraphQL type Forecast.
 type GetForecastsForecastsForecast struct {
 	Id          string     `json:"id"`
-	Summary     string     `json:"summary"`
+	Title       string     `json:"title"`
 	Description string     `json:"description"`
 	Created     time.Time  `json:"created"`
 	Closes      time.Time  `json:"closes"`
@@ -41,8 +41,8 @@ type GetForecastsForecastsForecast struct {
 // GetId returns GetForecastsForecastsForecast.Id, and is useful for accessing the field via an interface.
 func (v *GetForecastsForecastsForecast) GetId() string { return v.Id }
 
-// GetSummary returns GetForecastsForecastsForecast.Summary, and is useful for accessing the field via an interface.
-func (v *GetForecastsForecastsForecast) GetSummary() string { return v.Summary }
+// GetTitle returns GetForecastsForecastsForecast.Title, and is useful for accessing the field via an interface.
+func (v *GetForecastsForecastsForecast) GetTitle() string { return v.Title }
 
 // GetDescription returns GetForecastsForecastsForecast.Description, and is useful for accessing the field via an interface.
 func (v *GetForecastsForecastsForecast) GetDescription() string { return v.Description }
@@ -68,14 +68,14 @@ type GetForecastsResponse struct {
 func (v *GetForecastsResponse) GetForecasts() []GetForecastsForecastsForecast { return v.Forecasts }
 
 type NewForecast struct {
-	Summary     string    `json:"summary"`
+	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	Resolves    time.Time `json:"resolves"`
 	Closes      time.Time `json:"closes"`
 }
 
-// GetSummary returns NewForecast.Summary, and is useful for accessing the field via an interface.
-func (v *NewForecast) GetSummary() string { return v.Summary }
+// GetTitle returns NewForecast.Title, and is useful for accessing the field via an interface.
+func (v *NewForecast) GetTitle() string { return v.Title }
 
 // GetDescription returns NewForecast.Description, and is useful for accessing the field via an interface.
 func (v *NewForecast) GetDescription() string { return v.Description }
@@ -145,7 +145,7 @@ func GetForecasts(
 query GetForecasts {
 	forecasts {
 		id
-		summary
+		title
 		description
 		created
 		closes

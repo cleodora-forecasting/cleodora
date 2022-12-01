@@ -11,13 +11,13 @@ const ADD_FORECAST = gql(`
     mutation createForecast($input: NewForecast!) {
         createForecast(input: $input) {
             id
-            summary
+            title
         }
     }
 `);
 //` as DocumentNode<CreateForecastMutation, CreateForecastMutationVariables>);
 export const AddForecast: FC = () => {
-    const [summary, setSummary] = useState('');
+    const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [closes, setCloses] = useState(''); // TODO date
     const [resolves, setResolves] = useState(''); // TODO date
@@ -31,7 +31,7 @@ export const AddForecast: FC = () => {
         ],
         variables: {
             input: {
-                summary,
+                title,
                 description,
                 closes,
                 resolves,
@@ -46,7 +46,7 @@ export const AddForecast: FC = () => {
                 <p style={{color: "red"}}>Oh no! {error.message}</p> : null}
             {data && data.createForecast ?
                 <p style={{color: "green"}}>
-                    Saved "{data.createForecast.summary}" with
+                    Saved "{data.createForecast.title}" with
                     ID {data.createForecast.id}.
                 </p>
                 : null}
@@ -54,7 +54,7 @@ export const AddForecast: FC = () => {
                 onSubmit={e => {
                     e.preventDefault();
                     addForecast().then(() => {
-                        setSummary('');
+                        setTitle('');
                         setDescription('');
                         setCloses('');
                         setResolves('');
@@ -62,11 +62,11 @@ export const AddForecast: FC = () => {
                 }}
             >
                 <p>
-                    <label>Summary</label>
+                    <label>Title</label>
                     <input
-                        name="summary"
-                        value={summary}
-                        onChange={e => setSummary(e.target.value)}
+                        name="title"
+                        value={title}
+                        onChange={e => setTitle(e.target.value)}
                     />
                 </p>
                 <p>
