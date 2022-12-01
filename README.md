@@ -15,8 +15,12 @@ Examples of such forecasts:
 * Will there be nice weather on my birthday?
 * Will the number of contributors for "Cleodora" be more than 3 at the end of 2022?
 
-All information, including development guidelines, requirements and roadmap can
-be found on the website https://cleodora.org .
+Below an example mockup for how a user kept updating their "Will aliens be found on
+the moon in 2022?" forecast due to new information. Analyzing such a forecasting
+history is what will help them improve. You can find more such mockups on the
+website https://cleodora.org/docs/roadmap/mockups/ .
+
+![Mockup: History of a forecast](website/content/docs/roadmap/mockups/mockups_cleodora_history.jpg)
 
 
 # Table of Contents
