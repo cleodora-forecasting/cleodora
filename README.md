@@ -28,7 +28,7 @@ be found on the website https://cleodora.org .
   * [GitHub Codespaces](#github-codespaces)
 - [Run](#run)
   * [Backend (GraphQL API written in Go)](#backend--graphql-api-written-in-go-)
-  * [Frontend (React app)](#frontend--react-app-)
+  * [GUI / Frontend (React app)](#gui--frontend-react-app-)
   * [Client (CLI written in Go)](#client--cli-written-in-go-)
 - [Build](#build)
 - [GraphQL playground (GraphiQL)](#graphql-playground--graphiql-)
@@ -106,7 +106,10 @@ go run .
 * GraphQL API: http://localhost:8080/query
 
 
-## Frontend (React app)
+## GUI / Frontend (React app)
+
+Frequently the frontend is referred to as GUI (Graphical User Interface) in
+this app because it's shorter.
 
 ```bash
 cd frontend
