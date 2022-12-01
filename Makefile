@@ -62,3 +62,9 @@ build: ## Build Cleodora binary
 .PHONY: lint
 lint: ## Run golangci-lint with auto fix
 	@./bin/golangci-lint run --fix
+
+
+.PHONY: generate
+generate: ## Generate code
+	@go generate ./...
+	@cd frontend && npm run generate
