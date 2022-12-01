@@ -1,7 +1,7 @@
 import { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
-  schema: '../cleosrv/graph/schema.graphqls',
+  schema: '../schema.graphql',
   documents: ['src/**/*.tsx'],
   generates: {
     './src/__generated__/': {
