@@ -274,7 +274,7 @@ func (ec *executionContext) field_Mutation_createForecast_args(ctx context.Conte
 	var arg0 model.NewForecast
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewForecast2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐNewForecast(ctx, tmp)
+		arg0, err = ec.unmarshalNNewForecast2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewForecast(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -625,7 +625,7 @@ func (ec *executionContext) _Forecast_resolution(ctx context.Context, field grap
 	}
 	res := resTmp.(model.Resolution)
 	fc.Result = res
-	return ec.marshalNResolution2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐResolution(ctx, field.Selections, res)
+	return ec.marshalNResolution2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐResolution(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Forecast_resolution(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -669,7 +669,7 @@ func (ec *executionContext) _Mutation_createForecast(ctx context.Context, field 
 	}
 	res := resTmp.(*model.Forecast)
 	fc.Result = res
-	return ec.marshalNForecast2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐForecast(ctx, field.Selections, res)
+	return ec.marshalNForecast2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐForecast(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createForecast(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -740,7 +740,7 @@ func (ec *executionContext) _Query_forecasts(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*model.Forecast)
 	fc.Result = res
-	return ec.marshalNForecast2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐForecastᚄ(ctx, field.Selections, res)
+	return ec.marshalNForecast2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐForecastᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_forecasts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3238,11 +3238,11 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNForecast2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐForecast(ctx context.Context, sel ast.SelectionSet, v model.Forecast) graphql.Marshaler {
+func (ec *executionContext) marshalNForecast2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐForecast(ctx context.Context, sel ast.SelectionSet, v model.Forecast) graphql.Marshaler {
 	return ec._Forecast(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNForecast2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐForecastᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Forecast) graphql.Marshaler {
+func (ec *executionContext) marshalNForecast2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐForecastᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Forecast) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3266,7 +3266,7 @@ func (ec *executionContext) marshalNForecast2ᚕᚖgithubᚗcomᚋcleodoraᚑfor
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNForecast2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐForecast(ctx, sel, v[i])
+			ret[i] = ec.marshalNForecast2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐForecast(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3286,7 +3286,7 @@ func (ec *executionContext) marshalNForecast2ᚕᚖgithubᚗcomᚋcleodoraᚑfor
 	return ret
 }
 
-func (ec *executionContext) marshalNForecast2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐForecast(ctx context.Context, sel ast.SelectionSet, v *model.Forecast) graphql.Marshaler {
+func (ec *executionContext) marshalNForecast2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐForecast(ctx context.Context, sel ast.SelectionSet, v *model.Forecast) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -3311,18 +3311,18 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewForecast2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐNewForecast(ctx context.Context, v interface{}) (model.NewForecast, error) {
+func (ec *executionContext) unmarshalNNewForecast2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewForecast(ctx context.Context, v interface{}) (model.NewForecast, error) {
 	res, err := ec.unmarshalInputNewForecast(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNResolution2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐResolution(ctx context.Context, v interface{}) (model.Resolution, error) {
+func (ec *executionContext) unmarshalNResolution2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐResolution(ctx context.Context, v interface{}) (model.Resolution, error) {
 	var res model.Resolution
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNResolution2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋgraphᚋmodelᚐResolution(ctx context.Context, sel ast.SelectionSet, v model.Resolution) graphql.Marshaler {
+func (ec *executionContext) marshalNResolution2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐResolution(ctx context.Context, sel ast.SelectionSet, v model.Resolution) graphql.Marshaler {
 	return v
 }
 
