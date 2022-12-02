@@ -33,6 +33,46 @@ func (r *Resolver) AddDummyData() {
 				"2023-03-11T23:59:00+00:00",
 			),
 			Resolution: model.ResolutionUnresolved,
+			Outcomes: []*model.Outcome{
+				{
+					ID:      "1",
+					Text:    "Yes",
+					Correct: false,
+				},
+				{
+					ID:      "2",
+					Text:    "No",
+					Correct: false,
+				},
+			},
+			Estimates: []*model.Estimate{
+				{
+					ID:      "1",
+					Created: time.Now(),
+					Reason: "It's a great film and it's of the type that the" +
+						" Academy loves!",
+					Probabilities: []*model.Probability{
+						{
+							ID:    "1",
+							Value: 30,
+							Outcome: &model.Outcome{
+								ID:      "1",
+								Text:    "Yes",
+								Correct: false,
+							},
+						},
+						{
+							ID:    "2",
+							Value: 70,
+							Outcome: &model.Outcome{
+								ID:      "2",
+								Text:    "No",
+								Correct: false,
+							},
+						},
+					},
+				},
+			},
 		},
 		&model.Forecast{
 			ID:    "2",
@@ -49,6 +89,46 @@ func (r *Resolver) AddDummyData() {
 				"2022-12-01T09:00:00+00:00",
 			),
 			Resolution: model.ResolutionUnresolved,
+			Outcomes: []*model.Outcome{
+				{
+					ID:      "3",
+					Text:    "Yes",
+					Correct: false,
+				},
+				{
+					ID:      "4",
+					Text:    "No",
+					Correct: false,
+				},
+			},
+			Estimates: []*model.Estimate{
+				{
+					ID:      "2",
+					Created: time.Now(),
+					Reason: "I'm well prepared and performed well on test" +
+						" exams.",
+					Probabilities: []*model.Probability{
+						{
+							ID:    "3",
+							Value: 90,
+							Outcome: &model.Outcome{
+								ID:      "3",
+								Text:    "Yes",
+								Correct: false,
+							},
+						},
+						{
+							ID:    "4",
+							Value: 10,
+							Outcome: &model.Outcome{
+								ID:      "4",
+								Text:    "No",
+								Correct: false,
+							},
+						},
+					},
+				},
+			},
 		},
 		&model.Forecast{
 			ID:    "3",
@@ -66,6 +146,45 @@ func (r *Resolver) AddDummyData() {
 				"2022-12-31T23:59:00+00:00",
 			),
 			Resolution: model.ResolutionUnresolved,
+			Outcomes: []*model.Outcome{
+				{
+					ID:      "5",
+					Text:    "Yes",
+					Correct: false,
+				},
+				{
+					ID:      "6",
+					Text:    "No",
+					Correct: false,
+				},
+			},
+			Estimates: []*model.Estimate{
+				{
+					ID:      "3",
+					Created: time.Now(),
+					Reason:  "It's a new project and people are usually busy.",
+					Probabilities: []*model.Probability{
+						{
+							ID:    "5",
+							Value: 15,
+							Outcome: &model.Outcome{
+								ID:      "5",
+								Text:    "Yes",
+								Correct: false,
+							},
+						},
+						{
+							ID:    "6",
+							Value: 85,
+							Outcome: &model.Outcome{
+								ID:      "6",
+								Text:    "No",
+								Correct: false,
+							},
+						},
+					},
+				},
+			},
 		},
 	)
 }
