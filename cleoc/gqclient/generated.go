@@ -89,8 +89,7 @@ func (v *NewForecast) GetCloses() time.Time { return v.Closes }
 type Resolution string
 
 const (
-	ResolutionTrue          Resolution = "TRUE"
-	ResolutionFalse         Resolution = "FALSE"
+	ResolutionResolved      Resolution = "RESOLVED"
 	ResolutionNotApplicable Resolution = "NOT_APPLICABLE"
 	ResolutionUnresolved    Resolution = "UNRESOLVED"
 )

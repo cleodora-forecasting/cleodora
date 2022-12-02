@@ -49,9 +49,8 @@ export type Query = {
 };
 
 export enum Resolution {
-  False = 'FALSE',
   NotApplicable = 'NOT_APPLICABLE',
-  True = 'TRUE',
+  Resolved = 'RESOLVED',
   Unresolved = 'UNRESOLVED'
 }
 

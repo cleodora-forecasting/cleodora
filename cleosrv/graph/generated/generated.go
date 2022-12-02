@@ -255,8 +255,7 @@ type Mutation {
 scalar Time
 
 enum Resolution {
-  TRUE
-  FALSE
+  RESOLVED
   NOT_APPLICABLE
   UNRESOLVED
 }

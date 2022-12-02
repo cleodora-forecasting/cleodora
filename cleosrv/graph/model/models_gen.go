@@ -29,22 +29,20 @@ type NewForecast struct {
 type Resolution string
 
 const (
-	ResolutionTrue          Resolution = "TRUE"
-	ResolutionFalse         Resolution = "FALSE"
+	ResolutionResolved      Resolution = "RESOLVED"
 	ResolutionNotApplicable Resolution = "NOT_APPLICABLE"
 	ResolutionUnresolved    Resolution = "UNRESOLVED"
 )
 
 var AllResolution = []Resolution{
-	ResolutionTrue,
-	ResolutionFalse,
+	ResolutionResolved,
 	ResolutionNotApplicable,
 	ResolutionUnresolved,
 }
 
 func (e Resolution) IsValid() bool {
 	switch e {
-	case ResolutionTrue, ResolutionFalse, ResolutionNotApplicable, ResolutionUnresolved:
+	case ResolutionResolved, ResolutionNotApplicable, ResolutionUnresolved:
 		return true
 	}
 	return false
