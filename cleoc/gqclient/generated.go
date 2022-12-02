@@ -10,6 +10,9 @@ import (
 )
 
 // CreateForecastCreateForecast includes the requested fields of the GraphQL type Forecast.
+// The GraphQL type's documentation follows.
+//
+// A prediction about the future.
 type CreateForecastCreateForecast struct {
 	Id string `json:"id"`
 }
@@ -28,14 +31,27 @@ func (v *CreateForecastResponse) GetCreateForecast() CreateForecastCreateForecas
 }
 
 // GetForecastsForecastsForecast includes the requested fields of the GraphQL type Forecast.
+// The GraphQL type's documentation follows.
+//
+// A prediction about the future.
 type GetForecastsForecastsForecast struct {
-	Id          string     `json:"id"`
-	Title       string     `json:"title"`
-	Description string     `json:"description"`
-	Created     time.Time  `json:"created"`
-	Closes      time.Time  `json:"closes"`
-	Resolves    time.Time  `json:"resolves"`
-	Resolution  Resolution `json:"resolution"`
+	Id          string    `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Created     time.Time `json:"created"`
+	// The point in time at which you no longer want to update your probability
+	// estimates for the forecast. In most cases you won't need this. One example
+	// where you might is when you want to predict the outcome of an exam. You may
+	// want to set 'closes' to the time right before the exam starts, even though
+	// 'resolves' is several weeks later (when the exam results are published). This
+	// way your prediction history will only reflect your estimations before you
+	// took the exam, which is something you may want (or not, in which case you
+	// could simply not set 'closes').
+	Closes time.Time `json:"closes"`
+	// The point in time at which you predict you will be able to resolve whether
+	// how the forecast resolved.
+	Resolves   time.Time  `json:"resolves"`
+	Resolution Resolution `json:"resolution"`
 }
 
 // GetId returns GetForecastsForecastsForecast.Id, and is useful for accessing the field via an interface.

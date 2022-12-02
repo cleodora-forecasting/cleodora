@@ -15,13 +15,44 @@ export type Scalars = {
   Time: any;
 };
 
+/**
+ * A list of probabilities (one for each outcome) together with a timestamp and
+ * an explanation why you made this estimate. Every time you change your mind
+ * about a forecast you will create a new Estimate.
+ * All probabilities always add up to 100.
+ */
+export type Estimate = {
+  __typename?: 'Estimate';
+  created: Scalars['Time'];
+  id: Scalars['ID'];
+  probabilities: Array<Maybe<Probability>>;
+  reason: Scalars['String'];
+};
+
+/** A prediction about the future. */
 export type Forecast = {
   __typename?: 'Forecast';
+  /**
+   * The point in time at which you no longer want to update your probability
+   * estimates for the forecast. In most cases you won't need this. One example
+   * where you might is when you want to predict the outcome of an exam. You may
+   * want to set 'closes' to the time right before the exam starts, even though
+   * 'resolves' is several weeks later (when the exam results are published). This
+   * way your prediction history will only reflect your estimations before you
+   * took the exam, which is something you may want (or not, in which case you
+   * could simply not set 'closes').
+   */
   closes?: Maybe<Scalars['Time']>;
   created: Scalars['Time'];
   description: Scalars['String'];
+  estimates: Array<Maybe<Estimate>>;
   id: Scalars['ID'];
+  outcomes: Array<Maybe<Outcome>>;
   resolution: Resolution;
+  /**
+   * The point in time at which you predict you will be able to resolve whether
+   * how the forecast resolved.
+   */
   resolves: Scalars['Time'];
   title: Scalars['String'];
 };
@@ -41,6 +72,28 @@ export type NewForecast = {
   description: Scalars['String'];
   resolves: Scalars['Time'];
   title: Scalars['String'];
+};
+
+/**
+ * The possible results of a forecast. In the simplest case you will only have
+ * two outcomes: Yes and No.
+ */
+export type Outcome = {
+  __typename?: 'Outcome';
+  correct: Scalars['Boolean'];
+  id: Scalars['ID'];
+  text: Scalars['String'];
+};
+
+/**
+ * A number between 0 and 100 tied to a specific Outcome. It is always part of
+ * an Estimate.
+ */
+export type Probability = {
+  __typename?: 'Probability';
+  id: Scalars['ID'];
+  outcome: Outcome;
+  value: Scalars['Int'];
 };
 
 export type Query = {

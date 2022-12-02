@@ -45,11 +45,20 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	Estimate struct {
+		Created       func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Probabilities func(childComplexity int) int
+		Reason        func(childComplexity int) int
+	}
+
 	Forecast struct {
 		Closes      func(childComplexity int) int
 		Created     func(childComplexity int) int
 		Description func(childComplexity int) int
+		Estimates   func(childComplexity int) int
 		ID          func(childComplexity int) int
+		Outcomes    func(childComplexity int) int
 		Resolution  func(childComplexity int) int
 		Resolves    func(childComplexity int) int
 		Title       func(childComplexity int) int
@@ -57,6 +66,18 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		CreateForecast func(childComplexity int, input model.NewForecast) int
+	}
+
+	Outcome struct {
+		Correct func(childComplexity int) int
+		ID      func(childComplexity int) int
+		Text    func(childComplexity int) int
+	}
+
+	Probability struct {
+		ID      func(childComplexity int) int
+		Outcome func(childComplexity int) int
+		Value   func(childComplexity int) int
 	}
 
 	Query struct {
@@ -86,6 +107,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
+	case "Estimate.created":
+		if e.complexity.Estimate.Created == nil {
+			break
+		}
+
+		return e.complexity.Estimate.Created(childComplexity), true
+
+	case "Estimate.id":
+		if e.complexity.Estimate.ID == nil {
+			break
+		}
+
+		return e.complexity.Estimate.ID(childComplexity), true
+
+	case "Estimate.probabilities":
+		if e.complexity.Estimate.Probabilities == nil {
+			break
+		}
+
+		return e.complexity.Estimate.Probabilities(childComplexity), true
+
+	case "Estimate.reason":
+		if e.complexity.Estimate.Reason == nil {
+			break
+		}
+
+		return e.complexity.Estimate.Reason(childComplexity), true
+
 	case "Forecast.closes":
 		if e.complexity.Forecast.Closes == nil {
 			break
@@ -107,12 +156,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Forecast.Description(childComplexity), true
 
+	case "Forecast.estimates":
+		if e.complexity.Forecast.Estimates == nil {
+			break
+		}
+
+		return e.complexity.Forecast.Estimates(childComplexity), true
+
 	case "Forecast.id":
 		if e.complexity.Forecast.ID == nil {
 			break
 		}
 
 		return e.complexity.Forecast.ID(childComplexity), true
+
+	case "Forecast.outcomes":
+		if e.complexity.Forecast.Outcomes == nil {
+			break
+		}
+
+		return e.complexity.Forecast.Outcomes(childComplexity), true
 
 	case "Forecast.resolution":
 		if e.complexity.Forecast.Resolution == nil {
@@ -146,6 +209,48 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateForecast(childComplexity, args["input"].(model.NewForecast)), true
+
+	case "Outcome.correct":
+		if e.complexity.Outcome.Correct == nil {
+			break
+		}
+
+		return e.complexity.Outcome.Correct(childComplexity), true
+
+	case "Outcome.id":
+		if e.complexity.Outcome.ID == nil {
+			break
+		}
+
+		return e.complexity.Outcome.ID(childComplexity), true
+
+	case "Outcome.text":
+		if e.complexity.Outcome.Text == nil {
+			break
+		}
+
+		return e.complexity.Outcome.Text(childComplexity), true
+
+	case "Probability.id":
+		if e.complexity.Probability.ID == nil {
+			break
+		}
+
+		return e.complexity.Probability.ID(childComplexity), true
+
+	case "Probability.outcome":
+		if e.complexity.Probability.Outcome == nil {
+			break
+		}
+
+		return e.complexity.Probability.Outcome(childComplexity), true
+
+	case "Probability.value":
+		if e.complexity.Probability.Value == nil {
+			break
+		}
+
+		return e.complexity.Probability.Value(childComplexity), true
 
 	case "Query.forecasts":
 		if e.complexity.Query.Forecasts == nil {
@@ -231,14 +336,68 @@ type Query {
   forecasts: [Forecast!]!
 }
 
+"""
+A prediction about the future.
+"""
 type Forecast {
   id: ID!
   title: String!
   description: String!
   created: Time!
+
+  """
+  The point in time at which you predict you will be able to resolve whether
+  how the forecast resolved.
+  """
   resolves: Time!
+
+  """
+  The point in time at which you no longer want to update your probability
+  estimates for the forecast. In most cases you won't need this. One example
+  where you might is when you want to predict the outcome of an exam. You may
+  want to set 'closes' to the time right before the exam starts, even though
+  'resolves' is several weeks later (when the exam results are published). This
+  way your prediction history will only reflect your estimations before you
+  took the exam, which is something you may want (or not, in which case you
+  could simply not set 'closes').
+  """
   closes: Time
   resolution: Resolution!
+  outcomes: [Outcome]!
+  estimates: [Estimate]!
+}
+
+"""
+The possible results of a forecast. In the simplest case you will only have
+two outcomes: Yes and No.
+"""
+type Outcome {
+  id: ID!
+  text: String!
+  correct: Boolean!
+}
+
+"""
+A list of probabilities (one for each outcome) together with a timestamp and
+an explanation why you made this estimate. Every time you change your mind
+about a forecast you will create a new Estimate.
+All probabilities always add up to 100.
+"""
+type Estimate {
+  id: ID!
+  created: Time!
+  reason: String!
+  probabilities: [Probability]!
+}
+
+"""
+A number between 0 and 100 tied to a specific Outcome. It is always part of
+an Estimate.
+"""
+type Probability {
+  id: ID!
+  value: Int!
+  outcome: Outcome!
 }
 
 input NewForecast {
@@ -334,6 +493,190 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _Estimate_id(ctx context.Context, field graphql.CollectedField, obj *model.Estimate) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Estimate_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Estimate_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Estimate",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Estimate_created(ctx context.Context, field graphql.CollectedField, obj *model.Estimate) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Estimate_created(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Created, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Estimate_created(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Estimate",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Estimate_reason(ctx context.Context, field graphql.CollectedField, obj *model.Estimate) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Estimate_reason(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Reason, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Estimate_reason(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Estimate",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Estimate_probabilities(ctx context.Context, field graphql.CollectedField, obj *model.Estimate) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Estimate_probabilities(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Probabilities, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Probability)
+	fc.Result = res
+	return ec.marshalNProbability2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐProbability(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Estimate_probabilities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Estimate",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Probability_id(ctx, field)
+			case "value":
+				return ec.fieldContext_Probability_value(ctx, field)
+			case "outcome":
+				return ec.fieldContext_Probability_outcome(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Probability", field.Name)
+		},
+	}
+	return fc, nil
+}
 
 func (ec *executionContext) _Forecast_id(ctx context.Context, field graphql.CollectedField, obj *model.Forecast) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Forecast_id(ctx, field)
@@ -640,6 +983,112 @@ func (ec *executionContext) fieldContext_Forecast_resolution(ctx context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _Forecast_outcomes(ctx context.Context, field graphql.CollectedField, obj *model.Forecast) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Forecast_outcomes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Outcomes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Outcome)
+	fc.Result = res
+	return ec.marshalNOutcome2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐOutcome(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Forecast_outcomes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Forecast",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Outcome_id(ctx, field)
+			case "text":
+				return ec.fieldContext_Outcome_text(ctx, field)
+			case "correct":
+				return ec.fieldContext_Outcome_correct(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Outcome", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Forecast_estimates(ctx context.Context, field graphql.CollectedField, obj *model.Forecast) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Forecast_estimates(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Estimates, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Estimate)
+	fc.Result = res
+	return ec.marshalNEstimate2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐEstimate(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Forecast_estimates(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Forecast",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Estimate_id(ctx, field)
+			case "created":
+				return ec.fieldContext_Estimate_created(ctx, field)
+			case "reason":
+				return ec.fieldContext_Estimate_reason(ctx, field)
+			case "probabilities":
+				return ec.fieldContext_Estimate_probabilities(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Estimate", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createForecast(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createForecast(ctx, field)
 	if err != nil {
@@ -693,6 +1142,10 @@ func (ec *executionContext) fieldContext_Mutation_createForecast(ctx context.Con
 				return ec.fieldContext_Forecast_closes(ctx, field)
 			case "resolution":
 				return ec.fieldContext_Forecast_resolution(ctx, field)
+			case "outcomes":
+				return ec.fieldContext_Forecast_outcomes(ctx, field)
+			case "estimates":
+				return ec.fieldContext_Forecast_estimates(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Forecast", field.Name)
 		},
@@ -707,6 +1160,278 @@ func (ec *executionContext) fieldContext_Mutation_createForecast(ctx context.Con
 	if fc.Args, err = ec.field_Mutation_createForecast_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Outcome_id(ctx context.Context, field graphql.CollectedField, obj *model.Outcome) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Outcome_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Outcome_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Outcome",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Outcome_text(ctx context.Context, field graphql.CollectedField, obj *model.Outcome) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Outcome_text(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Text, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Outcome_text(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Outcome",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Outcome_correct(ctx context.Context, field graphql.CollectedField, obj *model.Outcome) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Outcome_correct(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Correct, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Outcome_correct(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Outcome",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Probability_id(ctx context.Context, field graphql.CollectedField, obj *model.Probability) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Probability_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Probability_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Probability",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Probability_value(ctx context.Context, field graphql.CollectedField, obj *model.Probability) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Probability_value(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Value, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Probability_value(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Probability",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Probability_outcome(ctx context.Context, field graphql.CollectedField, obj *model.Probability) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Probability_outcome(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Outcome, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Outcome)
+	fc.Result = res
+	return ec.marshalNOutcome2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐOutcome(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Probability_outcome(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Probability",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Outcome_id(ctx, field)
+			case "text":
+				return ec.fieldContext_Outcome_text(ctx, field)
+			case "correct":
+				return ec.fieldContext_Outcome_correct(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Outcome", field.Name)
+		},
 	}
 	return fc, nil
 }
@@ -764,6 +1489,10 @@ func (ec *executionContext) fieldContext_Query_forecasts(ctx context.Context, fi
 				return ec.fieldContext_Forecast_closes(ctx, field)
 			case "resolution":
 				return ec.fieldContext_Forecast_resolution(ctx, field)
+			case "outcomes":
+				return ec.fieldContext_Forecast_outcomes(ctx, field)
+			case "estimates":
+				return ec.fieldContext_Forecast_estimates(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Forecast", field.Name)
 		},
@@ -2733,6 +3462,55 @@ func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj i
 
 // region    **************************** object.gotpl ****************************
 
+var estimateImplementors = []string{"Estimate"}
+
+func (ec *executionContext) _Estimate(ctx context.Context, sel ast.SelectionSet, obj *model.Estimate) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, estimateImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Estimate")
+		case "id":
+
+			out.Values[i] = ec._Estimate_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "created":
+
+			out.Values[i] = ec._Estimate_created(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "reason":
+
+			out.Values[i] = ec._Estimate_reason(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "probabilities":
+
+			out.Values[i] = ec._Estimate_probabilities(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var forecastImplementors = []string{"Forecast"}
 
 func (ec *executionContext) _Forecast(ctx context.Context, sel ast.SelectionSet, obj *model.Forecast) graphql.Marshaler {
@@ -2789,6 +3567,20 @@ func (ec *executionContext) _Forecast(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "outcomes":
+
+			out.Values[i] = ec._Forecast_outcomes(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "estimates":
+
+			out.Values[i] = ec._Forecast_estimates(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2824,6 +3616,90 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createForecast(ctx, field)
 			})
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var outcomeImplementors = []string{"Outcome"}
+
+func (ec *executionContext) _Outcome(ctx context.Context, sel ast.SelectionSet, obj *model.Outcome) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, outcomeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Outcome")
+		case "id":
+
+			out.Values[i] = ec._Outcome_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "text":
+
+			out.Values[i] = ec._Outcome_text(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "correct":
+
+			out.Values[i] = ec._Outcome_correct(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var probabilityImplementors = []string{"Probability"}
+
+func (ec *executionContext) _Probability(ctx context.Context, sel ast.SelectionSet, obj *model.Probability) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, probabilityImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Probability")
+		case "id":
+
+			out.Values[i] = ec._Probability_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "value":
+
+			out.Values[i] = ec._Probability_value(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "outcome":
+
+			out.Values[i] = ec._Probability_outcome(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -3237,6 +4113,44 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) marshalNEstimate2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐEstimate(ctx context.Context, sel ast.SelectionSet, v []*model.Estimate) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOEstimate2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐEstimate(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
 func (ec *executionContext) marshalNForecast2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐForecast(ctx context.Context, sel ast.SelectionSet, v model.Forecast) graphql.Marshaler {
 	return ec._Forecast(ctx, sel, &v)
 }
@@ -3310,9 +4224,110 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
+func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalNNewForecast2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewForecast(ctx context.Context, v interface{}) (model.NewForecast, error) {
 	res, err := ec.unmarshalInputNewForecast(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNOutcome2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐOutcome(ctx context.Context, sel ast.SelectionSet, v []*model.Outcome) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOOutcome2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐOutcome(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalNOutcome2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐOutcome(ctx context.Context, sel ast.SelectionSet, v *model.Outcome) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Outcome(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProbability2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐProbability(ctx context.Context, sel ast.SelectionSet, v []*model.Probability) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOProbability2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐProbability(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalNResolution2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐResolution(ctx context.Context, v interface{}) (model.Resolution, error) {
@@ -3632,6 +4647,27 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	}
 	res := graphql.MarshalBoolean(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOEstimate2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐEstimate(ctx context.Context, sel ast.SelectionSet, v *model.Estimate) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Estimate(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOOutcome2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐOutcome(ctx context.Context, sel ast.SelectionSet, v *model.Outcome) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Outcome(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOProbability2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐProbability(ctx context.Context, sel ast.SelectionSet, v *model.Probability) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Probability(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
