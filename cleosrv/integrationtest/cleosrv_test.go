@@ -31,14 +31,14 @@ func TestGetForecasts_LowLevel(t *testing.T) {
 	// Prepare the request
 	//body := "{\"operationName\":\"GetForecasts\",\"variables\":{}," +
 	//	"\"query\":\"query GetForecasts {\\n  forecasts {\\n    id" +
-	//	"\\n    summary\\n    description\\n    created\\n    closes" +
+	//	"\\n    title\\n    description\\n    created\\n    closes" +
 	//	"\\n    resolves\\n    resolution\\n    __typename\\n  }\\n}\"}"
 
 	query := `
 		query GetForecasts {
 			forecasts {
 				id
-				summary
+				title
 				description
 				created
 				closes
@@ -97,7 +97,7 @@ func TestGetForecasts_GQClient(t *testing.T) {
 		query GetForecasts {
 			forecasts {
 				id
-				summary
+				title
 				description
 				created
 				closes
@@ -114,7 +114,7 @@ func TestGetForecasts_GQClient(t *testing.T) {
 			Id          string
 			Resolution  string
 			Resolves    string
-			Summary     string
+			Title       string
 		}
 	}
 
@@ -126,7 +126,7 @@ func TestGetForecasts_GQClient(t *testing.T) {
 	assert.Len(t, resp.Forecasts, 3)
 	assert.Equal(
 		t,
-		resp.Forecasts[2].Summary,
+		resp.Forecasts[2].Title,
 		"Will the number of contributors for \"Cleodora\" be more than 3 at"+
 			" the end of 2022?",
 	)
