@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/99designs/gqlgen v0.17.21
 	github.com/Khan/genqlient v0.5.0
-	github.com/go-chi/chi/v5 v5.0.7
+	github.com/go-chi/chi/v5 v5.0.8
 	github.com/golangci/golangci-lint v1.50.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/rs/cors v1.8.2
