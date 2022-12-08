@@ -10,24 +10,29 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    open-pull-requests-limit: 100
 
   - package-ecosystem: "gomod"
     directory: "/website"
     schedule:
       interval: "daily"
+    open-pull-requests-limit: 100
 
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
       interval: "daily"
+    open-pull-requests-limit: 100
 
   - package-ecosystem: "npm"
     directory: "/e2e_tests"
     schedule:
       interval: "daily"
+    open-pull-requests-limit: 100
 
   - package-ecosystem: "github-actions"
     # Workflow files stored in the default location of `.github/workflows`
     directory: "/"
     schedule:
       interval: "daily"
+    open-pull-requests-limit: 100
