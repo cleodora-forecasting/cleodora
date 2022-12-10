@@ -9,7 +9,7 @@ const App = () => {
         <CssBaseline />
         <AppBar position="relative">
           <Toolbar>
-            <img width="30px" src={logo as string} alt="Cleodora logo" />
+            <img width="30px" src={logo} alt="Cleodora logo" />
             <Typography variant="h6">Cleodora</Typography>
           </Toolbar>
         </AppBar>
