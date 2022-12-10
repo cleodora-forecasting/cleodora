@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {useQuery} from "@apollo/client";
 import {gql} from "./__generated__"
-import { Typography, Table } from '@mui/material'
+import { Typography } from '@mui/material'
 
 export const GET_FORECASTS = gql(`
     query GetForecasts {
