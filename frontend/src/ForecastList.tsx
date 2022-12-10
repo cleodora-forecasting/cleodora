@@ -1,6 +1,7 @@
 import {FC} from "react";
 import {useQuery} from "@apollo/client";
 import {gql} from "./__generated__"
+import { Typography, Table } from '@mui/material'
 
 export const GET_FORECASTS = gql(`
     query GetForecasts {
@@ -39,7 +40,7 @@ export const ForecastList: FC = () => {
     if (data === undefined) return <p>Error :-(</p>
     return (
         <div>
-            <h3>Forecasts</h3>
+            <Typography variant="h3">Forecasts</Typography>
             <table>
                 <thead>
                 <tr>

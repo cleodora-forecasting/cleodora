@@ -1,16 +1,24 @@
 import {ForecastList} from "./ForecastList";
 import {AddForecast} from "./AddForecast";
+import {AppBar, CssBaseline, Toolbar, Typography} from "@mui/material";
+import logo from './logo.png'
 
 const App = () => {
   return (
-      <div>
-        <h2>Cleodora</h2>
+      <>
+        <CssBaseline />
+        <AppBar position="relative">
+          <Toolbar>
+            <img width="30px" src={logo as string} />
+            <Typography variant="h6">Cleodora</Typography>
+          </Toolbar>
+        </AppBar>
         <br/>
         <ForecastList />
         <br />
         <br />
         <AddForecast />
-      </div>
+      </>
   );
 }
 
