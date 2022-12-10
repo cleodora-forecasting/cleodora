@@ -43,7 +43,7 @@ suite(function(env) {
 
             assert.equal("Cleodora", title, "Title does not match");
 
-            let header = await driver.findElement(By.css('h2'));
+            let header = await driver.findElement(By.css('h6'));
 
             let value = await header.getText();
             assert.equal("Cleodora", value, "Header does not match");
