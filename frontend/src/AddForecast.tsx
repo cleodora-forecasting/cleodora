@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import React, {FC, useState} from "react";
 import {useMutation} from "@apollo/client";
 import {GET_FORECASTS} from "./ForecastList";
 import {gql} from "./__generated__"
@@ -8,6 +8,9 @@ import {
 } from "./__generated__/graphql";
 import Button from "@mui/material/Button/Button";
 import {TextField} from "@mui/material";
+import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import dayjs, {Dayjs} from "dayjs";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 
 const ADD_FORECAST = gql(`
     mutation createForecast($input: NewForecast!) {
@@ -21,8 +24,8 @@ const ADD_FORECAST = gql(`
 export const AddForecast: FC = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [closes, setCloses] = useState(''); // TODO date
-    const [resolves, setResolves] = useState(''); // TODO date
+    const [closes, setCloses] = React.useState<Dayjs | null>(dayjs());
+    const [resolves, setResolves] = React.useState<Dayjs | null>(dayjs());
 
 //    useMutation<TableSizeMutation, TableSizeMutationVariables>
     const [addForecast, {error, data}] = useMutation<CreateForecastMutation, CreateForecastMutationVariables>(ADD_FORECAST, {
@@ -52,55 +55,58 @@ export const AddForecast: FC = () => {
                     ID {data.createForecast.id}.
                 </p>
                 : null}
-            <form
-                onSubmit={e => {
-                    e.preventDefault();
-                    addForecast().then(() => {
-                        setTitle('');
-                        setDescription('');
-                        setCloses('');
-                        setResolves('');
-                    }).catch(reason => (console.log("error addForecast()", reason)));
-                }}
-            >
-                <p>
-                    <TextField
-                        label="Title"
-                        value={title}
-                        onChange={e => setTitle(e.target.value)}
-                        variant="filled"
-                    />
-                </p>
-                <p>
-                    <TextField
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        label="Description"
-                        multiline
-                        variant="filled"
-                    />
-                </p>
-                <p>
-                    <small>Format for the dates:
-                        2022-12-01T09:00:00+01:00</small>
-                    <br/>
-                    <TextField
-                        label="Closes"
-                        value={closes}
-                        onChange={e => setCloses(e.target.value)}
-                        variant="filled"
-                    />
-                </p>
-                <p>
-                    <TextField
-                        label="Resolves"
-                        value={resolves}
-                        onChange={e => setResolves(e.target.value)}
-                        variant="filled"
-                    />
-                </p>
-                <Button variant="outlined" type="submit">Add Forecast</Button>
-            </form>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <form
+                    onSubmit={e => {
+                        e.preventDefault();
+                        addForecast().then(() => {
+                            setTitle('');
+                            setDescription('');
+                            setCloses(dayjs());
+                            setResolves(dayjs());
+                        }).catch(reason => (console.log("error addForecast()", reason)));
+                    }}
+                >
+                    <p>
+                        <TextField
+                            label="Title"
+                            value={title}
+                            onChange={e => setTitle(e.target.value)}
+                            variant="filled"
+                        />
+                    </p>
+                    <p>
+                        <TextField
+                            value={description}
+                            onChange={e => setDescription(e.target.value)}
+                            label="Description"
+                            multiline
+                            variant="filled"
+                        />
+                    </p>
+                    <p>
+                        <DateTimePicker
+                            label="Closes"
+                            value={closes}
+                            onChange={(newValue: Dayjs | null) => {
+                                setCloses(newValue);
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </p>
+                    <p>
+                        <DateTimePicker
+                            label="Resolves"
+                            value={resolves}
+                            onChange={(newValue: Dayjs | null) => {
+                                setResolves(newValue);
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </p>
+                    <Button variant="outlined" type="submit">Add Forecast</Button>
+                </form>
+            </LocalizationProvider>
         </div>
     );
 }
