@@ -12,6 +12,21 @@ export const GET_FORECASTS = gql(`
             closes
             resolves
             resolution
+            outcomes {
+                id
+                text
+            }
+            estimates {
+                id
+                probabilities {
+                    id
+                    value
+                    outcome {
+                        id
+                        text
+                    }
+                }
+            }
         }
     }
 `);
@@ -35,22 +50,39 @@ export const ForecastList: FC = () => {
                     <th>Closes</th>
                     <th>Resolves</th>
                     <th>Resolution</th>
+                    <th>Latest Estimate</th>
                 </tr>
                 </thead>
                 <tbody>
                 {
                     data.forecasts.map(
-                        f => (
-                            <tr key={f.id}>
-                                <td>{f.id}</td>
-                                <td>{f.title}</td>
-                                <td>{f.description}</td>
-                                <td>{new Date(f.created as string).toLocaleString()}</td>
-                                <td>{new Date(f.closes as string).toLocaleString()}</td>
-                                <td>{new Date(f.resolves as string).toLocaleString()}</td>
-                                <td>{f.resolution}</td>
-                            </tr>
-                        )
+                        f => {
+                            let estimates = ""
+                            if (Array.isArray(f.estimates)) {
+                                if (f.estimates[0] != null) { // TODO use the latest
+                                    estimates = f.estimates[0].probabilities.map(
+                                        p => {
+                                            if (p != null) {
+                                                return p.outcome.text + ": " + p.value.toString() + "%"
+                                            }
+                                            return ""
+                                        }
+                                    ).join(" | ")
+                                }
+                            }
+                            return (
+                                <tr key={f.id}>
+                                    <td>{f.id}</td>
+                                    <td>{f.title}</td>
+                                    <td>{f.description}</td>
+                                    <td>{new Date(f.created as string).toLocaleString()}</td>
+                                    <td>{new Date(f.closes as string).toLocaleString()}</td>
+                                    <td>{new Date(f.resolves as string).toLocaleString()}</td>
+                                    <td>{f.resolution}</td>
+                                    <td>{estimates}</td>
+                                </tr>
+                            )
+                        }
                     )
                 }
                 </tbody>
