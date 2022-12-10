@@ -6,6 +6,8 @@ import {
     CreateForecastMutation,
     CreateForecastMutationVariables,
 } from "./__generated__/graphql";
+import Button from "@mui/material/Button/Button";
+import {TextField} from "@mui/material";
 
 const ADD_FORECAST = gql(`
     mutation createForecast($input: NewForecast!) {
@@ -62,41 +64,42 @@ export const AddForecast: FC = () => {
                 }}
             >
                 <p>
-                    <label>Title</label>
-                    <input
-                        name="title"
+                    <TextField
+                        label="Title"
                         value={title}
                         onChange={e => setTitle(e.target.value)}
+                        variant="filled"
                     />
                 </p>
                 <p>
-                    <label>Description</label>
-                    <textarea
-                        name="description"
+                    <TextField
                         value={description}
                         onChange={e => setDescription(e.target.value)}
+                        label="Description"
+                        multiline
+                        variant="filled"
                     />
                 </p>
                 <p>
                     <small>Format for the dates:
                         2022-12-01T09:00:00+01:00</small>
                     <br/>
-                    <label>Closes</label>
-                    <input
-                        name="closes"
+                    <TextField
+                        label="Closes"
                         value={closes}
                         onChange={e => setCloses(e.target.value)}
+                        variant="filled"
                     />
                 </p>
                 <p>
-                    <label>Resolves</label>
-                    <input
-                        name="resolves"
+                    <TextField
+                        label="Resolves"
                         value={resolves}
                         onChange={e => setResolves(e.target.value)}
+                        variant="filled"
                     />
                 </p>
-                <button type="submit">Add Forecast</button>
+                <Button variant="outlined" type="submit">Add Forecast</Button>
             </form>
         </div>
     );
