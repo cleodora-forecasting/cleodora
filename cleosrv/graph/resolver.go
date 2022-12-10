@@ -76,9 +76,10 @@ func (r *Resolver) AddDummyData() {
 		},
 		&model.Forecast{
 			ID:    "2",
-			Title: "Will I get an A in my upcoming exam?",
-			Description: "The forecast resolves as true if and only if I get" +
-				" the highest marks.",
+			Title: "What grade will I get in my upcoming exam?",
+			Description: "CPE C2 exam. Grade C1 is the worst passing grade. " +
+				"It's a language exam using the Common European Framework of" +
+				" Reference for Languages.",
 			Created: time.Now(),
 			Closes: timeParseOrPanicPtr(
 				time.RFC3339,
@@ -92,12 +93,27 @@ func (r *Resolver) AddDummyData() {
 			Outcomes: []*model.Outcome{
 				{
 					ID:      "3",
-					Text:    "Yes",
+					Text:    "C2 Grade A",
 					Correct: false,
 				},
 				{
 					ID:      "4",
-					Text:    "No",
+					Text:    "C2 Grade B",
+					Correct: false,
+				},
+				{
+					ID:      "5",
+					Text:    "C2 Grade C",
+					Correct: false,
+				},
+				{
+					ID:      "6",
+					Text:    "C1",
+					Correct: false,
+				},
+				{
+					ID:      "7",
+					Text:    "Fail",
 					Correct: false,
 				},
 			},
@@ -110,19 +126,46 @@ func (r *Resolver) AddDummyData() {
 					Probabilities: []*model.Probability{
 						{
 							ID:    "3",
-							Value: 90,
+							Value: 40,
 							Outcome: &model.Outcome{
 								ID:      "3",
-								Text:    "Yes",
+								Text:    "C2 Grade A",
 								Correct: false,
 							},
 						},
 						{
 							ID:    "4",
-							Value: 10,
+							Value: 30,
 							Outcome: &model.Outcome{
 								ID:      "4",
-								Text:    "No",
+								Text:    "C2 Grade B",
+								Correct: false,
+							},
+						},
+						{
+							ID:    "5",
+							Value: 20,
+							Outcome: &model.Outcome{
+								ID:      "5",
+								Text:    "C2 Grade C",
+								Correct: false,
+							},
+						},
+						{
+							ID:    "6",
+							Value: 8,
+							Outcome: &model.Outcome{
+								ID:      "6",
+								Text:    "C1",
+								Correct: false,
+							},
+						},
+						{
+							ID:    "7",
+							Value: 2,
+							Outcome: &model.Outcome{
+								ID:      "7",
+								Text:    "Fail",
 								Correct: false,
 							},
 						},
@@ -148,12 +191,12 @@ func (r *Resolver) AddDummyData() {
 			Resolution: model.ResolutionUnresolved,
 			Outcomes: []*model.Outcome{
 				{
-					ID:      "5",
+					ID:      "8",
 					Text:    "Yes",
 					Correct: false,
 				},
 				{
-					ID:      "6",
+					ID:      "9",
 					Text:    "No",
 					Correct: false,
 				},
@@ -165,19 +208,19 @@ func (r *Resolver) AddDummyData() {
 					Reason:  "It's a new project and people are usually busy.",
 					Probabilities: []*model.Probability{
 						{
-							ID:    "5",
+							ID:    "8",
 							Value: 15,
 							Outcome: &model.Outcome{
-								ID:      "5",
+								ID:      "8",
 								Text:    "Yes",
 								Correct: false,
 							},
 						},
 						{
-							ID:    "6",
+							ID:    "9",
 							Value: 85,
 							Outcome: &model.Outcome{
-								ID:      "6",
+								ID:      "9",
 								Text:    "No",
 								Correct: false,
 							},
