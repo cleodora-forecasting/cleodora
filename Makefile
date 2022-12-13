@@ -47,12 +47,12 @@ build: ## Build Cleodora binary
 	@cp -r frontend/build $(EMBEDDED_FRONTEND_DIR)
 	@mkdir -p build
 	@go build \
-		-ldflags "-X github.com/cleodora-forecasting/cleodora/utils.Version=`git describe --always --dirty`" \
+		-ldflags "-X github.com/cleodora-forecasting/cleodora/cleoutils.Version=`git describe --always --dirty`" \
 		-tags production \
 		-o build/cleosrv \
 		github.com/cleodora-forecasting/cleodora/cleosrv
 	@go build \
-		-ldflags "-X github.com/cleodora-forecasting/cleodora/utils.Version=`git describe --always --dirty`" \
+		-ldflags "-X github.com/cleodora-forecasting/cleodora/cleoutils.Version=`git describe --always --dirty`" \
 		-tags production \
 		-o build/cleoc \
 		github.com/cleodora-forecasting/cleodora/cleoc
