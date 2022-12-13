@@ -12,6 +12,7 @@ import (
 
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/model"
+	"github.com/cleodora-forecasting/cleodora/cleoutils"
 )
 
 // CreateForecast is the resolver for the createForecast field.
@@ -37,7 +38,7 @@ func (r *queryResolver) Forecasts(ctx context.Context) ([]*model.Forecast, error
 
 // Metadata is the resolver for the metadata field.
 func (r *queryResolver) Metadata(ctx context.Context) (*model.Metadata, error) {
-	panic(fmt.Errorf("not implemented: Metadata - metadata"))
+	return &model.Metadata{Version: cleoutils.Version}, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.

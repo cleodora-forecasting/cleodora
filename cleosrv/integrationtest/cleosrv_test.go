@@ -131,3 +131,33 @@ func TestGetForecasts_GQClient(t *testing.T) {
 			" the end of 2022?",
 	)
 }
+
+func TestGetVersion(t *testing.T) {
+	// Set up the server
+	resolver := graph.Resolver{}
+	resolver.AddDummyData()
+	srv := handler.NewDefaultServer(
+		generated.NewExecutableSchema(generated.Config{Resolvers: &resolver}),
+	)
+
+	c := client.New(srv)
+
+	query := `
+		query GetMetadata {
+			metadata {
+				version
+			}
+		}`
+
+	var resp struct {
+		Metadata struct {
+			Version string
+		}
+	}
+
+	err := c.Post(query, &resp)
+	assert.Nil(t, err)
+
+	t.Log(resp)
+	assert.Equal(t, "dev", resp.Metadata.Version)
+}
