@@ -35,6 +35,11 @@ func (r *queryResolver) Forecasts(ctx context.Context) ([]*model.Forecast, error
 	return r.forecasts, nil
 }
 
+// Metadata is the resolver for the metadata field.
+func (r *queryResolver) Metadata(ctx context.Context) (*model.Metadata, error) {
+	panic(fmt.Errorf("not implemented: Metadata - metadata"))
+}
+
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 

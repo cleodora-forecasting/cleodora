@@ -43,6 +43,11 @@ type Forecast struct {
 	Estimates  []*Estimate `json:"estimates"`
 }
 
+// Information about the application itself e.g. the current version.
+type Metadata struct {
+	Version string `json:"version"`
+}
+
 type NewForecast struct {
 	Title       string     `json:"title"`
 	Description string     `json:"description"`

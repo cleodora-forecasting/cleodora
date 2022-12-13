@@ -57,6 +57,12 @@ export type Forecast = {
   title: Scalars['String'];
 };
 
+/** Information about the application itself e.g. the current version. */
+export type Metadata = {
+  __typename?: 'Metadata';
+  version: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createForecast: Forecast;
@@ -99,6 +105,7 @@ export type Probability = {
 export type Query = {
   __typename?: 'Query';
   forecasts: Array<Forecast>;
+  metadata: Metadata;
 };
 
 export enum Resolution {

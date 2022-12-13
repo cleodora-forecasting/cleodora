@@ -4,6 +4,7 @@
 
 type Query {
   forecasts: [Forecast!]!
+  metadata: Metadata!
 }
 
 """
@@ -87,4 +88,11 @@ enum Resolution {
   RESOLVED
   NOT_APPLICABLE
   UNRESOLVED
+}
+
+"""
+Information about the application itself e.g. the current version.
+"""
+type Metadata {
+  version: String!
 }
