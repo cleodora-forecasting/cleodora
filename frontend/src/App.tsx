@@ -1,5 +1,6 @@
 import {ForecastList} from "./ForecastList";
 import {AddForecast} from "./AddForecast";
+import {Footer} from "./Footer";
 import {AppBar, CssBaseline, Toolbar, Typography} from "@mui/material";
 import logo from './logo.png'
 
@@ -18,6 +19,7 @@ const App = () => {
         <br />
         <br />
         <AddForecast />
+        <Footer />
       </>
   );
 }
