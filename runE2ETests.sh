@@ -10,6 +10,7 @@ CLEOSRV_PATH=./dist/cleosrv_linux_amd64_v1/cleosrv
 
 trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
 
+make clean
 make build
 "${CLEOSRV_PATH}" &
 CLEOSRV_PID=$!

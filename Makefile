@@ -53,3 +53,11 @@ lint: ## Run linters with auto fix
 generate: ## Generate code
 	@go generate ./...
 	@cd frontend && npm run generate
+
+
+.PHONY: clean
+clean: ## Clean build artifacts
+	@rm -rf cleosrv/cleosrv/frontend_build/
+	@rm -rf dist/
+	@rm -rf frontend/build/
+	@rm -rf website/public/
