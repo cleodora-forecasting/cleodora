@@ -23,3 +23,4 @@ cd -
 
 export GOBIN=$PWD/bin
 go install github.com/golangci/golangci-lint/cmd/golangci-lint
+go install github.com/goreleaser/goreleaser

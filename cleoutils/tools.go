@@ -12,4 +12,5 @@ import (
 	_ "github.com/99designs/gqlgen/graphql/introspection"
 	_ "github.com/Khan/genqlient"
 	_ "github.com/golangci/golangci-lint/cmd/golangci-lint"
+    _ "github.com/goreleaser/goreleaser"
 )
