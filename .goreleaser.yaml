@@ -22,6 +22,14 @@ builds:
       - linux
       - windows
       - darwin
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: darwin
+        goarch: arm64
+      - goos: windows
+        goarch: arm64
 
   - id: cleoc
     binary: cleoc
@@ -36,6 +44,14 @@ builds:
       - linux
       - windows
       - darwin
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: darwin
+        goarch: arm64
+      - goos: windows
+        goarch: arm64
 archives:
   - replacements:
       darwin: Darwin
