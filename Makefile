@@ -37,26 +37,10 @@ help:
 
 SHELL=/bin/bash
 
-EMBEDDED_FRONTEND_DIR=cleosrv/cleosrv/frontend_build
 
 .PHONY: build
-build: ## Build Cleodora binary
-	@rm -rf frontend/build
-	@cd frontend; npm run build
-	@rm -rf $(EMBEDDED_FRONTEND_DIR)
-	@cp -r frontend/build $(EMBEDDED_FRONTEND_DIR)
-	@mkdir -p build
-	@go build \
-		-ldflags "-X github.com/cleodora-forecasting/cleodora/cleoutils.Version=`git describe --always --dirty`" \
-		-tags production \
-		-o build/cleosrv \
-		github.com/cleodora-forecasting/cleodora/cleosrv
-	@go build \
-		-ldflags "-X github.com/cleodora-forecasting/cleodora/cleoutils.Version=`git describe --always --dirty`" \
-		-tags production \
-		-o build/cleoc \
-		github.com/cleodora-forecasting/cleodora/cleoc
-	@rm -rf $(EMBEDDED_FRONTEND_DIR)
+build: ## Build for current platform
+	@./bin/goreleaser build --snapshot --single-target
 
 
 .PHONY: lint

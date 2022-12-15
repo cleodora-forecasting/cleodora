@@ -2,12 +2,35 @@
 # Make sure to check the documentation at https://goreleaser.com
 before:
   hooks:
-    # You may remove this if you don't use go modules.
-    - go mod tidy
-    # you may remove this if you don't need go generate
-    - go generate ./...
+    - rm -rf frontend/build
+    - sh -c 'cd frontend; npm run build'
+    - rm -rf cleosrv/cleosrv/frontend_build
+    - cp -r frontend/build cleosrv/cleosrv/frontend_build
 builds:
-  - env:
+  - id: cleosrv
+    binary: cleosrv
+    main: ./cleosrv
+    ldflags:
+      - -X github.com/cleodora-forecasting/cleodora/cleoutils.Version={{.Version}}
+      - -X github.com/cleodora-forecasting/cleodora/cleoutils.VersionCommit={{.ShortCommit}}
+      - -X github.com/cleodora-forecasting/cleodora/cleoutils.VersionDate={{.CommitDate}}
+    flags:
+      - -tags=production
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+
+  - id: cleoc
+    binary: cleoc
+    main: ./cleoc
+    ldflags:
+      - -X github.com/cleodora-forecasting/cleodora/cleoutils.Version={{.Version}}
+      - -X github.com/cleodora-forecasting/cleodora/cleoutils.VersionCommit={{.ShortCommit}}
+      - -X github.com/cleodora-forecasting/cleodora/cleoutils.VersionDate={{.CommitDate}}
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
@@ -23,7 +46,7 @@ archives:
 checksum:
   name_template: 'checksums.txt'
 snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+  name_template: '{{ incminor .Version }}-dev+{{ replace .CommitDate ":" "" }}.{{ .ShortCommit }}'
 changelog:
   sort: asc
   filters:

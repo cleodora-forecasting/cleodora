@@ -4,6 +4,7 @@ const assert = require("assert");
 const child_process = require('child_process');
 
 const BASE_URL = 'http://localhost:8080';
+const CLEOC_PATH = '../dist/cleoc_linux_amd64_v1/cleoc';
 
 suite(function(env) {
     describe('Verify front page', function() {
@@ -14,7 +15,7 @@ suite(function(env) {
 
             // https://stackoverflow.com/a/32872753
             let child = child_process.spawnSync(
-                "../build/cleoc",
+                CLEOC_PATH,
                 [
                     'add',
                     'forecast',
