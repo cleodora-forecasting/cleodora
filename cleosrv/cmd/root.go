@@ -6,6 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/cleodora-forecasting/cleodora/cleosrv/cleosrv"
 )
 
 var cfgFile string
@@ -24,7 +26,9 @@ forecasts.
 
 Visit https://cleodora.org for more information.
 `,
-	Run: func(cmd *cobra.Command, args []string) {},
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return cleosrv.Start()
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

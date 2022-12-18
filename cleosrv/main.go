@@ -1,9 +1,7 @@
 package main
 
-import "github.com/cleodora-forecasting/cleodora/cleosrv/cleosrv"
+import "github.com/cleodora-forecasting/cleodora/cleosrv/cmd"
 
 func main() {
-	if err := cleosrv.Start(); err != nil {
-		panic(err)
-	}
+	cmd.Execute()
 }
