@@ -7,6 +7,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi/v5"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
@@ -22,11 +24,16 @@ func Start(address string, frontendFooterText string) error {
 
 	router := chi.NewRouter()
 
-	resolver := graph.Resolver{}
+	db, err := getDB()
+	if err != nil {
+		return err
+	}
+
+	resolver := graph.NewResolver(db)
 	resolver.AddDummyData()
 
 	srv := handler.NewDefaultServer(
-		generated.NewExecutableSchema(generated.Config{Resolvers: &resolver}),
+		generated.NewExecutableSchema(generated.Config{Resolvers: resolver}),
 	)
 
 	configureCORS(router, srv)
@@ -39,4 +46,12 @@ func Start(address string, frontendFooterText string) error {
 	serveFrontend(router, frontendFooterText)
 
 	return http.ListenAndServe(address, router)
+}
+
+func getDB() (*gorm.DB, error) {
+	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
 }

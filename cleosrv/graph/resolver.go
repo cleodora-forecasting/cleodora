@@ -5,6 +5,8 @@ package graph
 import (
 	"time"
 
+	"gorm.io/gorm"
+
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/model"
 )
 
@@ -13,7 +15,14 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
+	db        *gorm.DB
 	forecasts []*model.Forecast
+}
+
+func NewResolver(db *gorm.DB) *Resolver {
+	return &Resolver{
+		db: db,
+	}
 }
 
 func (r *Resolver) AddDummyData() {
