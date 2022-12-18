@@ -63,10 +63,6 @@ func init() {
 			"To bind to all IP addresses and hostnames just specify "+
 			"semicolon port e.g. :8080",
 	)
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.
