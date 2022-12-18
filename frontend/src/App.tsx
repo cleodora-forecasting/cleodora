@@ -2,7 +2,7 @@ import {ForecastList} from "./ForecastList";
 import {AddForecast} from "./AddForecast";
 import {Footer} from "./Footer";
 import {AppBar, CssBaseline, Toolbar, Typography} from "@mui/material";
-import logo from './logo.png'
+import { ReactComponent as Logo } from './logo.svg';
 
 const App = () => {
   return (
@@ -10,7 +10,7 @@ const App = () => {
         <CssBaseline />
         <AppBar position="relative">
           <Toolbar>
-            <img width="30px" src={logo} alt="Cleodora logo" />
+            <Logo />
             <Typography variant="h6">Cleodora</Typography>
           </Toolbar>
         </AppBar>
