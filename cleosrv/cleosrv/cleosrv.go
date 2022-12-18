@@ -13,10 +13,11 @@ import (
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
 )
 
-func Start() error {
+func Start(address string) error {
 	fmt.Printf(
-		"Starting Cleodora (version: %s) http://localhost:8080\n",
+		"Starting Cleodora (version: %s) http://%s\n",
 		cleoutils.Version,
+		address,
 	)
 
 	router := chi.NewRouter()
@@ -37,5 +38,5 @@ func Start() error {
 
 	serveFrontend(router)
 
-	return http.ListenAndServe(":8080", router)
+	return http.ListenAndServe(address, router)
 }

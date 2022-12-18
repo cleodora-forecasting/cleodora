@@ -11,6 +11,7 @@ import (
 )
 
 var cfgFile string
+var address string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -27,7 +28,7 @@ forecasts.
 Visit https://cleodora.org for more information.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return cleosrv.Start()
+		return cleosrv.Start(address)
 	},
 }
 
@@ -52,6 +53,15 @@ func init() {
 		"config",
 		"",
 		"config file (default is $HOME/.cleosrv.yaml)",
+	)
+
+	rootCmd.PersistentFlags().StringVar(
+		&address,
+		"address",
+		"localhost:8080",
+		"Bind the process to a network address and port number. "+
+			"To bind to all IP addresses and hostnames just specify "+
+			"semicolon port e.g. :8080",
 	)
 
 	// Cobra also supports local flags, which will only run
