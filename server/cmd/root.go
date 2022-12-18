@@ -13,16 +13,18 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "cleosrv",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "Cleodora server to track personal forecasts",
+    Long: `This server is made out of a GraphQL API and an embedded user
+interface you can access via a web browser. You may also use a client (e.g. the
+'cleoc' tool).
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+The purpose of Cleodora is tracking personal forecasts (e.g. 'Will I get a
+raise within the next 6 months?') and systematically improve at making such
+forecasts.
+
+Visit https://cleodora.org for more information.
+`,
+	Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
