@@ -28,7 +28,7 @@ forecasts.
 Visit https://cleodora.org for more information.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return cleosrv.Start(address)
+		return cleosrv.Start(viper.GetString("address"))
 	},
 }
 
@@ -63,6 +63,13 @@ func init() {
 			"To bind to all IP addresses and hostnames just specify "+
 			"semicolon port e.g. :8080",
 	)
+	err := viper.BindPFlag(
+		"address",
+		rootCmd.PersistentFlags().Lookup("address"),
+	)
+	if err != nil {
+		panic(err)
+	}
 }
 
 // initConfig reads in config file and ENV variables if set.
