@@ -14,7 +14,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "cleosrv",
 	Short: "Cleodora server to track personal forecasts",
-    Long: `This server is made out of a GraphQL API and an embedded user
+	Long: `This server is made out of a GraphQL API and an embedded user
 interface you can access via a web browser. You may also use a client (e.g. the
 'cleoc' tool).
 
@@ -24,7 +24,7 @@ forecasts.
 
 Visit https://cleodora.org for more information.
 `,
-	Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -43,7 +43,12 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cleosrv.yaml)")
+	rootCmd.PersistentFlags().StringVar(
+		&cfgFile,
+		"config",
+		"",
+		"config file (default is $HOME/.cleosrv.yaml)",
+	)
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
