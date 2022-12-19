@@ -7,6 +7,7 @@ package graph
 import (
 	"context"
 	"fmt"
+	"html"
 	"math/rand"
 	"time"
 
@@ -19,8 +20,8 @@ import (
 func (r *mutationResolver) CreateForecast(ctx context.Context, input model.NewForecast) (*model.Forecast, error) {
 	forecast := &model.Forecast{
 		ID:          fmt.Sprintf("T%d", rand.Int()),
-		Title:       input.Title,
-		Description: input.Description,
+		Title:       html.EscapeString(input.Title),
+		Description: html.EscapeString(input.Description),
 		Created:     time.Now(),
 		Resolves:    input.Resolves,
 		Closes:      input.Closes,
