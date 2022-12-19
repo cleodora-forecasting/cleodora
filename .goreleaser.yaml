@@ -52,6 +52,11 @@ builds:
         goarch: arm64
       - goos: windows
         goarch: arm64
+dockers:
+  - image_templates:
+      - cleodora/cleodora
+    ids:
+      - cleosrv
 archives:
   - replacements:
       darwin: Darwin
