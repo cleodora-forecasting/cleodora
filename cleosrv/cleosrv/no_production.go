@@ -35,16 +35,10 @@ Then access it under <a href="http://localhost:3000">http://localhost:3000</a></
 <h1>Embed Frontend</h1>
 <p>To build and embed the frontend execute:
 <pre>
-cd frontend
-npm run build
-cd ..
+make build
 </pre>
-Then start the server with frontend:
-<pre>
-go run -tags production .
-</pre>
-Note that if you make any changes to the frontend code you will have to rebuild
-to make those changes visible.
+And start the resulting <i>cleosrv</i> binary you can find in the dist/
+directory.
 </p>
 `,
 	)
