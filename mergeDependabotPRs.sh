@@ -27,3 +27,13 @@ do
 done
 
 echo "All PRs merged"
+
+./installDependencies.sh
+make lint
+make generate
+
+git diff --exit-code || (echo "Code was changed via lint/generate" && exit 1)
+
+./runE2ETests.sh
+
+echo "Successfully done. You must run 'git push' to publish the changes."
