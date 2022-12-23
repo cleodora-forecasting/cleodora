@@ -9,6 +9,7 @@ on:
       - frontend/**
   pull_request:
     paths:
+      - .github/**
       - frontend/**
 
 jobs:
