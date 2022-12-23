@@ -1,0 +1,3 @@
+address: :9999
+frontend:
+  footer_text: "Some text to display in the footer"
