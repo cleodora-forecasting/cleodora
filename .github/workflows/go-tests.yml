@@ -6,7 +6,21 @@ on:
       - v*
     branches:
       - main
+    paths-ignore:
+      - README.md
+      - design/**
+      - docs/**
+      - e2e_tests/**
+      - frontend/**
+      - website/**
   pull_request:
+    paths-ignore:
+      - README.md
+      - design/**
+      - docs/**
+      - e2e_tests/**
+      - frontend/**
+      - website/**
 
 jobs:
   build:

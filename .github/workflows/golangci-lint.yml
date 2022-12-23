@@ -5,7 +5,22 @@ on:
       - v*
     branches:
       - main
+    paths-ignore:
+      - README.md
+      - design/**
+      - docs/**
+      - e2e_tests/**
+      - frontend/**
+      - website/**
   pull_request:
+    paths-ignore:
+      - README.md
+      - design/**
+      - docs/**
+      - e2e_tests/**
+      - frontend/**
+      - website/**
+
 permissions:
   contents: read
   # Optional: allow read access to pull request. Use with `only-new-issues` option.
