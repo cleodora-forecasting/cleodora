@@ -46,6 +46,7 @@ build: ## Build for current platform
 .PHONY: lint
 lint: ## Run linters with auto fix
 	@./bin/golangci-lint run --fix
+	@./bin/golangci-lint run --fix --build-tags production
 	@cd frontend && npm run lint
 
 
