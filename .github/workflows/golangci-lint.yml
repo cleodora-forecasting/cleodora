@@ -27,6 +27,9 @@ permissions:
   # pull-requests: read
 jobs:
   golangci:
+    strategy:
+      matrix:
+        build_tag: [default, production] # Note that 'default' is not a tag we actually use
     name: lint
     runs-on: ubuntu-latest
     steps:
@@ -48,7 +51,7 @@ jobs:
           # working-directory: somedir
 
           # Optional: golangci-lint command line arguments.
-          # args: --issues-exit-code=0
+          args: --build-tags ${{ matrix.build_tag }}
 
           # Optional: show only new issues if it's a pull request. The default value is `false`.
           # only-new-issues: true
