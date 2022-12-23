@@ -1,0 +1,49 @@
+name: Go generate
+
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - main
+    paths-ignore:
+      - README.md
+      - design/**
+      - docs/**
+      - e2e_tests/**
+      - frontend/**
+      - website/**
+  pull_request:
+    paths-ignore:
+      - README.md
+      - design/**
+      - docs/**
+      - e2e_tests/**
+      - frontend/**
+      - website/**
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Install
+        shell: bash
+        run: |
+          go mod tidy
+          go mod download
+
+      - name: Generate
+        run: go generate ./...
+
+      # Ensure nothing has changed
+      - name: Evaluate 'git diff'
+        run: git diff --exit-code
