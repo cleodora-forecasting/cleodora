@@ -4,6 +4,7 @@ package cleosrv
 
 import (
 	"embed"
+	"encoding/json"
 	"fmt"
 	"io/fs"
 	"net/http"
@@ -17,6 +18,7 @@ var embeddedFiles embed.FS
 
 func serveFrontend(router chi.Router) {
 	fmt.Println("Serving with frontend")
+	router.HandleFunc("/config.json", getFrontendConfig)
 	router.Handle("/*", http.FileServer(getFileSystem()))
 }
 
@@ -40,4 +42,21 @@ func configureCORS(router *chi.Mux, srv *handler.Server) {
 	// Later more granular configuration can be introduced.
 	// Probably it makes no sense without authentication for the backend.
 	fmt.Println("Disabling CORS")
+}
+
+type frontendConfig struct {
+	FooterText string `json:"FOOTER_TEXT"`
+}
+
+// getFrontendConfig generates the content of the config.json file used to
+// configure the frontend.
+func getFrontendConfig(w http.ResponseWriter, r *http.Request) {
+	data := frontendConfig{
+		FooterText: "",
+	}
+	w.Header().Set("Content-Type", "application/json")
+	err := json.NewEncoder(w).Encode(data)
+	if err != nil {
+		fmt.Println("ERROR while encoding frontendConfig", err) // TODO log
+	}
 }
