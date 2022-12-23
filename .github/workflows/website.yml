@@ -5,7 +5,7 @@ on:
     branches:
       - main  # Set a branch to deploy
     paths:
-      - .github/**
+      - .github/workflows/**
       - website/**
   pull_request:
 
