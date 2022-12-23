@@ -4,6 +4,7 @@
 
 ![Website Build](https://github.com/cleodora-forecasting/cleodora/actions/workflows/website.yml/badge.svg)
 ![golangci-lint](https://github.com/cleodora-forecasting/cleodora/actions/workflows/golangci-lint.yml/badge.svg)
+[![Go tests](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-tests.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-tests.yml)
 
 [Demo](https://demo.cleodora.org/) (courtesy of fly.io) - will be reset at
 regular intervals.
