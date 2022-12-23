@@ -4,7 +4,7 @@ before:
   hooks:
     - rm -rf frontend/build
     - sh -c 'cd frontend; npm run build'
-    - rm -rf cleosrv/cleosrv/frontend_build
+    - rm -rf cleosrv/cleosrv/frontend_build/*
     - cp -r frontend/build cleosrv/cleosrv/frontend_build
 builds:
   - id: cleosrv
