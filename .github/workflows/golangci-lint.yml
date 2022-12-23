@@ -41,6 +41,14 @@ jobs:
           go-version-file: go.mod
           cache: true
 
+      # Required, otherwise some linters fail because there is nothing to embed
+      - name: Create cleosrv/cleosrv/frontend_build/unused.html
+        if: ${{ matrix.build_tag == 'production' }}
+        shell: bash
+        run: |
+          mkdir -p cleosrv/cleosrv/frontend_build/
+          touch cleosrv/cleosrv/frontend_build/unused.html
+
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
