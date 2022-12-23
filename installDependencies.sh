@@ -7,6 +7,7 @@ set -o pipefail
 # of the Git repository.
 # You already need to have 'Go' and 'npm' installed.
 
+go mod tidy
 go mod download
 
 cd frontend
@@ -18,6 +19,7 @@ npm install
 cd -
 
 cd website
+go mod tidy
 go mod download
 cd -
 
