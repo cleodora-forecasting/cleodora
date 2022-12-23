@@ -58,7 +58,7 @@ generate: ## Generate code
 
 .PHONY: clean
 clean: ## Clean build artifacts
-	@rm -rf cleosrv/cleosrv/frontend_build/*
+	@rm -rf cleosrv/cleosrv/frontend_build/
 	@rm -rf dist/
 	@rm -rf frontend/build/
 	@rm -rf website/public/
