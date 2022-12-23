@@ -16,9 +16,9 @@ import (
 //go:embed frontend_build
 var embeddedFiles embed.FS
 
-func serveFrontend(router chi.Router) {
+func serveFrontend(router chi.Router, frontendFooterText string) {
 	fmt.Println("Serving with frontend")
-	router.HandleFunc("/config.json", getFrontendConfig)
+	router.HandleFunc("/config.json", getFrontendConfig(frontendFooterText))
 	router.Handle("/*", http.FileServer(getFileSystem()))
 }
 
@@ -48,15 +48,17 @@ type frontendConfig struct {
 	FooterText string `json:"FOOTER_TEXT"`
 }
 
-// getFrontendConfig generates the content of the config.json file used to
-// configure the frontend.
-func getFrontendConfig(w http.ResponseWriter, r *http.Request) {
-	data := frontendConfig{
-		FooterText: "",
-	}
-	w.Header().Set("Content-Type", "application/json")
-	err := json.NewEncoder(w).Encode(data)
-	if err != nil {
-		fmt.Println("ERROR while encoding frontendConfig", err) // TODO log
+// getFrontendConfig returns a function that generates the content of the
+// config.json file used to configure the frontend.
+func getFrontendConfig(frontendFooterText string) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		data := frontendConfig{
+			FooterText: frontendFooterText,
+		}
+		w.Header().Set("Content-Type", "application/json")
+		err := json.NewEncoder(w).Encode(data)
+		if err != nil {
+			fmt.Println("ERROR while encoding frontendConfig", err) // TODO log
+		}
 	}
 }

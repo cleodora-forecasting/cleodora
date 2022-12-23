@@ -13,7 +13,7 @@ import (
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
 )
 
-func Start(address string) error {
+func Start(address string, frontendFooterText string) error {
 	fmt.Printf(
 		"Starting Cleodora (version: %s) http://%s\n",
 		cleoutils.Version,
@@ -36,7 +36,7 @@ func Start(address string) error {
 	)
 	router.Handle("/query", srv)
 
-	serveFrontend(router)
+	serveFrontend(router, frontendFooterText)
 
 	return http.ListenAndServe(address, router)
 }

@@ -28,7 +28,10 @@ forecasts.
 Visit https://cleodora.org for more information.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return cleosrv.Start(viper.GetString("address"))
+		return cleosrv.Start(
+			viper.GetString("address"),
+			viper.GetString("frontend.footer_text"),
+		)
 	},
 }
 

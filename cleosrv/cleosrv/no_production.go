@@ -13,7 +13,7 @@ import (
 	"github.com/rs/cors"
 )
 
-func serveFrontend(router chi.Router) {
+func serveFrontend(router chi.Router, frontendFooterText string) {
 	fmt.Println("Serving without frontend")
 	router.HandleFunc("/", dummyFrontendHandler)
 }
