@@ -14,6 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/cleodora-forecasting/cleodora/cleosrv/cleosrv"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 )
@@ -23,10 +24,14 @@ import (
 // body, without any further GraphQL processing.
 func TestGetForecasts_LowLevel(t *testing.T) {
 	// Set up the server
-	resolver := graph.Resolver{}
-	resolver.AddDummyData()
+	// TODO init the DB here...
+	db, err := cleosrv.InitDB(":memory:")
+	require.Nil(t, err)
+	resolver := graph.NewResolver(db)
+	err = resolver.AddDummyData()
+	require.Nil(t, err)
 	srv := handler.NewDefaultServer(
-		generated.NewExecutableSchema(generated.Config{Resolvers: &resolver}),
+		generated.NewExecutableSchema(generated.Config{Resolvers: resolver}),
 	)
 
 	query := `
@@ -79,7 +84,7 @@ func TestGetForecasts_LowLevel(t *testing.T) {
 // TestGetForecasts_GQClient verifies that the forecasts are returned and
 // uses the gqlgen.client for it.
 func TestGetForecasts_GQClient(t *testing.T) {
-	c := initServer()
+	c := initServer(t)
 
 	query := `
 		query GetForecasts {
@@ -123,7 +128,7 @@ func TestGetForecasts_GQClient(t *testing.T) {
 // TestGetForecasts_SomeFields verifies that the query can contain only a few
 // fields.
 func TestGetForecasts_OnlySomeFields(t *testing.T) {
-	c := initServer()
+	c := initServer(t)
 
 	query := `
 		query GetForecasts {
@@ -157,7 +162,7 @@ func TestGetForecasts_OnlySomeFields(t *testing.T) {
 // TestGetForecasts_InvalidField verifies that an error is returned when
 // querying for a field that does not exist.
 func TestGetForecasts_InvalidField(t *testing.T) {
-	c := initServer()
+	c := initServer(t)
 
 	query := `
 		query GetForecasts {
@@ -181,7 +186,7 @@ func TestGetForecasts_InvalidField(t *testing.T) {
 }
 
 func TestCreateForecast(t *testing.T) {
-	c := initServer()
+	c := initServer(t)
 
 	newForecast := map[string]interface{}{
 		"title": "Will it rain tomorrow?",
@@ -220,7 +225,7 @@ func TestCreateForecast(t *testing.T) {
 // TestCreateForecast_OmitCloses verifies that a forecast can be created
 // without specifying a closing date.
 func TestCreateForecast_OmitCloses(t *testing.T) {
-	c := initServer()
+	c := initServer(t)
 
 	newForecast := map[string]interface{}{
 		"title": "Will it rain tomorrow?",
@@ -259,7 +264,7 @@ func TestCreateForecast_OmitCloses(t *testing.T) {
 }
 
 func TestGetVersion(t *testing.T) {
-	c := initServer()
+	c := initServer(t)
 
 	query := `
 		query GetMetadata {
@@ -281,12 +286,15 @@ func TestGetVersion(t *testing.T) {
 	assert.Equal(t, "dev", resp.Metadata.Version)
 }
 
-func initServer() *client.Client {
+func initServer(t *testing.T) *client.Client {
 	// Set up the server
-	resolver := graph.Resolver{}
-	resolver.AddDummyData()
+	db, err := cleosrv.InitDB(":memory:")
+	require.Nil(t, err)
+	resolver := graph.NewResolver(db)
+	err = resolver.AddDummyData()
+	require.Nil(t, err)
 	srv := handler.NewDefaultServer(
-		generated.NewExecutableSchema(generated.Config{Resolvers: &resolver}),
+		generated.NewExecutableSchema(generated.Config{Resolvers: resolver}),
 	)
 
 	c := client.New(srv)

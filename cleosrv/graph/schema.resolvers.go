@@ -8,9 +8,9 @@ import (
 	"context"
 	"fmt"
 	"html"
-	"math/rand"
 	"time"
 
+	"github.com/cleodora-forecasting/cleodora/cleosrv/dbmodel"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/model"
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
@@ -18,23 +18,94 @@ import (
 
 // CreateForecast is the resolver for the createForecast field.
 func (r *mutationResolver) CreateForecast(ctx context.Context, input model.NewForecast) (*model.Forecast, error) {
-	forecast := &model.Forecast{
-		ID:          fmt.Sprintf("T%d", rand.Int()),
+	dbForecast := dbmodel.Forecast{
 		Title:       html.EscapeString(input.Title),
 		Description: html.EscapeString(input.Description),
 		Created:     time.Now(),
 		Resolves:    input.Resolves,
 		Closes:      input.Closes,
-		Resolution:  model.ResolutionUnresolved,
+		Resolution:  dbmodel.ResolutionUnresolved,
+		Estimates:   nil,
 	}
 
-	r.forecasts = append(r.forecasts, forecast)
-	return forecast, nil
+	ret := r.db.Create(&dbForecast)
+
+	if ret.Error != nil {
+		return nil, ret.Error
+	}
+
+	retForecast := model.Forecast{
+		ID:          fmt.Sprint(dbForecast.ID),
+		Title:       dbForecast.Title,
+		Description: dbForecast.Description,
+		Created:     dbForecast.Created,
+		Resolves:    dbForecast.Resolves,
+		Closes:      dbForecast.Closes,
+		Resolution:  model.Resolution(dbForecast.Resolution),
+		Estimates:   nil,
+	}
+
+	return &retForecast, nil
 }
 
 // Forecasts is the resolver for the forecasts field.
 func (r *queryResolver) Forecasts(ctx context.Context) ([]*model.Forecast, error) {
-	return r.forecasts, nil
+	// TODO depending on what data is being queried here I guess the query has
+	// to return more or less data?
+	// https://gqlgen.com/reference/field-collection/
+	// fmt.Println(graphql.CollectAllFields(ctx))
+
+	var forecasts []dbmodel.Forecast
+	// TODO preload uses multiple queries and can be optimized with joins
+	ret := r.db.Preload("Estimates.Probabilities.Outcome").Find(&forecasts)
+	if ret.Error != nil {
+		return nil, ret.Error
+	}
+
+	var retForecasts []*model.Forecast
+
+	for _, f := range forecasts {
+		fmt.Println("forecast: ", f)
+		var estimates []*model.Estimate
+		for _, e := range f.Estimates {
+			var probabilities []*model.Probability
+			for _, p := range e.Probabilities {
+				probabilities = append(
+					probabilities,
+					&model.Probability{
+						ID:    fmt.Sprint(p.ID),
+						Value: p.Value,
+						Outcome: &model.Outcome{
+							ID:      fmt.Sprint(p.Outcome.ID),
+							Text:    p.Outcome.Text,
+							Correct: p.Outcome.Correct,
+						},
+					},
+				)
+			}
+			estimates = append(
+				estimates,
+				&model.Estimate{
+					ID:            fmt.Sprint(e.ID),
+					Created:       e.Created,
+					Reason:        e.Reason,
+					Probabilities: probabilities,
+				},
+			)
+		}
+		rf := model.Forecast{
+			ID:          fmt.Sprint(f.ID),
+			Title:       f.Title,
+			Description: f.Description,
+			Created:     f.Created,
+			Resolves:    f.Resolves,
+			Closes:      f.Closes,
+			Resolution:  model.Resolution(f.Resolution),
+			Estimates:   estimates,
+		}
+		retForecasts = append(retForecasts, &rf)
+	}
+	return retForecasts, nil
 }
 
 // Metadata is the resolver for the metadata field.

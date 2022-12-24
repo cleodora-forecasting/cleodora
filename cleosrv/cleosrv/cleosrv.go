@@ -25,13 +25,16 @@ func Start(address string, frontendFooterText string) error {
 
 	router := chi.NewRouter()
 
-	db, err := getDB()
+	db, err := InitDB("test.db")
 	if err != nil {
 		return err
 	}
 
 	resolver := graph.NewResolver(db)
-	resolver.AddDummyData()
+	err = resolver.AddDummyData()
+	if err != nil {
+		return err
+	}
 
 	srv := handler.NewDefaultServer(
 		generated.NewExecutableSchema(generated.Config{Resolvers: resolver}),
@@ -49,8 +52,8 @@ func Start(address string, frontendFooterText string) error {
 	return http.ListenAndServe(address, router)
 }
 
-func getDB() (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+func InitDB(dsn string) (*gorm.DB, error) {
+	db, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
