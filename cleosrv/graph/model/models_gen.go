@@ -39,7 +39,6 @@ type Forecast struct {
 	// could simply not set 'closes').
 	Closes     *time.Time  `json:"closes"`
 	Resolution Resolution  `json:"resolution"`
-	Outcomes   []*Outcome  `json:"outcomes"`
 	Estimates  []*Estimate `json:"estimates"`
 }
 

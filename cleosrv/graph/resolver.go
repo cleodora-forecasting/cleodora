@@ -33,18 +33,6 @@ func (r *Resolver) AddDummyData() {
 				"2023-03-11T23:59:00+00:00",
 			),
 			Resolution: model.ResolutionUnresolved,
-			Outcomes: []*model.Outcome{
-				{
-					ID:      "1",
-					Text:    "Yes",
-					Correct: false,
-				},
-				{
-					ID:      "2",
-					Text:    "No",
-					Correct: false,
-				},
-			},
 			Estimates: []*model.Estimate{
 				{
 					ID:      "1",
@@ -90,33 +78,6 @@ func (r *Resolver) AddDummyData() {
 				"2022-12-01T09:00:00+00:00",
 			),
 			Resolution: model.ResolutionUnresolved,
-			Outcomes: []*model.Outcome{
-				{
-					ID:      "3",
-					Text:    "C2 Grade A",
-					Correct: false,
-				},
-				{
-					ID:      "4",
-					Text:    "C2 Grade B",
-					Correct: false,
-				},
-				{
-					ID:      "5",
-					Text:    "C2 Grade C",
-					Correct: false,
-				},
-				{
-					ID:      "6",
-					Text:    "C1",
-					Correct: false,
-				},
-				{
-					ID:      "7",
-					Text:    "Fail",
-					Correct: false,
-				},
-			},
 			Estimates: []*model.Estimate{
 				{
 					ID:      "2",
@@ -189,18 +150,6 @@ func (r *Resolver) AddDummyData() {
 				"2022-12-31T23:59:00+00:00",
 			),
 			Resolution: model.ResolutionUnresolved,
-			Outcomes: []*model.Outcome{
-				{
-					ID:      "8",
-					Text:    "Yes",
-					Correct: false,
-				},
-				{
-					ID:      "9",
-					Text:    "No",
-					Correct: false,
-				},
-			},
 			Estimates: []*model.Estimate{
 				{
 					ID:      "3",

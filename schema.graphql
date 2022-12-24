@@ -34,7 +34,6 @@ type Forecast {
   """
   closes: Time
   resolution: Resolution!
-  outcomes: [Outcome]!
   estimates: [Estimate]!
 }
 
