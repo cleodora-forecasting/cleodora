@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/99designs/gqlgen/client"
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -177,6 +178,84 @@ func TestGetForecasts_InvalidField(t *testing.T) {
 	err := c.Post(query, &response)
 	assert.Contains(t, err.Error(), "http 422")
 	assert.Contains(t, err.Error(), "Cannot query field \\\"does_not_exist\\\"")
+}
+
+func TestCreateForecast(t *testing.T) {
+	c := initServer()
+
+	newForecast := map[string]interface{}{
+		"title": "Will it rain tomorrow?",
+		"description": "It counts as rain if between 9am and 9pm there are " +
+			"30 min or more of uninterrupted precipitation.",
+		"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+		"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+	}
+
+	query := `
+		mutation createForecast($input: NewForecast!) {
+			createForecast(input: $input) {
+				id
+				title
+			}
+		}`
+
+	var response struct {
+		CreateForecast struct {
+			Id    string
+			Title string
+		}
+	}
+
+	err := c.Post(query, &response, client.Var("input", newForecast))
+	require.Nil(t, err)
+
+	assert.NotEmpty(t, response.CreateForecast.Id)
+	assert.Equal(
+		t,
+		"Will it rain tomorrow?",
+		response.CreateForecast.Title,
+	)
+}
+
+// TestCreateForecast_OmitCloses verifies that a forecast can be created
+// without specifying a closing date.
+func TestCreateForecast_OmitCloses(t *testing.T) {
+	c := initServer()
+
+	newForecast := map[string]interface{}{
+		"title": "Will it rain tomorrow?",
+		"description": "It counts as rain if between 9am and 9pm there are " +
+			"30 min or more of uninterrupted precipitation.",
+		"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+	}
+
+	query := `
+		mutation createForecast($input: NewForecast!) {
+			createForecast(input: $input) {
+				id
+				title
+				closes
+			}
+		}`
+
+	var response struct {
+		CreateForecast struct {
+			Id     string
+			Title  string
+			Closes string
+		}
+	}
+
+	err := c.Post(query, &response, client.Var("input", newForecast))
+	require.Nil(t, err)
+
+	assert.NotEmpty(t, response.CreateForecast.Id)
+	assert.Equal(
+		t,
+		"Will it rain tomorrow?",
+		response.CreateForecast.Title,
+	)
+	assert.Empty(t, response.CreateForecast.Closes)
 }
 
 func TestGetVersion(t *testing.T) {
