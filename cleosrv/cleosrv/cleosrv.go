@@ -10,6 +10,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
+	"github.com/cleodora-forecasting/cleodora/cleosrv/dbmodel"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
@@ -53,5 +54,16 @@ func getDB() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	err = db.AutoMigrate(
+		&dbmodel.Forecast{},
+		&dbmodel.Outcome{},
+		&dbmodel.Probability{},
+		&dbmodel.Estimate{},
+	)
+	if err != nil {
+		return db, err
+	}
+
 	return db, nil
 }
