@@ -28,12 +28,6 @@ func TestGetForecasts_LowLevel(t *testing.T) {
 		generated.NewExecutableSchema(generated.Config{Resolvers: &resolver}),
 	)
 
-	// Prepare the request
-	//body := "{\"operationName\":\"GetForecasts\",\"variables\":{}," +
-	//	"\"query\":\"query GetForecasts {\\n  forecasts {\\n    id" +
-	//	"\\n    title\\n    description\\n    created\\n    closes" +
-	//	"\\n    resolves\\n    resolution\\n    __typename\\n  }\\n}\"}"
-
 	query := `
 		query GetForecasts {
 			forecasts {
@@ -84,14 +78,7 @@ func TestGetForecasts_LowLevel(t *testing.T) {
 // TestGetForecasts_GQClient verifies that the forecasts are returned and
 // uses the gqlgen.client for it.
 func TestGetForecasts_GQClient(t *testing.T) {
-	// Set up the server
-	resolver := graph.Resolver{}
-	resolver.AddDummyData()
-	srv := handler.NewDefaultServer(
-		generated.NewExecutableSchema(generated.Config{Resolvers: &resolver}),
-	)
-
-	c := client.New(srv)
+	c := initServer()
 
 	query := `
 		query GetForecasts {
@@ -106,7 +93,7 @@ func TestGetForecasts_GQClient(t *testing.T) {
 			}
 		}`
 
-	var resp struct {
+	var response struct {
 		Forecasts []struct {
 			Closes      string
 			Created     string
@@ -118,29 +105,82 @@ func TestGetForecasts_GQClient(t *testing.T) {
 		}
 	}
 
-	err := c.Post(query, &resp)
+	err := c.Post(query, &response)
 	assert.Nil(t, err)
 
-	t.Log(resp)
+	t.Log(response)
 
-	assert.Len(t, resp.Forecasts, 3)
+	assert.Len(t, response.Forecasts, 3)
 	assert.Equal(
 		t,
-		resp.Forecasts[2].Title,
 		"Will the number of contributors for \"Cleodora\" be more than 3 at"+
 			" the end of 2022?",
+		response.Forecasts[2].Title,
 	)
 }
 
-func TestGetVersion(t *testing.T) {
-	// Set up the server
-	resolver := graph.Resolver{}
-	resolver.AddDummyData()
-	srv := handler.NewDefaultServer(
-		generated.NewExecutableSchema(generated.Config{Resolvers: &resolver}),
-	)
+// TestGetForecasts_SomeFields verifies that the query can contain only a few
+// fields.
+func TestGetForecasts_OnlySomeFields(t *testing.T) {
+	c := initServer()
 
-	c := client.New(srv)
+	query := `
+		query GetForecasts {
+			forecasts {
+				id
+				title
+			}
+		}`
+
+	var response struct {
+		Forecasts []struct {
+			Id    string
+			Title string
+		}
+	}
+
+	err := c.Post(query, &response)
+	assert.Nil(t, err)
+
+	t.Log(response)
+
+	assert.Len(t, response.Forecasts, 3)
+	assert.Equal(
+		t,
+		"Will the number of contributors for \"Cleodora\" be more than 3 at"+
+			" the end of 2022?",
+		response.Forecasts[2].Title,
+	)
+}
+
+// TestGetForecasts_InvalidField verifies that an error is returned when
+// querying for a field that does not exist.
+func TestGetForecasts_InvalidField(t *testing.T) {
+	c := initServer()
+
+	query := `
+		query GetForecasts {
+			forecasts {
+				id
+				title
+				does_not_exist
+			}
+		}`
+
+	var response struct {
+		Forecasts []struct {
+			Id    string
+			Title string
+		}
+	}
+
+	err := c.Post(query, &response)
+	assert.Contains(t, err.Error(), "http 422")
+	assert.Contains(t, err.Error(), "Cannot query field \\\"does_not_exist\\\"")
+}
+
+func TestGetVersion(t *testing.T) {
+	c := initServer()
 
 	query := `
 		query GetMetadata {
@@ -160,4 +200,16 @@ func TestGetVersion(t *testing.T) {
 
 	t.Log(resp)
 	assert.Equal(t, "dev", resp.Metadata.Version)
+}
+
+func initServer() *client.Client {
+	// Set up the server
+	resolver := graph.Resolver{}
+	resolver.AddDummyData()
+	srv := handler.NewDefaultServer(
+		generated.NewExecutableSchema(generated.Config{Resolvers: &resolver}),
+	)
+
+	c := client.New(srv)
+	return c
 }
