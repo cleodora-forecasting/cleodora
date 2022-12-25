@@ -119,7 +119,7 @@ func TestGetForecasts_GQClient(t *testing.T) {
 	assert.Len(t, response.Forecasts, 3)
 	assert.Equal(
 		t,
-		"Will the number of contributors for \"Cleodora\" be more than 3 at"+
+		"Will the number of contributors to \"Cleodora\" be more than 3 at"+
 			" the end of 2022?",
 		response.Forecasts[2].Title,
 	)
@@ -153,7 +153,7 @@ func TestGetForecasts_OnlySomeFields(t *testing.T) {
 	assert.Len(t, response.Forecasts, 3)
 	assert.Equal(
 		t,
-		"Will the number of contributors for \"Cleodora\" be more than 3 at"+
+		"Will the number of contributors to \"Cleodora\" be more than 3 at"+
 			" the end of 2022?",
 		response.Forecasts[2].Title,
 	)
