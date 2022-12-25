@@ -148,12 +148,12 @@ go run .
 make build
 ```
 
-You can find the binary containing frontend and backend under `build/cleosrv` .
-Run it and access http://localhost:8080 in the browser. The frontend is
-embedded as static files inside the binary, so this binary contains the
-entire Cleodora backend and frontend.
+You can find the binary containing frontend and backend under
+`dist/cleosrv_*/cleosrv` . Run it and access http://localhost:8080 in the
+browser. The frontend is embedded as static files inside the binary, so this
+binary contains the entire Cleodora backend and frontend.
 
-The client binary is `build/cleoc` .
+The client binary is `dist/cleoc_*/cleoc` .
 
 
 # GraphQL playground (GraphiQL)
