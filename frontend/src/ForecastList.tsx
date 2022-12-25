@@ -68,6 +68,10 @@ export const ForecastList: FC = () => {
                                             ).join(" | ")
                                         }
                                     }
+                                    let closes = ""
+                                    if (f.closes) {
+                                        closes = new Date(f.closes as string).toLocaleString()
+                                    }
                                     return (
                                         <TableRow
                                             key={f.id}
@@ -75,7 +79,7 @@ export const ForecastList: FC = () => {
                                         >
                                             <TableCell component="th" scope="row">{f.title}</TableCell>
                                             <TableCell align="right">{new Date(f.created as string).toLocaleString()}</TableCell>
-                                            <TableCell align="right">{new Date(f.closes as string).toLocaleString()}</TableCell>
+                                            <TableCell align="right">{closes}</TableCell>
                                             <TableCell align="right">{new Date(f.resolves as string).toLocaleString()}</TableCell>
                                             <TableCell align="right">{f.resolution}</TableCell>
                                             <TableCell align="right">{estimates}</TableCell>
