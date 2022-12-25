@@ -65,7 +65,6 @@ func (r *queryResolver) Forecasts(ctx context.Context) ([]*model.Forecast, error
 	var retForecasts []*model.Forecast
 
 	for _, f := range forecasts {
-		fmt.Println("forecast: ", f)
 		var estimates []*model.Estimate
 		for _, e := range f.Estimates {
 			var probabilities []*model.Probability
