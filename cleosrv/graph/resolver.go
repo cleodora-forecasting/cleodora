@@ -25,6 +25,16 @@ func NewResolver(db *gorm.DB) *Resolver {
 }
 
 func (r *Resolver) AddDummyData() error {
+	var forecastCount int64
+	res := r.db.Model(&dbmodel.Forecast{}).Count(&forecastCount)
+	if res.Error != nil {
+		return res.Error
+	}
+	if forecastCount > 0 {
+		// Since the DB is not empty don't (re-)create dummy data
+		return nil
+	}
+
 	err := createDummyForecast_TheFabelmans(r.db)
 	if err != nil {
 		return err
