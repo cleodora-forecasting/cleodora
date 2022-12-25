@@ -241,7 +241,7 @@ func createDummyForecast_Contributors(db *gorm.DB) error {
 	}
 
 	forecast := dbmodel.Forecast{
-		Title: "Will the number of contributors for \"Cleodora\" be more " +
+		Title: "Will the number of contributors to \"Cleodora\" be more " +
 			"than 3 at the end of 2022?",
 		Description: "A contributor is any person who has made a commit" +
 			" in any Git repository of the cleodora-forecasting GitHub" +
