@@ -57,8 +57,12 @@ export const ForecastList: FC = () => {
                                 f => {
                                     let estimates = ""
                                     if (Array.isArray(f.estimates)) {
-                                        if (f.estimates[0] != null) { // TODO use the latest
-                                            estimates = f.estimates[0].probabilities.map(
+                                        // TODO the next line depends much
+                                        //  on what the API returns. It
+                                        //  probably needs to be adjusted.
+                                        const lastEstimate = f.estimates[f.estimates.length - 1];
+                                        if (lastEstimate != null) {
+                                            estimates = lastEstimate.probabilities.map(
                                                 p => {
                                                     if (p != null) {
                                                         return p.outcome.text + ": " + p.value.toString() + "%"
