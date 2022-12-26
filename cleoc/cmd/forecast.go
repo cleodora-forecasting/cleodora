@@ -14,11 +14,11 @@ import (
 
 // forecastCmd represents the forecast command.
 var forecastCmd = &cobra.Command{
-	Use:   "forecast SUMMARY RESOLUTION_DATE [DESCRIPTION]",
+	Use:   "forecast TITLE RESOLUTION_DATE [DESCRIPTION]",
 	Short: "Add a new forecast",
 	Long: `Add a new forecast to Cleodora
 
-SUMMARY is the title of the forecast.
+TITLE is the title of the forecast.
 RESOLUTION_DATE needs to be in the format 2022-11-13T19:30:00+01:00
 DESCRIPTION is optional.
 
