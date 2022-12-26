@@ -18,11 +18,6 @@ cd e2e_tests
 npm install
 cd -
 
-cd website
-go mod tidy
-go mod download
-cd -
-
 export GOBIN=$PWD/bin
 go install github.com/golangci/golangci-lint/cmd/golangci-lint
 go install github.com/goreleaser/goreleaser
