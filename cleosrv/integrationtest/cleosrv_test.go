@@ -298,6 +298,278 @@ func TestCreateForecast(t *testing.T) {
 	}
 }
 
+func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
+	tests := []struct {
+		name        string
+		newEstimate map[string]interface{}
+		expectedErr string
+	}{
+		{
+			name: "success",
+			newEstimate: map[string]interface{}{
+				"reason": "My weather app says it will rain",
+				"probabilities": []map[string]interface{}{
+					{
+						"value": 70,
+						"outcome": map[string]interface{}{
+							"text": "Yes",
+						},
+					},
+					{
+						"value": 30,
+						"outcome": map[string]interface{}{
+							"text": "No",
+						},
+					},
+				},
+			},
+			expectedErr: "",
+		},
+		{
+			name: "single probability",
+			newEstimate: map[string]interface{}{
+				"reason": "My weather app says it will rain",
+				"probabilities": []map[string]interface{}{
+					{
+						"value": 100,
+						"outcome": map[string]interface{}{
+							"text": "Any outcome",
+						},
+					},
+				},
+			},
+			expectedErr: "",
+		},
+		{
+			name: "success with more probabilities",
+			newEstimate: map[string]interface{}{
+				"reason": "My weather app says it will rain",
+				"probabilities": []map[string]interface{}{
+					{
+						"value": 30,
+						"outcome": map[string]interface{}{
+							"text": "Yes, but less than 2 hours",
+						},
+					},
+					{
+						"value": 20,
+						"outcome": map[string]interface{}{
+							"text": "Yes, between 2 and 5 hours",
+						},
+					},
+					{
+						"value": 20,
+						"outcome": map[string]interface{}{
+							"text": "Yes, more than 5 hours",
+						},
+					},
+					{
+						"value": 30,
+						"outcome": map[string]interface{}{
+							"text": "No",
+						},
+					},
+				},
+			},
+			expectedErr: "",
+		},
+		{
+			name: "reason cant be empty",
+			newEstimate: map[string]interface{}{
+				"reason": "",
+				"probabilities": []map[string]interface{}{
+					{
+						"value": 70,
+						"outcome": map[string]interface{}{
+							"text": "Yes",
+						},
+					},
+					{
+						"value": 30,
+						"outcome": map[string]interface{}{
+							"text": "No",
+						},
+					},
+				},
+			},
+			expectedErr: "'reason' can't be empty",
+		},
+		{
+			name: "probabilities must add up to 100",
+			newEstimate: map[string]interface{}{
+				"reason": "My weather app says it will rain.",
+				"probabilities": []map[string]interface{}{
+					{
+						"value": 70,
+						"outcome": map[string]interface{}{
+							"text": "Yes",
+						},
+					},
+					{
+						"value": 20,
+						"outcome": map[string]interface{}{
+							"text": "No",
+						},
+					},
+				},
+			},
+			expectedErr: "probabilities must add up to 100",
+		},
+		{
+			name: "probabilities must be between 0 and 100",
+			newEstimate: map[string]interface{}{
+				"reason": "My weather app says it will rain.",
+				"probabilities": []map[string]interface{}{
+					{
+						"value": -10,
+						"outcome": map[string]interface{}{
+							"text": "Yes",
+						},
+					},
+					{
+						"value": 110,
+						"outcome": map[string]interface{}{
+							"text": "No",
+						},
+					},
+				},
+			},
+			expectedErr: "probabilities must be between 0 and 100",
+		},
+		{
+			name: "probabilities cant be empty",
+			newEstimate: map[string]interface{}{
+				"reason":        "My weather app says it will rain.",
+				"probabilities": []map[string]interface{}{},
+			},
+			expectedErr: "probabilities can't be empty",
+		},
+		{
+			name: "outcome must be set",
+			newEstimate: map[string]interface{}{
+				"reason": "My weather app says it will rain",
+				"probabilities": []map[string]interface{}{
+					{
+						"value":   70,
+						"outcome": nil,
+					},
+					{
+						"value": 30,
+						"outcome": map[string]interface{}{
+							"text": "No",
+						},
+					},
+				},
+			},
+			expectedErr: "cannot be null",
+		},
+		{
+			name: "outcome cant be empty",
+			newEstimate: map[string]interface{}{
+				"reason": "My weather app says it will rain",
+				"probabilities": []map[string]interface{}{
+					{
+						"value":   70,
+						"outcome": map[string]interface{}{},
+					},
+					{
+						"value": 30,
+						"outcome": map[string]interface{}{
+							"text": "No",
+						},
+					},
+				},
+			},
+			expectedErr: "must be defined",
+		},
+		{
+			name: "outcome text cant be empty",
+			newEstimate: map[string]interface{}{
+				"reason": "My weather app says it will rain",
+				"probabilities": []map[string]interface{}{
+					{
+						"value": 70,
+						"outcome": map[string]interface{}{
+							"text": "",
+						},
+					},
+					{
+						"value": 30,
+						"outcome": map[string]interface{}{
+							"text": "No",
+						},
+					},
+				},
+			},
+			expectedErr: "outcome text can't be empty",
+		},
+		{
+			name: "outcomes cant be duplicates",
+			newEstimate: map[string]interface{}{
+				"reason": "My weather app says it will rain",
+				"probabilities": []map[string]interface{}{
+					{
+						"value": 70,
+						"outcome": map[string]interface{}{
+							"text": "No",
+						},
+					},
+					{
+						"value": 30,
+						"outcome": map[string]interface{}{
+							"text": "No",
+						},
+					},
+				},
+			},
+			expectedErr: "outcome 'No' is a duplicate",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Log(tt.name)
+		t.Run(tt.name, func(t *testing.T) {
+
+			c := initServer(t)
+
+			newForecast := map[string]interface{}{
+				"title": "Will it rain tomorrow?",
+				"description": "It counts as rain if between 9am and 9pm there are " +
+					"30 min or more of uninterrupted precipitation.",
+				"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+				"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+			}
+
+			query := `
+		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+			createForecast(forecast: $forecast, estimate: $estimate) {
+				id
+				title
+			}
+		}`
+
+			var response struct {
+				CreateForecast struct {
+					Id    string
+					Title string
+				}
+			}
+
+			err := c.Post(
+				query,
+				&response,
+				client.Var("forecast", newForecast),
+				client.Var("estimate", tt.newEstimate),
+			)
+			if tt.expectedErr == "" { // success
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorContains(t, err, tt.expectedErr)
+			}
+		})
+	}
+}
+
 func TestCreateForecast_FailsWithoutEstimate(t *testing.T) {
 	c := initServer(t)
 
@@ -422,6 +694,7 @@ func TestGetVersion(t *testing.T) {
 }
 
 func initServer(t *testing.T) *client.Client {
+	t.Helper()
 	// Set up the server
 	db, err := cleosrv.InitDB(":memory:")
 	require.Nil(t, err)

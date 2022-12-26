@@ -3,9 +3,11 @@ package graph
 //go:generate go run github.com/99designs/gqlgen generate
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
+	"github.com/hashicorp/go-multierror"
 	"gorm.io/gorm"
 
 	"github.com/cleodora-forecasting/cleodora/cleosrv/dbmodel"
@@ -318,6 +320,53 @@ func timeParseOrPanicPtr(layout string, value string) *time.Time {
 	t := timeParseOrPanic(layout, value)
 
 	return &t
+}
+
+func validateNewEstimate(estimate model.NewEstimate) error {
+	var validationErr *multierror.Error
+	if estimate.Reason == "" {
+		validationErr = multierror.Append(
+			validationErr,
+			errors.New("'reason' can't be empty"),
+		)
+	}
+	if len(estimate.Probabilities) == 0 {
+		validationErr = multierror.Append(
+			validationErr,
+			errors.New("probabilities can't be empty"),
+		)
+	}
+	sumProbabilities := 0
+	existingOutcomes := map[string]bool{}
+	for _, p := range estimate.Probabilities {
+		if p.Outcome.Text == "" {
+			validationErr = multierror.Append(
+				validationErr,
+				errors.New("outcome text can't be empty"),
+			)
+		}
+		if _, ok := existingOutcomes[p.Outcome.Text]; ok {
+			validationErr = multierror.Append(
+				validationErr,
+				fmt.Errorf("outcome '%v' is a duplicate", p.Outcome.Text),
+			)
+		}
+		existingOutcomes[p.Outcome.Text] = true
+		if p.Value < 0 || p.Value > 100 {
+			validationErr = multierror.Append(
+				validationErr,
+				fmt.Errorf("probabilities must be between 0 and 100, not %v", p.Value),
+			)
+		}
+		sumProbabilities += p.Value
+	}
+	if sumProbabilities != 100 {
+		validationErr = multierror.Append(
+			validationErr,
+			fmt.Errorf("probabilities must add up to 100, not %v", sumProbabilities),
+		)
+	}
+	return validationErr.ErrorOrNil()
 }
 
 func convertNewEstimateToDBEstimate(estimate model.NewEstimate) []dbmodel.Estimate {
