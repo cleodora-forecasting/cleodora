@@ -83,6 +83,17 @@ type GetForecastsResponse struct {
 // GetForecasts returns GetForecastsResponse.Forecasts, and is useful for accessing the field via an interface.
 func (v *GetForecastsResponse) GetForecasts() []GetForecastsForecastsForecast { return v.Forecasts }
 
+type NewEstimate struct {
+	Reason        string           `json:"reason"`
+	Probabilities []NewProbability `json:"probabilities"`
+}
+
+// GetReason returns NewEstimate.Reason, and is useful for accessing the field via an interface.
+func (v *NewEstimate) GetReason() string { return v.Reason }
+
+// GetProbabilities returns NewEstimate.Probabilities, and is useful for accessing the field via an interface.
+func (v *NewEstimate) GetProbabilities() []NewProbability { return v.Probabilities }
+
 type NewForecast struct {
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
@@ -102,6 +113,24 @@ func (v *NewForecast) GetResolves() time.Time { return v.Resolves }
 // GetCloses returns NewForecast.Closes, and is useful for accessing the field via an interface.
 func (v *NewForecast) GetCloses() time.Time { return v.Closes }
 
+type NewOutcome struct {
+	Text string `json:"text"`
+}
+
+// GetText returns NewOutcome.Text, and is useful for accessing the field via an interface.
+func (v *NewOutcome) GetText() string { return v.Text }
+
+type NewProbability struct {
+	Value   int        `json:"value"`
+	Outcome NewOutcome `json:"outcome"`
+}
+
+// GetValue returns NewProbability.Value, and is useful for accessing the field via an interface.
+func (v *NewProbability) GetValue() int { return v.Value }
+
+// GetOutcome returns NewProbability.Outcome, and is useful for accessing the field via an interface.
+func (v *NewProbability) GetOutcome() NewOutcome { return v.Outcome }
+
 type Resolution string
 
 const (
@@ -112,28 +141,34 @@ const (
 
 // __CreateForecastInput is used internally by genqlient
 type __CreateForecastInput struct {
-	Input NewForecast `json:"input"`
+	Forecast NewForecast `json:"forecast"`
+	Estimate NewEstimate `json:"estimate"`
 }
 
-// GetInput returns __CreateForecastInput.Input, and is useful for accessing the field via an interface.
-func (v *__CreateForecastInput) GetInput() NewForecast { return v.Input }
+// GetForecast returns __CreateForecastInput.Forecast, and is useful for accessing the field via an interface.
+func (v *__CreateForecastInput) GetForecast() NewForecast { return v.Forecast }
+
+// GetEstimate returns __CreateForecastInput.Estimate, and is useful for accessing the field via an interface.
+func (v *__CreateForecastInput) GetEstimate() NewEstimate { return v.Estimate }
 
 func CreateForecast(
 	ctx context.Context,
 	client graphql.Client,
-	input NewForecast,
+	forecast NewForecast,
+	estimate NewEstimate,
 ) (*CreateForecastResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateForecast",
 		Query: `
-mutation CreateForecast ($input: NewForecast!) {
-	createForecast(input: $input) {
+mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
+	createForecast(forecast: $forecast, estimate: $estimate) {
 		id
 	}
 }
 `,
 		Variables: &__CreateForecastInput{
-			Input: input,
+			Forecast: forecast,
+			Estimate: estimate,
 		},
 	}
 	var err error

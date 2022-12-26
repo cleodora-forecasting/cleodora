@@ -16,8 +16,8 @@ query GetForecasts {
   }
 }
 
-mutation CreateForecast($input: NewForecast!) {
-  createForecast(input: $input) {
+mutation CreateForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+  createForecast(forecast: $forecast, estimate: $estimate) {
     id
   }
 }

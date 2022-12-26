@@ -13,8 +13,8 @@ import dayjs, {Dayjs} from "dayjs";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 
 const ADD_FORECAST = gql(`
-    mutation createForecast($input: NewForecast!) {
-        createForecast(input: $input) {
+    mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+        createForecast(forecast: $forecast, estimate: $estimate) {
             id
             title
         }
@@ -35,12 +35,29 @@ export const AddForecast: FC = () => {
             'GetForecasts' // Query name
         ],
         variables: {
-            input: {
+            forecast: {
                 title,
                 description,
                 closes,
                 resolves,
             },
+            estimate: {
+                reason: "asdf",
+                probabilities: [
+                    {
+                        value: 50,
+                        outcome: {
+                            text: "TODO frontend",
+                        },
+                    },
+                    {
+                        value: 50,
+                        outcome: {
+                            text: "TODO frontend",
+                        },
+                    },
+                ],
+            }
         },
     });
 

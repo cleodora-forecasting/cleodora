@@ -68,7 +68,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateForecast func(childComplexity int, input model.NewForecast) int
+		CreateForecast func(childComplexity int, forecast model.NewForecast, estimate model.NewEstimate) int
 	}
 
 	Outcome struct {
@@ -90,7 +90,7 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreateForecast(ctx context.Context, input model.NewForecast) (*model.Forecast, error)
+	CreateForecast(ctx context.Context, forecast model.NewForecast, estimate model.NewEstimate) (*model.Forecast, error)
 }
 type QueryResolver interface {
 	Forecasts(ctx context.Context) ([]*model.Forecast, error)
@@ -213,7 +213,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateForecast(childComplexity, args["input"].(model.NewForecast)), true
+		return e.complexity.Mutation.CreateForecast(childComplexity, args["forecast"].(model.NewForecast), args["estimate"].(model.NewEstimate)), true
 
 	case "Outcome.correct":
 		if e.complexity.Outcome.Correct == nil {
@@ -279,7 +279,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputNewEstimate,
 		ec.unmarshalInputNewForecast,
+		ec.unmarshalInputNewOutcome,
+		ec.unmarshalInputNewProbability,
 	)
 	first := true
 
@@ -380,16 +383,6 @@ type Forecast {
 }
 
 """
-The possible results of a forecast. In the simplest case you will only have
-two outcomes: Yes and No.
-"""
-type Outcome {
-  id: ID!
-  text: String!
-  correct: Boolean!
-}
-
-"""
 A list of probabilities (one for each outcome) together with a timestamp and
 an explanation why you made this estimate. Every time you change your mind
 about a forecast you will create a new Estimate.
@@ -412,6 +405,16 @@ type Probability {
   outcome: Outcome!
 }
 
+"""
+The possible results of a forecast. In the simplest case you will only have
+two outcomes: Yes and No.
+"""
+type Outcome {
+  id: ID!
+  text: String!
+  correct: Boolean!
+}
+
 input NewForecast {
   title: String!
   description: String!
@@ -419,8 +422,25 @@ input NewForecast {
   closes: Time
 }
 
+input NewEstimate {
+  reason: String!
+  probabilities: [NewProbability!]!
+}
+
+input NewProbability {
+  value: Int!
+  outcome: NewOutcome!
+  # Later this could be extended to also support creating new probabilities
+  # with existing outcomes e.g. newOutcome and outcome fields that are both
+  # optional.
+}
+
+input NewOutcome {
+  text: String!
+}
+
 type Mutation {
-  createForecast(input: NewForecast!): Forecast!
+  createForecast(forecast: NewForecast!, estimate: NewEstimate!): Forecast!
 }
 
 scalar Time
@@ -449,14 +469,23 @@ func (ec *executionContext) field_Mutation_createForecast_args(ctx context.Conte
 	var err error
 	args := map[string]interface{}{}
 	var arg0 model.NewForecast
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+	if tmp, ok := rawArgs["forecast"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("forecast"))
 		arg0, err = ec.unmarshalNNewForecast2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewForecast(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["input"] = arg0
+	args["forecast"] = arg0
+	var arg1 model.NewEstimate
+	if tmp, ok := rawArgs["estimate"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("estimate"))
+		arg1, err = ec.unmarshalNNewEstimate2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewEstimate(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["estimate"] = arg1
 	return args, nil
 }
 
@@ -1114,7 +1143,7 @@ func (ec *executionContext) _Mutation_createForecast(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateForecast(rctx, fc.Args["input"].(model.NewForecast))
+		return ec.resolvers.Mutation().CreateForecast(rctx, fc.Args["forecast"].(model.NewForecast), fc.Args["estimate"].(model.NewEstimate))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3457,6 +3486,42 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputNewEstimate(ctx context.Context, obj interface{}) (model.NewEstimate, error) {
+	var it model.NewEstimate
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"reason", "probabilities"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "reason":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reason"))
+			it.Reason, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "probabilities":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("probabilities"))
+			it.Probabilities, err = ec.unmarshalNNewProbability2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewProbabilityᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj interface{}) (model.NewForecast, error) {
 	var it model.NewForecast
 	asMap := map[string]interface{}{}
@@ -3500,6 +3565,70 @@ func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj i
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("closes"))
 			it.Closes, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputNewOutcome(ctx context.Context, obj interface{}) (model.NewOutcome, error) {
+	var it model.NewOutcome
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"text"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "text":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("text"))
+			it.Text, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputNewProbability(ctx context.Context, obj interface{}) (model.NewProbability, error) {
+	var it model.NewProbability
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"value", "outcome"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "value":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("value"))
+			it.Value, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "outcome":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("outcome"))
+			it.Outcome, err = ec.unmarshalNNewOutcome2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewOutcome(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4352,9 +4481,41 @@ func (ec *executionContext) marshalNMetadata2ᚖgithubᚗcomᚋcleodoraᚑforeca
 	return ec._Metadata(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalNNewEstimate2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewEstimate(ctx context.Context, v interface{}) (model.NewEstimate, error) {
+	res, err := ec.unmarshalInputNewEstimate(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNNewForecast2githubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewForecast(ctx context.Context, v interface{}) (model.NewForecast, error) {
 	res, err := ec.unmarshalInputNewForecast(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewOutcome2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewOutcome(ctx context.Context, v interface{}) (*model.NewOutcome, error) {
+	res, err := ec.unmarshalInputNewOutcome(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewProbability2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewProbabilityᚄ(ctx context.Context, v interface{}) ([]*model.NewProbability, error) {
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*model.NewProbability, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNNewProbability2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewProbability(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalNNewProbability2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewProbability(ctx context.Context, v interface{}) (*model.NewProbability, error) {
+	res, err := ec.unmarshalInputNewProbability(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalNOutcome2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐOutcome(ctx context.Context, sel ast.SelectionSet, v *model.Outcome) graphql.Marshaler {

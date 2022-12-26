@@ -3,11 +3,13 @@ package graph
 //go:generate go run github.com/99designs/gqlgen generate
 
 import (
+	"fmt"
 	"time"
 
 	"gorm.io/gorm"
 
 	"github.com/cleodora-forecasting/cleodora/cleosrv/dbmodel"
+	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/model"
 )
 
 // This file will not be regenerated automatically.
@@ -316,4 +318,76 @@ func timeParseOrPanicPtr(layout string, value string) *time.Time {
 	t := timeParseOrPanic(layout, value)
 
 	return &t
+}
+
+func convertNewEstimateToDBEstimate(estimate model.NewEstimate) []dbmodel.Estimate {
+	var probabilities []dbmodel.Probability
+
+	for _, p := range estimate.Probabilities {
+		probabilities = append(
+			probabilities,
+			dbmodel.Probability{
+				Value: p.Value,
+				Outcome: dbmodel.Outcome{
+					Text:    p.Outcome.Text,
+					Correct: false,
+				},
+			},
+		)
+	}
+
+	return []dbmodel.Estimate{
+		{
+			Created:       time.Now(),
+			Reason:        estimate.Reason,
+			Probabilities: probabilities,
+		},
+	}
+}
+
+func convertEstimatesDBToGQL(dbEstimates []dbmodel.Estimate) []*model.Estimate {
+	var gqlEstimates []*model.Estimate
+	for _, e := range dbEstimates {
+		gqlEstimates = append(
+			gqlEstimates,
+			convertEstimateDBToGQL(e),
+		)
+	}
+	return gqlEstimates
+}
+
+func convertEstimateDBToGQL(dbEstimate dbmodel.Estimate) *model.Estimate {
+	return &model.Estimate{
+		ID:            fmt.Sprint(dbEstimate.ID),
+		Created:       dbEstimate.Created,
+		Reason:        dbEstimate.Reason,
+		Probabilities: convertProbabilitiesDBToGQL(dbEstimate.Probabilities),
+	}
+}
+
+func convertProbabilitiesDBToGQL(dbProbabilities []dbmodel.Probability) []*model.Probability {
+	var gqlProbabilities []*model.Probability
+	for _, p := range dbProbabilities {
+		gqlProbabilities = append(
+			gqlProbabilities,
+			convertProbabilityDBToGQL(p),
+		)
+	}
+	return gqlProbabilities
+}
+
+func convertProbabilityDBToGQL(dbProbability dbmodel.Probability) *model.Probability {
+	return &model.Probability{
+		ID:      fmt.Sprint(dbProbability.ID),
+		Value:   dbProbability.Value,
+		Outcome: convertOutcomeDBToGQL(dbProbability.Outcome),
+	}
+}
+
+func convertOutcomeDBToGQL(dbOutcome dbmodel.Outcome) *model.Outcome {
+	return &model.Outcome{
+		ID:      fmt.Sprint(dbOutcome.ID),
+		Text:    dbOutcome.Text,
+		Correct: dbOutcome.Correct,
+	}
 }

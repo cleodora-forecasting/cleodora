@@ -77,8 +77,25 @@ input NewForecast {
   closes: Time
 }
 
+input NewEstimate {
+  reason: String!
+  probabilities: [NewProbability!]!
+}
+
+input NewProbability {
+  value: Int!
+  outcome: NewOutcome!
+  # Later this could be extended to also support creating new probabilities
+  # with existing outcomes e.g. newOutcome and outcome fields that are both
+  # optional.
+}
+
+input NewOutcome {
+  text: String!
+}
+
 type Mutation {
-  createForecast(input: NewForecast!): Forecast!
+  createForecast(forecast: NewForecast!, estimate: NewEstimate!): Forecast!
 }
 
 scalar Time

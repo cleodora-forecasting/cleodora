@@ -69,7 +69,13 @@ export type Mutation = {
 
 
 export type MutationCreateForecastArgs = {
-  input: NewForecast;
+  estimate: NewEstimate;
+  forecast: NewForecast;
+};
+
+export type NewEstimate = {
+  probabilities: Array<NewProbability>;
+  reason: Scalars['String'];
 };
 
 export type NewForecast = {
@@ -77,6 +83,15 @@ export type NewForecast = {
   description: Scalars['String'];
   resolves: Scalars['Time'];
   title: Scalars['String'];
+};
+
+export type NewOutcome = {
+  text: Scalars['String'];
+};
+
+export type NewProbability = {
+  outcome: NewOutcome;
+  value: Scalars['Int'];
 };
 
 /**
@@ -114,7 +129,8 @@ export enum Resolution {
 }
 
 export type CreateForecastMutationVariables = Exact<{
-  input: NewForecast;
+  forecast: NewForecast;
+  estimate: NewEstimate;
 }>;
 
 
@@ -131,6 +147,6 @@ export type GetForecastsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetForecastsQuery = { __typename?: 'Query', forecasts: Array<{ __typename?: 'Forecast', id: string, title: string, description: string, created: any, closes?: any | null, resolves: any, resolution: Resolution, estimates: Array<{ __typename?: 'Estimate', id: string, probabilities: Array<{ __typename?: 'Probability', id: string, value: number, outcome: { __typename?: 'Outcome', id: string, text: string } } | null> } | null> }> };
 
 
-export const CreateForecastDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createForecast"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewForecast"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createForecast"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]} as unknown as DocumentNode<CreateForecastMutation, CreateForecastMutationVariables>;
+export const CreateForecastDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createForecast"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"forecast"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewForecast"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"estimate"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewEstimate"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createForecast"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"forecast"},"value":{"kind":"Variable","name":{"kind":"Name","value":"forecast"}}},{"kind":"Argument","name":{"kind":"Name","value":"estimate"},"value":{"kind":"Variable","name":{"kind":"Name","value":"estimate"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]} as unknown as DocumentNode<CreateForecastMutation, CreateForecastMutationVariables>;
 export const GetMetadataDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMetadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"version"}}]}}]}}]} as unknown as DocumentNode<GetMetadataQuery, GetMetadataQueryVariables>;
 export const GetForecastsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetForecasts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"forecasts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"closes"}},{"kind":"Field","name":{"kind":"Name","value":"resolves"}},{"kind":"Field","name":{"kind":"Name","value":"resolution"}},{"kind":"Field","name":{"kind":"Name","value":"estimates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"probabilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"outcome"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetForecastsQuery, GetForecastsQueryVariables>;

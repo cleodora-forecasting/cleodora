@@ -46,13 +46,26 @@ Example:
 			fmt.Sprintf("%s/query", URL),
 			http.DefaultClient,
 		)
-		f := gqclient.NewForecast{
+		forecast := gqclient.NewForecast{
 			Title:       title,
 			Description: description,
 			Resolves:    resolves,
 			Closes:      resolves, // should be optional
 		}
-		resp, err := gqclient.CreateForecast(ctx, client, f)
+		estimate := gqclient.NewEstimate{
+			Reason: "TODO cleoc",
+			Probabilities: []gqclient.NewProbability{
+				{
+					Value:   50,
+					Outcome: gqclient.NewOutcome{Text: "TODO cleoc"},
+				},
+				{
+					Value:   50,
+					Outcome: gqclient.NewOutcome{Text: "TODO cleoc"},
+				},
+			},
+		}
+		resp, err := gqclient.CreateForecast(ctx, client, forecast, estimate)
 		if err != nil {
 			return err // todo wrap
 		}

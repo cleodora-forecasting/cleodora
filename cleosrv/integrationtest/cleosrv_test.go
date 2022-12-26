@@ -196,9 +196,123 @@ func TestCreateForecast(t *testing.T) {
 		"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
 	}
 
+	newEstimate := map[string]interface{}{
+		"reason": "My weather app says it will rain.",
+		"probabilities": []map[string]interface{}{
+			{
+				"value": 70,
+				"outcome": map[string]interface{}{
+					"text": "Yes",
+				},
+			},
+			{
+				"value": 30,
+				"outcome": map[string]interface{}{
+					"text": "No",
+				},
+			},
+		},
+	}
+
 	query := `
-		mutation createForecast($input: NewForecast!) {
-			createForecast(input: $input) {
+		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+			createForecast(forecast: $forecast, estimate: $estimate) {
+				id
+				title
+				estimates {
+					id
+					created
+					reason
+					probabilities {
+						id
+						value
+						outcome {
+							id
+							text
+							correct
+						}
+					}
+				}
+			}
+		}`
+
+	var response struct {
+		CreateForecast struct {
+			Id        string
+			Title     string
+			Estimates []struct {
+				Id            string
+				Created       string
+				Reason        string
+				Probabilities []struct {
+					Id      string
+					Value   int
+					Outcome struct {
+						Id      string
+						Text    string
+						Correct bool
+					}
+				}
+			}
+		}
+	}
+
+	err := c.Post(
+		query,
+		&response,
+		client.Var("forecast", newForecast),
+		client.Var("estimate", newEstimate),
+	)
+	require.Nil(t, err)
+
+	assert.NotEmpty(t, response.CreateForecast.Id)
+	assert.Equal(
+		t,
+		"Will it rain tomorrow?",
+		response.CreateForecast.Title,
+	)
+
+	assert.Len(t, response.CreateForecast.Estimates, 1)
+	assert.NotEmpty(t, response.CreateForecast.Estimates[0].Id)
+	assert.Equal(
+		t,
+		"My weather app says it will rain.",
+		response.CreateForecast.Estimates[0].Reason,
+	)
+	assert.Len(t, response.CreateForecast.Estimates[0].Probabilities, 2)
+	assert.NotEmpty(t, response.CreateForecast.Estimates[0].Probabilities[0].Id)
+	assert.NotEmpty(t, response.CreateForecast.Estimates[0].Probabilities[1].Id)
+	assert.False(t, response.CreateForecast.Estimates[0].Probabilities[0].Outcome.Correct)
+	assert.False(t, response.CreateForecast.Estimates[0].Probabilities[1].Outcome.Correct)
+
+	// If the order is Yes, No ...
+	if response.CreateForecast.Estimates[0].Probabilities[0].Outcome.Text == "Yes" {
+		assert.Equal(t, 70, response.CreateForecast.Estimates[0].Probabilities[0].Value)
+		assert.Equal(t, "Yes", response.CreateForecast.Estimates[0].Probabilities[0].Outcome.Text)
+		assert.Equal(t, 30, response.CreateForecast.Estimates[0].Probabilities[1].Value)
+		assert.Equal(t, "No", response.CreateForecast.Estimates[0].Probabilities[1].Outcome.Text)
+	} else { // ... or if it is No, Yes
+		assert.Equal(t, 30, response.CreateForecast.Estimates[0].Probabilities[0].Value)
+		assert.Equal(t, "No", response.CreateForecast.Estimates[0].Probabilities[0].Outcome.Text)
+		assert.Equal(t, 70, response.CreateForecast.Estimates[0].Probabilities[1].Value)
+		assert.Equal(t, "Yes", response.CreateForecast.Estimates[0].Probabilities[1].Outcome.Text)
+	}
+}
+
+func TestCreateForecast_FailsWithoutEstimate(t *testing.T) {
+	c := initServer(t)
+
+	newForecast := map[string]interface{}{
+		"title": "Will it rain tomorrow?",
+		"description": "It counts as rain if between 9am and 9pm there are " +
+			"30 min or more of uninterrupted precipitation.",
+		"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+		"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+	}
+
+	query := `
+		mutation createForecast($forecast: NewForecast!) {
+			createForecast(forecast: $forecast) {
 				id
 				title
 			}
@@ -211,20 +325,19 @@ func TestCreateForecast(t *testing.T) {
 		}
 	}
 
-	err := c.Post(query, &response, client.Var("input", newForecast))
-	require.Nil(t, err)
-
-	assert.NotEmpty(t, response.CreateForecast.Id)
-	assert.Equal(
+	err := c.Post(query, &response, client.Var("forecast", newForecast))
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "http 422")
+	assert.Contains(
 		t,
-		"Will it rain tomorrow?",
-		response.CreateForecast.Title,
+		err.Error(),
+		"argument \\\"estimate\\\" of type \\\"NewEstimate!\\\" is required",
 	)
 }
 
-// TestCreateForecast_OmitCloses verifies that a forecast can be created
+// TestCreateForecast_CanOmitCloses verifies that a forecast can be created
 // without specifying a closing date.
-func TestCreateForecast_OmitCloses(t *testing.T) {
+func TestCreateForecast_CanOmitCloses(t *testing.T) {
 	c := initServer(t)
 
 	newForecast := map[string]interface{}{
@@ -234,9 +347,27 @@ func TestCreateForecast_OmitCloses(t *testing.T) {
 		"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
 	}
 
+	newEstimate := map[string]interface{}{
+		"reason": "My weather app says it will rain.",
+		"probabilities": []map[string]interface{}{
+			{
+				"value": 70,
+				"outcome": map[string]interface{}{
+					"text": "Yes",
+				},
+			},
+			{
+				"value": 30,
+				"outcome": map[string]interface{}{
+					"text": "No",
+				},
+			},
+		},
+	}
+
 	query := `
-		mutation createForecast($input: NewForecast!) {
-			createForecast(input: $input) {
+		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+			createForecast(forecast: $forecast, estimate: $estimate) {
 				id
 				title
 				closes
@@ -251,7 +382,12 @@ func TestCreateForecast_OmitCloses(t *testing.T) {
 		}
 	}
 
-	err := c.Post(query, &response, client.Var("input", newForecast))
+	err := c.Post(
+		query,
+		&response,
+		client.Var("forecast", newForecast),
+		client.Var("estimate", newEstimate),
+	)
 	require.Nil(t, err)
 
 	assert.NotEmpty(t, response.CreateForecast.Id)

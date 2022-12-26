@@ -17,15 +17,15 @@ import (
 )
 
 // CreateForecast is the resolver for the createForecast field.
-func (r *mutationResolver) CreateForecast(ctx context.Context, input model.NewForecast) (*model.Forecast, error) {
+func (r *mutationResolver) CreateForecast(ctx context.Context, forecast model.NewForecast, estimate model.NewEstimate) (*model.Forecast, error) {
 	dbForecast := dbmodel.Forecast{
-		Title:       html.EscapeString(input.Title),
-		Description: html.EscapeString(input.Description),
+		Title:       html.EscapeString(forecast.Title),
+		Description: html.EscapeString(forecast.Description),
 		Created:     time.Now(),
-		Resolves:    input.Resolves,
-		Closes:      input.Closes,
+		Resolves:    forecast.Resolves,
+		Closes:      forecast.Closes,
 		Resolution:  dbmodel.ResolutionUnresolved,
-		Estimates:   nil,
+		Estimates:   convertNewEstimateToDBEstimate(estimate),
 	}
 
 	ret := r.db.Create(&dbForecast)
@@ -42,7 +42,7 @@ func (r *mutationResolver) CreateForecast(ctx context.Context, input model.NewFo
 		Resolves:    dbForecast.Resolves,
 		Closes:      dbForecast.Closes,
 		Resolution:  model.Resolution(dbForecast.Resolution),
-		Estimates:   nil,
+		Estimates:   convertEstimatesDBToGQL(dbForecast.Estimates),
 	}
 
 	return &retForecast, nil

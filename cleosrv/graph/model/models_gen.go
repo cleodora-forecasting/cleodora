@@ -47,11 +47,25 @@ type Metadata struct {
 	Version string `json:"version"`
 }
 
+type NewEstimate struct {
+	Reason        string            `json:"reason"`
+	Probabilities []*NewProbability `json:"probabilities"`
+}
+
 type NewForecast struct {
 	Title       string     `json:"title"`
 	Description string     `json:"description"`
 	Resolves    time.Time  `json:"resolves"`
 	Closes      *time.Time `json:"closes"`
+}
+
+type NewOutcome struct {
+	Text string `json:"text"`
+}
+
+type NewProbability struct {
+	Value   int         `json:"value"`
+	Outcome *NewOutcome `json:"outcome"`
 }
 
 // The possible results of a forecast. In the simplest case you will only have
