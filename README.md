@@ -27,24 +27,6 @@ website https://cleodora.org/docs/roadmap/mockups/ .
 ![Mockup: History of a forecast](website/content/docs/roadmap/mockups/mockups_cleodora_history.jpg)
 
 
-# Table of Contents
-
-- [Features](#features)
-- [Dev Setup](#dev-setup)
-  * [Manual setup](#manual-setup)
-  * [Gitpod](#gitpod)
-  * [GitHub Codespaces](#github-codespaces)
-- [Run](#run)
-  * [Backend (GraphQL API written in Go)](#backend-graphql-api-written-in-go)
-  * [GUI / Frontend (React app)](#gui--frontend-react-app)
-  * [Client (CLI written in Go)](#client-cli-written-in-go)
-- [Build](#build)
-- [GraphQL playground (GraphiQL)](#graphql-playground--graphiql-)
-- [Tests](#tests)
-  * [Setup](#setup)
-  * [Execution](#execution)
-
-
 # Features
 
 Concrete next steps can be found as GitHub issues.
