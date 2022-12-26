@@ -38,16 +38,6 @@ type Forecast {
 }
 
 """
-The possible results of a forecast. In the simplest case you will only have
-two outcomes: Yes and No.
-"""
-type Outcome {
-  id: ID!
-  text: String!
-  correct: Boolean!
-}
-
-"""
 A list of probabilities (one for each outcome) together with a timestamp and
 an explanation why you made this estimate. Every time you change your mind
 about a forecast you will create a new Estimate.
@@ -68,6 +58,16 @@ type Probability {
   id: ID!
   value: Int!
   outcome: Outcome!
+}
+
+"""
+The possible results of a forecast. In the simplest case you will only have
+two outcomes: Yes and No.
+"""
+type Outcome {
+  id: ID!
+  text: String!
+  correct: Boolean!
 }
 
 input NewForecast {
