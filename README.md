@@ -187,16 +187,20 @@ Open http://localhost:3000 in a browser and see the list of forecasts.
 
 # Tests
 
-## Setup
+## Integration tests
+
+```bash
+go test ./...
+```
+
+
+## E2E (end to end) tests
+
+Selenium end to end tests, also including the cleoc client.
 
 ```bash
 sudo apt install firefox-geckodriver
 ```
-
-
-## Execution
-
-Run the end to end Selenium browser tests.
 
 ```bash
 ./runE2ETests.sh
