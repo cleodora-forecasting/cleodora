@@ -30,7 +30,7 @@ func buildRootCommand(app *cleoc.App) *cobra.Command {
 cleoc version: %s
 `, cleoutils.Version),
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			if err := app.Config.Load(); err != nil {
+			if err := app.Config.LoadWithViper(); err != nil {
 				return err
 			}
 			app.Out = cmd.OutOrStdout() // this is in the example code, but not in the slides, why?

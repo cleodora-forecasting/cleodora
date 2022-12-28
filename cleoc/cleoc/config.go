@@ -12,7 +12,10 @@ type Config struct {
 	ConfigFile string
 }
 
-func (c *Config) Load() error {
+// LoadWithViper initializes or overwrites the Config by using the 'viper'
+// library (thereby reading in config files, ENV variables etc.). You should
+// probably not call it.
+func (c *Config) LoadWithViper() error {
 	v := viper.New()
 
 	if c.ConfigFile != "" {
