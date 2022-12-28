@@ -43,7 +43,7 @@ Example:
 		}
 		ctx := context.Background()
 		client := graphql.NewClient(
-			fmt.Sprintf("%s/query", URL),
+			fmt.Sprintf("%s/query", url),
 			http.DefaultClient,
 		)
 		forecast := gqclient.NewForecast{

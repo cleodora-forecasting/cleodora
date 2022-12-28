@@ -12,7 +12,7 @@ import (
 
 var (
 	cfgFile string
-	URL     string
+	url     string
 )
 
 // rootCmd represents the base command when called without any subcommands.
@@ -44,7 +44,7 @@ func init() {
 		"config file (default is $HOME/.cleoc.yml)",
 	)
 	rootCmd.PersistentFlags().StringVarP(
-		&URL,
+		&url,
 		"url",
 		"u",
 		"http://localhost:8080",
