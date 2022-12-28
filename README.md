@@ -119,7 +119,7 @@ because the frontend queries the backend for data.
 The purpose is to interact with the API.
 
 ```bash
-cd cleoc
+cd cleoc/cmd/
 go run .
 ```
 

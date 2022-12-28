@@ -34,7 +34,7 @@ builds:
 
   - id: cleoc
     binary: cleoc
-    main: ./cleoc
+    main: ./cleoc/cmd
     ldflags:
       - -X github.com/cleodora-forecasting/cleodora/cleoutils.Version={{.Version}}
       - -X github.com/cleodora-forecasting/cleodora/cleoutils.VersionCommit={{.ShortCommit}}
