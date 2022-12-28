@@ -33,8 +33,7 @@ Concrete next steps can be found as GitHub issues.
 
 Less detailed possible future features can be found on the
 [website](https://cleodora.org/docs/roadmap/) (or also in here under
-[./website/content/docs/roadmap.md](./website/content/docs/roadmap/_index.md)) or
-under [./docs/features/](./docs/features/).
+[./website/content/docs/roadmap](./website/content/docs/roadmap/)).
 
 
 # Dev Setup
