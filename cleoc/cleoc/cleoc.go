@@ -15,6 +15,7 @@ import (
 
 type App struct {
 	Out    io.Writer
+	Err    io.Writer
 	Config *Config
 }
 
@@ -22,6 +23,7 @@ func NewApp() *App {
 	c := &Config{}
 	return &App{
 		Out:    os.Stdout,
+		Err:    os.Stderr,
 		Config: c,
 	}
 }
@@ -59,6 +61,6 @@ func (a *App) AddForecast(title string, resolves string, description string) err
 	if err != nil {
 		return err // todo wrap
 	}
-	fmt.Println(resp.CreateForecast.Id)
+	fmt.Fprint(a.Out, resp.CreateForecast.Id)
 	return nil
 }

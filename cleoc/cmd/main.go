@@ -34,6 +34,7 @@ cleoc version: %s
 				return err
 			}
 			app.Out = cmd.OutOrStdout() // this is in the example code, but not in the slides, why?
+			app.Err = cmd.OutOrStderr()
 			return nil
 		},
 	}
