@@ -19,7 +19,9 @@ suite(function(env) {
                 [
                     'add',
                     'forecast',
+                    '-t',
                     'Is this a test forecast?',
+                    '-r',
                     '2022-12-01T15:00:00+01:00'
                 ],
                 { encoding : 'utf8' },

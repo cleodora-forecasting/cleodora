@@ -20,37 +20,57 @@ func buildAddCommand(app *cleoc.App) *cobra.Command {
 }
 
 func buildAddForecastCommand(app *cleoc.App) *cobra.Command {
+	var opts cleoc.AddForecastOptions
+
 	var forecastCmd = &cobra.Command{
-		Use:   "forecast TITLE RESOLUTION_DATE [DESCRIPTION]",
+		Use:   "forecast",
 		Short: "Add a new forecast",
 		Long: `Add a new forecast to Cleodora
-
-TITLE is the title of the forecast.
-RESOLUTION_DATE needs to be in the format 2022-11-13T19:30:00+01:00
-DESCRIPTION is optional.
 
 It returns the ID of the forecast that was just created.
 
 Example:
 
+// TODO update the example
 	cleoc add forecast "Will it rain tomorrow?" 2022-11-14T00:00:00+01:00 "If \
 		during the day it rains for more than 2 minutes at a time the \
 		forecast resolves as true."
 `,
-		Args: cobra.RangeArgs(2, 3),
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return opts.Validate()
+		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			description := ""
-			if len(args) == 3 {
-				description = args[2]
-			}
 			return app.AddForecast(
-				args[0],
-				args[1],
-				description,
+				opts.Title,
+				opts.Resolves,
+				opts.Description,
 				"TODO cleoc",
 				[]string{"TODO cleoc:50", "TODO cleoc:50"},
 			)
 		},
 	}
+
+	forecastCmd.Flags().StringVarP(
+		&opts.Title,
+		"title",
+		"t",
+		"",
+		"Title of the forecast",
+	)
+	forecastCmd.Flags().StringVarP(
+		&opts.Description,
+		"description",
+		"d",
+		"",
+		"Description of the forecast",
+	)
+	forecastCmd.Flags().StringVarP(
+		&opts.Resolves,
+		"resolves",
+		"r",
+		"",
+		"Resolution date of the forecast (format 2022-11-13T19:30:00+01:00)",
+	)
+
 	return forecastCmd
 }
