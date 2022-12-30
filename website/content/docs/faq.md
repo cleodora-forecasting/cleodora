@@ -31,15 +31,15 @@ concerning your favorite political party).
 
 Many people find the idea of attaching a probability to a future event to be
 counter-intuitive. That is because one way of thinking about probability is
-when repeating an event many times. For example if you flip a coin 10.000 times
+when **repeating an event many times**. For example if you flip a coin 10.000 times
 it will land about 5.000 times on heads. Therefore we say there is a 50%
 probability of getting heads. Some events can't be repeated however. What is
 the likelihood of the US president stepping down in the next year due to a
 conflict of interest with the rice industry? How do you repeat this event
 10.000 times?
 
-Another way of thinking about probabilities is _belief_. How likely do you
-believe something is going to happen (0 being you are certain it will never
+A more helpful way of thinking about probabilities is _belief_. How **likely do you
+believe something is going to happen** (0 being you are certain it will never
 happen and 100 you are certain it will definitely happen)? If I flip a coin,
 how strongly do you believe heads will come up? Given your prior experience in
 the world you will probably believe 50% probability of heads. Or maybe you
@@ -50,16 +50,18 @@ more importantly, will vary over time because you get to see new data
 (evidence)! So maybe your belief that the US president will have to step down
 due to a conflict of interest with the rice industry is 0.001% . When you learn
 that he in fact owns large amounts of stock in rice companies your belief will
-possibly increase to 5%.
+possibly increase to 5%. Cleodora will help you keep track of your beliefs and
+once you find out the truth, how often you were right or wrong. This will aid
+you in forming more accurate beliefs in the future.
 
-Yet another way of thinking about such probabilities is, how much money would
-you be willing to bet on it? For example if you believe there is a 5% chance
+Yet another way of thinking about such probabilities is, **how much money would
+you be willing to bet on it**? For example if you believe there is a 5% chance
 the US president will step down in the next year due to a conflict of interest
 with the rice industry, then you consider the following bet fair: You bet $1 on
 YES and your friend Mindy bets $19 on NO. If it turns out you were right, you
 get her $19 and if it turns out she was right she gets your $1. You would not
 take the bet if she was only offering $15 and you would definitely take the bet
-if she was offering $20 . How exactly this is calculated (5/95 = 1/19 = 1:19
+if she was offering $20 . How this is calculated exactly (5/95 = 1/19 = 1:19
 odds) does not matter, only that you have this intuition that if you think
 something is very likely to happen you would be willing to bet a lot of money
 on it and vice versa.
