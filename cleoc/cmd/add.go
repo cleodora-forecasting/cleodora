@@ -52,7 +52,13 @@ Example:
 			if len(args) == 3 {
 				description = args[2]
 			}
-			return app.AddForecast(args[0], args[1], description)
+			return app.AddForecast(
+				args[0],
+				args[1],
+				description,
+				"TODO cleoc",
+				[]string{"TODO cleoc:50", "TODO cleoc:50"},
+			)
 		},
 	}
 	return forecastCmd

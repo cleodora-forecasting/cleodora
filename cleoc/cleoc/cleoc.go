@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/Khan/genqlient/graphql"
@@ -29,7 +31,13 @@ func NewApp() *App {
 	}
 }
 
-func (a *App) AddForecast(title string, resolves string, description string) error {
+func (a *App) AddForecast(
+	title string,
+	resolves string,
+	description string,
+	reason string,
+	probabilities []string,
+) error {
 	resolvesT, err := time.Parse(time.RFC3339, resolves)
 	if err != nil {
 		return err // todo wrap
@@ -45,28 +53,65 @@ func (a *App) AddForecast(title string, resolves string, description string) err
 		Resolves:    resolvesT,
 		Closes:      resolvesT, // should be optional
 	}
+
+	reqProbabilities, err := validateAndParseProbabilities(probabilities)
+	if err != nil {
+		_, _ = a.Err.Write(
+			[]byte(fmt.Sprintf("Error parsing probabilities: %v", err.Error())),
+		)
+		// TODO the errors should be combined
+		return err
+	}
+
 	estimate := gqclient.NewEstimate{
-		Reason: "TODO cleoc",
-		Probabilities: []gqclient.NewProbability{
-			{
-				Value:   50,
-				Outcome: gqclient.NewOutcome{Text: "TODO cleoc"},
-			},
-			{
-				Value:   50,
-				Outcome: gqclient.NewOutcome{Text: "TODO cleoc"},
-			},
-		},
+		Reason:        reason,
+		Probabilities: reqProbabilities,
 	}
 	resp, err := gqclient.CreateForecast(ctx, client, forecast, estimate)
 	if err != nil {
-		return err // todo wrap
+		return err // TODO wrap
 	}
 	_, err = fmt.Fprint(a.Out, resp.CreateForecast.Id)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func validateAndParseProbabilities(probabilities []string) ([]gqclient.NewProbability, error) {
+	var reqProbabilities []gqclient.NewProbability
+	for _, p := range probabilities {
+		if !strings.Contains(p, ":") {
+			return nil, fmt.Errorf("'%v' must contain ':'", p)
+		}
+		firstSegment := p[:strings.LastIndex(p, ":")]
+		lastSegment := p[strings.LastIndex(p, ":")+1:]
+		if firstSegment == "" {
+			return nil, fmt.Errorf("'%v' the outcome can't be empty. "+
+				"Use OUTCOME:PROBABILITY", p)
+		}
+		if lastSegment == "" {
+			return nil, fmt.Errorf("'%v' the probability can't be empty. "+
+				"Use OUTCOME:PROBABILITY", p)
+		}
+		value, err := strconv.Atoi(lastSegment)
+		if err != nil {
+			return nil, fmt.Errorf("'%v' the probability is not a "+
+				"valid number. Use OUTCOME:PROBABILITY", p)
+		}
+		outcome := firstSegment
+
+		reqProbabilities = append(
+			reqProbabilities,
+			gqclient.NewProbability{
+				Value: value,
+				Outcome: gqclient.NewOutcome{
+					Text: outcome,
+				},
+			},
+		)
+	}
+	return reqProbabilities, nil
 }
 
 func (a *App) Version() error {
