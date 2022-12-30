@@ -51,3 +51,21 @@ func TestApp_AddForecast(t *testing.T) {
 	assert.Equal(t, "999", out.String())
 	assert.Empty(t, errOut)
 }
+
+func TestApp_Version(t *testing.T) {
+	out := &bytes.Buffer{}
+	errOut := &bytes.Buffer{}
+	config := &cleoc.Config{
+		URL:        "",
+		ConfigFile: "",
+	}
+	a := &cleoc.App{
+		Out:    out,
+		Err:    errOut,
+		Config: config,
+	}
+	err := a.Version()
+	assert.Nil(t, err)
+	assert.Equal(t, "dev", out.String())
+	assert.Empty(t, errOut)
+}

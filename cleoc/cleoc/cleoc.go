@@ -11,6 +11,7 @@ import (
 	"github.com/Khan/genqlient/graphql"
 
 	"github.com/cleodora-forecasting/cleodora/cleoc/gqclient"
+	"github.com/cleodora-forecasting/cleodora/cleoutils"
 )
 
 type App struct {
@@ -61,6 +62,16 @@ func (a *App) AddForecast(title string, resolves string, description string) err
 	if err != nil {
 		return err // todo wrap
 	}
-	fmt.Fprint(a.Out, resp.CreateForecast.Id)
+	_, err = fmt.Fprint(a.Out, resp.CreateForecast.Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *App) Version() error {
+	if _, err := fmt.Fprint(a.Out, cleoutils.Version); err != nil {
+		return err
+	}
 	return nil
 }
