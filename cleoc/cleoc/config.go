@@ -1,6 +1,7 @@
 package cleoc
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -34,7 +35,11 @@ func (c *Config) LoadWithViper() error {
 
 	err := v.ReadInConfig()
 	if err != nil {
-		return err
+		if err != nil {
+			if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+				return fmt.Errorf("error reading config file: %w", err)
+			}
+		}
 	}
 
 	// v.AutomaticEnv() // should I do this?
