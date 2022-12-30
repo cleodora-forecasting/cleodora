@@ -15,8 +15,10 @@ func main() {
 
 	cmd := buildRootCommand(app)
 	if err := cmd.Execute(); err != nil {
-		_, err = fmt.Fprint(os.Stderr, err.Error())
-		fmt.Printf("Error printing error: %v\n", err)
+		_, err = fmt.Fprintf(os.Stderr, "%s\n", err)
+		if err != nil {
+			fmt.Printf("Error printing error: %v\n", err)
+		}
 		os.Exit(1)
 	}
 }
@@ -37,7 +39,8 @@ cleoc version: %s
 			app.Err = cmd.OutOrStderr()
 			return cmd.Help()
 		},
-		SilenceUsage: true,
+		SilenceUsage:  true,
+		SilenceErrors: true, // Errors are printed by main
 	}
 
 	rootCmd.PersistentFlags().StringVar(

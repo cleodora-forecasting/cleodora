@@ -225,7 +225,7 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 				"No:10",
 			},
 			expectedProbabilities: nil,
-			expectedErr: "Error parsing probabilities: 'Yes:Tree'" +
+			expectedErr: "error parsing probabilities: 'Yes:Tree'" +
 				" the probability is not a valid number. Use OUTCOME:PROBABILITY",
 		},
 		{
@@ -235,7 +235,7 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 				"No:10",
 			},
 			expectedProbabilities: nil,
-			expectedErr:           "Error parsing probabilities: 'Yes' must contain ':'",
+			expectedErr:           "error parsing probabilities: 'Yes' must contain ':'",
 		},
 		{
 			name: "invalid no outcome",
@@ -244,7 +244,7 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 				"No:10",
 			},
 			expectedProbabilities: nil,
-			expectedErr: "Error parsing probabilities: ':30' the " +
+			expectedErr: "error parsing probabilities: ':30' the " +
 				"outcome can't be empty. Use OUTCOME:PROBABILITY",
 		},
 		{
@@ -254,8 +254,14 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 				"No:10",
 			},
 			expectedProbabilities: nil,
-			expectedErr: "Error parsing probabilities: 'Yes:' the " +
+			expectedErr: "error parsing probabilities: 'Yes:' the " +
 				"probability can't be empty. Use OUTCOME:PROBABILITY",
+		},
+		{
+			name:                  "invalid no probabilities",
+			inputProbabilities:    []string{},
+			expectedProbabilities: nil,
+			expectedErr:           "error parsing probabilities: no probabilities",
 		},
 	}
 
@@ -316,7 +322,7 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 			} else {
 				assert.Error(t, err)
 				assert.Empty(t, out.String())
-				assert.Equal(t, tt.expectedErr, errOut.String())
+				assert.Equal(t, tt.expectedErr, err.Error())
 			}
 		})
 	}

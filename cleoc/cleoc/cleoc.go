@@ -2,6 +2,7 @@ package cleoc
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -56,11 +57,7 @@ func (a *App) AddForecast(
 
 	reqProbabilities, err := validateAndParseProbabilities(probabilities)
 	if err != nil {
-		_, _ = a.Err.Write(
-			[]byte(fmt.Sprintf("Error parsing probabilities: %v", err.Error())),
-		)
-		// TODO the errors should be combined
-		return err
+		return fmt.Errorf("error parsing probabilities: %w", err)
 	}
 
 	estimate := gqclient.NewEstimate{
@@ -79,6 +76,9 @@ func (a *App) AddForecast(
 }
 
 func validateAndParseProbabilities(probabilities []string) ([]gqclient.NewProbability, error) {
+	if len(probabilities) == 0 {
+		return nil, errors.New("no probabilities")
+	}
 	var reqProbabilities []gqclient.NewProbability
 	for _, p := range probabilities {
 		if !strings.Contains(p, ":") {
