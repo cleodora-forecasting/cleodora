@@ -115,7 +115,7 @@ func validateAndParseProbabilities(probabilities []string) ([]gqclient.NewProbab
 }
 
 func (a *App) Version() error {
-	if _, err := fmt.Fprint(a.Out, cleoutils.Version); err != nil {
+	if _, err := fmt.Fprintf(a.Out, "%v\n", cleoutils.Version); err != nil {
 		return err
 	}
 	return nil
