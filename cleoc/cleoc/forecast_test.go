@@ -122,6 +122,100 @@ func TestApp_AddForecast_Simple(t *testing.T) {
 	assert.Empty(t, errOut)
 }
 
+func TestApp_AddForecast_Error(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Verify the body contains the expected request
+		body, err := io.ReadAll(r.Body)
+		require.Nil(t, err)
+		var bodyStruct createForecastBody
+		err = json.Unmarshal(body, &bodyStruct)
+		require.Nil(t, err)
+
+		assert.Equal(t, "CreateForecast", bodyStruct.OperationName)
+		assert.Equal(t, "Will it rain tomorrow?", bodyStruct.Variables.Forecast.Title)
+		assert.Equal(t,
+			"The weather prediction says so",
+			bodyStruct.Variables.Estimate.Reason,
+		)
+		assert.Len(t, bodyStruct.Variables.Estimate.Probabilities, 2)
+
+		expectedProbabilities := []probability{
+			{
+				Value: 20,
+				Outcome: outcome{
+					Text: "Yes",
+				},
+			},
+			{
+				Value: 80,
+				Outcome: outcome{
+					Text: "No",
+				},
+			},
+		}
+		assert.ElementsMatch(t, expectedProbabilities, bodyStruct.Variables.Estimate.Probabilities)
+
+		// Send a response, copied from an actual response due to an erroneous
+		// request where 'title' was missing
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_, err = fmt.Fprint(
+			w,
+			"{\"errors\":[{\"message\":\"json request body could not be "+
+				"decoded: invalid character 'd' looking for beginning of "+
+				"object key string body:{\\\"operationName\\\":\\\""+
+				"createForecast\\\",\\\"variables\\\":{\\\"forecast\\\":{"+
+				"description\\\":\\\"asdf\\\",\\\"closes\\\":\\\""+
+				"2022-12-31T11:28:52.431Z\\\",\\\"resolves\\\":\\\""+
+				"2022-12-31T11:28:52.431Z\\\"},\\\"estimate\\\":{\\\""+
+				"reason\\\":\\\"asdf\\\",\\\"probabilities\\\":[{\\\""+
+				"value\\\":50,\\\"outcome\\\":{\\\"text\\\":\\\""+
+				"Yes\\\"}},{\\\"value\\\":50,\\\"outcome\\\":{"+
+				"\\\"text\\\":\\\"No\\\"}}]}},\\\"query\\\":"+
+				"\\\"mutation createForecast($forecast: NewForecast!, "+
+				"$estimate: NewEstimate!) {\\\\n  createForecast(forecast: "+
+				"$forecast, estimate: $estimate) {\\\\n    id\\\\n    "+
+				"title\\\\n    __typename\\\\n  }\\\\n}\\\"}\"}],\"data\":"+
+				"null}",
+		)
+		require.Nil(t, err)
+	}))
+	defer ts.Close()
+
+	out := &bytes.Buffer{}
+	errOut := &bytes.Buffer{}
+	config := &cleoc.Config{
+		URL:        ts.URL,
+		ConfigFile: "",
+	}
+	a := &cleoc.App{
+		Out:    out,
+		Err:    errOut,
+		Config: config,
+	}
+
+	opts := cleoc.AddForecastOptions{
+		Title:       "Will it rain tomorrow?",
+		Description: "",
+		Resolves:    time.Now().Add(time.Hour * 24).Format(time.RFC3339),
+		Reason:      "The weather prediction says so",
+		Probabilities: map[string]int{
+			"Yes": 20,
+			"No":  80,
+		},
+	}
+	// Of course, we know the options in this test to be valid,
+	// but for documentation purposes make it clear that validation is
+	// expected before calling AddForecast
+	err := opts.Validate()
+	require.Nil(t, err)
+
+	err = a.AddForecast(opts)
+	assert.ErrorContains(t, err, "400 Bad Request")
+	assert.Empty(t, out)
+	assert.Empty(t, errOut)
+}
+
 // TestApp_AddForecast_Probabilities verifies correct 'probabilities'
 // parameter during forecast creation.
 func TestApp_AddForecast_Probabilities(t *testing.T) {
@@ -237,8 +331,6 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 		})
 	}
 }
-
-// TODO Add test that verifies error server response with the forecasts creation
 
 func TestAddForecastOptions_Validate(t *testing.T) {
 	type fields struct {
