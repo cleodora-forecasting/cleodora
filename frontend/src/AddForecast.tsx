@@ -42,18 +42,18 @@ export const AddForecast: FC = () => {
                 resolves,
             },
             estimate: {
-                reason: "asdf",
+                reason: "TODO Just a gut feeling I have.",
                 probabilities: [
                     {
                         value: 50,
                         outcome: {
-                            text: "TODO frontend",
+                            text: "TODO Yes",
                         },
                     },
                     {
                         value: 50,
                         outcome: {
-                            text: "TODO frontend",
+                            text: "TODO No",
                         },
                     },
                 ],
