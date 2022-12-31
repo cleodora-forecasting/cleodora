@@ -18,13 +18,16 @@ import (
 
 // CreateForecast is the resolver for the createForecast field.
 func (r *mutationResolver) CreateForecast(ctx context.Context, forecast model.NewForecast, estimate model.NewEstimate) (*model.Forecast, error) {
-	err := validateNewEstimate(estimate)
+	err := validateNewForecast(forecast)
+	if err != nil {
+		return nil, fmt.Errorf("error validating NewForecast: %w", err)
+	}
+	err = validateNewEstimate(estimate)
 	if err != nil {
 		return nil, fmt.Errorf("error validating NewEstimate: %w", err)
 	}
 	dbForecast := dbmodel.Forecast{
-		Title: html.EscapeString(forecast.Title), // TODO needs to be validated,
-		// can't be empty
+		Title:       html.EscapeString(forecast.Title),
 		Description: html.EscapeString(forecast.Description),
 		Created:     time.Now(),
 		Resolves:    forecast.Resolves,

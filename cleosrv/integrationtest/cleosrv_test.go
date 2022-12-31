@@ -570,6 +570,142 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 	}
 }
 
+func TestCreateForecast_ValidateNewForecast(t *testing.T) {
+	tests := []struct {
+		name        string
+		newForecast map[string]interface{}
+		expectedErr string
+	}{
+		{
+			name: "success",
+			newForecast: map[string]interface{}{
+				"title": "Will it rain tomorrow?",
+				"description": "It counts as rain if between 9am and 9pm there are " +
+					"30 min or more of uninterrupted precipitation.",
+				"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+				"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+			},
+			expectedErr: "",
+		},
+		{
+			name: "title cant be empty",
+			newForecast: map[string]interface{}{
+				"title": "",
+				"description": "It counts as rain if between 9am and 9pm there are " +
+					"30 min or more of uninterrupted precipitation.",
+				"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+				"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+			},
+			expectedErr: "title can't be empty",
+		},
+		{
+			name: "description can be empty",
+			newForecast: map[string]interface{}{
+				"title":       "Will it rain tomorrow?",
+				"description": "",
+				"closes":      time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+				"resolves":    time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+			},
+			expectedErr: "",
+		},
+		{
+			name: "closes can be empty",
+			newForecast: map[string]interface{}{
+				"title": "Will it rain tomorrow?",
+				"description": "It counts as rain if between 9am and 9pm there are " +
+					"30 min or more of uninterrupted precipitation.",
+				"closes":   nil,
+				"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+			},
+			expectedErr: "",
+		},
+		{
+			name: "closes can be omitted",
+			newForecast: map[string]interface{}{
+				"title": "Will it rain tomorrow?",
+				"description": "It counts as rain if between 9am and 9pm there are " +
+					"30 min or more of uninterrupted precipitation.",
+				"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+			},
+			expectedErr: "",
+		},
+		{
+			name: "resolves cant be empty",
+			newForecast: map[string]interface{}{
+				"title": "Will it rain tomorrow?",
+				"description": "It counts as rain if between 9am and 9pm there are " +
+					"30 min or more of uninterrupted precipitation.",
+				"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+				"resolves": nil,
+			},
+			expectedErr: "cannot be null",
+		},
+		{
+			name: "resolves cant be omitted",
+			newForecast: map[string]interface{}{
+				"title": "Will it rain tomorrow?",
+				"description": "It counts as rain if between 9am and 9pm there are " +
+					"30 min or more of uninterrupted precipitation.",
+				"closes": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+			},
+			expectedErr: "must be defined",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Log(tt.name)
+		t.Run(tt.name, func(t *testing.T) {
+
+			c := initServer(t)
+
+			newEstimate := map[string]interface{}{
+				"reason": "My weather app says it will rain",
+				"probabilities": []map[string]interface{}{
+					{
+						"value": 70,
+						"outcome": map[string]interface{}{
+							"text": "Yes",
+						},
+					},
+					{
+						"value": 30,
+						"outcome": map[string]interface{}{
+							"text": "No",
+						},
+					},
+				},
+			}
+
+			query := `
+		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+			createForecast(forecast: $forecast, estimate: $estimate) {
+				id
+				title
+			}
+		}`
+
+			var response struct {
+				CreateForecast struct {
+					Id    string
+					Title string
+				}
+			}
+
+			err := c.Post(
+				query,
+				&response,
+				client.Var("forecast", tt.newForecast),
+				client.Var("estimate", newEstimate),
+			)
+			if tt.expectedErr == "" { // success
+				assert.Nil(t, err)
+			} else {
+				assert.ErrorContains(t, err, tt.expectedErr)
+			}
+		})
+	}
+}
+
 func TestCreateForecast_FailsWithoutEstimate(t *testing.T) {
 	c := initServer(t)
 
@@ -604,70 +740,6 @@ func TestCreateForecast_FailsWithoutEstimate(t *testing.T) {
 		err.Error(),
 		"argument \\\"estimate\\\" of type \\\"NewEstimate!\\\" is required",
 	)
-}
-
-// TestCreateForecast_CanOmitCloses verifies that a forecast can be created
-// without specifying a closing date.
-func TestCreateForecast_CanOmitCloses(t *testing.T) {
-	c := initServer(t)
-
-	newForecast := map[string]interface{}{
-		"title": "Will it rain tomorrow?",
-		"description": "It counts as rain if between 9am and 9pm there are " +
-			"30 min or more of uninterrupted precipitation.",
-		"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
-	}
-
-	newEstimate := map[string]interface{}{
-		"reason": "My weather app says it will rain.",
-		"probabilities": []map[string]interface{}{
-			{
-				"value": 70,
-				"outcome": map[string]interface{}{
-					"text": "Yes",
-				},
-			},
-			{
-				"value": 30,
-				"outcome": map[string]interface{}{
-					"text": "No",
-				},
-			},
-		},
-	}
-
-	query := `
-		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
-			createForecast(forecast: $forecast, estimate: $estimate) {
-				id
-				title
-				closes
-			}
-		}`
-
-	var response struct {
-		CreateForecast struct {
-			Id     string
-			Title  string
-			Closes string
-		}
-	}
-
-	err := c.Post(
-		query,
-		&response,
-		client.Var("forecast", newForecast),
-		client.Var("estimate", newEstimate),
-	)
-	require.Nil(t, err)
-
-	assert.NotEmpty(t, response.CreateForecast.Id)
-	assert.Equal(
-		t,
-		"Will it rain tomorrow?",
-		response.CreateForecast.Title,
-	)
-	assert.Empty(t, response.CreateForecast.Closes)
 }
 
 func TestGetVersion(t *testing.T) {

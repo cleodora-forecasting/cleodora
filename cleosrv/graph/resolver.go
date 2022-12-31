@@ -322,6 +322,17 @@ func timeParseOrPanicPtr(layout string, value string) *time.Time {
 	return &t
 }
 
+func validateNewForecast(forecast model.NewForecast) error {
+	var validationErr *multierror.Error
+	if forecast.Title == "" {
+		validationErr = multierror.Append(
+			validationErr,
+			errors.New("title can't be empty"),
+		)
+	}
+	return validationErr.ErrorOrNil()
+}
+
 func validateNewEstimate(estimate model.NewEstimate) error {
 	var validationErr *multierror.Error
 	if estimate.Reason == "" {
