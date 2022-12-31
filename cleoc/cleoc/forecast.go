@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/Khan/genqlient/graphql"
+	"github.com/hashicorp/go-multierror"
 
 	"github.com/cleodora-forecasting/cleodora/cleoc/gqclient"
 )
@@ -78,35 +79,56 @@ type AddForecastOptions struct {
 }
 
 func (opts *AddForecastOptions) Validate() error {
-	// TODO consider joining as many errors as possible into one to be more
-	// user friendly
+	var validationErr *multierror.Error
 	if opts.Title == "" {
-		return errors.New("--title can't be empty")
+		validationErr = multierror.Append(
+			validationErr,
+			errors.New("--title can't be empty"),
+		)
 	}
 	if _, err := time.Parse(time.RFC3339, opts.Resolves); err != nil {
-		return errors.New("--resolves must be in RFC 3339 format (2022-11-13T19:30:00+01:00)")
+		validationErr = multierror.Append(
+			validationErr,
+			errors.New("--resolves must be in RFC 3339 format "+
+				"(2022-11-13T19:30:00+01:00)"),
+		)
 	}
 	if opts.Reason == "" {
-		return errors.New("--reason can't be empty")
+		validationErr = multierror.Append(
+			validationErr,
+			errors.New("--reason can't be empty"),
+		)
 	}
 	if len(opts.Probabilities) == 0 {
-		return errors.New("--probability is required")
+		validationErr = multierror.Append(
+			validationErr,
+			errors.New("--probability is required"),
+		)
 	}
 	sumProbabilities := 0
 	for o, p := range opts.Probabilities {
 		if o == "" {
-			return errors.New("--probability has wrong format. Use '-p Yes=30'")
+			validationErr = multierror.Append(
+				validationErr,
+				errors.New("--probability has wrong format. Use '-p Yes=30'"),
+			)
 		}
 		if p < 0 || p > 100 {
-			return errors.New("probabilities must be between 0 and 100")
+			validationErr = multierror.Append(
+				validationErr,
+				errors.New("probabilities must be between 0 and 100"),
+			)
 		}
 		sumProbabilities += p
 	}
 	if sumProbabilities != 100 {
-		return fmt.Errorf(
-			"all probabilities must add up to 100 (here only %v)",
-			sumProbabilities,
+		validationErr = multierror.Append(
+			validationErr,
+			fmt.Errorf(
+				"all probabilities must add up to 100 (here only %v)",
+				sumProbabilities,
+			),
 		)
 	}
-	return nil
+	return validationErr.ErrorOrNil()
 }

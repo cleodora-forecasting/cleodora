@@ -9,6 +9,7 @@ require (
 	github.com/golangci/golangci-lint v1.50.1
 	github.com/goreleaser/goreleaser v1.14.0
 	github.com/gorilla/websocket v1.5.0
+	github.com/hashicorp/go-multierror v1.1.1
 	github.com/rs/cors v1.8.3
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0
@@ -172,7 +173,6 @@ require (
 	github.com/gostaticanalysis/nilerr v0.1.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
-	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-retryablehttp v0.7.1 // indirect
 	github.com/hashicorp/go-version v1.6.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
