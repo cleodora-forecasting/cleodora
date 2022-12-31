@@ -31,10 +31,17 @@ It returns the ID of the forecast that was just created.
 
 Example:
 
-// TODO update the example
-	cleoc add forecast "Will it rain tomorrow?" 2022-11-14T00:00:00+01:00 "If \
-		during the day it rains for more than 2 minutes at a time the \
-		forecast resolves as true."
+	cleoc add forecast \
+        --title "Will it rain tomorrow?" \
+        --resolves 2022-11-14T00:00:00+01:00 \
+        --description "If during the day it \
+            rains for more than 2 minutes at \
+            a time the forecast resolves as \
+            true." \
+        --probability Yes=70 \
+        --probability No=30 \
+        --reason "The weather forecast said \
+            it would rain"
 `,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return opts.Validate()
