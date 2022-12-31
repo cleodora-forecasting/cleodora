@@ -18,7 +18,7 @@ import (
 func (a *App) AddForecast(opts AddForecastOptions) error {
 	resolvesT, err := time.Parse(time.RFC3339, opts.Resolves)
 	if err != nil {
-		return err // TODO wrap
+		return fmt.Errorf("could not parse 'resolves': %w", err)
 	}
 	ctx := context.Background()
 	client := graphql.NewClient(
@@ -44,7 +44,7 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 	}
 	resp, err := gqclient.CreateForecast(ctx, client, forecast, estimate)
 	if err != nil {
-		return err // TODO wrap
+		return fmt.Errorf("error calling the API: %w", err)
 	}
 	_, err = fmt.Fprint(a.Out, resp.CreateForecast.Id)
 	if err != nil {
