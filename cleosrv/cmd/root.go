@@ -3,8 +3,10 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
+	"github.com/adrg/xdg"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -13,6 +15,7 @@ import (
 
 var cfgFile string
 var address string
+var database string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -31,6 +34,7 @@ Visit https://cleodora.org for more information.
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return cleosrv.Start(
 			viper.GetString("address"),
+			viper.GetString("database"),
 			viper.GetString("frontend.footer_text"),
 		)
 	},
@@ -56,7 +60,10 @@ func init() {
 		&cfgFile,
 		"config",
 		"",
-		"config file (default is $HOME/.cleosrv.yaml)",
+		fmt.Sprintf(
+			"config file (default is %v)",
+			filepath.Join(xdg.ConfigHome, "cleosrv.yaml"),
+		),
 	)
 
 	rootCmd.PersistentFlags().StringVar(
@@ -67,9 +74,23 @@ func init() {
 			"To bind to all IP addresses and hostnames just specify "+
 			"semicolon port e.g. :8080",
 	)
+	rootCmd.PersistentFlags().StringVar(
+		&database,
+		"database",
+		filepath.Join(xdg.DataHome, "cleosrv", "cleosrv.db"),
+		"Path to the SQLite database to use. Will be created if it "+
+			"doesn't exist.",
+	)
 	err := viper.BindPFlag(
 		"address",
 		rootCmd.PersistentFlags().Lookup("address"),
+	)
+	if err != nil {
+		panic(err)
+	}
+	err = viper.BindPFlag(
+		"database",
+		rootCmd.PersistentFlags().Lookup("database"),
 	)
 	if err != nil {
 		panic(err)
@@ -82,14 +103,9 @@ func initConfig() {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
-		// Search config in home directory with name ".cleosrv" (without extension).
-		viper.AddConfigPath(home)
+		viper.AddConfigPath(xdg.ConfigHome)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".cleosrv")
+		viper.SetConfigName("cleosrv")
 	}
 
 	viper.SetEnvPrefix("CLEOSRV")

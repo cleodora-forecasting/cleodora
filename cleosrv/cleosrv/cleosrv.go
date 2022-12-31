@@ -3,6 +3,8 @@ package cleosrv
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -16,16 +18,26 @@ import (
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
 )
 
-func Start(address string, frontendFooterText string) error {
-	fmt.Printf(
-		"Starting Cleodora (version: %s) http://%s\n",
+func Start(address string, database string, frontendFooterText string) error {
+	fmt.Printf(`cleosrv (Cleodora server) - Visit https://cleodora.org for more information.
+Version: %s
+Database: %s
+Listening on: %s
+
+`,
 		cleoutils.Version,
+		database,
 		address,
 	)
 
+	err := os.MkdirAll(filepath.Dir(database), 0770)
+	if err != nil {
+		return fmt.Errorf("error making directories for database %v: %w", database, err)
+	}
+
 	router := chi.NewRouter()
 
-	db, err := InitDB("test.db")
+	db, err := InitDB(database)
 	if err != nil {
 		return err
 	}
