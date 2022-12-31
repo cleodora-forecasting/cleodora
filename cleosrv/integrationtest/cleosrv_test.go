@@ -24,7 +24,6 @@ import (
 // body, without any further GraphQL processing.
 func TestGetForecasts_LowLevel(t *testing.T) {
 	// Set up the server
-	// TODO init the DB here...
 	db, err := cleosrv.InitDB(":memory:")
 	require.Nil(t, err)
 	resolver := graph.NewResolver(db)
