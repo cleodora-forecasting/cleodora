@@ -245,6 +245,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 		Title         string
 		Description   string
 		Resolves      string
+		Closes        string
 		Reason        string
 		Probabilities map[string]int
 	}
@@ -259,6 +260,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				Title:       "Will it rain?",
 				Description: "Yes if it rains for more than 30 minutes.",
 				Resolves:    "2020-10-01T13:13:00+02:00",
+				Closes:      "2020-10-01T13:13:00+02:00",
 				Reason:      "The weather forecast says so",
 				Probabilities: map[string]int{
 					"Yes": 20,
@@ -273,6 +275,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				Title:       "",
 				Description: "Yes if it rains for more than 30 minutes.",
 				Resolves:    "2020-10-01T13:13:00+02:00",
+				Closes:      "2020-10-01T13:13:00+02:00",
 				Reason:      "The weather forecast says so",
 				Probabilities: map[string]int{
 					"Yes": 20,
@@ -287,6 +290,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				Title:       "Will it rain?",
 				Description: "",
 				Resolves:    "2020-10-01T13:13:00+02:00",
+				Closes:      "2020-10-01T13:13:00+02:00",
 				Reason:      "The weather forecast says so",
 				Probabilities: map[string]int{
 					"Yes": 20,
@@ -301,6 +305,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				Title:       "Will it rain?",
 				Description: "Yes if it rains for more than 30 minutes.",
 				Resolves:    "",
+				Closes:      "2020-10-01T13:13:00+02:00",
 				Reason:      "The weather forecast says so",
 				Probabilities: map[string]int{
 					"Yes": 20,
@@ -315,6 +320,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				Title:       "Will it rain?",
 				Description: "Yes if it rains for more than 30 minutes.",
 				Resolves:    "2020-10-01",
+				Closes:      "2020-10-01T13:13:00+02:00",
 				Reason:      "The weather forecast says so",
 				Probabilities: map[string]int{
 					"Yes": 20,
@@ -329,6 +335,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				Title:       "Will it rain?",
 				Description: "Yes if it rains for more than 30 minutes.",
 				Resolves:    "2020-10-01T13:13:00+02:00",
+				Closes:      "2020-10-01T13:13:00+02:00",
 				Reason:      "",
 				Probabilities: map[string]int{
 					"Yes": 20,
@@ -343,6 +350,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				Title:         "Will it rain?",
 				Description:   "Yes if it rains for more than 30 minutes.",
 				Resolves:      "2020-10-01T13:13:00+02:00",
+				Closes:        "2020-10-01T13:13:00+02:00",
 				Reason:        "The weather forecast says so",
 				Probabilities: map[string]int{},
 			},
@@ -354,6 +362,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				Title:         "Will it rain?",
 				Description:   "Yes if it rains for more than 30 minutes.",
 				Resolves:      "2020-10-01T13:13:00+02:00",
+				Closes:        "2020-10-01T13:13:00+02:00",
 				Reason:        "The weather forecast says so",
 				Probabilities: nil,
 			},
@@ -365,6 +374,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				Title:       "Will it rain?",
 				Description: "Yes if it rains for more than 30 minutes.",
 				Resolves:    "2020-10-01T13:13:00+02:00",
+				Closes:      "2020-10-01T13:13:00+02:00",
 				Reason:      "The weather forecast says so",
 				Probabilities: map[string]int{
 					"Yes": 110,
@@ -379,6 +389,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				Title:       "Will it rain?",
 				Description: "Yes if it rains for more than 30 minutes.",
 				Resolves:    "2020-10-01T13:13:00+02:00",
+				Closes:      "2020-10-01T13:13:00+02:00",
 				Reason:      "The weather forecast says so",
 				Probabilities: map[string]int{
 					"Yes": 10,
@@ -393,6 +404,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				Title:       "Will it rain?",
 				Description: "Yes if it rains for more than 30 minutes.",
 				Resolves:    "2020-10-01T13:13:00+02:00",
+				Closes:      "2020-10-01T13:13:00+02:00",
 				Reason:      "The weather forecast says so",
 				Probabilities: map[string]int{
 					"":   90,
@@ -400,6 +412,21 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				},
 			},
 			wantErr: assert.Error,
+		},
+		{
+			name: "closes can be empty",
+			fields: fields{
+				Title:       "Will it rain?",
+				Description: "Yes if it rains for more than 30 minutes.",
+				Resolves:    "2020-10-01T13:13:00+02:00",
+				Closes:      "",
+				Reason:      "The weather forecast says so",
+				Probabilities: map[string]int{
+					"Yes": 20,
+					"No":  80,
+				},
+			},
+			wantErr: assert.NoError,
 		},
 	}
 	for _, tt := range tests {
@@ -409,6 +436,7 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 				Title:         tt.fields.Title,
 				Description:   tt.fields.Description,
 				Resolves:      tt.fields.Resolves,
+				Closes:        tt.fields.Closes,
 				Reason:        tt.fields.Reason,
 				Probabilities: tt.fields.Probabilities,
 			}

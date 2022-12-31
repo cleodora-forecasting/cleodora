@@ -73,6 +73,12 @@ Example:
 		"Resolution date of the forecast (format 2022-11-13T19:30:00+01:00)",
 	)
 	forecastCmd.Flags().StringVar(
+		&opts.Closes,
+		"closes",
+		"",
+		"Closing date of the forecast (format 2022-11-13T19:30:00+01:00)",
+	)
+	forecastCmd.Flags().StringVar(
 		&opts.Reason,
 		"reason",
 		"",

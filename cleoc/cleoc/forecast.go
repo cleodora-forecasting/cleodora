@@ -20,6 +20,13 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 	if err != nil {
 		return fmt.Errorf("could not parse 'resolves': %w", err)
 	}
+	var closesT time.Time
+	if opts.Closes != "" {
+		closesT, err = time.Parse(time.RFC3339, opts.Closes)
+		if err != nil {
+			return fmt.Errorf("could not parse 'closes': %w", err)
+		}
+	}
 	ctx := context.Background()
 	client := graphql.NewClient(
 		fmt.Sprintf("%s/query", a.Config.URL),
@@ -29,8 +36,7 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 		Title:       opts.Title,
 		Description: opts.Description,
 		Resolves:    resolvesT,
-		Closes:      resolvesT, // TODO should be optional See:
-		// https://github.com/Khan/genqlient/blob/main/docs/FAQ.md#-nullable-fields
+		Closes:      closesT,
 	}
 
 	reqProbabilities, err := parseProbabilities(opts.Probabilities)
@@ -75,7 +81,7 @@ type AddForecastOptions struct {
 	Resolves      string
 	Reason        string
 	Probabilities map[string]int
-	// TODO Closes
+	Closes        string
 }
 
 func (opts *AddForecastOptions) Validate() error {
@@ -92,6 +98,15 @@ func (opts *AddForecastOptions) Validate() error {
 			errors.New("--resolves must be in RFC 3339 format "+
 				"(2022-11-13T19:30:00+01:00)"),
 		)
+	}
+	if opts.Closes != "" { // it's allowed to be empty
+		if _, err := time.Parse(time.RFC3339, opts.Closes); err != nil {
+			validationErr = multierror.Append(
+				validationErr,
+				errors.New("--closes must be in RFC 3339 format "+
+					"(2022-11-13T19:30:00+01:00)"),
+			)
+		}
 	}
 	if opts.Reason == "" {
 		validationErr = multierror.Append(
