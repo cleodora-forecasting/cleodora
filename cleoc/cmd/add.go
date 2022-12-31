@@ -40,13 +40,7 @@ Example:
 			return opts.Validate()
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return app.AddForecast(
-				opts.Title,
-				opts.Resolves,
-				opts.Description,
-				"TODO cleoc",
-				[]string{"TODO cleoc:50", "TODO cleoc:50"},
-			)
+			return app.AddForecast(opts)
 		},
 	}
 
@@ -70,6 +64,20 @@ Example:
 		"r",
 		"",
 		"Resolution date of the forecast (format 2022-11-13T19:30:00+01:00)",
+	)
+	forecastCmd.Flags().StringVar(
+		&opts.Reason,
+		"reason",
+		"",
+		"The reason why you chose these probabilities",
+	)
+	forecastCmd.Flags().StringToIntVarP(
+		&opts.Probabilities,
+		"probability",
+		"p",
+		nil,
+		"Outcome probability pair. Can be specified multiple times. "+
+			"-p Green=30 -p Red=30 -p \"Light red=40\"",
 	)
 
 	return forecastCmd

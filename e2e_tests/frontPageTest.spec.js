@@ -22,7 +22,13 @@ suite(function(env) {
                     '-t',
                     'Is this a test forecast?',
                     '-r',
-                    '2022-12-01T15:00:00+01:00'
+                    '2022-12-01T15:00:00+01:00',
+                    '--reason',
+                    'We\'re running a test, so it seems likely.',
+                    '-p',
+                    'Yes=99',
+                    '-p',
+                    'No=1',
                 ],
                 { encoding : 'utf8' },
             );
