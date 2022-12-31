@@ -2,9 +2,8 @@ package cleoc
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/spf13/cobra"
+	"github.com/adrg/xdg"
 	"github.com/spf13/viper"
 )
 
@@ -23,12 +22,7 @@ func (c *Config) LoadWithViper() error {
 		// Use config file from the flag.
 		viper.SetConfigFile(c.ConfigFile)
 	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
-		// Search config in home directory with name ".cleoc" (without extension).
-		viper.AddConfigPath(home)
+		viper.AddConfigPath(xdg.ConfigHome)
 		viper.SetConfigType("yml")
 		viper.SetConfigName(".cleoc")
 	}

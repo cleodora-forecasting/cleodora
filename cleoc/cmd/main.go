@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
+	"github.com/adrg/xdg"
 	"github.com/spf13/cobra"
 
 	"github.com/cleodora-forecasting/cleodora/cleoc/cleoc"
@@ -86,7 +88,10 @@ cleoc version: %s
 		&app.Config.ConfigFile,
 		"config",
 		"",
-		"config file (default is $HOME/.cleoc.yml)",
+		fmt.Sprintf(
+			"config file (default is %v)",
+			filepath.Join(xdg.ConfigHome, "cleoc.yaml"),
+		),
 	)
 	rootCmd.PersistentFlags().StringVarP(
 		&app.Config.URL,
