@@ -5,6 +5,7 @@ package graph
 import (
 	"errors"
 	"fmt"
+	"html"
 	"time"
 
 	"github.com/hashicorp/go-multierror"
@@ -389,7 +390,7 @@ func convertNewEstimateToDBEstimate(estimate model.NewEstimate) []dbmodel.Estima
 			dbmodel.Probability{
 				Value: p.Value,
 				Outcome: dbmodel.Outcome{
-					Text:    p.Outcome.Text,
+					Text:    html.EscapeString(p.Outcome.Text),
 					Correct: false,
 				},
 			},
@@ -399,7 +400,7 @@ func convertNewEstimateToDBEstimate(estimate model.NewEstimate) []dbmodel.Estima
 	return []dbmodel.Estimate{
 		{
 			Created:       time.Now(),
-			Reason:        estimate.Reason,
+			Reason:        html.EscapeString(estimate.Reason),
 			Probabilities: probabilities,
 		},
 	}
