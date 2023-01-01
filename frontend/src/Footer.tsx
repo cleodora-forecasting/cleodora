@@ -17,7 +17,10 @@ type FrontendConfig = {
 };
 
 export const Footer: FC = () => {
-    const {data} = useQuery(GET_METADATA);
+    const {data, error} = useQuery(GET_METADATA);
+    if (error) {
+        console.log("Error GET_METADATA", error);
+    }
     const [config, setConfig] = useState({} as FrontendConfig);
 
     useEffect(() => {
@@ -42,7 +45,9 @@ export const Footer: FC = () => {
     return <footer>
         <Grid container spacing={2}>
             <Grid item lg={6}>
-                Cleodora Forecasting (<a href="https://cleodora.org">cleodora.org</a>). Version: {data?.metadata.version}
+                Cleodora Forecasting
+                (<a href="https://cleodora.org">cleodora.org</a>).
+                Version: <span>{data?.metadata.version}</span>
             </Grid>
             <Grid item lg={6}>
                 <Box display="flex" justifyContent="flex-end">
