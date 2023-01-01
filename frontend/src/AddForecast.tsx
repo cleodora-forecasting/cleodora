@@ -6,8 +6,7 @@ import {
     CreateForecastMutation,
     CreateForecastMutationVariables,
 } from "./__generated__/graphql";
-import Button from "@mui/material/Button/Button";
-import {TextField} from "@mui/material";
+import {TextField, Button} from "@mui/material";
 import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import dayjs, {Dayjs} from "dayjs";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
