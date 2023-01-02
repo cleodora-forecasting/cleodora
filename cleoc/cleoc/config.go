@@ -23,11 +23,11 @@ func (c *Config) LoadWithViper() error {
 
 	if c.ConfigFile != "" {
 		// Use config file from the flag.
-		viper.SetConfigFile(c.ConfigFile)
+		v.SetConfigFile(c.ConfigFile)
 	} else {
-		viper.AddConfigPath(xdg.ConfigHome)
-		viper.SetConfigType(DefaultConfigFileType)
-		viper.SetConfigName(DefaultConfigFileName)
+		v.AddConfigPath(xdg.ConfigHome)
+		v.SetConfigType(DefaultConfigFileType)
+		v.SetConfigName(DefaultConfigFileName)
 	}
 
 	err := v.ReadInConfig()
