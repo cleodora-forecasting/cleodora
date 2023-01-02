@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Roadmap &amp; Requirements on Cleodora Forecasting</title><link>https://cleodora.org/docs/roadmap/</link><description>Recent content in Roadmap &amp; Requirements on Cleodora Forecasting</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://cleodora.org/docs/roadmap/index.xml" rel="self" type="application/rss+xml"/><item><title>Ideas</title><link>https://cleodora.org/docs/roadmap/ideas/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/roadmap/ideas/</guid><description>Ideas # A collection of thoughts and ideas that haven&amp;rsquo;t yet made it into actual tasks (and may never do so).
-cleoc (CLI) # GopherCon 2019: Carolyn Van Slyck - Design Command-Line Tools People Love
+cleoc (CLI) # Design Command-Line Tools People Love # Title: GopherCon 2019: Carolyn Van Slyck - Design Command-Line Tools People Love
 Video: https://www.youtube.com/watch?v=eMz0vni6PAw
 Code: https://github.com/carolynvs/emote
 Slides: https://carolynvanslyck.com/talk/go/cli/
