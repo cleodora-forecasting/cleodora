@@ -19,19 +19,26 @@ jobs:
           msystem: MINGW64
           path-type: inherit
 
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v3
         with:
           go-version-file: go.mod
           cache: true
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Build
-        run: go build -o temp github.com/cleodora-forecasting/cleodora/cleosrv
+        run: go build -o cleosrv.exe github.com/cleodora-forecasting/cleodora/cleosrv
         shell: msys2 {0}
 
-      - name: Try
+      - name: List directory content
         run: ls
 
       - name: Display version
-        run: ./temp version
+        run: ./cleosrv.exe version
+
+      - name: 'Save cleosrv.exe'
+        uses: actions/upload-artifact@v3
+        with:
+          name: cleosrv.exe
+          path: cleosrv.exe
+          retention-days: 2
