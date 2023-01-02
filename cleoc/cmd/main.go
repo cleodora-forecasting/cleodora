@@ -90,7 +90,13 @@ cleoc version: %s
 		"",
 		fmt.Sprintf(
 			"config file (default is %v)",
-			filepath.Join(xdg.ConfigHome, "cleoc.yaml"),
+			filepath.Join(
+				xdg.ConfigHome,
+				fmt.Sprintf(
+					"%v.%v", cleoc.DefaultConfigFileName,
+					cleoc.DefaultConfigFileType,
+				),
+			),
 		),
 	)
 	rootCmd.PersistentFlags().StringVarP(

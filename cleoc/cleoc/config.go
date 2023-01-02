@@ -7,6 +7,9 @@ import (
 	"github.com/spf13/viper"
 )
 
+const DefaultConfigFileName = "cleoc"
+const DefaultConfigFileType = "yml"
+
 type Config struct {
 	URL        string
 	ConfigFile string
@@ -23,8 +26,8 @@ func (c *Config) LoadWithViper() error {
 		viper.SetConfigFile(c.ConfigFile)
 	} else {
 		viper.AddConfigPath(xdg.ConfigHome)
-		viper.SetConfigType("yml")
-		viper.SetConfigName(".cleoc")
+		viper.SetConfigType(DefaultConfigFileType)
+		viper.SetConfigName(DefaultConfigFileName)
 	}
 
 	err := v.ReadInConfig()
