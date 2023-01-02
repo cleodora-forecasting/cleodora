@@ -16,7 +16,9 @@ A collection of thoughts and ideas that haven't yet made it into actual tasks
 
 ## cleoc (CLI)
 
-GopherCon 2019: Carolyn Van Slyck - Design Command-Line Tools People Love
+### Design Command-Line Tools People Love
+
+Title: GopherCon 2019: Carolyn Van Slyck - Design Command-Line Tools People Love
 
 Video: https://www.youtube.com/watch?v=eMz0vni6PAw
 
@@ -38,6 +40,11 @@ these ideas and can serve as inspiration.
 cmd/porter/main.go
 
 pkg/porter/porter.go
+
+
+### Command Line Interface Guidelines
+
+https://clig.dev/
 
 
 ## Mobile Client
