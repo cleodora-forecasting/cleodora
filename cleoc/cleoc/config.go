@@ -34,6 +34,9 @@ func (c *Config) LoadWithViper() error {
 	if err != nil {
 		if err != nil {
 			if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+				// Note that ConfigFileNotFoundError is not returned when
+				// explicitly specifying a config path (--config), which should
+				// (and does) cause an error if it doesn't exist.
 				return fmt.Errorf("error reading config file: %w", err)
 			}
 		}
