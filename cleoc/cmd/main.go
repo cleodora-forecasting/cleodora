@@ -7,6 +7,7 @@ import (
 
 	"github.com/adrg/xdg"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	"github.com/cleodora-forecasting/cleodora/cleoc/cleoc"
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
@@ -34,6 +35,7 @@ func main() {
 
 func buildRootCommand(app *cleoc.App) *cobra.Command {
 	var printVersion bool
+	viperInstance := viper.New()
 
 	var rootCmd = &cobra.Command{
 		Use:   "cleoc",
@@ -52,7 +54,7 @@ cleoc version: %s
 				return nil
 			}
 
-			if err := app.Config.LoadWithViper(); err != nil {
+			if err := app.Config.LoadWithViper(viperInstance); err != nil {
 				return err
 			}
 			return nil
@@ -106,6 +108,19 @@ cleoc version: %s
 		"http://localhost:8080",
 		"base URL for the API",
 	)
+	err := viperInstance.BindPFlag(
+		"url",
+		rootCmd.PersistentFlags().Lookup("url"),
+	)
+	if err != nil {
+		// TODO replace with logging
+		_, err2 := fmt.Fprintf(os.Stderr, "error binding to pflag url: %v", err)
+		fmt.Printf(
+			"error while writing to stderr. Original error: %v. Fprintf error: %v\n",
+			err,
+			err2,
+		)
+	}
 
 	rootCmd.AddCommand(buildAddCommand(app))
 	rootCmd.AddCommand(buildVersionCommand(app))

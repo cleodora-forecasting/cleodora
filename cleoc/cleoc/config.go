@@ -2,6 +2,7 @@ package cleoc
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/adrg/xdg"
 	"github.com/spf13/viper"
@@ -18,8 +19,8 @@ type Config struct {
 // LoadWithViper initializes or overwrites the Config by using the 'viper'
 // library (thereby reading in config files, ENV variables etc.). You should
 // probably not call it.
-func (c *Config) LoadWithViper() error {
-	v := viper.New()
+func (c *Config) LoadWithViper(v *viper.Viper) error {
+	// v := viper.New()
 
 	if c.ConfigFile != "" {
 		// Use config file from the flag.
@@ -42,7 +43,9 @@ func (c *Config) LoadWithViper() error {
 		}
 	}
 
-	// v.AutomaticEnv() // should I do this?
+	v.SetEnvPrefix("CLEOC") // e.g. CLEOC_URL
+	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	v.AutomaticEnv()
 
 	err = v.Unmarshal(c)
 	return err
