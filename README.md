@@ -139,31 +139,85 @@ The client binary is `dist/cleoc_*/cleoc` .
 
 # GraphQL playground (GraphiQL)
 
-Start frontend and backend as described above.
+Start the backend as described above.
 
-Open http://localhost:8080/playground/ in a browser and create some forecasts:
+Open http://localhost:8080/playground/ in a browser.
+
+You can list all the forecasts:
 
 ```graphql
-mutation createForecast {
-    createForecast(
-        input: {
-            title: "Will 'The Fabelmans' win 'Best Picture'?",
-            description: "The new Steven Spielberg movie. Academy Award for Best Picture 2023.",
-            resolves: "2023-03-01T12:00:00+01:00",
-        }
-    ) {
-        id
-        title
-        description
-        created
-        resolves
-        closes
-        resolution
-    }
+query GetForecasts {
+  forecasts {
+    id
+    title
+    description
+    created
+    closes
+    resolves
+    resolution
+  }
 }
 ```
 
-Open http://localhost:3000 in a browser and see the list of forecasts.
+And create a forecast ...
+
+```graphql
+mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+  createForecast(forecast: $forecast, estimate: $estimate) {
+    id
+    title
+    estimates {
+      id
+      created
+      reason
+      probabilities {
+        id
+        value
+        outcome {
+          id
+          text
+          correct
+        }
+      }
+    }
+  }
+}
+```
+
+... with variables:
+
+```json
+{
+  "forecast": {
+    "title": "Will it rain tomorrow?",
+    "description": "It counts as rain if between 9am and 9pm there are 30 min or more of uninterrupted precipitation.",
+    "resolves": "2022-01-31T10:00:00+01:00"
+  },
+  "estimate": {
+    "reason": "My weather app says it will rain.",
+    "probabilities": [
+      {
+        "value": 70,
+        "outcome": {
+          "text": "Yes"
+        }
+      },
+      {
+        "value": 30,
+        "outcome": {
+          "text": "No"
+        }
+      }
+    ]
+  }
+}
+```
+
+If you start the frontend as described above you can see the result there as
+well.
+
+See [schema.graphql](./schema.graphql) to see the GraphQL schema, queries
+and mutations.
 
 
 # Tests
