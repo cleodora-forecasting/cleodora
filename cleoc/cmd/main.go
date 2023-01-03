@@ -47,8 +47,8 @@ cleoc version: %s
 			cleoutils.Version,
 		),
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			app.Out = cmd.OutOrStdout()
-			app.Err = cmd.OutOrStderr()
+			cmd.SetOut(app.Out)
+			cmd.SetErr(app.Err)
 
 			if shouldSkipConfig(cmd) {
 				return nil
