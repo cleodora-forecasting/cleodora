@@ -240,3 +240,27 @@ sudo apt install firefox-geckodriver
 ```bash
 ./runE2ETests.sh
 ```
+
+
+# Deploy
+
+## Docker
+
+```bash
+make clean
+make build
+DOCKER_TAG=0.1.0.dev.`git rev-parse --short HEAD`
+echo "DOCKER_TAG: ${DOCKER_TAG}"
+docker build --tag cleodora:${DOCKER_TAG} .
+docker run -p 8080:8080 cleodora:${DOCKER_TAG}
+docker push cleodora/cleodora:${DOCKER_TAG}
+```
+
+
+## fly.io (demo.cleodora.org)
+
+```bash
+make clean
+make build
+flyctl deploy --local-only # use local Docker to build
+```
