@@ -298,6 +298,8 @@ func TestCreateForecast(t *testing.T) {
 	}
 }
 
+// TestCreateForecast_ValidateNewEstimate verifies the expected error or no
+// error with different NewEstimate values.
 func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 	tests := []struct {
 		name        string
@@ -570,6 +572,8 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 	}
 }
 
+// TestCreateForecast_ValidateNewForecast tests forecast creation with
+// different input values, some leading to errors, others not.
 func TestCreateForecast_ValidateNewForecast(t *testing.T) {
 	tests := []struct {
 		name        string
@@ -699,6 +703,8 @@ func TestCreateForecast_ValidateNewForecast(t *testing.T) {
 			)
 			if tt.expectedErr == "" { // success
 				assert.Nil(t, err)
+				assert.NotEmpty(t, response.CreateForecast.Id)
+				assert.Equal(t, tt.newForecast["title"], response.CreateForecast.Title)
 			} else {
 				assert.ErrorContains(t, err, tt.expectedErr)
 			}
@@ -732,6 +738,9 @@ func TestCreateForecast_FailsWithoutEstimate(t *testing.T) {
 		}
 	}
 
+	// Note that the client 'c' never returns the JSON errors in response but
+	// stuffs it all into a string in 'err' and that's it. Otherwise, it would
+	// be nicer to more precisely check the error result.
 	err := c.Post(query, &response, client.Var("forecast", newForecast))
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "http 422")
