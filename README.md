@@ -22,9 +22,9 @@ Examples of such forecasts:
 Below an example mockup for how a user kept updating their "Will aliens be found on
 the moon in 2022?" forecast due to new information. Analyzing such a forecasting
 history is what will help them improve. You can find more such mockups on the
-website https://cleodora.org/docs/roadmap/mockups/ .
+website https://cleodora.org/docs/development/roadmap/mockups/ .
 
-![Mockup: History of a forecast](website/content/docs/roadmap/mockups/mockups_cleodora_history.jpg)
+![Mockup: History of a forecast](website/content/docs/development/roadmap/mockups/mockups_cleodora_history.jpg)
 
 
 # Features
@@ -32,8 +32,8 @@ website https://cleodora.org/docs/roadmap/mockups/ .
 Concrete next steps can be found as GitHub issues.
 
 Less detailed possible future features can be found on the
-[website](https://cleodora.org/docs/roadmap/) (or also in here under
-[./website/content/docs/roadmap](./website/content/docs/roadmap/)).
+[website](https://cleodora.org/docs/development/roadmap/) (or also in here under
+[./website/content/docs/development/roadmap](./website/content/docs/development/roadmap/)).
 
 
 # Dev Setup
