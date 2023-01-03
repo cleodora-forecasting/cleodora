@@ -4,7 +4,7 @@ weight: 6
 # bookFlatSection: false
 # bookToc: true
 # bookHidden: false
-# bookCollapseSection: false
+bookCollapseSection: true
 # bookComments: false
 # bookSearchExclude: false
 aliases:

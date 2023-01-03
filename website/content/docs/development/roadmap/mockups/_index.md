@@ -7,6 +7,8 @@ bookToc: true
 # bookCollapseSection: false
 # bookComments: false
 # bookSearchExclude: false
+aliases:
+  - /docs/roadmap/mockups/
 ---
 
 # Mockups

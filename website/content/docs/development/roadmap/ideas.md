@@ -7,6 +7,8 @@ weight: 5
 # bookCollapseSection: false
 # bookComments: false
 # bookSearchExclude: false
+aliases:
+  - /docs/roadmap/ideas/
 ---
 
 # Ideas
