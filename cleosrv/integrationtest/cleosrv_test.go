@@ -298,6 +298,107 @@ func TestCreateForecast(t *testing.T) {
 	}
 }
 
+// TestCreateForecast_XSS verifies that HTML is correctly escaped (to
+// prevent XSS attacks).
+func TestCreateForecast_XSS(t *testing.T) {
+	c := initServer(t)
+
+	attack := "<script>alert(document.cookie)</script>"
+
+	newForecast := map[string]interface{}{
+		"title": "Will it rain tomorrow?" + attack,
+		"description": "It counts as rain if between 9am and 9pm there are " +
+			"30 min or more of uninterrupted precipitation." + attack,
+		"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+		"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+	}
+
+	newEstimate := map[string]interface{}{
+		"reason": "My weather app says it will rain." + attack,
+		"probabilities": []map[string]interface{}{
+			{
+				"value": 70,
+				"outcome": map[string]interface{}{
+					"text": "Yes" + attack,
+				},
+			},
+			{
+				"value": 30,
+				"outcome": map[string]interface{}{
+					"text": "No" + attack,
+				},
+			},
+		},
+	}
+
+	query := `
+		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+			createForecast(forecast: $forecast, estimate: $estimate) {
+				id
+				title
+                description
+				estimates {
+					id
+					created
+					reason
+					probabilities {
+						id
+						value
+						outcome {
+							id
+							text
+							correct
+						}
+					}
+				}
+			}
+		}`
+
+	var response struct {
+		CreateForecast struct {
+			Id          string
+			Title       string
+			Description string
+			Estimates   []struct {
+				Id            string
+				Created       string
+				Reason        string
+				Probabilities []struct {
+					Id      string
+					Value   int
+					Outcome struct {
+						Id      string
+						Text    string
+						Correct bool
+					}
+				}
+			}
+		}
+	}
+
+	err := c.Post(
+		query,
+		&response,
+		client.Var("forecast", newForecast),
+		client.Var("estimate", newEstimate),
+	)
+	require.Nil(t, err)
+
+	assert.NotContains(t, response.CreateForecast.Title, attack)
+	assert.Equal(
+		t,
+		"Will it rain tomorrow?&lt;script&gt;alert(document.cookie)&lt;/script&gt;",
+		response.CreateForecast.Title,
+	)
+	assert.NotContains(t, response.CreateForecast.Description, attack)
+	for _, e := range response.CreateForecast.Estimates {
+		assert.NotContains(t, e.Reason, attack)
+		for _, p := range e.Probabilities {
+			assert.NotContains(t, p.Outcome.Text, attack)
+		}
+	}
+}
+
 // TestCreateForecast_ValidateNewEstimate verifies the expected error or no
 // error with different NewEstimate values.
 func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
