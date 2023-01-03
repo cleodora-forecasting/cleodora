@@ -10,6 +10,7 @@ import (
 
 const DefaultConfigFileName = "cleoc"
 const DefaultConfigFileType = "yml"
+const EnvPrefix = "CLEOC"
 
 type Config struct {
 	URL        string
@@ -20,8 +21,6 @@ type Config struct {
 // library (thereby reading in config files, ENV variables etc.). You should
 // probably not call it.
 func (c *Config) LoadWithViper(v *viper.Viper) error {
-	// v := viper.New()
-
 	if c.ConfigFile != "" {
 		// Use config file from the flag.
 		v.SetConfigFile(c.ConfigFile)
@@ -43,7 +42,7 @@ func (c *Config) LoadWithViper(v *viper.Viper) error {
 		}
 	}
 
-	v.SetEnvPrefix("CLEOC") // e.g. CLEOC_URL
+	v.SetEnvPrefix(EnvPrefix)
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()
 
