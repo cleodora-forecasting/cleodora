@@ -1,4 +1,4 @@
-import {render, waitFor, screen} from '@testing-library/react'
+import {render, screen, within} from '@testing-library/react'
 import '@testing-library/jest-dom'
 import {ApolloProvider} from "@apollo/client";
 import {Footer} from './Footer';
@@ -11,9 +11,10 @@ test('footer displays a version and a footer text', async () => {
         </ApolloProvider>
     );
 
-    expect(screen.getByText('cleodora.org')).toBeInTheDocument();
+    const footer = screen.getByRole('contentinfo');
 
-    await waitFor(() => screen.findByText("99.99.99+test"))
-    expect(screen.getByText("99.99.99+test")).toBeInTheDocument();
-    expect(screen.getByText("Footer text for a test")).toBeInTheDocument();
+    expect(within(footer).getByText("cleodora.org")).toBeInTheDocument();
+
+    await within(footer).findByText("99.99.99+test");
+    await within(footer).findByText("Footer text for a test");
 });
