@@ -83,7 +83,7 @@ func TestGetForecasts_LowLevel(t *testing.T) {
 // TestGetForecasts_GQClient verifies that the forecasts are returned and
 // uses the gqlgen.client for it.
 func TestGetForecasts_GQClient(t *testing.T) {
-	c := initServer(t)
+	c := initServerAndGetClient(t)
 
 	query := `
 		query GetForecasts {
@@ -127,7 +127,7 @@ func TestGetForecasts_GQClient(t *testing.T) {
 // TestGetForecasts_SomeFields verifies that the query can contain only a few
 // fields.
 func TestGetForecasts_OnlySomeFields(t *testing.T) {
-	c := initServer(t)
+	c := initServerAndGetClient(t)
 
 	query := `
 		query GetForecasts {
@@ -161,7 +161,7 @@ func TestGetForecasts_OnlySomeFields(t *testing.T) {
 // TestGetForecasts_InvalidField verifies that an error is returned when
 // querying for a field that does not exist.
 func TestGetForecasts_InvalidField(t *testing.T) {
-	c := initServer(t)
+	c := initServerAndGetClient(t)
 
 	query := `
 		query GetForecasts {
@@ -185,7 +185,7 @@ func TestGetForecasts_InvalidField(t *testing.T) {
 }
 
 func TestCreateForecast(t *testing.T) {
-	c := initServer(t)
+	c := initServerAndGetClient(t)
 
 	newForecast := map[string]interface{}{
 		"title": "Will it rain tomorrow?",
@@ -301,7 +301,7 @@ func TestCreateForecast(t *testing.T) {
 // TestCreateForecast_XSS verifies that HTML is correctly escaped (to
 // prevent XSS attacks).
 func TestCreateForecast_XSS(t *testing.T) {
-	c := initServer(t)
+	c := initServerAndGetClient(t)
 
 	attack := "<script>alert(document.cookie)</script>"
 
@@ -633,7 +633,7 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 		t.Log(tt.name)
 		t.Run(tt.name, func(t *testing.T) {
 
-			c := initServer(t)
+			c := initServerAndGetClient(t)
 
 			newForecast := map[string]interface{}{
 				"title": "Will it rain tomorrow?",
@@ -761,7 +761,7 @@ func TestCreateForecast_ValidateNewForecast(t *testing.T) {
 		t.Log(tt.name)
 		t.Run(tt.name, func(t *testing.T) {
 
-			c := initServer(t)
+			c := initServerAndGetClient(t)
 
 			newEstimate := map[string]interface{}{
 				"reason": "My weather app says it will rain",
@@ -814,7 +814,7 @@ func TestCreateForecast_ValidateNewForecast(t *testing.T) {
 }
 
 func TestCreateForecast_FailsWithoutEstimate(t *testing.T) {
-	c := initServer(t)
+	c := initServerAndGetClient(t)
 
 	newForecast := map[string]interface{}{
 		"title": "Will it rain tomorrow?",
@@ -853,7 +853,7 @@ func TestCreateForecast_FailsWithoutEstimate(t *testing.T) {
 }
 
 func TestGetVersion(t *testing.T) {
-	c := initServer(t)
+	c := initServerAndGetClient(t)
 
 	query := `
 		query GetMetadata {
@@ -875,7 +875,7 @@ func TestGetVersion(t *testing.T) {
 	assert.Equal(t, "dev", resp.Metadata.Version)
 }
 
-func initServer(t *testing.T) *client.Client {
+func initServerAndGetClient(t *testing.T) *client.Client {
 	t.Helper()
 	// Set up the server
 	db, err := cleosrv.InitDB(":memory:")
