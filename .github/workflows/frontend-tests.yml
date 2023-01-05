@@ -1,4 +1,4 @@
-name: Frontend Lint
+name: Frontend Tests
 on:
   push:
     tags:
@@ -30,6 +30,11 @@ jobs:
         working-directory: frontend
         run: npm ci
 
-      - name: Lint
+      # Just to ensure it also works, not needed for tests
+      - name: Build
         working-directory: frontend
-        run: npm run lint
+        run: npm build
+
+      - name: Test
+        working-directory: frontend
+        run: npm test
