@@ -33,7 +33,7 @@ jobs:
       # Just to ensure it also works, not needed for tests
       - name: Build
         working-directory: frontend
-        run: npm build
+        run: npm run build
 
       - name: Test
         working-directory: frontend
