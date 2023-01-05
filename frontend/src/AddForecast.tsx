@@ -31,7 +31,8 @@ export const AddForecast: FC = () => {
         refetchQueries: [
             {query: GET_FORECASTS}, // TODO needs refactor, should not be
             // referencing different component stuff
-            'GetForecasts' // Query name
+            // to refetch outside of the mutation i.e. inside <App />?
+            // https://www.apollographql.com/docs/react/data/refetching/
         ],
         variables: {
             forecast: {
@@ -130,3 +131,5 @@ export const AddForecast: FC = () => {
         </div>
     );
 }
+
+export default AddForecast;

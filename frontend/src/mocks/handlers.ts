@@ -62,6 +62,17 @@ export const handlers: RequestHandler[] = [
            }),
        )
     }),
+    graphql.mutation("createForecast", (req, res, ctx) => {
+        return res(
+            ctx.data({
+                "createForecast":{
+                    "id": "999",
+                    "title": "Mock title",
+                    "__typename": "Forecast"
+                }
+            }),
+        )
+    }),
     rest.get('/config.json', (req, res, ctx) => {
         console.log("config.json called");
         return res(ctx.json({ FOOTER_TEXT: "Footer text for a test" }))
