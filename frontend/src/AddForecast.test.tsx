@@ -1,11 +1,29 @@
-import { render, screen } from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import AddForecast from './AddForecast';
 import {ApolloProvider} from "@apollo/client";
 import {client} from "./client";
 import userEvent from "@testing-library/user-event";
+import {server} from "./mocks/server";
+import {graphql} from "msw";
 
-test('after adding a forecast a succcess msg is shown', async () => {
+test('after adding a forecast a success msg is shown', async () => {
     const user = userEvent.setup()
+    let requestBody;
+
+    server.use(
+        graphql.mutation("createForecast", async (req, res, ctx) => {
+            requestBody = await req.json();
+            return res(
+                ctx.data({
+                    "createForecast": {
+                        "id": "999",
+                        "title": "Mock title",
+                        "__typename": "Forecast"
+                    }
+                }),
+            )
+        }),
+    )
 
     render(
         <ApolloProvider client={client}>
@@ -13,22 +31,22 @@ test('after adding a forecast a succcess msg is shown', async () => {
         </ApolloProvider>
     );
 
-    // fill out form
+    const expectedTitle = "Will this test pass?";
+    const inputResolves = "01/13/2023 10:00 AM";
+    const expectedResolves = "2023-01-13T09:00:00.000Z";
 
-    const title = screen.getByLabelText('Title');
-    const resolves = screen.getByLabelText('Resolves');
+    await user.type(screen.getByLabelText('Title'), expectedTitle);
+    await user.clear(screen.getByLabelText('Closes'));
+    await user.clear(screen.getByLabelText('Resolves'));
+    await user.type(screen.getByLabelText('Resolves'), inputResolves);
+    await user.click(await screen.findByRole("button", {name: "Add Forecast"}));
 
-    await user.type(title, "Will this test pass?");
-    await user.type(resolves, "2022-01-31T12:00:00+01:00");
-
-    // click submit
-    const submit = await screen.findByRole("button", {name: "Add Forecast"});
-
-    await user.click(submit);
-
-    // TODO improve test to not use a standard mock but define it here to have
-    // the same title and verify the request too.
-    // https://www.stackbuilders.com/blog/testing-react-components-with-testing-library-and-mock-service-worker/
-    // https://kentcdodds.com/blog/stop-mocking-fetch
-    expect(await screen.findByText(/Saved "Mock title" with ID \d+./)).toBeInTheDocument();
+    expect(await screen.findByText('Saved "Mock title" with ID 999.')).toBeInTheDocument();
+    expect(requestBody).toBeTruthy();
+    if (requestBody) {
+        expect(requestBody!.variables.forecast.title).toBe(expectedTitle);
+        expect(requestBody!.variables.forecast.resolves).toBe(expectedResolves);
+        expect(requestBody!.variables.forecast.closes).toBeNull();
+        expect(requestBody!.variables.forecast.description).toBe("");
+    }
 });
