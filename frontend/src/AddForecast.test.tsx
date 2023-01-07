@@ -50,16 +50,16 @@ test('after adding a forecast a success msg is shown', async () => {
     const expectedResolves = "2023-01-13T10:00:00.000Z";
     const expectedReason = "It was written carefully and is not complicated.";
 
-    await user.type(screen.getByLabelText('Title'), expectedTitle);
+    await user.type(screen.getByLabelText('Title *'), expectedTitle);
     await user.clear(screen.getByLabelText('Closes'));
-    await user.clear(screen.getByLabelText('Resolves'));
-    await user.type(screen.getByLabelText('Resolves'), inputResolves);
-    await user.type(screen.getByLabelText('Reason'), expectedReason);
-    await user.type(await screen.findByLabelText('Outcome0'), 'Yes');
-    await user.type(await screen.findByLabelText('Probability0'), '95');
+    await user.clear(screen.getByLabelText('Resolves *'));
+    await user.type(screen.getByLabelText('Resolves *'), inputResolves);
+    await user.type(screen.getByLabelText('Reason *'), expectedReason);
+    await user.type(await screen.findByLabelText('1. Outcome *'), 'Yes');
+    await user.type(await screen.findByLabelText('1. Probability *'), '95');
     await user.click(await screen.findByLabelText('add probability'));
-    await user.type(await screen.findByLabelText('Outcome1'), 'No');
-    await user.type(await screen.findByLabelText('Probability1'), '5');
+    await user.type(await screen.findByLabelText('2. Outcome *'), 'No');
+    await user.type(await screen.findByLabelText('2. Probability *'), '5');
     await user.click(await screen.findByRole("button", {name: "Add Forecast"}));
 
     expect(await screen.findByText('Saved "Mock title" with ID 999.')).toBeInTheDocument();

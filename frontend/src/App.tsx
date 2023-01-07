@@ -7,19 +7,20 @@ import { ReactComponent as Logo } from './logo.svg';
 const App = () => {
   return (
       <>
-        <CssBaseline />
-        <AppBar position="relative">
-          <Toolbar>
-            <Logo />
-            <Typography variant="h6">Cleodora</Typography>
-          </Toolbar>
-        </AppBar>
-        <br/>
-        <ForecastList />
-        <br />
-        <br />
-        <AddForecast />
-        <Footer />
+          <CssBaseline />
+          <AppBar position="relative">
+              <Toolbar>
+                  <Logo />
+                  <Typography variant="h6">Cleodora</Typography>
+              </Toolbar>
+          </AppBar>
+          <div style={{padding: 20}}>
+              <ForecastList />
+              <div style={{marginTop: 40}}>
+                  <AddForecast />
+              </div>
+          </div>
+          <Footer />
       </>
   );
 }

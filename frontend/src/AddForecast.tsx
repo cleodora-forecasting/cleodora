@@ -7,7 +7,13 @@ import {
     CreateForecastMutation,
     CreateForecastMutationVariables,
 } from "./__generated__/graphql";
-import {TextField, Button, Grid, IconButton} from "@mui/material";
+import {
+    TextField,
+    Button,
+    Grid,
+    IconButton,
+    InputAdornment
+} from "@mui/material";
 import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import dayjs, {Dayjs} from "dayjs";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
@@ -70,14 +76,6 @@ export const AddForecast: FC = () => {
     return (
         <div>
             <h3>Add Forecast</h3>
-            {error ?
-                <p style={{color: "red"}}>Oh no! {error.message}</p> : null}
-            {data && data.createForecast ?
-                <p style={{color: "green"}}>
-                    Saved "{data.createForecast.title}" with
-                    ID {data.createForecast.id}.
-                </p>
-                : null}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <form onSubmit={e => {
                     e.preventDefault();
@@ -90,79 +88,96 @@ export const AddForecast: FC = () => {
                         setProbabilities([{value: 0, outcome: {text: ''}}]);
                     }).catch(reason => (console.log("error addForecast()", reason)));
                 }}>
-                    <Grid container direction="row" alignItems="flex-start" spacing={1} justifyItems="flex-start">
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    label="Title"
-                                    value={title}
-                                    onChange={e => setTitle(e.target.value)}
-                                    variant="filled"
-                                />
+                    <Grid container direction="column" alignItems="flex-start" spacing={3} justifyItems="flex-start">
+                        <Grid item>
+                            <TextField
+                                required
+                                label="Title"
+                                value={title}
+                                onChange={e => setTitle(e.target.value)}
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                value={description}
+                                onChange={e => setDescription(e.target.value)}
+                                label="Description"
+                                multiline
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item>
+                            <DateTimePicker
+                                label="Resolves"
+                                value={resolves}
+                                onChange={(newValue) => {
+                                    if (!newValue) {
+                                        return
+                                    }
+                                    setResolves(newValue);
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        required
+                                        helperText="Date when you'll know the answer."
+                                    />
+                                )}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <DateTimePicker
+                                label="Closes"
+                                value={closes}
+                                onChange={(newValue: Dayjs | null) => {
+                                    setCloses(newValue);
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        helperText="Optional date when you'll stop updating."
+                                    />
+                                )}
+                            />
+                        </Grid>
+                        <Grid item container direction="column" spacing={2}>
+                            <Grid item>
+                                <p style={{maxWidth: 400}}>Specify all possible outcomes/answers to the forecast, each with a probability of 0-100% . The total probability must add up to 100% . For example "Yes" with 30% and "No" with 70%.</p>
                             </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    value={description}
-                                    onChange={e => setDescription(e.target.value)}
-                                    label="Description"
-                                    multiline
-                                    variant="filled"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <DateTimePicker
-                                    label="Closes"
-                                    value={closes}
-                                    onChange={(newValue: Dayjs | null) => {
-                                        setCloses(newValue);
-                                    }}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            helperText="(optional) No probability updates after this date."
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <DateTimePicker
-                                    label="Resolves"
-                                    value={resolves}
-                                    onChange={(newValue) => {
-                                        if (!newValue) {
-                                            return
-                                        }
-                                        setResolves(newValue);
-                                    }}
-                                    renderInput={(params) => <TextField {...params} />}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                            {probabilities.map((prob, index) => (
-                                <Grid container key={index}>
-                                    <Grid item xs={2}>
-                                        <TextField
-                                            value={prob.outcome.text}
-                                            onChange={e => handleModifyProbability(index, e.target.value, prob.value)}
-                                            label={`Outcome${index}`}
-                                            variant="filled"/>
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <TextField
-                                            value={prob.value}
-                                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                                            onChange={
-                                                e => {
-                                                    if (isNaN(Number(e.target.value))) {
-                                                        return
-                                                    }
-                                                    handleModifyProbability(index, prob.outcome.text, Number(e.target.value))
-                                                }
+                        {probabilities.map((prob, index, {length}) => (
+                            <Grid item container key={index} spacing={1} alignItems="center">
+                                <Grid item>
+                                    <TextField
+                                        required
+                                        value={prob.outcome.text}
+                                        onChange={e => handleModifyProbability(index, e.target.value, prob.value)}
+                                        label={`${index+1}. Outcome`}
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <TextField
+                                        required
+                                        value={prob.value}
+                                        onChange={e => {
+                                            if (isNaN(Number(e.target.value))) {
+                                                return
                                             }
-                                            label={`Probability${index}`}
-                                            variant="filled"/>
-                                    </Grid>
-                                    <Grid item xs={1}>
+                                            handleModifyProbability(index, prob.outcome.text, Number(e.target.value))
+                                        }}
+                                        inputProps={{inputMode: "numeric", pattern: '[0-9]+'}}
+                                        InputLabelProps={{shrink: true}}
+                                        label={`${index+1}. Probability`}
+                                        variant="outlined"
+                                        sx={{ m: 1, width: '25ch' }}
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                                        }}
+                                    />
+                                </Grid>
+                                {index + 1 === length ?
+                                    <Grid item>
                                         <IconButton
                                             aria-label="add probability"
                                             onClick={_ => setProbabilities(old => [...old, {outcome: {text: ''}, value: 0}])}
@@ -170,22 +185,32 @@ export const AddForecast: FC = () => {
                                             <AddCircleOutlineIcon />
                                         </IconButton>
                                     </Grid>
-                                </Grid>
-                            ))}
+                                    : null
+                                }
                             </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    value={reason}
-                                    onChange={e => setReason(e.target.value)}
-                                    label="Reason"
-                                    multiline
-                                    variant="filled"
-                                    helperText="Why these probabilities?"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Button variant="outlined" type="submit">Add Forecast</Button>
-                            </Grid>
+                        ))}
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                required
+                                value={reason}
+                                onChange={e => setReason(e.target.value)}
+                                label="Reason"
+                                multiline
+                                variant="outlined"
+                                helperText="Why these probabilities?"
+                            />
+                        </Grid>
+                        <Grid item>
+                            {error ?
+                                <p style={{color: "red"}}>Oh no! {error.message}</p> : null}
+                            {data && data.createForecast ?
+                                <p style={{color: "green"}}>
+                                    Saved "{data.createForecast.title}" with
+                                    ID {data.createForecast.id}.
+                                </p>
+                                : null}
+                            <Button variant="outlined" type="submit">Add Forecast</Button>
                         </Grid>
                     </Grid>
                 </form>
