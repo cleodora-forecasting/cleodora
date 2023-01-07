@@ -47,7 +47,7 @@ test('after adding a forecast a success msg is shown', async () => {
 
     const expectedTitle = "Will this test pass?";
     const inputResolves = "01/13/2023 10:00 AM";
-    const expectedResolves = "2023-01-13T09:00:00.000Z";
+    const expectedResolves = "2023-01-13T10:00:00.000Z";
     const expectedReason = "It was written carefully and is not complicated.";
 
     await user.type(screen.getByLabelText('Title'), expectedTitle);
