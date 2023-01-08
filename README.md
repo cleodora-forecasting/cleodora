@@ -251,9 +251,11 @@ make clean
 make build
 DOCKER_TAG=0.1.0.dev.`git rev-parse --short HEAD`
 echo "DOCKER_TAG: ${DOCKER_TAG}"
-docker build --tag cleodora:${DOCKER_TAG} .
-docker run -p 8080:8080 -v cleodora_data:/data cleodora:${DOCKER_TAG}
+docker build --tag cleodora/cleodora:${DOCKER_TAG} .
+docker run -p 8080:8080 -v cleodora_data:/data cleodora/cleodora:${DOCKER_TAG}
 docker push cleodora/cleodora:${DOCKER_TAG}
+#docker tag cleodora/cleodora:${DOCKER_TAG} cleodora/cleodora:latest
+#docker push cleodora/cleodora:latest
 ```
 
 Always start the container with a named volume (and keep using the same name,
