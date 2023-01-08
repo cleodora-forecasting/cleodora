@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased]
+## Unreleased
 
 ### Added
 
@@ -22,5 +22,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create new forecasts with associated outcomes and probabilities via the web
   frontend included in `cleosrv`
 
-
-[unreleased]: https://github.com/cleodora-forecasting/cleodora/commits/main
+[Git history](https://github.com/cleodora-forecasting/cleodora/commits/main)
