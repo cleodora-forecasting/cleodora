@@ -13,3 +13,5 @@ development practices to advance in your career. For example extensive testing,
 writing documentation, code architecture, rigorous (but kind) code reviews and
 in general a high emphasis on simplicity and quality at the expense of more
 features.
+
+See the [Development Documentation](dev_docs/) for next steps.
