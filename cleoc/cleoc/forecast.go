@@ -52,7 +52,7 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 	if err != nil {
 		return fmt.Errorf("error calling the API: %w", err)
 	}
-	_, err = fmt.Fprint(a.Out, resp.CreateForecast.Id)
+	_, err = fmt.Fprint(a.Out, resp.CreateForecast.Id+"\n")
 	if err != nil {
 		return err
 	}

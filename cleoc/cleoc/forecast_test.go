@@ -118,7 +118,7 @@ func TestApp_AddForecast_Simple(t *testing.T) {
 
 	err = a.AddForecast(opts)
 	require.Nil(t, err)
-	assert.Equal(t, "999", out.String())
+	assert.Equal(t, "999\n", out.String())
 	assert.Empty(t, errOut)
 }
 
@@ -326,7 +326,7 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 
 			err = a.AddForecast(opts)
 			require.Nil(t, err)
-			assert.Equal(t, "999", out.String())
+			assert.Equal(t, "999\n", out.String())
 			assert.Empty(t, errOut)
 		})
 	}
