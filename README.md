@@ -33,6 +33,10 @@ We are always looking for people to contribute! Please check the [Contributing
 Guide](CONTRIBUTING.md) to get started. Then you can check the [Development
 Documentation](dev_docs/).
 
+You'll also find the [roadmap](dev_docs/roadmap/),
+[dev guidelines](dev_docs/dev_guidelines.md) or a list of
+[technologies](dev_docs/technology.md) there.
+
 
 # User Documentation
 
