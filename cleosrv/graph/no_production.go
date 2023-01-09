@@ -288,3 +288,18 @@ func createDummyForecast_Contributors(db *gorm.DB) error {
 	}
 	return nil
 }
+
+func timeParseOrPanic(layout string, value string) time.Time {
+	t, err := time.Parse(layout, value)
+	if err != nil {
+		panic(err)
+	}
+
+	return t
+}
+
+func timeParseOrPanicPtr(layout string, value string) *time.Time {
+	t := timeParseOrPanic(layout, value)
+
+	return &t
+}
