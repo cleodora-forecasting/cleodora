@@ -51,12 +51,9 @@ the most accurate forecasts on the same issues. The main use case will always
 be making personal, private forecasts and systematically improving at making
 them.
 
-Read some more detailed [examples how to use Cleodora]({{< ref "use-cases"
->}}), [how to contribute]({{< ref "development" >}}), the [development
-guidelines]({{< ref "dev-guidelines" >}}) and [technology]({{< ref "technology"
->}}) used, the [roadmap]({{< ref "roadmap" >}}), some [mockups]({{< ref
-"mockups" >}}), how Cleodora [compares to
-other tools]({{< ref "comparison" >}}) or have a look at the
-[live demo](https://demo.cleodora.org).
+Read some more detailed [examples how to use Cleodora]({{< ref "use-cases" >}}),
+[how to contribute]({{< ref "development" >}}), how Cleodora [compares to other
+tools]({{< ref "comparison" >}}) or have a look at the [live
+demo](https://demo.cleodora.org).
 
 [Find us on GitHub](https://github.com/cleodora-forecasting/cleodora).
