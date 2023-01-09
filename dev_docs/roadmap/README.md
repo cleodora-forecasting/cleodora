@@ -1,16 +1,3 @@
----
-title: "Roadmap & Requirements"
-weight: 2
-# bookFlatSection: false
-bookToc: true
-# bookHidden: false
-bookCollapseSection: true
-# bookComments: false
-# bookSearchExclude: false
-aliases:
-  - /docs/roadmap/
----
-
 # Roadmap & Requirements
 
 ## Version 1

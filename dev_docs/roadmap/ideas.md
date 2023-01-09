@@ -1,16 +1,3 @@
----
-title: "Ideas"
-weight: 5
-# bookFlatSection: false
-# bookToc: true
-# bookHidden: false
-# bookCollapseSection: false
-# bookComments: false
-# bookSearchExclude: false
-aliases:
-  - /docs/roadmap/ideas/
----
-
 # Ideas
 
 A collection of thoughts and ideas that haven't yet made it into actual tasks
