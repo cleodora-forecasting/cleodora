@@ -34,14 +34,14 @@ Example:
 	cleoc add forecast \
         --title "Will it rain tomorrow?" \
         --resolves 2022-11-14T00:00:00+01:00 \
-        --description "If during the day it \
-            rains for more than 2 minutes at \
-            a time the forecast resolves as \
-            true." \
+        --description "If during the day it" \
+            "rains for more than 2 minutes at" \
+            "a time the forecast resolves as" \
+            "true." \
         --probability Yes=70 \
         --probability No=30 \
-        --reason "The weather forecast said \
-            it would rain"
+        --reason "The weather forecast said" \
+            "it would rain"
 `,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return opts.Validate()
