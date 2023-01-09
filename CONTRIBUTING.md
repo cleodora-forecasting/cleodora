@@ -1,4 +1,4 @@
-# Contributing
+# Contributing Guide
 
 Any contributions to Cleodora are more than welcome. This includes software
 development, writing documentation, commenting on issues or discussions, making
