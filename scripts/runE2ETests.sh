@@ -1,7 +1,7 @@
 #!/bin/bash
 set -o errexit
-set -o pipefail
 set -o nounset
+set -o pipefail
 
 CLEOSRV_PATH=./dist/cleosrv_linux_amd64_v1/cleosrv
 DB_PATH=./e2e_tests.db

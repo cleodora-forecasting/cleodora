@@ -52,7 +52,7 @@ directly in your browser. See below.
 ```bash
 git clone https://github.com/cleodora-forecasting/cleodora
 cd cleodora
-./installDependencies.sh
+./scripts/installDependencies.sh
 ```
 
 ## Gitpod
@@ -238,7 +238,7 @@ sudo apt install firefox-geckodriver
 ```
 
 ```bash
-./runE2ETests.sh
+./scripts/runE2ETests.sh
 ```
 
 
