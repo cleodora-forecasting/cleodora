@@ -6,12 +6,10 @@ on:
       - main  # Set a branch to deploy
     paths:
       - .github/workflows/**
-      - CHANGELOG.md
       - website/**
   pull_request:
     paths:
       - .github/workflows/**
-      - CHANGELOG.md
       - website/**
 
 jobs:
