@@ -42,6 +42,8 @@ your firewall whether you want to allow this application to run. Say "Yes".
 Open a web browser such as Firefox, Google Chrome, Microsoft Edge or Safari and
 type `http://localhost:8080` into the address bar. That's it!
 
+![cleosrv web frontend](cleosrv_frontend.png "cleosrv web frontend")
+
 If you want to stop `cleosrv` you can close the console window or hit Ctrl+C
 inside that console.
 
@@ -84,6 +86,8 @@ You can see the location of this file by looking in the console window where
 `cleosrv` is running. There should be one line starting with `Database: ` which
 tells you the location. Stop `cleosrv` and make a copy of that file to
 whichever location you want.
+
+![cleosrv console](cleosrv_console.png "cleosrv console")
 
 
 ## cleoc
