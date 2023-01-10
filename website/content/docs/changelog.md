@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+[Git history](https://github.com/cleodora-forecasting/cleodora/compare/v0.1.0...HEAD)
+
+
+## 0.1.0
+
 ### Added
 
 - `cleosrv` application that runs a local webserver on Windows, Linux or MacOS
@@ -33,4 +38,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create new forecasts with associated outcomes and probabilities via the web
   frontend included in `cleosrv`
 
-[Git history](https://github.com/cleodora-forecasting/cleodora/commits/main)
+[Git history](https://github.com/cleodora-forecasting/cleodora/releases/tag/v0.1.0)
