@@ -19,12 +19,7 @@ Examples of such forecasts:
 * Will the number of contributors for "Cleodora" be more than 5 at the end of
   2023?
 
-Below an example mockup for how a user kept updating their "Will aliens be
-found on the moon in 2022?" forecast due to new information. Analyzing such a
-forecasting history is what will help them improve. You can find more such
-mockups under [dev_docs/roadmap/mockups](dev_docs/roadmap/mockups).
-
-![Mockup: History of a forecast](dev_docs/roadmap/mockups/mockups_cleodora_history.jpg)
+![cleosrv web frontend](website/content/docs/user/cleosrv_frontend.png "cleosrv web frontend")
 
 
 # Contributing
