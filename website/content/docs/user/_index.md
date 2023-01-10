@@ -17,7 +17,9 @@ preparation for the release which is coming very soon.
 
 ## cleosrv
 
-`cleosrv` is the Cleodora server that includes all you need in a single binary.
+`cleosrv` is the Cleodora server that includes a beautiful web frontend that you
+can access from your browser (and a GraphQL API, which you can ignore if you
+don't know what that is).
 
 
 ### Installing cleosrv
@@ -26,7 +28,8 @@ Download the latest release for [Windows
 (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.0/TODO),
 [Linux (64bit)](), [Linux ARM (64bit)]() or [Mac OS (64bit)]().
 
-You may also get the `cleodora` Docker container from Docker Hub.
+You may also get the `cleodora` Docker container from Docker Hub:
+`docker pull cleodora/cleodora` . The container only runs `cleosrv`.
 
 
 ### Running cleosrv
@@ -38,8 +41,15 @@ running, congratulations!
 Open a web browser such as Firefox, Google Chrome, Microsoft Edge or Safari and
 type http://localhost:8080 into the address bar. That's it!
 
-If you want to stop `cleosrv` you can close the console window or type Ctrl+C
+If you want to stop `cleosrv` you can close the console window or hit Ctrl+C
 inside that console.
+
+When running on Docker you should specify a named volume (`cleodora_data` here),
+otherwise your data will be stored on an anonymous volume and you may lose it:
+
+```bash
+docker run -p 8080:8080 -v cleodora_data:/data cleodora/cleodora:latest
+```
 
 
 ### Configuring cleosrv
