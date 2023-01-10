@@ -28,6 +28,12 @@ General philosophy, how to write Git commits messages, code format etc. See
 [Dev Guidelines](dev_guidelines.md).
 
 
+# Code Structure
+
+What is the purpose of the different directories in this repository? See [Code
+Structure](code_structure.md).
+
+
 # Deployment
 
 How to deploy to Docker Hub, create a new release etc. Probably only
