@@ -21,7 +21,7 @@ don&rsquo;t know what that is).</p><h3 id=installing-cleosrv>Installing cleosrv
 double-click on the <code>cleosrv.exe</code> file you downloaded and such a console will
 open automatically. Now <code>cleosrv</code> is running, congratulations! You may be asked by
 your firewall whether you want to allow this application to run. Say &ldquo;Yes&rdquo;.</p><p>Open a web browser such as Firefox, Google Chrome, Microsoft Edge or Safari and
-type <code>http://localhost:8080</code> into the address bar. That&rsquo;s it!</p><p>If you want to stop <code>cleosrv</code> you can close the console window or hit Ctrl+C
+type <code>http://localhost:8080</code> into the address bar. That&rsquo;s it!</p><p><img src=cleosrv_frontend.png alt="cleosrv web frontend" title="cleosrv web frontend"></p><p>If you want to stop <code>cleosrv</code> you can close the console window or hit Ctrl+C
 inside that console.</p><p>When running on Docker you should specify a named volume (<code>cleodora_data</code> here),
 otherwise your data will be stored on an anonymous volume and you may lose it:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>docker run -p 8080:8080 -v cleodora_data:/data cleodora/cleodora:latest
 </span></span></code></pre></div><h3 id=configuring-cleosrv>Configuring cleosrv
@@ -34,7 +34,7 @@ file on your computer. If you make a copy of this file, you have backed up
 everything you need for running <code>cleosrv</code>.</p><p>You can see the location of this file by looking in the console window where
 <code>cleosrv</code> is running. There should be one line starting with <code>Database:</code> which
 tells you the location. Stop <code>cleosrv</code> and make a copy of that file to
-whichever location you want.</p><h2 id=cleoc>cleoc
+whichever location you want.</p><p><img src=cleosrv_console.png alt="cleosrv console" title="cleosrv console"></p><h2 id=cleoc>cleoc
 <a class=anchor href=#cleoc>#</a></h2><p><code>cleoc</code> is a Cleodora CLI (command-line interface) client to interact with a
 Cleodora server. You do not need to use it. In particular, if you have never
 used a CLI before (or don&rsquo;t know what that is), you may not get much benefit
@@ -58,6 +58,6 @@ you should use a separate database for that (<code>--database</code> parameter).
 also make a copy of your real database file and experiment with that.</p><p>The command line parameters, GraphQL API format and config file format will not
 necessarily be backwards compatible before release 1.0.0 . Changes will be
 documented in the changelog. The reason for this is that we don&rsquo;t want to drag
-potential bad early design decisions along forever.</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/cleodora-forecasting/cleodora/commit/c75fa2517aba773434720ace44d6b7bd003f0cd9 title='Last modified by Omar Kohl | January 10, 2023' target=_blank rel=noopener><img src=/svg/calendar.svg class=book-icon alt=Calendar>
+potential bad early design decisions along forever.</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/cleodora-forecasting/cleodora/commit/c4f7fe07c0fafd453b066058f60ba4d4b9187f65 title='Last modified by Omar Kohl | January 10, 2023' target=_blank rel=noopener><img src=/svg/calendar.svg class=book-icon alt=Calendar>
 <span>January 10, 2023</span></a></div><div><a class="flex align-center" href=https://github.com/cleodora-forecasting/cleodora/edit/main/website/content/docs/user/_index.md target=_blank rel=noopener><img src=/svg/edit.svg class=book-icon alt=Edit>
 <span>Edit this page</span></a></div></div><script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script></footer><div class=book-comments></div><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents><ul><li><a href=#cleosrv>cleosrv</a><ul><li><a href=#installing-cleosrv>Installing cleosrv</a></li><li><a href=#running-cleosrv>Running cleosrv</a></li><li><a href=#configuring-cleosrv>Configuring cleosrv</a></li><li><a href=#back-up-the-database>Back up the database</a></li></ul></li><li><a href=#cleoc>cleoc</a><ul><li><a href=#installing-cleoc>Installing cleoc</a></li><li><a href=#running-cleoc>Running cleoc</a></li><li><a href=#configuring-cleoc>Configuring cleoc</a></li></ul></li><li><a href=#backwards-compatibility>Backwards Compatibility</a></li></ul></nav></div></aside></main></body></html>
