@@ -38,6 +38,7 @@ Visit https://cleodora.org for more information.
 			viper.GetString("frontend.footer_text"),
 		)
 	},
+	SilenceUsage: true,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
