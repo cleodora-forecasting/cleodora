@@ -37,3 +37,7 @@ Guide](https://github.com/cleodora-forecasting/cleodora/blob/main/CONTRIBUTING.m
 and [Development
 Documentation](https://github.com/cleodora-forecasting/cleodora/tree/main/dev_docs)
 on [GitHub](https://github.com/cleodora-forecasting/cleodora).
+
+You'll also find the
+[roadmap](https://github.com/cleodora-forecasting/cleodora/tree/main/dev_docs/roadmap)
+there.
