@@ -35,11 +35,12 @@ You may also get the `cleodora` Docker container from Docker Hub:
 ### Running cleosrv
 
 You can start `cleosrv` in a terminal/console window. On Windows you can also
-double-click on it and such a console will open automatically. Now `cleosrv` is
-running, congratulations!
+double-click on the `cleosrv.exe` file you downloaded and such a console will
+open automatically. Now `cleosrv` is running, congratulations! You may be asked by
+your firewall whether you want to allow this application to run. Say "Yes".
 
 Open a web browser such as Firefox, Google Chrome, Microsoft Edge or Safari and
-type http://localhost:8080 into the address bar. That's it!
+type `http://localhost:8080` into the address bar. That's it!
 
 If you want to stop `cleosrv` you can close the console window or hit Ctrl+C
 inside that console.
