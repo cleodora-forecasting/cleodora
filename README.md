@@ -47,7 +47,7 @@ How to install, configure and run Cleodora. Check the website
 See [cleodora.org/docs/changelog](https://cleodora.org/docs/changelog).
 
 
-## Contributors
+# Contributors
 
 Thanks go to these wonderful people ([emoji meaning](https://allcontributors.org/docs/en/emoji-key)):
 
