@@ -49,6 +49,8 @@ See [cleodora.org/docs/changelog](https://cleodora.org/docs/changelog).
 
 ## Contributors
 
+Thanks go to these wonderful people ([emoji meaning](https://allcontributors.org/docs/en/emoji-key)):
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -71,3 +73,9 @@ See [cleodora.org/docs/changelog](https://cleodora.org/docs/changelog).
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://allcontributors.org/) specification.
+Contributions of any kind are welcome!
+
+It also uses the [all-contributors bot](https://allcontributors.org/docs/en/bot/usage)
+so you can easily add yourself or others to the list of contributors.
