@@ -1,3 +1,4 @@
-address: localhost:8080
-frontend:
-  footer_text: ""
+#address: localhost:8080
+#database: /path/to/some/cleosrv.yml
+#frontend:
+#  footer_text: ""
