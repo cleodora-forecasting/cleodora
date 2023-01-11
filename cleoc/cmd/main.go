@@ -40,7 +40,7 @@ func buildRootCommand(app *cleoc.App) *cobra.Command {
 	var rootCmd = &cobra.Command{
 		Use:   "cleoc",
 		Short: "Command line tool to interact with a Cleodora server",
-        Long: fmt.Sprintf(`cleoc is a command line tool to interact with a Cleodora server.
+		Long: fmt.Sprintf(`cleoc is a command line tool to interact with a Cleodora server.
 
 cleoc version: %s
 
