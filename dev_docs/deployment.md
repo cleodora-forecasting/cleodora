@@ -2,6 +2,10 @@
 
 ## Docker
 
+TODO Does not work right now because Goreleaser expects a different format and
+cleosrv can't be copied to the current directory because there already is a
+directory with that name.
+
 ```bash
 make clean
 make build
@@ -41,9 +45,8 @@ mentioned above):
 ## fly.io (demo.cleodora.org)
 
 ```bash
-make clean
-make build
-flyctl deploy --local-only # use local Docker to build
+flyctl deploy
+./scripts/demoDummyData.sh
 ```
 
 
