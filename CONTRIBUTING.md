@@ -35,6 +35,6 @@ additional work before they can be merged.
   [exercises](https://github.com/cleodora-forecasting/cleodora/issues?q=is%3Aopen+label%3A%22good+first+issue%22+exercise)
   may be very useful.
 * If you had any difficulty getting started, please improve this documentation.
-  See #145.
+  See [#145](https://github.com/cleodora-forecasting/cleodora/issues/145).
 
 See the [Development Documentation](dev_docs/) for more information.
