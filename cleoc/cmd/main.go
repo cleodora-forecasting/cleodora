@@ -40,9 +40,15 @@ func buildRootCommand(app *cleoc.App) *cobra.Command {
 	var rootCmd = &cobra.Command{
 		Use:   "cleoc",
 		Short: "Command line tool to interact with a Cleodora server",
-		Long: fmt.Sprintf(`Create and modify forecasts in Cleodora server.
+        Long: fmt.Sprintf(`cleoc is a command line tool to interact with a Cleodora server.
 
 cleoc version: %s
+
+The purpose of Cleodora is tracking personal forecasts (e.g. 'Will I get a
+raise within the next 6 months?') and systematically improve at making such
+forecasts.
+
+Visit https://cleodora.org for more information.
 `,
 			cleoutils.Version,
 		),
