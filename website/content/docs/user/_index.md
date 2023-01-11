@@ -28,8 +28,14 @@ Download the latest release for [Windows
 (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.0/TODO),
 [Linux (64bit)](), [Linux ARM (64bit)]() or [Mac OS (64bit)]().
 
-You may also get the `cleodora` Docker container from Docker Hub:
-`docker pull cleodora/cleodora` . The container only runs `cleosrv`.
+
+#### Docker
+
+You may also get the `cleodora` Docker image from Docker Hub:
+
+`docker pull cleodora/cleodora`
+
+The image only includes `cleosrv` (not `cleoc`).
 
 
 ### Running cleosrv
@@ -37,7 +43,7 @@ You may also get the `cleodora` Docker container from Docker Hub:
 You can start `cleosrv` in a terminal/console window. On Windows you can also
 double-click on the `cleosrv.exe` file you downloaded and such a console will
 open automatically. Now `cleosrv` is running, congratulations! You may be asked by
-your firewall whether you want to allow this application to run. Say "Yes".
+your firewall whether you want to allow this application to run. Answer "Yes".
 
 Open a web browser such as Firefox, Google Chrome, Microsoft Edge or Safari and
 type `http://localhost:8080` into the address bar. That's it!
@@ -45,7 +51,10 @@ type `http://localhost:8080` into the address bar. That's it!
 ![cleosrv web frontend](cleosrv_frontend.png "cleosrv web frontend")
 
 If you want to stop `cleosrv` you can close the console window or hit Ctrl+C
-inside that console.
+(possibly twice) inside that console.
+
+
+#### Docker
 
 When running on Docker you should specify a named volume (`cleodora_data` here),
 otherwise your data will be stored on an anonymous volume and you may lose it:
@@ -63,10 +72,13 @@ some default option.
 You can pass parameters on the command line to specify the path to a different
 database or a different config file. Execute `cleosrv --help`.
 
-You can also create (or edit) the default config file named `cleosrv.yml`:
+You can also create (or edit) the default config file:
+
+**cleosrv.yml**
 
 ```yaml
 address: localhost:9999
+database: /path/to/some/cleosrv.db
 ```
 
 The default location for this file is:
@@ -115,6 +127,8 @@ Execute it in a console window. Try `cleoc --help` to get started.
 You can pass multiple CLI parameters to configure `cleoc`. Check the `--help`
 output. You may also create a config file. The default location is displayed as
 part of `--help`.
+
+**cleoc.yml**
 
 ```yaml
 url: http://localhost:9999
