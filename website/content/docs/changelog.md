@@ -19,10 +19,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-[Git history](https://github.com/cleodora-forecasting/cleodora/compare/v0.1.0...HEAD)
+[Git history](https://github.com/cleodora-forecasting/cleodora/compare/v0.1.1...HEAD)
 
 
-## 0.1.0
+## v0.1.1
+
+### Added
+
+* Doc: Improved user and developer documentation
+
+
+### Fixed
+
+* Internal: Build issues when preparing a release
+
+
+[Git history](https://github.com/cleodora-forecasting/cleodora/compare/v0.1.0...v0.1.1)
+
+
+## v0.1.0
 
 ### Added
 
@@ -37,5 +52,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create new forecasts with associated outcomes and probabilities via `cleoc`
 - Create new forecasts with associated outcomes and probabilities via the web
   frontend included in `cleosrv`
+
 
 [Git history](https://github.com/cleodora-forecasting/cleodora/commits/v0.1.0)
