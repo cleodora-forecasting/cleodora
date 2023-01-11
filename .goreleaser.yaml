@@ -55,7 +55,10 @@ builds:
         goarch: arm64
 dockers:
   - image_templates:
-      - cleodora/cleodora
+    - "cleodora/cleodora:{{ .Tag }}"
+    - "cleodora/cleodora:v{{ .Major }}"
+    - "cleodora/cleodora:v{{ .Major }}.{{ .Minor }}"
+    - "cleodora/cleodora:latest"
     ids:
       - cleosrv
 archives:
