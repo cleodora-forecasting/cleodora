@@ -190,6 +190,11 @@ and mutations.
 go test ./...
 ```
 
+```bash
+cd frontend
+npm test a
+```
+
 
 ## E2E (end to end) tests
 
