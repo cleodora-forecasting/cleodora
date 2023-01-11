@@ -77,8 +77,18 @@ You can also create (or edit) the default config file:
 **cleosrv.yml**
 
 ```yaml
-address: localhost:9999
-database: /path/to/some/cleosrv.db
+## Uncomment (remove the leading # from) any parameter you want to use
+
+## Default address the server should listen on. Use 0.0.0.0:8080 if you want to
+## expose it in your local network. Don't include 'http://'.
+#address: localhost:8080
+
+## Path to the database if you don't want to use the default
+#database: /path/to/some/cleosrv.db
+
+#frontend:
+#  # A text that is displayed in the footer of the web frontend
+#  footer_text: ""
 ```
 
 The default location for this file is:
@@ -131,7 +141,10 @@ part of `--help`.
 **cleoc.yml**
 
 ```yaml
-url: http://localhost:9999
+## Uncomment (remove the leading # from) any parameter you want to use
+
+## URL of the cleosrv
+#url: http://localhost:8080
 ```
 
 
