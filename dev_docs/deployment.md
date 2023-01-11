@@ -45,3 +45,17 @@ make clean
 make build
 flyctl deploy --local-only # use local Docker to build
 ```
+
+
+## Release
+
+* Git repo needs to be completely clean. No untracked files!
+* Create a GitHub token for goreleaser
+  * https://github.com/settings/personal-access-tokens/new
+  * Access on the cleodora-forecasting organization and repository cleodora-forecasting/cleodora
+  * Give the token no organization permissions and the following repository permissions:
+    * Read access to metadata
+    * Read and Write access to code
+* `cp website/content/user/changelog.md .`
+* Remove everything except the current release from changelog.md
+* `GITHUB_TOKEN=secret ./bin/goreleaser release --release-notes changelog.md`
