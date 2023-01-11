@@ -63,7 +63,27 @@ dockers:
       - cleosrv
     extra_files:
       - cleosrv.example.yml
+
 archives:
+  - id: cleosrv
+    builds:
+      - cleosrv
+    name_template: `cleosrv_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ with .Arm }}v{{ . }}{{ end }}{{ with .Mips }}_{{ . }}{{ end }}{{ if not (eq .Amd64 "v1") }}{{ .Amd64 }}{{ end }}`
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - none*
+  - id: cleoc
+    builds:
+      - cleoc
+    name_template: `cleoc_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ with .Arm }}v{{ . }}{{ end }}{{ with .Mips }}_{{ . }}{{ end }}{{ if not (eq .Amd64 "v1") }}{{ .Amd64 }}{{ end }}`
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - none*
+
 checksum:
   name_template: 'checksums.txt'
 snapshot:
