@@ -56,6 +56,11 @@ flyctl deploy --local-only # use local Docker to build
   * Give the token no organization permissions and the following repository permissions:
     * Read access to metadata
     * Read and Write access to code
-* `cp website/content/user/changelog.md .`
-* Remove everything except the current release from changelog.md
-* `GITHUB_TOKEN=secret ./bin/goreleaser release --release-notes changelog.md`
+
+```bash
+cp website/content/docs/changelog.md .
+# Remove everything except the current release from changelog.md
+# Also remove the version title because it becomes redundant
+vim changelog.md
+GITHUB_TOKEN=secret ./bin/goreleaser release --release-notes changelog.md
+```
