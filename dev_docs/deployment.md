@@ -5,6 +5,7 @@
 ```bash
 make clean
 make build
+cp dist/cleosrv_linux_amd64_v1/cleosrv .
 DOCKER_TAG=0.1.0.dev.`git rev-parse --short HEAD`
 echo "DOCKER_TAG: ${DOCKER_TAG}"
 docker build --tag cleodora/cleodora:${DOCKER_TAG} .

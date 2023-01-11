@@ -55,12 +55,14 @@ builds:
         goarch: arm64
 dockers:
   - image_templates:
-    - "cleodora/cleodora:{{ .Tag }}"
-    - "cleodora/cleodora:v{{ .Major }}"
-    - "cleodora/cleodora:v{{ .Major }}.{{ .Minor }}"
-    - "cleodora/cleodora:latest"
+      - "cleodora/cleodora:{{ .Tag }}"
+      - "cleodora/cleodora:v{{ .Major }}"
+      - "cleodora/cleodora:v{{ .Major }}.{{ .Minor }}"
+      - "cleodora/cleodora:latest"
     ids:
       - cleosrv
+    extra_files:
+      - cleosrv.example.yml
 archives:
 checksum:
   name_template: 'checksums.txt'
