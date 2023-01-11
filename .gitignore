@@ -3,3 +3,6 @@
 /cleosrv/cleosrv/frontend_build/
 /dist/
 oryxBuildBinary
+
+# Temporary file used for release.
+changelog.md
