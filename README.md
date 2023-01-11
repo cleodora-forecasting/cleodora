@@ -1,4 +1,7 @@
 <img align="right" src="./design/logo_full.png">
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # Cleodora Forecasting
 
@@ -47,6 +50,20 @@ See [cleodora.org/docs/changelog](https://cleodora.org/docs/changelog).
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.schafe-sind-bessere-rasenmaeher.de/"><img src="https://avatars.githubusercontent.com/u/14924663?v=4?s=100" width="100px;" alt="Robert Lützner"/><br /><sub><b>Robert Lützner</b></sub></a><br /><a href="#userTesting-rluetzner" title="User Testing">📓</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
