@@ -11,10 +11,6 @@ bookToc: true
 
 # User Documentation
 
-**IMPORTANT** There is no release 0.1.0 yet. This documentation is in
-preparation for the release which is coming very soon.
-
-
 ## cleosrv
 
 `cleosrv` is the Cleodora server that includes a beautiful web frontend that you
@@ -24,9 +20,14 @@ don't know what that is).
 
 ### Installing cleosrv
 
-Download the latest release for [Windows
-(64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.0/TODO),
-[Linux (64bit)](), [Linux ARM (64bit)]() or [Mac OS (64bit)]().
+Download the latest release for
+[Windows (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.1/cleosrv_0.1.1_windows_amd64.zip),
+[Linux (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.1/cleosrv_0.1.1_linux_amd64.tar.gz),
+[Linux ARM (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.1/cleosrv_0.1.1_linux_arm64.tar.gz) or
+[Mac OS (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.1/cleosrv_0.1.1_darwin_amd64.tar.gz).
+
+Unpack the archive wherever you want it. There will only be a single executable
+inside named `cleosrv` or `cleosrv.exe`.
 
 
 #### Docker
@@ -122,9 +123,14 @@ out of it.
 
 ### Installing cleoc
 
-Download the latest release for [Windows
-(64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.0/TODO),
-[Linux (64bit)](), [Linux ARM (64bit)]() or [Mac OS (64bit)]().
+Download the latest release for
+[Windows (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.1/cleoc_0.1.1_windows_amd64.zip),
+[Linux (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.1/cleoc_0.1.1_linux_amd64.tar.gz),
+[Linux ARM (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.1/cleoc_0.1.1_linux_arm64.tar.gz) or
+[Mac OS (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.1/cleoc_0.1.1_darwin_amd64.tar.gz).
+
+Unpack the archive wherever you want it. There will only be a single executable
+inside named `cleoc` or `cleoc.exe`.
 
 
 ### Running cleoc
