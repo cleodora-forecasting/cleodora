@@ -6,7 +6,7 @@
 ![golangci-lint](https://github.com/cleodora-forecasting/cleodora/actions/workflows/golangci-lint.yml/badge.svg)
 [![Go tests](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-tests.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-tests.yml)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 See the [Cleodora Demo](https://demo.cleodora.org/).
@@ -58,6 +58,7 @@ Thanks go to these wonderful people ([emoji meaning](https://allcontributors.org
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.schafe-sind-bessere-rasenmaeher.de/"><img src="https://avatars.githubusercontent.com/u/14924663?v=4?s=100" width="100px;" alt="Robert Lützner"/><br /><sub><b>Robert Lützner</b></sub></a><br /><a href="#userTesting-rluetzner" title="User Testing">📓</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/omarkohl"><img src="https://avatars.githubusercontent.com/u/1420656?v=4?s=100" width="100px;" alt="Omar Kohl"/><br /><sub><b>Omar Kohl</b></sub></a><br /><a href="https://github.com/cleodora-forecasting/cleodora/commits?author=omarkohl" title="Code">💻</a> <a href="https://github.com/cleodora-forecasting/cleodora/issues?q=author%3Aomarkohl" title="Bug reports">🐛</a> <a href="#content-omarkohl" title="Content">🖋</a> <a href="https://github.com/cleodora-forecasting/cleodora/commits?author=omarkohl" title="Documentation">📖</a> <a href="#ideas-omarkohl" title="Ideas, Planning, & Feedback">🤔</a> <a href="#platform-omarkohl" title="Packaging/porting to new platform">📦</a> <a href="#promotion-omarkohl" title="Promotion">📣</a> <a href="https://github.com/cleodora-forecasting/cleodora/commits?author=omarkohl" title="Tests">⚠️</a> <a href="#userTesting-omarkohl" title="User Testing">📓</a></td>
     </tr>
   </tbody>
 </table>
