@@ -49,6 +49,7 @@ flyctl deploy --local-only # use local Docker to build
 
 ## Release
 
+* Ensure the changelog and download links on the website are up to date
 * Git repo needs to be completely clean. No untracked files!
 * Create a GitHub token for goreleaser
   * https://github.com/settings/personal-access-tokens/new
