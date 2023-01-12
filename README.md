@@ -19,7 +19,7 @@ Examples of such forecasts:
 * Will "The Fabelmans" win "Best Picture" at the Oscars 2023?
 * Will I get an A in my upcoming exam?
 * Will there be nice weather on my birthday?
-* Will the number of contributors for "Cleodora" be more than 5 at the end of
+* Will the number of contributors to "Cleodora" be more than 5 at the end of
   2023?
 
 ![cleosrv web frontend](website/content/docs/user/cleosrv_frontend.png "cleosrv web frontend")
