@@ -40,5 +40,5 @@
 		}
 	},
 
-	"postCreateCommand": "./installDependencies.sh"
+	"postCreateCommand": "./scripts/installDependencies.sh"
 }
