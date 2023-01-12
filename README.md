@@ -2,9 +2,12 @@
 
 # Cleodora Forecasting
 
-![Website Build](https://github.com/cleodora-forecasting/cleodora/actions/workflows/website.yml/badge.svg)
-![golangci-lint](https://github.com/cleodora-forecasting/cleodora/actions/workflows/golangci-lint.yml/badge.svg)
-[![Go tests](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-tests.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-tests.yml)
+[![Frontend Lint](https://github.com/cleodora-forecasting/cleodora/actions/workflows/frontend-lint.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/frontend-lint.yml)
+[![Frontend Tests](https://github.com/cleodora-forecasting/cleodora/actions/workflows/frontend-tests.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/frontend-tests.yml)
+[![Go Generate](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-generate.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-generate.yml)
+[![Go Lint](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-lint.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-lint.yml)
+[![Go Tests](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-tests.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-tests.yml)
+[![Website Build](https://github.com/cleodora-forecasting/cleodora/actions/workflows/website-build.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/website-build.yml)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
