@@ -1,32 +1,13 @@
 tasks:
-  - name: Backend Console
+  - name: Console
     init: |
         ./scripts/installDependencies.sh
         brew install hugo # Will install the extended flavor
     command: |
-        gp sync-done install-dependencies
-        printf "\n\n"
-        clear
-        echo "# Execute the following command to start the backend:"
-        echo 'go run .'
-
-  - name: Frontend Console
-    init: gp sync-await install-dependencies
-    command: |
-        cd frontend
-        printf "\n\n"
-        clear
-        echo "# Execute the following command to start the frontend:"
-        echo 'REACT_APP_API_URL=`gp url 8080` npm start'
-
-  - name: Website Console
-    init: gp sync-await install-dependencies
-    command: |
-        cd website
-        printf "\n\n"
-        clear
-        echo "# Execute the following command to start the website:"
-        echo 'hugo server'
+        echo "Check the 'Development Documentation' for help:"
+        echo
+        echo "https://github.com/cleodora-forecasting/cleodora/tree/main/dev_docs"
+        echo
 
 ports:
   - name: Website
