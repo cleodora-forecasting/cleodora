@@ -7,8 +7,8 @@ cleosrv can't be copied to the current directory because there already is a
 directory with that name.
 
 ```bash
-make clean
-make build
+mage clean
+mage build
 cp dist/cleosrv_linux_amd64_v1/cleosrv .
 DOCKER_TAG=0.1.0.dev.`git rev-parse --short HEAD`
 echo "DOCKER_TAG: ${DOCKER_TAG}"

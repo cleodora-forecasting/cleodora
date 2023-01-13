@@ -10,6 +10,11 @@ directly in your browser. See below.
 * [Install npm](https://nodejs.org/en/download/) v16.18.0 or higher
 * (optional) [Install hugo](https://gohugo.io/installation/) (extended flavor)
   v0.97.3 or higher to make changes to the cleodora.org website
+* Set up `mage`:
+    * Option 1: Install automatically by executing `go run mage.go ensuremage`.
+    * Option 2: Install manually as described on the website: https://magefile.org/ .
+    * Option 3: If you do neither of the above, you can still use mage by
+      substituting `mage` with `go run mage.go` everywhere.
 
 ```bash
 git clone https://github.com/cleodora-forecasting/cleodora
@@ -88,7 +93,7 @@ go run .
 # Build
 
 ```bash
-make build
+mage build
 ```
 
 You can find the binary containing frontend and backend under

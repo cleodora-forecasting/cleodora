@@ -19,7 +19,10 @@
   to be executed from the top level directory.
 * **[website/](../website/)**: Contains the source for the cleodora.org
   website. In the `content` directory you'll find the interesting stuff.
-* **[Makefile](../Makefile)**: Run the build, lint the software etc. Execute
-  `make` to see the possible targets.
+* **[magefile.go](../magefile.go)**: The equivalent of a _Makefile_, but
+  written in Go. It is used by the build tool `mage`.
+* **[mage.go](../mage.go)**: A workaround for people who don't want to install
+  `mage` globally. Instead they can run `go run mage.go X` where X is any
+  `mage` target.
 * **[schema.graphql](../schema.graphql)**: The GraphQL schema used by `cleoc`,
   `cleosrv` and the frontend.

@@ -12,8 +12,8 @@ DB_PATH=./e2e_tests.db
 trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
 
 rm -rf "${DB_PATH}"
-make clean
-make build
+mage clean
+mage build
 "${CLEOSRV_PATH}" --database "${DB_PATH}" &
 CLEOSRV_PID=$!
 

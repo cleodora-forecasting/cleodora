@@ -6,12 +6,14 @@ require (
 	github.com/99designs/gqlgen v0.17.22
 	github.com/Khan/genqlient v0.5.0
 	github.com/adrg/xdg v0.4.0
+	github.com/carolynvs/magex v0.9.0
 	github.com/glebarez/sqlite v1.6.0
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/golangci/golangci-lint v1.50.1
 	github.com/goreleaser/goreleaser v1.14.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/hashicorp/go-multierror v1.1.1
+	github.com/magefile/mage v1.14.0
 	github.com/rs/cors v1.8.3
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0
