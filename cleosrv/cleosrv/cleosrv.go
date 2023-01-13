@@ -2,6 +2,7 @@ package cleosrv
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -18,7 +19,29 @@ import (
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
 )
 
-func Start(address string, database string, frontendFooterText string) error {
+type App struct {
+	Out    io.Writer
+	Err    io.Writer
+	Config *Config
+}
+
+func NewApp() *App {
+	c := &Config{}
+	return &App{
+		Out:    os.Stdout,
+		Err:    os.Stderr,
+		Config: c,
+	}
+}
+
+func (a *App) Version() error {
+	if _, err := fmt.Fprintf(a.Out, "%v\n", cleoutils.Version); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *App) Start() error {
 	fmt.Printf(`cleosrv (Cleodora server) - Visit https://cleodora.org for more information.
 Version: %s
 Database: %s
@@ -26,18 +49,18 @@ Listening on: %s
 
 `,
 		cleoutils.Version,
-		database,
-		address,
+		a.Config.Database,
+		a.Config.Address,
 	)
 
-	err := os.MkdirAll(filepath.Dir(database), 0770)
+	err := os.MkdirAll(filepath.Dir(a.Config.Database), 0770)
 	if err != nil {
-		return fmt.Errorf("error making directories for database %v: %w", database, err)
+		return fmt.Errorf("error making directories for database %v: %w", a.Config.Database, err)
 	}
 
 	router := chi.NewRouter()
 
-	db, err := InitDB(database)
+	db, err := a.InitDB()
 	if err != nil {
 		return err
 	}
@@ -59,13 +82,13 @@ Listening on: %s
 	)
 	router.Handle("/query", srv)
 
-	serveFrontend(router, frontendFooterText)
+	serveFrontend(router, a.Config.Frontend.FooterText)
 
-	return http.ListenAndServe(address, router)
+	return http.ListenAndServe(a.Config.Address, router)
 }
 
-func InitDB(dsn string) (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{})
+func (a *App) InitDB() (*gorm.DB, error) {
+	db, err := gorm.Open(sqlite.Open(a.Config.Database), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}

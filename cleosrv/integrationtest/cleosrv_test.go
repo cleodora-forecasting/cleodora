@@ -24,7 +24,9 @@ import (
 // body, without any further GraphQL processing.
 func TestGetForecasts_LowLevel(t *testing.T) {
 	// Set up the server
-	db, err := cleosrv.InitDB(":memory:")
+	app := cleosrv.NewApp()
+	app.Config.Database = ":memory:"
+	db, err := app.InitDB()
 	require.Nil(t, err)
 	resolver := graph.NewResolver(db)
 	err = resolver.AddDummyData()
@@ -878,7 +880,9 @@ func TestGetVersion(t *testing.T) {
 func initServerAndGetClient(t *testing.T) *client.Client {
 	t.Helper()
 	// Set up the server
-	db, err := cleosrv.InitDB(":memory:")
+	app := cleosrv.NewApp()
+	app.Config.Database = ":memory:"
+	db, err := app.InitDB()
 	require.Nil(t, err)
 	resolver := graph.NewResolver(db)
 	err = resolver.AddDummyData()
