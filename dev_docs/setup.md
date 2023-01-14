@@ -192,12 +192,7 @@ and mutations.
 ## Integration tests
 
 ```bash
-go test ./...
-```
-
-```bash
-cd frontend
-npm test a
+mage test
 ```
 
 

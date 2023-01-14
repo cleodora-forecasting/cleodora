@@ -63,3 +63,9 @@ func Build() {
 func EnsureMage() {
 	pkg.EnsureMage("")
 }
+
+// Test executes all tests except the e2e tests.
+func Test() {
+	must.RunV("go", "test", "./...")
+	mustFrontend.RunV("npm", "test", "a", "--", "--watchAll=false")
+}
