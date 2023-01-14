@@ -85,4 +85,14 @@ users, but the focus will always be on personal forecasts.
 
 Cleodora (/kliːəˈdɔːrə/) is a nymph from Greek mythology who was able to
 predict the future by casting stones. She and her sisters Melaina and Daphnis
-are known as the Thriae.
+are known as the Thriae and were associated with the Oracle of Delphi.
+
+Cleodora is the mother of Parnassos (eponym of the famous Mount Parnassos,
+Greece).
+
+She is mentioned in "Description of Greece" by the traveler and geographer
+Pausanias (c. 110 – c. 180).
+
+Read more about the mythological Cleodora
+[here](https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0160%3Abook%3D10%3Achapter%3D6)
+and [here](https://en.wikipedia.org/wiki/Cleodora_(nymph)).
