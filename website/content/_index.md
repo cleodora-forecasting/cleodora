@@ -15,6 +15,8 @@ bookToc: true
 
 <img align="right" src="/logo_full.png">
 
+**Get started: [Live Demo](https://demo.cleodora.org) | [Installation and Usage Documentation]({{< ref "user" >}})**
+
 Cleodora is an **open source** piece of software that is in the early stages of
 development. I am looking for people to [**collaborate**]({{< ref "development" >}}) in creating it.
 
