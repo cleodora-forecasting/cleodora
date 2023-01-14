@@ -3,6 +3,9 @@
 package main
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/carolynvs/magex/mgx"
 	"github.com/carolynvs/magex/pkg"
 	"github.com/carolynvs/magex/shx"
@@ -28,6 +31,24 @@ func Generate() {
 
 // Lint all code, fixing things automatically where possible.
 func Lint() {
+	// Create an empty file to avoid linter error:
+	// cleosrv/cleosrv/production.go: pattern frontend_build: no matching files found (typecheck)
+	emptyFile := filepath.Join(
+		"cleosrv",
+		"cleosrv",
+		"frontend_build",
+		"empty_for_lint.html",
+	)
+	mgx.Must(os.MkdirAll(filepath.Dir(emptyFile), os.ModePerm))
+	f, err := os.OpenFile(
+		emptyFile,
+		os.O_RDONLY|os.O_CREATE,
+		0644,
+	)
+	mgx.Must(err)
+	mgx.Must(f.Close())
+	defer sh.Rm(emptyFile) // error is ignored because it's not vital that it's removed
+
 	must.RunV(
 		"go",
 		"run",
