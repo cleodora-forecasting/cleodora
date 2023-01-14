@@ -40,5 +40,5 @@
 		}
 	},
 
-	"updateContentCommand": "go run mage.go ensuremage && ./scripts/installDependencies.sh"
+	"updateContentCommand": "go run mage.go ensuremage installdeps"
 }

@@ -19,7 +19,7 @@ directly in your browser. See below.
 ```bash
 git clone https://github.com/cleodora-forecasting/cleodora
 cd cleodora
-./scripts/installDependencies.sh
+mage installdeps
 ```
 
 ## Gitpod

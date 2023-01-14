@@ -1,8 +1,7 @@
 tasks:
   - name: Console
     init: |
-        go run mage.go ensuremage
-        ./scripts/installDependencies.sh
+        go run mage.go ensuremage installdeps
         brew install hugo # Will install the extended flavor
     command: |
         echo "Check the 'Development Documentation' for help:"

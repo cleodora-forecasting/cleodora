@@ -28,9 +28,7 @@ done
 
 echo "All PRs merged"
 
-./scripts/installDependencies.sh
-mage lint
-mage generate
+mage installdeps lint generate
 
 git diff --exit-code || (echo "Code was changed via lint/generate" && exit 1)
 

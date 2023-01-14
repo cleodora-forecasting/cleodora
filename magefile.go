@@ -69,3 +69,11 @@ func Test() {
 	must.RunV("go", "test", "./...")
 	mustFrontend.RunV("npm", "test", "a", "--", "--watchAll=false")
 }
+
+// InstallDeps install all dependencies.
+func InstallDeps() {
+	must.RunV("go", "mod", "tidy")
+	must.RunV("go", "mod", "download")
+	mustFrontend.RunV("npm", "install")
+	shx.Command("npm", "install").In("e2e_tests").Must().RunV()
+}
