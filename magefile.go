@@ -59,7 +59,7 @@ func Build() {
 	)
 }
 
-// EnsureMage installs mage globally
+// EnsureMage installs mage globally if it's not already installed.
 func EnsureMage() {
 	pkg.EnsureMage("")
 }
@@ -70,7 +70,7 @@ func Test() {
 	mustFrontend.RunV("npm", "test", "a", "--", "--watchAll=false")
 }
 
-// InstallDeps install all dependencies.
+// InstallDeps installs all dependencies.
 func InstallDeps() {
 	must.RunV("go", "mod", "tidy")
 	must.RunV("go", "mod", "download")
