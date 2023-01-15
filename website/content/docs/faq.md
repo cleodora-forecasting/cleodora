@@ -38,21 +38,22 @@ the likelihood of the US president stepping down in the next year due to a
 conflict of interest with the rice industry? How do you repeat this event
 10.000 times?
 
-A more helpful way of thinking about probabilities is _belief_. How **likely do you
-believe something is going to happen** (0 being you are certain it will never
-happen and 100 you are certain it will definitely happen)? If I flip a coin,
-how strongly do you believe heads will come up? Given your prior experience in
-the world you will probably believe 50% probability of heads. Or maybe you
-think I am the kind of person who has trick coins in their pocket and then you
-would only believe 10% probability of heads. The same can be applied to any
-future event.  The strength of you belief can depend upon many things, and much
-more importantly, will vary over time because you get to see new data
-(evidence)! So maybe your belief that the US president will have to step down
-due to a conflict of interest with the rice industry is 0.001% . When you learn
-that he in fact owns large amounts of stock in rice companies your belief will
-possibly increase to 5%. Cleodora will help you keep track of your beliefs and
-once you find out the truth, how often you were right or wrong. This will aid
-you in forming more accurate beliefs in the future.
+A more helpful way of thinking about probabilities is _belief_ (this is called
+the Bayesian interpretation of probability). How **likely do you believe
+something is going to happen** (0 being you are certain it will never happen
+and 100 you are certain it will definitely happen)? If I flip a coin, how
+strongly do you believe heads will come up? Given your prior experience in the
+world you will probably believe 50% probability of heads. Or maybe you think I
+am the kind of person who has trick coins in their pocket and then you would
+only believe 10% probability of heads. The same can be applied to any future
+event.  The strength of you belief can depend upon many things, and much more
+importantly, will vary over time because you get to see new data (evidence)! So
+maybe your belief that the US president will have to step down due to a
+conflict of interest with the rice industry is 0.001% . When you learn that he
+in fact owns large amounts of stock in rice companies your belief will possibly
+increase to 5%. Cleodora will help you keep track of your beliefs and once you
+find out the truth, how often you were right or wrong. This will aid you in
+forming more accurate beliefs in the future.
 
 Yet another way of thinking about such probabilities is, **how much money would
 you be willing to bet on it**? For example if you believe there is a 5% chance
