@@ -3,8 +3,10 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/carolynvs/magex/mgx"
 	"github.com/carolynvs/magex/pkg"
@@ -97,4 +99,55 @@ func InstallDeps() {
 	must.RunV("go", "mod", "download")
 	mustFrontend.RunV("npm", "install")
 	shx.Command("npm", "install").In("e2e_tests").Must().RunV()
+}
+
+// MergeDependabot merges all open dependabot PRs
+func MergeDependabot() error {
+	out, err := shx.Output("git", "rev-parse", "--abbrev-ref", "HEAD")
+	mgx.Must(err)
+	if out != "main" {
+		return fmt.Errorf("Not on main! Exiting")
+	}
+	err = shx.Run("git", "diff", "--quiet", "--exit-code")
+	if err != nil {
+		return fmt.Errorf("There are uncommitted changes! Exiting")
+	}
+
+	must.RunV("git", "fetch")
+	must.RunV("git", "remote", "prune", "origin")
+
+	out, err = shx.Output(
+		"git",
+		"for-each-ref",
+		"--format=%(refname)",
+		"refs/remotes/origin/dependabot/",
+	)
+
+	for _, pr := range strings.Split(out, "\n") {
+		fmt.Printf("PR: %v", pr)
+		err = shx.Run("git", "merge-base", "--is-ancestor", pr, "HEAD")
+		if err == nil {
+			fmt.Println("Already merged")
+			continue
+		}
+		must.RunV("git", "merge", pr, "-m", "Merge dependabot update")
+		fmt.Println()
+	}
+	fmt.Println("All PRs merged")
+
+	InstallDeps()
+	Lint()
+	Generate()
+
+	err = shx.Run("git", "diff", "--exit-code")
+	if err != nil {
+		return fmt.Errorf("Code was changed via lint/generate: %w", err)
+	}
+
+	Test()
+
+	must.RunV("./scripts/runE2ETests.sh")
+
+	fmt.Println("Successfully done. You must run 'git push' to publish the changes.")
+	return nil
 }
