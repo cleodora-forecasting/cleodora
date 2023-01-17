@@ -33,6 +33,22 @@ A simple dev environment, directly in the browser.
   />
 </a>
 
+For the frontend to be able to reach the API, `cleosrv` needs to be running (in
+a separate Terminal) and the frontend needs to know the correct API URL (which
+in Gitpod will not be the default http://localhost:8080).
+
+You can find out the correct URL once `cleosrv` (API) has started with the `gp`
+command. To directly start the frontend with the correct URL you can do it in
+one command:
+
+```bash
+cd frontend
+REACT_APP_API_URL=`gp url 8080` npm start
+```
+
+Note that running the e2e tests in GitPod is currently not possible because it
+needs to start a browser and requires an X server for that.
+
 
 ## GitHub Codespaces
 
@@ -48,6 +64,21 @@ tab, right click on `API (8080)` and then `Port Visibility` / `Public`.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=548549126&machine=basicLinux32gb)
 
+For the frontend to be able to reach the API, `cleosrv` needs to be running (in
+a separate Terminal) and the frontend needs to know the correct API URL (which
+in GitHub Codespaces will not be the default http://localhost:8080).
+
+To directly start the frontend with the correct URL you can do it in one
+command:
+
+```bash
+cd frontend
+REACT_APP_API_URL="https://${CODESPACE_NAME}-8080.githubpreview.dev" npm start
+```
+
+Note that running the e2e tests in GitHub Codespaces is currently not possible
+because it needs to start a browser and requires an X server for that.
+
 
 # Run
 
@@ -58,6 +89,11 @@ cd cleosrv
 go run .
 ```
 
+You can pass some parameters to `go run .` e.g. `go run . --database
+./mydb.db`. See `go run . --help`. The database will be created if it does not
+exist and will use a default path if not specified. You can see the database
+being used in the console output under `Database: ...`.
+
 * GraphQL playground: http://localhost:8080/playground/
 * GraphQL API: http://localhost:8080/query
 
@@ -65,7 +101,7 @@ go run .
 ## GUI / Frontend (React app)
 
 Frequently the frontend is referred to as GUI (Graphical User Interface) in
-this app because it's shorter.
+this documentation because it's shorter.
 
 ```bash
 cd frontend
@@ -78,6 +114,9 @@ Open http://localhost:3000
 
 The backend must also be running, otherwise you will get an error. This is
 because the frontend queries the backend for data.
+
+Note that in Gitpod and GitHub codespaces you always need to specify the
+`REACT_APP_API_URL`. See the Gitpod and GitHub codespaces doc sections.
 
 
 ## Client (CLI written in Go)
@@ -199,6 +238,9 @@ mage test
 ## E2E (end to end) tests
 
 Selenium end to end tests, also including the cleoc client.
+
+This is currently NOT possible in GitPod or GitHub Codespaces because the e2e
+tests require an X server to launch a web browser.
 
 ```bash
 sudo apt install firefox-geckodriver
