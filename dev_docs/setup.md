@@ -116,7 +116,7 @@ The backend must also be running, otherwise you will get an error. This is
 because the frontend queries the backend for data.
 
 Note that in Gitpod and GitHub codespaces you always need to specify the
-`REACT_APP_API_URL`. See the Gitpod and GitHub codespaces doc sections.
+`REACT_APP_API_URL`. See the Gitpod and GitHub Codespaces doc sections.
 
 
 ## Client (CLI written in Go)
