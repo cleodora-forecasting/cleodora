@@ -124,7 +124,7 @@ func MergeDependabot() error {
 	)
 
 	for _, pr := range strings.Split(out, "\n") {
-		fmt.Printf("PR: %v", pr)
+		fmt.Printf("PR: %v\n", pr)
 		err = shx.Run("git", "merge-base", "--is-ancestor", pr, "HEAD")
 		if err == nil {
 			fmt.Println("Already merged")
