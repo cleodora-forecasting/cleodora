@@ -249,3 +249,17 @@ sudo apt install firefox-geckodriver
 ```bash
 ./scripts/runE2ETests.sh
 ```
+
+
+# Website
+
+The website cleodora.org is built using the static site generator Hugo and the
+entire content can be found in the `website/` directory. If you want to make
+some modifications to the content and want to try how they look:
+
+```bash
+cd website
+hugo server
+```
+
+Now open http://localhost:1313 .
