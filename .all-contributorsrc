@@ -40,6 +40,16 @@
       "contributions": [
         "userTesting"
       ]
+    },
+    {
+      "login": "TrueMilli",
+      "name": "Milli",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61841994?v=4",
+      "profile": "https://github.com/TrueMilli",
+      "contributions": [
+        "userTesting",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
