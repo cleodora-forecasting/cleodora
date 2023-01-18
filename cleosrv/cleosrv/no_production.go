@@ -5,9 +5,11 @@ package cleosrv
 import (
 	"fmt"
 	"net/http"
+	"path/filepath"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
+	"github.com/adrg/xdg"
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/websocket"
 	"github.com/rs/cors"
@@ -83,4 +85,8 @@ func configureCORS(router *chi.Mux, srv *handler.Server) {
 			WriteBufferSize: 1024,
 		},
 	})
+}
+
+func DefaultDatabasePath() string {
+	return filepath.Join(xdg.DataHome, "cleosrv", "cleosrv_dev.db")
 }

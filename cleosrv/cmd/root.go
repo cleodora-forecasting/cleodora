@@ -79,7 +79,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(
 		&database,
 		"database",
-		filepath.Join(xdg.DataHome, "cleosrv", "cleosrv.db"),
+		cleosrv.DefaultDatabasePath(),
 		"Path to the SQLite database to use. Will be created if it "+
 			"doesn't exist.",
 	)

@@ -8,8 +8,10 @@ import (
 	"fmt"
 	"io/fs"
 	"net/http"
+	"path/filepath"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/adrg/xdg"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -61,4 +63,8 @@ func getFrontendConfig(frontendFooterText string) func(w http.ResponseWriter, r 
 			fmt.Println("ERROR while encoding frontendConfig", err) // TODO log
 		}
 	}
+}
+
+func DefaultDatabasePath() string {
+	return filepath.Join(xdg.DataHome, "cleosrv", "cleosrv.db")
 }
