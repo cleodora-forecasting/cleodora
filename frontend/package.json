@@ -14,7 +14,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/node": "^18.11.18",
-    "@types/react": "^18.0.26",
+    "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "dayjs": "^1.11.7",
     "graphql": "^16.6.0",
