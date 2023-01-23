@@ -10,6 +10,6 @@
   "license": "",
   "devDependencies": {
     "mocha": "^10.2.0",
-    "selenium-webdriver": "^4.7.1"
+    "selenium-webdriver": "^4.8.0"
   }
 }
