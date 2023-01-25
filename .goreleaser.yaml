@@ -69,17 +69,34 @@ archives:
     rlcp: true
     builds:
       - cleosrv
-    name_template: 'cleosrv_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ with .Arm }}v{{ . }}{{ end }}{{ with .Mips }}_{{ . }}{{ end }}{{ if not (eq .Amd64 "v1") }}{{ .Amd64 }}{{ end }}'
+    name_template: >-
+      {{ .Binary }}_
+      {{- .Version }}_
+      {{- if eq .Os "darwin" }}macOS_
+      {{- else}}{{- title .Os }}_{{ end }}
+      {{- if eq .Arch "amd64" }}64bit
+      {{- else if eq .Arch "arm64" }}ARM64
+      {{- else }}{{ .Arch }}{{ end }}
+    format: tar.gz
     format_overrides:
       - goos: windows
         format: zip
     files:
       - none*
+
   - id: cleoc
     rlcp: true
     builds:
       - cleoc
-    name_template: 'cleoc_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ with .Arm }}v{{ . }}{{ end }}{{ with .Mips }}_{{ . }}{{ end }}{{ if not (eq .Amd64 "v1") }}{{ .Amd64 }}{{ end }}'
+    name_template: >-
+      {{ .Binary }}_
+      {{- .Version }}_
+      {{- if eq .Os "darwin" }}macOS_
+      {{- else}}{{- title .Os }}_{{ end }}
+      {{- if eq .Arch "amd64" }}64bit
+      {{- else if eq .Arch "arm64" }}ARM64
+      {{- else }}{{ .Arch }}{{ end }}
+    format: tar.gz
     format_overrides:
       - goos: windows
         format: zip
