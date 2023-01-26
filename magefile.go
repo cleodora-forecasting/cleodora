@@ -29,8 +29,8 @@ func Clean() {
 
 // Generate code (for example after changing the schema).
 func Generate() {
-	must.RunV("go", "generate", "./...")
-	mustFrontend.RunV("npm", "run", "generate")
+	_ = must.RunV("go", "generate", "./...")
+	_ = mustFrontend.RunV("npm", "run", "generate")
 }
 
 // Lint all code, fixing things automatically where possible.
@@ -51,16 +51,20 @@ func Lint() {
 	)
 	mgx.Must(err)
 	mgx.Must(f.Close())
-	defer sh.Rm(emptyFile) // error is ignored because it's not vital that it's removed
+	defer func() {
+		if err := sh.Rm(emptyFile); err != nil {
+			fmt.Printf("ERROR deleting emtpyFile: %v\n", err)
+		}
+	}()
 
-	must.RunV(
+	_ = must.RunV(
 		"go",
 		"run",
 		"github.com/golangci/golangci-lint/cmd/golangci-lint",
 		"run",
 		"--fix",
 	)
-	must.RunV(
+	_ = must.RunV(
 		"go",
 		"run",
 		"github.com/golangci/golangci-lint/cmd/golangci-lint",
@@ -69,7 +73,7 @@ func Lint() {
 		"--build-tags",
 		"production",
 	)
-	must.RunV(
+	_ = must.RunV(
 		"go",
 		"run",
 		"github.com/golangci/golangci-lint/cmd/golangci-lint",
@@ -78,12 +82,12 @@ func Lint() {
 		"--build-tags",
 		"mage",
 	)
-	mustFrontend.RunV("npm", "run", "lint")
+	_ = mustFrontend.RunV("npm", "run", "lint")
 }
 
 // Build cleosrv and cleoc binaries for the current platform.
 func Build() {
-	must.RunV(
+	_ = must.RunV(
 		"go",
 		"run",
 		"github.com/goreleaser/goreleaser",
@@ -94,22 +98,22 @@ func Build() {
 }
 
 // EnsureMage installs mage globally if it's not already installed.
-func EnsureMage() {
-	pkg.EnsureMage("")
+func EnsureMage() error {
+	return pkg.EnsureMage("")
 }
 
 // Test executes all tests except the e2e tests.
 func Test() {
-	must.RunV("go", "test", "./...")
-	mustFrontend.RunV("npm", "test", "a", "--", "--watchAll=false")
+	_ = must.RunV("go", "test", "./...")
+	_ = mustFrontend.RunV("npm", "test", "a", "--", "--watchAll=false")
 }
 
 // InstallDeps installs all dependencies.
 func InstallDeps() {
-	must.RunV("go", "mod", "tidy")
-	must.RunV("go", "mod", "download")
-	mustFrontend.RunV("npm", "install")
-	shx.Command("npm", "install").In("e2e_tests").Must().RunV()
+	_ = must.RunV("go", "mod", "tidy")
+	_ = must.RunV("go", "mod", "download")
+	_ = mustFrontend.RunV("npm", "install")
+	_ = shx.Command("npm", "install").In("e2e_tests").Must().RunV()
 }
 
 // MergeDependabot merges all open dependabot PRs
@@ -124,8 +128,8 @@ func MergeDependabot() error {
 		return fmt.Errorf("There are uncommitted changes! Exiting")
 	}
 
-	must.RunV("git", "fetch")
-	must.RunV("git", "remote", "prune", "origin")
+	_ = must.RunV("git", "fetch")
+	_ = must.RunV("git", "remote", "prune", "origin")
 
 	out, err = shx.Output(
 		"git",
@@ -133,6 +137,7 @@ func MergeDependabot() error {
 		"--format=%(refname)",
 		"refs/remotes/origin/dependabot/",
 	)
+	mgx.Must(err)
 
 	for _, pr := range strings.Split(out, "\n") {
 		fmt.Printf("PR: %v\n", pr)
@@ -141,7 +146,7 @@ func MergeDependabot() error {
 			fmt.Println("Already merged")
 			continue
 		}
-		must.RunV("git", "merge", pr, "-m", "Merge dependabot update")
+		_ = must.RunV("git", "merge", pr, "-m", "Merge dependabot update")
 		fmt.Println()
 	}
 	fmt.Println("All PRs merged")
@@ -156,7 +161,7 @@ func MergeDependabot() error {
 	}
 
 	Test()
-    E2ETest()
+	E2ETest()
 
 	fmt.Println("Successfully done. You must run 'git push' to publish the changes.")
 	return nil
@@ -170,11 +175,11 @@ func E2ETest() {
 	dbPath := "./e2e_tests.db"
 	mgx.Must(sh.Rm(dbPath))
 	cmd := exec.Command(cleosrvPath, "--database", dbPath)
-    mgx.Must(cmd.Start())
-    defer func() {
-        if err := cmd.Process.Kill(); err != nil {
-            fmt.Printf("error stopping cleosrv: %v\n", err)
-        }
-    }()
-	shx.Command("npx", "cypress", "run", "-b", "firefox", "--headed").In("e2e_tests").Must().RunV()
+	mgx.Must(cmd.Start())
+	defer func() {
+		if err := cmd.Process.Kill(); err != nil {
+			fmt.Printf("error stopping cleosrv: %v\n", err)
+		}
+	}()
+	_ = shx.Command("npx", "cypress", "run", "-b", "firefox", "--headed").In("e2e_tests").Must().RunV()
 }
