@@ -243,7 +243,7 @@ This is currently NOT possible in GitPod or GitHub Codespaces because the e2e
 tests require an X server to launch a web browser.
 
 ```bash
-./scripts/runE2ETests.sh
+mage e2etest
 ```
 
 

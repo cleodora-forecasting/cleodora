@@ -5,12 +5,14 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
 	"github.com/carolynvs/magex/mgx"
 	"github.com/carolynvs/magex/pkg"
 	"github.com/carolynvs/magex/shx"
+	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 )
 
@@ -145,9 +147,25 @@ func MergeDependabot() error {
 	}
 
 	Test()
-
-	must.RunV("./scripts/runE2ETests.sh")
+    E2ETest()
 
 	fmt.Println("Successfully done. You must run 'git push' to publish the changes.")
 	return nil
+}
+
+// E2ETest starts cleosrv and runs end to end tests with Cypress
+func E2ETest() {
+	mg.Deps(Clean)
+	mg.Deps(Build)
+	cleosrvPath := "./dist/cleosrv_linux_amd64_v1/cleosrv"
+	dbPath := "./e2e_tests.db"
+	mgx.Must(sh.Rm(dbPath))
+	cmd := exec.Command(cleosrvPath, "--database", dbPath)
+    mgx.Must(cmd.Start())
+    defer func() {
+        if err := cmd.Process.Kill(); err != nil {
+            fmt.Printf("error stopping cleosrv: %v\n", err)
+        }
+    }()
+	shx.Command("npx", "cypress", "run", "-b", "firefox", "--headed").In("e2e_tests").Must().RunV()
 }
