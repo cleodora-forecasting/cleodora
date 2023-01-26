@@ -8,7 +8,7 @@ describe('basic front page tests', () => {
     cy.visit(BASE_URL)
   });
 
-  it('passes', () => {
+  it('title input field for new forecast exists', () => {
     cy.findByLabelText('Title *').click().type('Does cypress work?')
   });
 
