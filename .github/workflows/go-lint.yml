@@ -30,7 +30,7 @@ jobs:
     timeout-minutes: 5
     strategy:
       matrix:
-        build_tag: [default, production] # Note that 'default' is not a tag we actually use
+        build_tag: [default, production, mage] # Note that 'default' is not a tag we actually use
     name: lint
     runs-on: ubuntu-latest
     steps:

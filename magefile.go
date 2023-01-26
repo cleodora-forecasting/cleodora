@@ -69,6 +69,15 @@ func Lint() {
 		"--build-tags",
 		"production",
 	)
+	must.RunV(
+		"go",
+		"run",
+		"github.com/golangci/golangci-lint/cmd/golangci-lint",
+		"run",
+		"--fix",
+		"--build-tags",
+		"mage",
+	)
 	mustFrontend.RunV("npm", "run", "lint")
 }
 
