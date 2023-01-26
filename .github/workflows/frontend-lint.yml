@@ -32,4 +32,4 @@ jobs:
 
       - name: Lint
         working-directory: frontend
-        run: npm run lint
+        run: eslint src
