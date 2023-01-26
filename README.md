@@ -8,6 +8,7 @@
 [![Go Lint](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-lint.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-lint.yml)
 [![Go Tests](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-tests.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-tests.yml)
 [![Website Build](https://github.com/cleodora-forecasting/cleodora/actions/workflows/website-build.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/website-build.yml)
+[![E2E Tests Lint](https://github.com/cleodora-forecasting/cleodora/actions/workflows/e2e_tests-lint.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/e2e_tests-lint.yml)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
