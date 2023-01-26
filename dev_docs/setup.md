@@ -237,14 +237,10 @@ mage test
 
 ## E2E (end to end) tests
 
-Selenium end to end tests, also including the cleoc client.
+Cypress end to end tests, also including the cleoc client.
 
 This is currently NOT possible in GitPod or GitHub Codespaces because the e2e
 tests require an X server to launch a web browser.
-
-```bash
-sudo apt install firefox-geckodriver
-```
 
 ```bash
 ./scripts/runE2ETests.sh

@@ -18,6 +18,6 @@ mage build
 CLEOSRV_PID=$!
 
 cd e2e_tests
-node_modules/.bin/mocha --timeout 15000 frontPageTest.spec.js
+npx cypress run -b firefox --headed
 
 kill "${CLEOSRV_PID}"
