@@ -27,6 +27,7 @@ permissions:
   # pull-requests: read
 jobs:
   golangci:
+    timeout-minutes: 5
     strategy:
       matrix:
         build_tag: [default, production] # Note that 'default' is not a tag we actually use
