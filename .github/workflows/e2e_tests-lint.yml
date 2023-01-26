@@ -1,0 +1,35 @@
+name: E2E Tests Lint
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - main
+    paths:
+      - .github/workflows/**
+      - e2e_tests/**
+  pull_request:
+    paths:
+      - .github/workflows/**
+      - e2e_tests/**
+
+jobs:
+  build:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+          cache-dependency-path: e2e_tests/package-lock.json
+
+      - name: Install dependencies
+        working-directory: e2e_tests
+        run: npm ci
+
+      - name: Lint
+        working-directory: e2e_tests
+        run: npm run lint
