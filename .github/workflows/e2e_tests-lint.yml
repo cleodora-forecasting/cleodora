@@ -32,4 +32,4 @@ jobs:
 
       - name: Lint
         working-directory: e2e_tests
-        run: eslint cypress
+        run: npx run eslint cypress
