@@ -14,13 +14,11 @@ describe('basic front page tests', () => {
 
   it('renders the page title and header', () => {
     cy.title().should('eq', 'Cleodora');
-    let headings = cy.findAllByRole('heading');
-    console.log(headings.first());
-    headings.first().should('have.text', 'Cleodora');
+    cy.findAllByRole('heading').first().should('have.text', 'Cleodora');
   });
 
   it('contains new forecast', () => {
-    let cmd = CLEOC_PATH + " add forecast " +
+    const cmd = CLEOC_PATH + " add forecast " +
         "-t 'Is this a test forecast?' " +
         "-r '2022-12-01T15:00:00+01:00' " +
         "--reason \"We're running a test, so it seems likely.\" " +
