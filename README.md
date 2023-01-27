@@ -4,6 +4,7 @@
 
 [![Frontend Lint](https://github.com/cleodora-forecasting/cleodora/actions/workflows/frontend-lint.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/frontend-lint.yml)
 [![Frontend Tests](https://github.com/cleodora-forecasting/cleodora/actions/workflows/frontend-tests.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/frontend-tests.yml)
+[![Frontend Generate](https://github.com/cleodora-forecasting/cleodora/actions/workflows/frontend-generate.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/frontend-generate.yml)
 [![Go Generate](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-generate.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-generate.yml)
 [![Go Lint](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-lint.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-lint.yml)
 [![Go Tests](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-tests.yml/badge.svg)](https://github.com/cleodora-forecasting/cleodora/actions/workflows/go-tests.yml)

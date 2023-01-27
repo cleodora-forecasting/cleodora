@@ -1,0 +1,39 @@
+name: Frontend Generate
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - main
+    paths:
+      - .github/workflows/**
+      - frontend/**
+  pull_request:
+    paths:
+      - .github/workflows/**
+      - frontend/**
+
+jobs:
+  build:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Generate
+        working-directory: frontend
+        run: npm run generate
+
+      # Ensure nothing has changed
+      - name: Evaluate 'git diff'
+        run: git diff --exit-code
