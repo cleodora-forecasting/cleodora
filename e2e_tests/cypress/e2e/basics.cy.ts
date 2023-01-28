@@ -1,6 +1,15 @@
 /// <reference types="cypress" />
 
 describe('basic front page tests', () => {
+  let cleocPath:string;
+
+  before(() => {
+    cleocPath = Cypress.env('cleocPath') as string
+    if (cleocPath == undefined) {
+      throw new Error("cleocPath is not defined in Cypress.env");
+    }
+  });
+
   beforeEach(() => {
     cy.visit("/")
   });
@@ -15,7 +24,7 @@ describe('basic front page tests', () => {
   });
 
   it('contains new forecast', () => {
-    const cmd = Cypress.env('cleocPath') + " " +
+    const cmd = cleocPath + " " +
         "--url " + Cypress.config('baseUrl') + " " +
         "add forecast " +
         "-t 'Is this a test forecast?' " +
