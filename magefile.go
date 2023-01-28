@@ -231,16 +231,16 @@ func e2eTestHelper(browser string, shouldRebuild bool, baseURL string) {
 			fmt.Println(strings.Repeat("=", 80))
 		}()
 	}
-	args := []string{
+	cypressArgs := []string{
 		"cypress",
 		"run",
 		"-b",
 		browser,
 	}
 	if strings.ToLower(browser) == "electron" {
-		args = append(args, "--headless")
+		cypressArgs = append(cypressArgs, "--headless")
 	} else {
-		args = append(args, "--headed")
+		cypressArgs = append(cypressArgs, "--headed")
 	}
 
 	var cypressConfig []string
@@ -254,16 +254,12 @@ func e2eTestHelper(browser string, shouldRebuild bool, baseURL string) {
 	cypressEnv = append(cypressEnv, "cleocPath="+cleocPath)
 
 	if len(cypressConfig) > 0 {
-		args = append(args, "--config", strings.Join(cypressConfig, ","))
+		cypressArgs = append(cypressArgs, "--config", strings.Join(cypressConfig, ","))
 	}
 	if len(cypressEnv) > 0 {
-		args = append(args, "--env", strings.Join(cypressEnv, ","))
+		cypressArgs = append(cypressArgs, "--env", strings.Join(cypressEnv, ","))
 	}
-	_ = shx.Command("npx", args...).In("e2e_tests").Must().RunV()
-
-	// cypress run --browser firefox --config viewportWidth=1280,viewportHeight=720
-	// https://docs.cypress.io/guides/references/configuration
-	// e2e.baseUrl
+	_ = shx.Command("npx", cypressArgs...).In("e2e_tests").Must().RunV()
 }
 
 // getCurrentBuildTarget is a helper function to determine where the compiled
