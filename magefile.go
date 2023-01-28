@@ -20,6 +20,7 @@ import (
 
 var must = shx.CommandBuilder{StopOnError: true}
 var mustFrontend = shx.CommandBuilder{StopOnError: true, Dir: "frontend"}
+var mustE2E = shx.CommandBuilder{StopOnError: true, Dir: "e2e_tests"}
 
 // Clean up build artifacts.
 func Clean() {
@@ -85,6 +86,7 @@ func Lint() {
 		"mage",
 	)
 	_ = mustFrontend.RunV("npm", "run", "lint")
+	_ = mustE2E.RunV("npm", "run", "lint")
 }
 
 // Build cleosrv and cleoc binaries for the current platform.
@@ -115,7 +117,7 @@ func InstallDeps() {
 	_ = must.RunV("go", "mod", "tidy")
 	_ = must.RunV("go", "mod", "download")
 	_ = mustFrontend.RunV("npm", "install")
-	_ = shx.Command("npm", "install").In("e2e_tests").Must().RunV()
+	_ = mustE2E.RunV("npm", "install")
 }
 
 // MergeDependabot merges all open dependabot PRs.
