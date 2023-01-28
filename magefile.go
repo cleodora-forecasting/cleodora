@@ -3,10 +3,12 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/carolynvs/magex/mgx"
@@ -116,7 +118,7 @@ func InstallDeps() {
 	_ = shx.Command("npm", "install").In("e2e_tests").Must().RunV()
 }
 
-// MergeDependabot merges all open dependabot PRs
+// MergeDependabot merges all open dependabot PRs.
 func MergeDependabot() error {
 	out, err := shx.Output("git", "rev-parse", "--abbrev-ref", "HEAD")
 	mgx.Must(err)
@@ -167,19 +169,118 @@ func MergeDependabot() error {
 	return nil
 }
 
-// E2ETest starts cleosrv and runs end to end tests with Cypress
+// E2ETest starts cleosrv and runs end-to-end tests with Cypress and Firefox.
 func E2ETest() {
-	mg.Deps(Clean)
-	mg.Deps(Build)
-	cleosrvPath := "./dist/cleosrv_linux_amd64_v1/cleosrv"
-	dbPath := "./e2e_tests.db"
+	e2eTestHelper("firefox", true, "")
+}
+
+// E2ETestB is like E2ETest but allows choosing a browser.
+// Note that if the browser is 'electron' it will run headless.
+func E2ETestB(browser string) {
+	e2eTestHelper(browser, true, "")
+}
+
+// E2ETestC is like E2ETest but allow to configure multiple things.
+// If the browser is 'electron' it will run headless. If the baseURL is
+// specified (as opposed to an empty string) then no cleosrv is started, but
+// it's assumed one is already running with that baseURL.
+// shouldRebuild specifies whether the binaries should be re-built.
+func E2ETestC(browser string, shouldRebuild bool, baseURL string) {
+	e2eTestHelper(browser, shouldRebuild, baseURL)
+}
+
+func e2eTestHelper(browser string, shouldRebuild bool, baseURL string) {
+	dbPath := "e2e_tests.db"
 	mgx.Must(sh.Rm(dbPath))
-	cmd := exec.Command(cleosrvPath, "--database", dbPath)
-	mgx.Must(cmd.Start())
-	defer func() {
-		if err := cmd.Process.Kill(); err != nil {
-			fmt.Printf("error stopping cleosrv: %v\n", err)
-		}
-	}()
-	_ = shx.Command("npx", "cypress", "run", "-b", "firefox", "--headed").In("e2e_tests").Must().RunV()
+
+	if shouldRebuild {
+		mg.Deps(Clean)
+		mg.Deps(Build)
+	}
+	buildTarget, err := getCurrentBuildTarget()
+	mgx.Must(err)
+	cleosrvPath, err := filepath.Abs(filepath.Join(
+		"dist",
+		"cleosrv_"+buildTarget,
+		"cleosrv",
+	))
+	mgx.Must(err)
+	cleocPath, err := filepath.Abs(filepath.Join(
+		"dist",
+		"cleoc_"+buildTarget,
+		"cleoc",
+	))
+	mgx.Must(err)
+
+	if baseURL == "" {
+		cleosrvCmd := exec.Command(cleosrvPath, "--database", dbPath)
+		var cleosrvStdout, cleosrvStderr bytes.Buffer
+		cleosrvCmd.Stdout = &cleosrvStdout
+		cleosrvCmd.Stderr = &cleosrvStderr
+		mgx.Must(cleosrvCmd.Start())
+		defer func() {
+			if err := cleosrvCmd.Process.Kill(); err != nil {
+				fmt.Printf("error stopping cleosrv: %v\n", err)
+			}
+			fmt.Println(strings.Repeat("=", 80))
+			fmt.Println("cleosrv stdout:")
+			fmt.Println(cleosrvStdout.String())
+			fmt.Println(strings.Repeat("=", 80))
+			fmt.Println("cleosrv stderr:")
+			fmt.Println(cleosrvStderr.String())
+			fmt.Println(strings.Repeat("=", 80))
+		}()
+	}
+	args := []string{
+		"cypress",
+		"run",
+		"-b",
+		browser,
+	}
+	if strings.ToLower(browser) == "electron" {
+		args = append(args, "--headless")
+	} else {
+		args = append(args, "--headed")
+	}
+
+	var cypressConfig []string
+	var cypressEnv []string
+
+	if baseURL == "" {
+		cypressConfig = append(cypressConfig, "baseUrl=http://localhost:8080")
+	} else {
+		cypressConfig = append(cypressConfig, "baseUrl="+baseURL)
+	}
+	cypressEnv = append(cypressEnv, "cleocPath="+cleocPath)
+
+	if len(cypressConfig) > 0 {
+		args = append(args, "--config", strings.Join(cypressConfig, ","))
+	}
+	if len(cypressEnv) > 0 {
+		args = append(args, "--env", strings.Join(cypressEnv, ","))
+	}
+	_ = shx.Command("npx", args...).In("e2e_tests").Must().RunV()
+
+	// cypress run --browser firefox --config viewportWidth=1280,viewportHeight=720
+	// https://docs.cypress.io/guides/references/configuration
+	// e2e.baseUrl
+}
+
+// getCurrentBuildTarget is a helper function to determine where the compiled
+// binaries have been placed by goreleaser
+func getCurrentBuildTarget() (string, error) {
+	goos := os.Getenv("GOOS")
+	if goos == "" {
+		goos = runtime.GOOS
+	}
+	goarch := os.Getenv("GOARCH")
+	if goarch == "" {
+		goarch = runtime.GOARCH
+	}
+	if goarch == "amd64" {
+		return fmt.Sprintf("%s_%s_v1", goos, goarch), nil
+	} else if goarch == "arm64" {
+		return fmt.Sprintf("%s_%s", goos, goarch), nil
+	}
+	return "", fmt.Errorf("unknown goarch: %v", goarch)
 }

@@ -1,11 +1,8 @@
 /// <reference types="cypress" />
 
-const BASE_URL = 'http://localhost:8080';
-const CLEOC_PATH = '../dist/cleoc_linux_amd64_v1/cleoc';
-
 describe('basic front page tests', () => {
   beforeEach(() => {
-    cy.visit(BASE_URL)
+    cy.visit("/")
   });
 
   it('title input field for new forecast exists', () => {
@@ -18,7 +15,9 @@ describe('basic front page tests', () => {
   });
 
   it('contains new forecast', () => {
-    const cmd = CLEOC_PATH + " add forecast " +
+    const cmd = Cypress.env('cleocPath') + " " +
+        "--url " + Cypress.config('baseUrl') + " " +
+        "add forecast " +
         "-t 'Is this a test forecast?' " +
         "-r '2022-12-01T15:00:00+01:00' " +
         "--reason \"We're running a test, so it seems likely.\" " +
