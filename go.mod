@@ -10,7 +10,7 @@ require (
 	github.com/glebarez/sqlite v1.6.0
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/golangci/golangci-lint v1.51.0
-	github.com/goreleaser/goreleaser v1.15.1
+	github.com/goreleaser/goreleaser v1.15.2
 	github.com/gorilla/websocket v1.5.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/magefile/mage v1.14.0
@@ -198,9 +198,9 @@ require (
 	github.com/googleapis/enterprise-certificate-proxy v0.2.1 // indirect
 	github.com/googleapis/gax-go/v2 v2.7.0 // indirect
 	github.com/gordonklaus/ineffassign v0.0.0-20210914165742-4cc7213b9bc8 // indirect
-	github.com/goreleaser/chglog v0.3.0 // indirect
+	github.com/goreleaser/chglog v0.4.0 // indirect
 	github.com/goreleaser/fileglob v1.3.0 // indirect
-	github.com/goreleaser/nfpm/v2 v2.24.0 // indirect
+	github.com/goreleaser/nfpm/v2 v2.25.1 // indirect
 	github.com/gostaticanalysis/analysisutil v0.7.1 // indirect
 	github.com/gostaticanalysis/comment v1.4.2 // indirect
 	github.com/gostaticanalysis/forcetypeassert v0.1.0 // indirect
@@ -265,7 +265,7 @@ require (
 	github.com/muesli/mango-pflag v0.1.0 // indirect
 	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/roff v0.1.0 // indirect
-	github.com/muesli/termenv v0.13.0 // indirect
+	github.com/muesli/termenv v0.14.0 // indirect
 	github.com/nakabonne/nestif v0.3.1 // indirect
 	github.com/nbutton23/zxcvbn-go v0.0.0-20210217022336-fa2cb2858354 // indirect
 	github.com/nishanths/exhaustive v0.9.5 // indirect
