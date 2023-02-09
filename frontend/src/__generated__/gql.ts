@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
-    "\n    mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {\n        createForecast(forecast: $forecast, estimate: $estimate) {\n            id\n            title\n        }\n    }\n": types.CreateForecastDocument,
+    "\n    mutation createForecast($forecast: CreateForecastInput!, $estimate: CreateEstimateInput!) {\n        createForecast(forecast: $forecast, estimate: $estimate) {\n            id\n            title\n        }\n    }\n": types.CreateForecastDocument,
     "\n    query GetMetadata {\n        metadata {\n            version\n        }\n    }\n": types.GetMetadataDocument,
     "\n    query GetForecasts {\n        forecasts {\n            id\n            title\n            description\n            created\n            closes\n            resolves\n            resolution\n            estimates {\n                id\n                probabilities {\n                    id\n                    value\n                    outcome {\n                        id\n                        text\n                    }\n                }\n            }\n        }\n    }\n": types.GetForecastsDocument,
 };
@@ -35,7 +35,7 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n    mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {\n        createForecast(forecast: $forecast, estimate: $estimate) {\n            id\n            title\n        }\n    }\n"): (typeof documents)["\n    mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {\n        createForecast(forecast: $forecast, estimate: $estimate) {\n            id\n            title\n        }\n    }\n"];
+export function gql(source: "\n    mutation createForecast($forecast: CreateForecastInput!, $estimate: CreateEstimateInput!) {\n        createForecast(forecast: $forecast, estimate: $estimate) {\n            id\n            title\n        }\n    }\n"): (typeof documents)["\n    mutation createForecast($forecast: CreateForecastInput!, $estimate: CreateEstimateInput!) {\n        createForecast(forecast: $forecast, estimate: $estimate) {\n            id\n            title\n        }\n    }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

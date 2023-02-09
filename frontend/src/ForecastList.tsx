@@ -61,10 +61,10 @@ export const ForecastList: FC = () => {
                                         //  on what the API returns. It
                                         //  probably needs to be adjusted.
                                         const lastEstimate = f.estimates[f.estimates.length - 1];
-                                        if (lastEstimate != null) {
+                                        if (lastEstimate != null && lastEstimate.probabilities != null) {
                                             estimates = lastEstimate.probabilities.map(
                                                 p => {
-                                                    if (p != null) {
+                                                    if (p != null && p.outcome != null) {
                                                         return p.outcome.text + ": " + p.value.toString() + "%"
                                                     }
                                                     return ""
