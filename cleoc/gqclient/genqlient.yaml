@@ -1,8 +1,13 @@
 # Default genqlient config; for full documentation see:
 # https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
-schema: ../../schema.graphql
+schema:
+  - ../../schema.graphql
+  - ../../extended.graphql
 operations:
 - genqlient.graphql
+
+optional: pointer
+
 generated: generated.go
 bindings:
   Time:
