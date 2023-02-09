@@ -384,11 +384,12 @@ func init() {
 	sql.Register("sqlite3", sqlite3Driver{Driver: &sqlite.Driver{}})
 }
 
+// timeParseOrPanic parses the time and converts it to UTC
 func timeParseOrPanic(layout string, value string) time.Time {
 	t, err := time.Parse(layout, value)
 	if err != nil {
 		panic(err)
 	}
 
-	return t
+	return t.UTC()
 }
