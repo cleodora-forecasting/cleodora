@@ -32,6 +32,9 @@ func Clean() {
 
 // Generate code (for example after changing the schema).
 func Generate() {
+	// Run cleosrv generate first because it updates the GraphQL schema which
+	// is used everywhere else.
+	_ = must.RunV("go", "generate", "./cleosrv/...")
 	_ = must.RunV("go", "generate", "./...")
 	_ = mustFrontend.RunV("npm", "run", "generate")
 }
