@@ -222,8 +222,9 @@ mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
 If you start the frontend as described above you can see the result there as
 well.
 
-See [schema.graphql](./schema.graphql) to see the GraphQL schema, queries
-and mutations.
+See [schema.graphql](./schema.graphql) and
+[extended.graphql](./extended.graphql) to see the GraphQL schema, queries and
+mutations.
 
 
 # Tests
