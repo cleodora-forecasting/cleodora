@@ -32,10 +32,27 @@ forecasts.
 Visit https://cleodora.org for more information.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		app := cleosrv.NewApp()
-		app.Config.Address = viper.GetString("address")
-		app.Config.Database = viper.GetString("database")
-		app.Config.Frontend.FooterText = viper.GetString("frontend.footer_text")
+		config := &cleosrv.Config{
+			Address:  viper.GetString("address"),
+			Database: viper.GetString("database"),
+			Frontend: struct {
+				FooterText string
+			}{
+				FooterText: viper.GetString("frontend.footer_text"),
+			},
+		}
+
+		app, err := cleosrv.NewApp(config)
+		if err != nil {
+			return fmt.Errorf("error creating App: %w", err)
+		}
+
+		defer func(app *cleosrv.App) {
+			err := app.Close()
+			if err != nil {
+				_, _ = fmt.Fprintf(os.Stderr, "error closing App: %v", err)
+			}
+		}(app)
 		return app.Start()
 	},
 	SilenceUsage: true,

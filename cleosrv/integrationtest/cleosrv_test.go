@@ -10,13 +10,10 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/client"
-	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/cleodora-forecasting/cleodora/cleosrv/cleosrv"
-	"github.com/cleodora-forecasting/cleodora/cleosrv/graph"
-	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 )
 
 // TestGetForecasts_LowLevel verifies that the forecasts are returned by
@@ -24,16 +21,12 @@ import (
 // body, without any further GraphQL processing.
 func TestGetForecasts_LowLevel(t *testing.T) {
 	// Set up the server
-	app := cleosrv.NewApp()
-	app.Config.Database = ":memory:"
-	db, err := app.InitDB()
+	// app, err := cleosrv.NewApp(&cleosrv.Config{Database: "./temp_test.db"})
+	app, err := cleosrv.NewApp(&cleosrv.Config{Database: ":memory:"})
 	require.Nil(t, err)
-	resolver := graph.NewResolver(db)
-	err = resolver.AddDummyData()
+	srv := app.GetServer()
+	err = app.AddDummyData()
 	require.Nil(t, err)
-	srv := handler.NewDefaultServer(
-		generated.NewExecutableSchema(generated.Config{Resolvers: resolver}),
-	)
 
 	query := `
 		query GetForecasts {
@@ -80,6 +73,7 @@ func TestGetForecasts_LowLevel(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Contains(t, string(b), "Fabelmans")
+	// https://gitlab.com/cznic/sqlite/-/issues/35
 }
 
 // TestGetForecasts_GQClient verifies that the forecasts are returned and
@@ -102,10 +96,10 @@ func TestGetForecasts_GQClient(t *testing.T) {
 
 	var response struct {
 		Forecasts []struct {
+			Id          string
 			Closes      string
 			Created     string
 			Description string
-			Id          string
 			Resolution  string
 			Resolves    string
 			Title       string
@@ -216,7 +210,7 @@ func TestCreateForecast(t *testing.T) {
 	}
 
 	query := `
-		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+		mutation createForecast($forecast: CreateForecastInput!, $estimate: CreateEstimateInput!) {
 			createForecast(forecast: $forecast, estimate: $estimate) {
 				id
 				title
@@ -334,7 +328,7 @@ func TestCreateForecast_XSS(t *testing.T) {
 	}
 
 	query := `
-		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+		mutation createForecast($forecast: CreateForecastInput!, $estimate: CreateEstimateInput!) {
 			createForecast(forecast: $forecast, estimate: $estimate) {
 				id
 				title
@@ -402,7 +396,7 @@ func TestCreateForecast_XSS(t *testing.T) {
 }
 
 // TestCreateForecast_ValidateNewEstimate verifies the expected error or no
-// error with different NewEstimate values.
+// error with different CreateEstimateInput values.
 func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 	tests := []struct {
 		name        string
@@ -497,7 +491,7 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 					},
 				},
 			},
-			expectedErr: "'reason' can't be empty",
+			expectedErr: "\\\"Estimate.reason\\\": value is less than the required length",
 		},
 		{
 			name: "probabilities must add up to 100",
@@ -539,7 +533,7 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 					},
 				},
 			},
-			expectedErr: "probabilities must be between 0 and 100",
+			expectedErr: "\\\"Probability.value\\\": value out of range",
 		},
 		{
 			name: "probabilities cant be empty",
@@ -606,7 +600,7 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 					},
 				},
 			},
-			expectedErr: "outcome text can't be empty",
+			expectedErr: "\\\"Outcome.text\\\": value is less than the required length",
 		},
 		{
 			name: "outcomes cant be duplicates",
@@ -646,7 +640,7 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 			}
 
 			query := `
-		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+		mutation createForecast($forecast: CreateForecastInput!, $estimate: CreateEstimateInput!) {
 			createForecast(forecast: $forecast, estimate: $estimate) {
 				id
 				title
@@ -703,7 +697,7 @@ func TestCreateForecast_ValidateNewForecast(t *testing.T) {
 				"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
 				"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
 			},
-			expectedErr: "title can't be empty",
+			expectedErr: "\\\"Forecast.title\\\": value is less than the required length",
 		},
 		{
 			name: "description can be empty",
@@ -784,7 +778,7 @@ func TestCreateForecast_ValidateNewForecast(t *testing.T) {
 			}
 
 			query := `
-		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+		mutation createForecast($forecast: CreateForecastInput!, $estimate: CreateEstimateInput!) {
 			createForecast(forecast: $forecast, estimate: $estimate) {
 				id
 				title
@@ -827,7 +821,7 @@ func TestCreateForecast_FailsWithoutEstimate(t *testing.T) {
 	}
 
 	query := `
-		mutation createForecast($forecast: NewForecast!) {
+		mutation createForecast($forecast: CreateForecastInput!) {
 			createForecast(forecast: $forecast) {
 				id
 				title
@@ -850,7 +844,7 @@ func TestCreateForecast_FailsWithoutEstimate(t *testing.T) {
 	assert.Contains(
 		t,
 		err.Error(),
-		"argument \\\"estimate\\\" of type \\\"NewEstimate!\\\" is required",
+		"argument \\\"estimate\\\" of type \\\"CreateEstimateInput!\\\" is required",
 	)
 }
 
@@ -880,17 +874,12 @@ func TestGetVersion(t *testing.T) {
 func initServerAndGetClient(t *testing.T) *client.Client {
 	t.Helper()
 	// Set up the server
-	app := cleosrv.NewApp()
-	app.Config.Database = ":memory:"
-	db, err := app.InitDB()
+	// Set up the server
+	app, err := cleosrv.NewApp(&cleosrv.Config{Database: ":memory:"})
 	require.Nil(t, err)
-	resolver := graph.NewResolver(db)
-	err = resolver.AddDummyData()
+	srv := app.GetServer()
+	err = app.AddDummyData()
 	require.Nil(t, err)
-	srv := handler.NewDefaultServer(
-		generated.NewExecutableSchema(generated.Config{Resolvers: resolver}),
-	)
-
 	c := client.New(srv)
 	return c
 }

@@ -7,124 +7,54 @@ package graph
 import (
 	"context"
 	"fmt"
-	"html"
-	"time"
 
-	"github.com/cleodora-forecasting/cleodora/cleosrv/dbmodel"
+	"github.com/cleodora-forecasting/cleodora/cleosrv/ent"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
-	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/model"
-	"github.com/cleodora-forecasting/cleodora/cleoutils"
 )
 
-// CreateForecast is the resolver for the createForecast field.
-func (r *mutationResolver) CreateForecast(ctx context.Context, forecast model.NewForecast, estimate model.NewEstimate) (*model.Forecast, error) {
-	err := validateNewForecast(forecast)
-	if err != nil {
-		return nil, fmt.Errorf("error validating NewForecast: %w", err)
-	}
-	err = validateNewEstimate(estimate)
-	if err != nil {
-		return nil, fmt.Errorf("error validating NewEstimate: %w", err)
-	}
-	dbForecast := dbmodel.Forecast{
-		Title:       html.EscapeString(forecast.Title),
-		Description: html.EscapeString(forecast.Description),
-		Created:     time.Now(),
-		Resolves:    forecast.Resolves,
-		Closes:      forecast.Closes,
-		Resolution:  dbmodel.ResolutionUnresolved,
-		Estimates:   convertNewEstimateToDBEstimate(estimate),
-	}
+// Node is the resolver for the node field.
+func (r *queryResolver) Node(ctx context.Context, id int) (ent.Noder, error) {
+	panic(fmt.Errorf("not implemented: Node - node"))
+}
 
-	ret := r.db.Create(&dbForecast)
+// Nodes is the resolver for the nodes field.
+func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, error) {
+	panic(fmt.Errorf("not implemented: Nodes - nodes"))
+}
 
-	if ret.Error != nil {
-		return nil, ret.Error
-	}
-
-	retForecast := model.Forecast{
-		ID:          fmt.Sprint(dbForecast.ID),
-		Title:       dbForecast.Title,
-		Description: dbForecast.Description,
-		Created:     dbForecast.Created,
-		Resolves:    dbForecast.Resolves,
-		Closes:      dbForecast.Closes,
-		Resolution:  model.Resolution(dbForecast.Resolution),
-		Estimates:   convertEstimatesDBToGQL(dbForecast.Estimates),
-	}
-
-	return &retForecast, nil
+// Estimates is the resolver for the estimates field.
+func (r *queryResolver) Estimates(ctx context.Context) ([]*ent.Estimate, error) {
+	panic(fmt.Errorf("not implemented: Estimates - estimates"))
 }
 
 // Forecasts is the resolver for the forecasts field.
-func (r *queryResolver) Forecasts(ctx context.Context) ([]*model.Forecast, error) {
-	// TODO depending on what data is being queried here I guess the query has
-	// to return more or less data?
-	// https://gqlgen.com/reference/field-collection/
-	// fmt.Println(graphql.CollectAllFields(ctx))
-
-	var forecasts []dbmodel.Forecast
-	// TODO preload uses multiple queries and can be optimized with joins
-	ret := r.db.Preload("Estimates.Probabilities.Outcome").Find(&forecasts)
-	if ret.Error != nil {
-		return nil, ret.Error
-	}
-
-	var retForecasts []*model.Forecast
-
-	for _, f := range forecasts {
-		var estimates []*model.Estimate
-		for _, e := range f.Estimates {
-			var probabilities []*model.Probability
-			for _, p := range e.Probabilities {
-				probabilities = append(
-					probabilities,
-					&model.Probability{
-						ID:    fmt.Sprint(p.ID),
-						Value: p.Value,
-						Outcome: &model.Outcome{
-							ID:      fmt.Sprint(p.Outcome.ID),
-							Text:    p.Outcome.Text,
-							Correct: p.Outcome.Correct,
-						},
-					},
-				)
-			}
-			estimates = append(
-				estimates,
-				&model.Estimate{
-					ID:            fmt.Sprint(e.ID),
-					Created:       e.Created,
-					Reason:        e.Reason,
-					Probabilities: probabilities,
-				},
-			)
-		}
-		rf := model.Forecast{
-			ID:          fmt.Sprint(f.ID),
-			Title:       f.Title,
-			Description: f.Description,
-			Created:     f.Created,
-			Resolves:    f.Resolves,
-			Closes:      f.Closes,
-			Resolution:  model.Resolution(f.Resolution),
-			Estimates:   estimates,
-		}
-		retForecasts = append(retForecasts, &rf)
-	}
-	return retForecasts, nil
+func (r *queryResolver) Forecasts(ctx context.Context) ([]*ent.Forecast, error) {
+	return r.client.Forecast.Query().All(ctx)
 }
 
-// Metadata is the resolver for the metadata field.
-func (r *queryResolver) Metadata(ctx context.Context) (*model.Metadata, error) {
-	return &model.Metadata{Version: cleoutils.Version}, nil
+// Outcomes is the resolver for the outcomes field.
+func (r *queryResolver) Outcomes(ctx context.Context) ([]*ent.Outcome, error) {
+	panic(fmt.Errorf("not implemented: Outcomes - outcomes"))
 }
 
-// Mutation returns generated.MutationResolver implementation.
-func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
+// Probabilities is the resolver for the probabilities field.
+func (r *queryResolver) Probabilities(ctx context.Context) ([]*ent.Probability, error) {
+	panic(fmt.Errorf("not implemented: Probabilities - probabilities"))
+}
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
-type mutationResolver struct{ *Resolver }
+// CreateEstimateInput returns generated.CreateEstimateInputResolver implementation.
+func (r *Resolver) CreateEstimateInput() generated.CreateEstimateInputResolver {
+	return &createEstimateInputResolver{r}
+}
+
+// CreateProbabilityInput returns generated.CreateProbabilityInputResolver implementation.
+func (r *Resolver) CreateProbabilityInput() generated.CreateProbabilityInputResolver {
+	return &createProbabilityInputResolver{r}
+}
+
 type queryResolver struct{ *Resolver }
+type createEstimateInputResolver struct{ *Resolver }
+type createProbabilityInputResolver struct{ *Resolver }
