@@ -22,8 +22,6 @@ func init() {
 	estimateDescReason := estimateFields[0].Descriptor()
 	// estimate.DefaultReason holds the default value on creation for the reason field.
 	estimate.DefaultReason = estimateDescReason.Default.(string)
-	// estimate.ReasonValidator is a validator for the "reason" field. It is called by the builders before save.
-	estimate.ReasonValidator = estimateDescReason.Validators[0].(func(string) error)
 	// estimateDescCreated is the schema descriptor for created field.
 	estimateDescCreated := estimateFields[1].Descriptor()
 	// estimate.DefaultCreated holds the default value on creation for the created field.

@@ -18,7 +18,7 @@ type Estimate struct {
 // Fields of the Estimate.
 func (Estimate) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("reason").Default("").NotEmpty(),
+		field.String("reason").Default(""),
 		field.Time("created").Default(time.Now),
 	}
 }

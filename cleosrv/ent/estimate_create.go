@@ -134,11 +134,6 @@ func (ec *EstimateCreate) check() error {
 	if _, ok := ec.mutation.Reason(); !ok {
 		return &ValidationError{Name: "reason", err: errors.New(`ent: missing required field "Estimate.reason"`)}
 	}
-	if v, ok := ec.mutation.Reason(); ok {
-		if err := estimate.ReasonValidator(v); err != nil {
-			return &ValidationError{Name: "reason", err: fmt.Errorf(`ent: validator failed for field "Estimate.reason": %w`, err)}
-		}
-	}
 	if _, ok := ec.mutation.Created(); !ok {
 		return &ValidationError{Name: "created", err: errors.New(`ent: missing required field "Estimate.created"`)}
 	}

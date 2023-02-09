@@ -68,8 +68,6 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultReason holds the default value on creation for the "reason" field.
 	DefaultReason string
-	// ReasonValidator is a validator for the "reason" field. It is called by the builders before save.
-	ReasonValidator func(string) error
 	// DefaultCreated holds the default value on creation for the "created" field.
 	DefaultCreated func() time.Time
 )

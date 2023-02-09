@@ -151,20 +151,7 @@ func (eu *EstimateUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (eu *EstimateUpdate) check() error {
-	if v, ok := eu.mutation.Reason(); ok {
-		if err := estimate.ReasonValidator(v); err != nil {
-			return &ValidationError{Name: "reason", err: fmt.Errorf(`ent: validator failed for field "Estimate.reason": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (eu *EstimateUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := eu.check(); err != nil {
-		return n, err
-	}
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   estimate.Table,
@@ -425,20 +412,7 @@ func (euo *EstimateUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (euo *EstimateUpdateOne) check() error {
-	if v, ok := euo.mutation.Reason(); ok {
-		if err := estimate.ReasonValidator(v); err != nil {
-			return &ValidationError{Name: "reason", err: fmt.Errorf(`ent: validator failed for field "Estimate.reason": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (euo *EstimateUpdateOne) sqlSave(ctx context.Context) (_node *Estimate, err error) {
-	if err := euo.check(); err != nil {
-		return _node, err
-	}
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   estimate.Table,

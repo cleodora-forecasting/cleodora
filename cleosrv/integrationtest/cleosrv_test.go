@@ -491,7 +491,7 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 					},
 				},
 			},
-			expectedErr: "\\\"Estimate.reason\\\": value is less than the required length",
+			expectedErr: "",
 		},
 		{
 			name: "probabilities must add up to 100",
