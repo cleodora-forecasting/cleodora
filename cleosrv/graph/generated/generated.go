@@ -67,7 +67,8 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateForecast func(childComplexity int, forecast model.NewForecast, estimate model.NewEstimate) int
+		CreateForecast  func(childComplexity int, forecast model.NewForecast, estimate model.NewEstimate) int
+		ResolveForecast func(childComplexity int, forecastID string, resolution *model.Resolution, correctOutcomeID *string) int
 	}
 
 	Outcome struct {
@@ -90,6 +91,7 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	CreateForecast(ctx context.Context, forecast model.NewForecast, estimate model.NewEstimate) (*model.Forecast, error)
+	ResolveForecast(ctx context.Context, forecastID string, resolution *model.Resolution, correctOutcomeID *string) (*model.Forecast, error)
 }
 type QueryResolver interface {
 	Forecasts(ctx context.Context) ([]*model.Forecast, error)
@@ -213,6 +215,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateForecast(childComplexity, args["forecast"].(model.NewForecast), args["estimate"].(model.NewEstimate)), true
+
+	case "Mutation.resolveForecast":
+		if e.complexity.Mutation.ResolveForecast == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_resolveForecast_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ResolveForecast(childComplexity, args["forecastId"].(string), args["resolution"].(*model.Resolution), args["correctOutcomeId"].(*string)), true
 
 	case "Outcome.correct":
 		if e.complexity.Outcome.Correct == nil {
@@ -440,6 +454,11 @@ input NewOutcome {
 
 type Mutation {
   createForecast(forecast: NewForecast!, estimate: NewEstimate!): Forecast!
+  resolveForecast(
+      forecastId: ID!,
+      resolution: Resolution,
+      correctOutcomeId: ID
+  ): Forecast
 }
 
 scalar Time
@@ -485,6 +504,39 @@ func (ec *executionContext) field_Mutation_createForecast_args(ctx context.Conte
 		}
 	}
 	args["estimate"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_resolveForecast_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["forecastId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("forecastId"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["forecastId"] = arg0
+	var arg1 *model.Resolution
+	if tmp, ok := rawArgs["resolution"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("resolution"))
+		arg1, err = ec.unmarshalOResolution2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐResolution(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["resolution"] = arg1
+	var arg2 *string
+	if tmp, ok := rawArgs["correctOutcomeId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("correctOutcomeId"))
+		arg2, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["correctOutcomeId"] = arg2
 	return args, nil
 }
 
@@ -1194,6 +1246,75 @@ func (ec *executionContext) fieldContext_Mutation_createForecast(ctx context.Con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_createForecast_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_resolveForecast(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_resolveForecast(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ResolveForecast(rctx, fc.Args["forecastId"].(string), fc.Args["resolution"].(*model.Resolution), fc.Args["correctOutcomeId"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Forecast)
+	fc.Result = res
+	return ec.marshalOForecast2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐForecast(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_resolveForecast(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Forecast_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Forecast_title(ctx, field)
+			case "description":
+				return ec.fieldContext_Forecast_description(ctx, field)
+			case "created":
+				return ec.fieldContext_Forecast_created(ctx, field)
+			case "resolves":
+				return ec.fieldContext_Forecast_resolves(ctx, field)
+			case "closes":
+				return ec.fieldContext_Forecast_closes(ctx, field)
+			case "resolution":
+				return ec.fieldContext_Forecast_resolution(ctx, field)
+			case "estimates":
+				return ec.fieldContext_Forecast_estimates(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Forecast", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_resolveForecast_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -3815,6 +3936,12 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 				return ec._Mutation_createForecast(ctx, field)
 			})
 
+		case "resolveForecast":
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_resolveForecast(ctx, field)
+			})
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4869,11 +4996,50 @@ func (ec *executionContext) marshalOEstimate2ᚖgithubᚗcomᚋcleodoraᚑforeca
 	return ec._Estimate(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalOForecast2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐForecast(ctx context.Context, sel ast.SelectionSet, v *model.Forecast) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Forecast(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalID(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalID(*v)
+	return res
+}
+
 func (ec *executionContext) marshalOProbability2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐProbability(ctx context.Context, sel ast.SelectionSet, v *model.Probability) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Probability(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOResolution2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐResolution(ctx context.Context, v interface{}) (*model.Resolution, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.Resolution)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOResolution2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐResolution(ctx context.Context, sel ast.SelectionSet, v *model.Resolution) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

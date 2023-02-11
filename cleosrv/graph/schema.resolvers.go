@@ -56,6 +56,11 @@ func (r *mutationResolver) CreateForecast(ctx context.Context, forecast model.Ne
 	return &retForecast, nil
 }
 
+// ResolveForecast is the resolver for the resolveForecast field.
+func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID string, resolution *model.Resolution, correctOutcomeID *string) (*model.Forecast, error) {
+	panic(fmt.Errorf("not implemented: ResolveForecast - resolveForecast"))
+}
+
 // Forecasts is the resolver for the forecasts field.
 func (r *queryResolver) Forecasts(ctx context.Context) ([]*model.Forecast, error) {
 	// TODO depending on what data is being queried here I guess the query has

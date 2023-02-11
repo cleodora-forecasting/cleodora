@@ -96,6 +96,11 @@ input NewOutcome {
 
 type Mutation {
   createForecast(forecast: NewForecast!, estimate: NewEstimate!): Forecast!
+  resolveForecast(
+      forecastId: ID!,
+      resolution: Resolution,
+      correctOutcomeId: ID
+  ): Forecast
 }
 
 scalar Time
