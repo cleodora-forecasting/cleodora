@@ -32,11 +32,11 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 		fmt.Sprintf("%s/query", a.Config.URL),
 		http.DefaultClient,
 	)
-	forecast := gqclient.NewForecast{
+	forecast := gqclient.CreateForecastInput{
 		Title:       opts.Title,
-		Description: opts.Description,
+		Description: &opts.Description,
 		Resolves:    resolvesT,
-		Closes:      closesT,
+		Closes:      &closesT,
 	}
 
 	reqProbabilities, err := parseProbabilities(opts.Probabilities)
@@ -44,8 +44,8 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 		return fmt.Errorf("error parsing probabilities: %w", err)
 	}
 
-	estimate := gqclient.NewEstimate{
-		Reason:        opts.Reason,
+	estimate := gqclient.CreateEstimateInput{
+		Reason:        &opts.Reason,
 		Probabilities: reqProbabilities,
 	}
 	resp, err := gqclient.CreateForecast(ctx, client, forecast, estimate)
@@ -59,14 +59,14 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 	return nil
 }
 
-func parseProbabilities(probabilities map[string]int) ([]gqclient.NewProbability, error) {
-	var reqProbabilities []gqclient.NewProbability
+func parseProbabilities(probabilities map[string]int) ([]gqclient.CreateProbabilityInput, error) {
+	var reqProbabilities []gqclient.CreateProbabilityInput
 	for outcome, value := range probabilities {
 		reqProbabilities = append(
 			reqProbabilities,
-			gqclient.NewProbability{
+			gqclient.CreateProbabilityInput{
 				Value: value,
-				Outcome: gqclient.NewOutcome{
+				Outcome: gqclient.CreateOutcomeInput{
 					Text: outcome,
 				},
 			},

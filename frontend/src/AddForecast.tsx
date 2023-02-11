@@ -2,7 +2,7 @@ import React, {FC, useState} from "react";
 import {useMutation} from "@apollo/client";
 import {GET_FORECASTS} from "./ForecastList";
 import {gql} from "./__generated__"
-import {NewProbability} from "./__generated__/graphql";
+import {CreateProbabilityInput} from "./__generated__/graphql";
 import {
     CreateForecastMutation,
     CreateForecastMutationVariables,
@@ -20,7 +20,7 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 const ADD_FORECAST = gql(`
-    mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+    mutation createForecast($forecast: CreateForecastInput!, $estimate: CreateEstimateInput!) {
         createForecast(forecast: $forecast, estimate: $estimate) {
             id
             title
@@ -34,7 +34,7 @@ export const AddForecast: FC = () => {
     const [closes, setCloses] = React.useState<Dayjs | null>(null);
     const [resolves, setResolves] = useState(dayjs());
     const [reason, setReason] = useState('');
-    const [probabilities, setProbabilities] = useState([{outcome: {text: ''}, value: 0} as NewProbability]);
+    const [probabilities, setProbabilities] = useState([{outcome: {text: ''}, value: 0} as CreateProbabilityInput]);
 
 //    useMutation<TableSizeMutation, TableSizeMutationVariables>
     const [addForecast, {error, data}] = useMutation<CreateForecastMutation, CreateForecastMutationVariables>(ADD_FORECAST, {

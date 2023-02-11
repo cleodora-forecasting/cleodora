@@ -13,7 +13,8 @@ Currently the following technologies are being used:
 * [TypeScript](https://www.typescriptlang.org/), JavaScript with syntax for
   types
 * [SQLite](https://sqlite.org/index.html), a single-file database
-* [GORM](https://gorm.io/), a Go ORM (Object-Relational Mapping) library
+* [ent](https://entgo.io/), a Go ORM (Object-Relational Mapping) library and
+  GraphQL schema generator
 * [Cypress](https://www.cypress.io/) for end to end tests
 * [Cobra](https://github.com/spf13/cobra) and
   [Viper](https://github.com/spf13/viper) for building Go CLI applications
