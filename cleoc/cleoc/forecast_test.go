@@ -172,8 +172,8 @@ func TestApp_AddForecast_Error(t *testing.T) {
 				"value\\\":50,\\\"outcome\\\":{\\\"text\\\":\\\""+
 				"Yes\\\"}},{\\\"value\\\":50,\\\"outcome\\\":{"+
 				"\\\"text\\\":\\\"No\\\"}}]}},\\\"query\\\":"+
-				"\\\"mutation createForecast($forecast: CreateForecastInput!, "+
-				"$estimate: CreateEstimateInput!) {\\\\n  createForecast(forecast: "+
+				"\\\"mutation createForecast($forecast: NewForecast!, "+
+				"$estimate: NewEstimate!) {\\\\n  createForecast(forecast: "+
 				"$forecast, estimate: $estimate) {\\\\n    id\\\\n    "+
 				"title\\\\n    __typename\\\\n  }\\\\n}\\\"}\"}],\"data\":"+
 				"null}",
