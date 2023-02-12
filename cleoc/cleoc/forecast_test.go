@@ -49,10 +49,10 @@ func TestApp_AddForecast_Simple(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Verify the body contains the expected request
 		body, err := io.ReadAll(r.Body)
-		require.Nil(t, err)
+		require.NoError(t, err)
 		var bodyStruct createForecastBody
 		err = json.Unmarshal(body, &bodyStruct)
-		require.Nil(t, err)
+		require.NoError(t, err)
 
 		assert.Equal(t, "CreateForecast", bodyStruct.OperationName)
 		assert.Equal(t, "Will it rain tomorrow?", bodyStruct.Variables.Forecast.Title)
@@ -84,7 +84,7 @@ func TestApp_AddForecast_Simple(t *testing.T) {
 			w,
 			"{\"data\":{\"createForecast\":{\"id\":\"999\",\"__typename\":\"Forecast\"}}}",
 		)
-		require.Nil(t, err)
+		require.NoError(t, err)
 	}))
 	defer ts.Close()
 
@@ -114,10 +114,10 @@ func TestApp_AddForecast_Simple(t *testing.T) {
 	// but for documentation purposes make it clear that validation is
 	// expected before calling AddForecast
 	err := opts.Validate()
-	require.Nil(t, err)
+	require.NoError(t, err)
 
 	err = a.AddForecast(opts)
-	require.Nil(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, "999\n", out.String())
 	assert.Empty(t, errOut)
 }
@@ -126,10 +126,10 @@ func TestApp_AddForecast_Error(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Verify the body contains the expected request
 		body, err := io.ReadAll(r.Body)
-		require.Nil(t, err)
+		require.NoError(t, err)
 		var bodyStruct createForecastBody
 		err = json.Unmarshal(body, &bodyStruct)
-		require.Nil(t, err)
+		require.NoError(t, err)
 
 		assert.Equal(t, "CreateForecast", bodyStruct.OperationName)
 		assert.Equal(t, "Will it rain tomorrow?", bodyStruct.Variables.Forecast.Title)
@@ -178,7 +178,7 @@ func TestApp_AddForecast_Error(t *testing.T) {
 				"title\\\\n    __typename\\\\n  }\\\\n}\\\"}\"}],\"data\":"+
 				"null}",
 		)
-		require.Nil(t, err)
+		require.NoError(t, err)
 	}))
 	defer ts.Close()
 
@@ -208,7 +208,7 @@ func TestApp_AddForecast_Error(t *testing.T) {
 	// but for documentation purposes make it clear that validation is
 	// expected before calling AddForecast
 	err := opts.Validate()
-	require.Nil(t, err)
+	require.NoError(t, err)
 
 	err = a.AddForecast(opts)
 	assert.ErrorContains(t, err, "400 Bad Request")
@@ -277,10 +277,10 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				// Verify the body contains the expected request
 				body, err := io.ReadAll(r.Body)
-				require.Nil(t, err)
+				require.NoError(t, err)
 				var bodyStruct createForecastBody
 				err = json.Unmarshal(body, &bodyStruct)
-				require.Nil(t, err)
+				require.NoError(t, err)
 
 				assert.Equal(t, "CreateForecast", bodyStruct.OperationName)
 				assert.Equal(t, "Will it rain tomorrow?", bodyStruct.Variables.Forecast.Title)
@@ -296,7 +296,7 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 					w,
 					"{\"data\":{\"createForecast\":{\"id\":\"999\",\"__typename\":\"Forecast\"}}}",
 				)
-				require.Nil(t, err)
+				require.NoError(t, err)
 			}))
 			defer server.Close()
 
@@ -322,10 +322,10 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 			// but for documentation purposes make it clear that validation is
 			// expected before calling AddForecast
 			err := opts.Validate()
-			require.Nil(t, err)
+			require.NoError(t, err)
 
 			err = a.AddForecast(opts)
-			require.Nil(t, err)
+			require.NoError(t, err)
 			assert.Equal(t, "999\n", out.String())
 			assert.Empty(t, errOut)
 		})

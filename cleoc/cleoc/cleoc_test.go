@@ -22,7 +22,7 @@ func TestApp_Version(t *testing.T) {
 		Config: config,
 	}
 	err := a.Version()
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, "dev\n", out.String())
 	assert.Empty(t, errOut)
 }

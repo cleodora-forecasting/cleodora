@@ -27,10 +27,10 @@ func TestGetForecasts_LowLevel(t *testing.T) {
 	app := cleosrv.NewApp()
 	app.Config.Database = ":memory:"
 	db, err := app.InitDB()
-	require.Nil(t, err)
+	require.NoError(t, err)
 	resolver := graph.NewResolver(db)
 	err = resolver.AddDummyData()
-	require.Nil(t, err)
+	require.NoError(t, err)
 	srv := handler.NewDefaultServer(
 		generated.NewExecutableSchema(generated.Config{Resolvers: resolver}),
 	)
@@ -64,7 +64,7 @@ func TestGetForecasts_LowLevel(t *testing.T) {
 		"localhost:8080/query",
 		strings.NewReader(body),
 	)
-	require.Nil(t, err)
+	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json")
 
 	// Send the request
@@ -77,7 +77,7 @@ func TestGetForecasts_LowLevel(t *testing.T) {
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 
 	b, err := io.ReadAll(res.Body)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	assert.Contains(t, string(b), "Fabelmans")
 }
@@ -113,7 +113,7 @@ func TestGetForecasts_GQClient(t *testing.T) {
 	}
 
 	err := c.Post(query, &response)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	t.Log(response)
 
@@ -147,7 +147,7 @@ func TestGetForecasts_OnlySomeFields(t *testing.T) {
 	}
 
 	err := c.Post(query, &response)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	t.Log(response)
 
@@ -264,7 +264,7 @@ func TestCreateForecast(t *testing.T) {
 		client.Var("forecast", newForecast),
 		client.Var("estimate", newEstimate),
 	)
-	require.Nil(t, err)
+	require.NoError(t, err)
 
 	assert.NotEmpty(t, response.CreateForecast.Id)
 	assert.Equal(
@@ -384,7 +384,7 @@ func TestCreateForecast_XSS(t *testing.T) {
 		client.Var("forecast", newForecast),
 		client.Var("estimate", newEstimate),
 	)
-	require.Nil(t, err)
+	require.NoError(t, err)
 
 	assert.NotContains(t, response.CreateForecast.Title, attack)
 	assert.Equal(
@@ -667,7 +667,7 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 				client.Var("estimate", tt.newEstimate),
 			)
 			if tt.expectedErr == "" { // success
-				assert.Nil(t, err)
+				assert.NoError(t, err)
 			} else {
 				assert.ErrorContains(t, err, tt.expectedErr)
 			}
@@ -805,7 +805,7 @@ func TestCreateForecast_ValidateNewForecast(t *testing.T) {
 				client.Var("estimate", newEstimate),
 			)
 			if tt.expectedErr == "" { // success
-				assert.Nil(t, err)
+				assert.NoError(t, err)
 				assert.NotEmpty(t, response.CreateForecast.Id)
 				assert.Equal(t, tt.newForecast["title"], response.CreateForecast.Title)
 			} else {
@@ -871,7 +871,7 @@ func TestGetVersion(t *testing.T) {
 	}
 
 	err := c.Post(query, &resp)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	t.Log(resp)
 	assert.Equal(t, "dev", resp.Metadata.Version)
@@ -883,10 +883,10 @@ func initServerAndGetClient(t *testing.T) *client.Client {
 	app := cleosrv.NewApp()
 	app.Config.Database = ":memory:"
 	db, err := app.InitDB()
-	require.Nil(t, err)
+	require.NoError(t, err)
 	resolver := graph.NewResolver(db)
 	err = resolver.AddDummyData()
-	require.Nil(t, err)
+	require.NoError(t, err)
 	srv := handler.NewDefaultServer(
 		generated.NewExecutableSchema(generated.Config{Resolvers: resolver}),
 	)
