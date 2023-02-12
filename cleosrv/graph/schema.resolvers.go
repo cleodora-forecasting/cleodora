@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"html"
 	"time"
@@ -58,7 +59,139 @@ func (r *mutationResolver) CreateForecast(ctx context.Context, forecast model.Ne
 
 // ResolveForecast is the resolver for the resolveForecast field.
 func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID string, resolution *model.Resolution, correctOutcomeID *string) (*model.Forecast, error) {
-	panic(fmt.Errorf("not implemented: ResolveForecast - resolveForecast"))
+	tx := r.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		return nil, fmt.Errorf("error creating transaction: %w", err)
+	}
+
+	resolutionToSet := dbmodel.ResolutionResolved
+	if resolution != nil {
+		resolutionToSet = dbmodel.Resolution(*resolution)
+	}
+
+	if resolutionToSet == dbmodel.ResolutionUnresolved {
+		_ = tx.Rollback()
+		return nil, fmt.Errorf("resolution %v is not allowed", resolutionToSet)
+	}
+
+	if resolutionToSet == dbmodel.ResolutionResolved && correctOutcomeID == nil {
+		_ = tx.Rollback()
+		return nil, fmt.Errorf(
+			"to resolve as %v, an Outcome must be specified",
+			resolutionToSet,
+		)
+	}
+
+	forecast := dbmodel.Forecast{}
+	ret := tx.Where("id = ?", forecastID).First(&forecast)
+	if ret.Error != nil {
+		_ = tx.Rollback()
+		return nil, fmt.Errorf("error getting Forecast with ID %v: %w", forecastID, ret.Error)
+	}
+
+	if forecast.Resolution != dbmodel.ResolutionUnresolved {
+		_ = tx.Rollback()
+		return nil, errors.New("forecast has already been resolved")
+	}
+
+	forecast.Resolution = resolutionToSet
+	ret = tx.Save(&forecast)
+	if ret.Error != nil {
+		_ = tx.Rollback()
+		return nil, fmt.Errorf("error setting resolution: %w", ret.Error)
+	}
+
+	if resolutionToSet == dbmodel.ResolutionResolved {
+		outcome := dbmodel.Outcome{}
+		ret = tx.Where("id = ?", correctOutcomeID).First(&outcome)
+		if ret.Error != nil {
+			_ = tx.Rollback()
+			return nil, fmt.Errorf("error getting outcome: %w", ret.Error)
+		}
+
+		matchingForecast := dbmodel.Forecast{}
+		ret = tx.Joins(
+			"INNER JOIN estimates ON estimates.forecast_id == forecasts.id AND forecasts.id = ?",
+			forecastID,
+		).Joins(
+			"INNER JOIN probabilities ON probabilities.estimate_id == estimates.id",
+		).Joins(
+			"INNER JOIN outcomes ON outcomes.id == probabilities.outcome_id AND outcomes.id = ?",
+			correctOutcomeID,
+		).First(&matchingForecast)
+
+		if ret.Error != nil {
+			_ = tx.Rollback()
+			return nil, fmt.Errorf("can't match forecast and outcome: %w", ret.Error)
+		}
+
+		if ret.RowsAffected != 1 {
+			_ = tx.Rollback()
+			return nil, errors.New("can't match forecast and outcome")
+		}
+
+		outcome.Correct = true
+		ret = tx.Save(&outcome)
+		if ret.Error != nil {
+			_ = tx.Rollback()
+			return nil, fmt.Errorf("error updating outcome: %w", ret.Error)
+		}
+	}
+
+	// TODO preload uses multiple queries and can be optimized with joins
+	ret = tx.Preload("Estimates.Probabilities.Outcome").Find(&forecast)
+	if ret.Error != nil {
+		_ = tx.Rollback()
+		return nil, fmt.Errorf("error preloading: %w", ret.Error)
+	}
+
+	var estimates []*model.Estimate
+	for _, e := range forecast.Estimates {
+		var probabilities []*model.Probability
+		for _, p := range e.Probabilities {
+			probabilities = append(
+				probabilities,
+				&model.Probability{
+					ID:    fmt.Sprint(p.ID),
+					Value: p.Value,
+					Outcome: &model.Outcome{
+						ID:      fmt.Sprint(p.Outcome.ID),
+						Text:    p.Outcome.Text,
+						Correct: p.Outcome.Correct,
+					},
+				},
+			)
+		}
+		estimates = append(
+			estimates,
+			&model.Estimate{
+				ID:            fmt.Sprint(e.ID),
+				Created:       e.Created,
+				Reason:        e.Reason,
+				Probabilities: probabilities,
+			},
+		)
+	}
+	rf := model.Forecast{
+		ID:          fmt.Sprint(forecast.ID),
+		Title:       forecast.Title,
+		Description: forecast.Description,
+		Created:     forecast.Created,
+		Resolves:    forecast.Resolves,
+		Closes:      forecast.Closes,
+		Resolution:  model.Resolution(forecast.Resolution),
+		Estimates:   estimates,
+	}
+	ret = tx.Commit()
+	if ret.Error != nil {
+		return nil, fmt.Errorf("error committing: %w", ret.Error)
+	}
+	return &rf, nil
 }
 
 // Forecasts is the resolver for the forecasts field.
