@@ -77,7 +77,7 @@ func TestGetForecasts_LowLevel(t *testing.T) {
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 
 	b, err := io.ReadAll(res.Body)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Contains(t, string(b), "Fabelmans")
 }
@@ -113,7 +113,7 @@ func TestGetForecasts_GQClient(t *testing.T) {
 	}
 
 	err := c.Post(query, &response)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	t.Log(response)
 
@@ -147,7 +147,7 @@ func TestGetForecasts_OnlySomeFields(t *testing.T) {
 	}
 
 	err := c.Post(query, &response)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	t.Log(response)
 
@@ -805,7 +805,7 @@ func TestCreateForecast_ValidateNewForecast(t *testing.T) {
 				client.Var("estimate", newEstimate),
 			)
 			if tt.expectedErr == "" { // success
-				assert.NoError(t, err)
+				require.NoError(t, err)
 				assert.NotEmpty(t, response.CreateForecast.Id)
 				assert.Equal(t, tt.newForecast["title"], response.CreateForecast.Title)
 			} else {
@@ -871,7 +871,7 @@ func TestGetVersion(t *testing.T) {
 	}
 
 	err := c.Post(query, &resp)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	t.Log(resp)
 	assert.Equal(t, "dev", resp.Metadata.Version)
