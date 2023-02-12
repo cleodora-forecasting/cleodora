@@ -881,7 +881,7 @@ func initServerAndGetClient(t *testing.T) *client.Client {
 	t.Helper()
 	// Set up the server
 	app := cleosrv.NewApp()
-	app.Config.Database = ":memory:"
+	app.Config.Database = fmt.Sprintf("file:%s?mode=memory&cache=shared", t.Name())
 	db, err := app.InitDB()
 	require.NoError(t, err)
 	resolver := graph.NewResolver(db)
