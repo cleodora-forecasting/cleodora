@@ -1,6 +1,7 @@
 package integrationtest
 
 import (
+	"context"
 	"fmt"
 	"testing"
 	"time"
@@ -119,83 +120,44 @@ func TestGetForecasts_InvalidField(t *testing.T) {
 	assert.Contains(t, err.Error(), "Cannot query field \\\"does_not_exist\\\"")
 }
 
-func TestCreateForecast(t *testing.T) {
-	c := initServerAndGetClient(t)
+func timeToPointer(t time.Time) *time.Time {
+	return &t
+}
 
-	newForecast := map[string]interface{}{
-		"title": "Will it rain tomorrow?",
-		"description": "It counts as rain if between 9am and 9pm there are " +
+func TestCreateForecast(t *testing.T) {
+	c := initServerAndGetClient2(t)
+
+	newForecast := NewForecast{
+		Title: "Will it rain tomorrow?",
+		Description: "It counts as rain if between 9am and 9pm there are " +
 			"30 min or more of uninterrupted precipitation.",
-		"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
-		"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+		Closes:   timeToPointer(time.Now().Add(24 * time.Hour)),
+		Resolves: time.Now().Add(24 * time.Hour),
 	}
 
-	newEstimate := map[string]interface{}{
-		"reason": "My weather app says it will rain.",
-		"probabilities": []map[string]interface{}{
+	newEstimate := NewEstimate{
+		Reason: "My weather app says it will rain.",
+		Probabilities: []NewProbability{
 			{
-				"value": 70,
-				"outcome": map[string]interface{}{
-					"text": "Yes",
+				Value: 70,
+				Outcome: NewOutcome{
+					Text: "Yes",
 				},
 			},
 			{
-				"value": 30,
-				"outcome": map[string]interface{}{
-					"text": "No",
+				Value: 30,
+				Outcome: NewOutcome{
+					Text: "No",
 				},
 			},
 		},
 	}
 
-	query := `
-		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
-			createForecast(forecast: $forecast, estimate: $estimate) {
-				id
-				title
-				estimates {
-					id
-					created
-					reason
-					probabilities {
-						id
-						value
-						outcome {
-							id
-							text
-							correct
-						}
-					}
-				}
-			}
-		}`
-
-	var response struct {
-		CreateForecast struct {
-			Id        string
-			Title     string
-			Estimates []struct {
-				Id            string
-				Created       string
-				Reason        string
-				Probabilities []struct {
-					Id      string
-					Value   int
-					Outcome struct {
-						Id      string
-						Text    string
-						Correct bool
-					}
-				}
-			}
-		}
-	}
-
-	err := c.Post(
-		query,
-		&response,
-		client.Var("forecast", newForecast),
-		client.Var("estimate", newEstimate),
+	response, err := CreateForecast(
+		context.Background(),
+		c,
+		newForecast,
+		newEstimate,
 	)
 	require.NoError(t, err)
 
@@ -206,14 +168,14 @@ func TestCreateForecast(t *testing.T) {
 		response.CreateForecast.Title,
 	)
 
-	assert.Len(t, response.CreateForecast.Estimates, 1)
+	require.Len(t, response.CreateForecast.Estimates, 1)
 	assert.NotEmpty(t, response.CreateForecast.Estimates[0].Id)
 	assert.Equal(
 		t,
 		"My weather app says it will rain.",
 		response.CreateForecast.Estimates[0].Reason,
 	)
-	assert.Len(t, response.CreateForecast.Estimates[0].Probabilities, 2)
+	require.Len(t, response.CreateForecast.Estimates[0].Probabilities, 2)
 	assert.NotEmpty(t, response.CreateForecast.Estimates[0].Probabilities[0].Id)
 	assert.NotEmpty(t, response.CreateForecast.Estimates[0].Probabilities[1].Id)
 	assert.False(t, response.CreateForecast.Estimates[0].Probabilities[0].Outcome.Correct)
