@@ -100,6 +100,13 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 	}
 
 	forecast.Resolution = resolutionToSet
+	now := time.Now().UTC()
+	if forecast.Resolves.After(now) {
+		forecast.Resolves = now
+	}
+	if forecast.Closes != nil && forecast.Closes.After(now) {
+		forecast.Closes = &now
+	}
 	ret = tx.Save(&forecast)
 	if ret.Error != nil {
 		_ = tx.Rollback()
