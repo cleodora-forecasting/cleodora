@@ -26,7 +26,7 @@ import (
 func TestGetForecasts_LowLevel(t *testing.T) {
 	// Set up the server
 	app := cleosrv.NewApp()
-	app.Config.Database = ":memory:"
+	app.Config.Database = fmt.Sprintf("file:%s?mode=memory&cache=shared", t.Name())
 	db, err := app.InitDB()
 	require.NoError(t, err)
 	resolver := graph.NewResolver(db)
