@@ -810,6 +810,9 @@ func TestGetVersion(t *testing.T) {
 	assert.Equal(t, "dev", resp.Metadata.Version)
 }
 
+// initServerAndGetClient returns a gqlgen Client that is not meant for public
+// consumption by gqlgen. For that reason this function is deprecated, and it
+// should be replaced where possible with initServerAndGetClient2 .
 func initServerAndGetClient(t *testing.T) *client.Client {
 	t.Helper()
 	// Set up the server

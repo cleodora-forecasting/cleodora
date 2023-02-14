@@ -1,0 +1,14 @@
+# Default genqlient config; for full documentation see:
+# https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
+schema: ../../schema.graphql
+operations:
+  - test_operations.graphql
+
+generated: generated.go
+package: integrationtest
+
+optional: pointer
+
+bindings:
+  Time:
+    type: time.Time

@@ -1,63 +1,173 @@
 package integrationtest
 
 import (
+	"context"
+	"fmt"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
-	"github.com/99designs/gqlgen/client"
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/Khan/genqlient/graphql"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/cleodora-forecasting/cleodora/cleosrv/cleosrv"
+	"github.com/cleodora-forecasting/cleodora/cleosrv/graph"
+	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 )
 
-// TestResolveForecast tests the resolve forecast happy case.
-// It resolves the forecast and set one of the Outcomes as correct.
-// It also verifies that the same forecast can't be resolved again.
+// TestResolveForecast tests the happy case and some correct or incorrect
+// input combinations.
 func TestResolveForecast(t *testing.T) {
-	c := initServerAndGetClient(t)
+	getResolutionPointer := func(r Resolution) *Resolution {
+		return &r
+	}
 
-	queryGetForecasts := `
-		query GetForecasts {
-			forecasts {
-				id
-				title
-				resolution
-				estimates {
-					id
-					probabilities {
-						id
-						outcome {
-							id
-							text
-							correct
+	tests := []struct {
+		name                       string
+		inputResolution            *Resolution
+		includeInputOutcomeId      bool
+		expectedErr                string
+		expectedResolution         Resolution
+		expectedOutcomeCorrectness bool
+	}{
+		{
+			name:                       "happy case - set RESOLVED",
+			inputResolution:            getResolutionPointer(ResolutionResolved),
+			includeInputOutcomeId:      true,
+			expectedErr:                "",
+			expectedResolution:         ResolutionResolved,
+			expectedOutcomeCorrectness: true,
+		},
+		{
+			name:                       "with resolution RESOLVED the resolution can be omitted",
+			inputResolution:            nil,
+			includeInputOutcomeId:      true,
+			expectedErr:                "",
+			expectedResolution:         ResolutionResolved,
+			expectedOutcomeCorrectness: true,
+		},
+		{
+			name:                       "resolution RESOLVED is only allowed when passing the OutcomeId",
+			inputResolution:            getResolutionPointer(ResolutionResolved),
+			includeInputOutcomeId:      false,
+			expectedErr:                "Outcome must be specified",
+			expectedResolution:         ResolutionUnresolved,
+			expectedOutcomeCorrectness: false,
+		},
+		{
+			name:                       "can apply NOT_APPLICABLE resolution",
+			inputResolution:            getResolutionPointer(ResolutionNotApplicable),
+			includeInputOutcomeId:      false,
+			expectedErr:                "",
+			expectedResolution:         ResolutionNotApplicable,
+			expectedOutcomeCorrectness: false,
+		},
+		{
+			name:                       "can apply NOT_APPLICABLE resolution even with OutcomeId",
+			inputResolution:            getResolutionPointer(ResolutionNotApplicable),
+			includeInputOutcomeId:      true,
+			expectedErr:                "",
+			expectedResolution:         ResolutionNotApplicable,
+			expectedOutcomeCorrectness: false, // note the Outcome must not change
+		},
+		{
+			name:                       "applying UNRESOLVED resolution is not allowed",
+			inputResolution:            getResolutionPointer(ResolutionUnresolved),
+			includeInputOutcomeId:      true,
+			expectedErr:                "not allowed",
+			expectedResolution:         ResolutionUnresolved,
+			expectedOutcomeCorrectness: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Log(tt.name)
+		t.Run(tt.name, func(t *testing.T) {
+			c := initServerAndGetClient2(t)
+
+			queryResponse, err := GetForecasts(context.Background(), c)
+			require.NoError(t, err)
+
+			fmt.Println(queryResponse)
+
+			var fabelmansForecastId string
+			var yesOutcomeId string
+
+			for _, f := range queryResponse.Forecasts {
+				if strings.Contains(f.Title, "\"The Fabelmans\"") {
+					fabelmansForecastId = f.Id
+					require.Equal(t, ResolutionUnresolved, f.Resolution)
+					require.NotEmpty(t, f.Estimates)
+					for _, p := range f.Estimates[0].Probabilities {
+						require.False(t, p.Outcome.Correct)
+						if p.Outcome.Text == "Yes" {
+							yesOutcomeId = p.Outcome.Id
+							break
 						}
 					}
+					break
 				}
 			}
-		}`
+			require.NotEmpty(t, fabelmansForecastId)
+			require.NotEmpty(t, yesOutcomeId)
 
-	type responseForecast struct {
-		Id         string
-		Title      string
-		Resolution string
-		Estimates  []struct {
-			Id            string
-			Probabilities []struct {
-				Id      string
-				Outcome struct {
-					Id      string
-					Text    string
-					Correct bool
+			var inputOutcomeId *string
+			if tt.includeInputOutcomeId {
+				inputOutcomeId = &yesOutcomeId
+			}
+
+			_, err = ResolveForecast(
+				context.Background(),
+				c,
+				fabelmansForecastId,
+				inputOutcomeId,
+				tt.inputResolution,
+			)
+			if tt.expectedErr == "" {
+				assert.NoError(t, err)
+			} else {
+				assert.ErrorContains(t, err, tt.expectedErr)
+			}
+
+			// Verify what has changed
+			queryResponse, err = GetForecasts(context.Background(), c)
+			require.NoError(t, err)
+
+			for _, f := range queryResponse.Forecasts {
+				if strings.Contains(f.Title, "\"The Fabelmans\"") {
+					assert.Equal(t, tt.expectedResolution, f.Resolution)
+					require.NotEmpty(t, f.Estimates)
+					for _, p := range f.Estimates[0].Probabilities {
+						if p.Outcome.Text == "Yes" {
+							assert.Equal(t, tt.expectedOutcomeCorrectness, p.Outcome.Correct)
+						} else {
+							assert.False(
+								t,
+								p.Outcome.Correct,
+								"all other outcomes must be false",
+							)
+						}
+					}
+					break
 				}
 			}
-		}
+		})
 	}
+}
 
-	var queryResponse struct {
-		Forecasts []responseForecast
-	}
+// TestResolveForecast_VerifyResponseValue tests the resolve forecast happy
+// case and verifies the response contains the expected results. It resolves
+// the forecast and set one of the Outcomes as correct.
+// It also verifies that the same forecast can't be resolved again.
+func TestResolveForecast_VerifyResponseValue(t *testing.T) {
+	c := initServerAndGetClient2(t)
 
-	err := c.Post(queryGetForecasts, &queryResponse)
+	queryResponse, err := GetForecasts(context.Background(), c)
 	require.NoError(t, err)
+
+	fmt.Println(queryResponse)
 
 	var fabelmansForecastId string
 	var yesOutcomeId string
@@ -65,7 +175,7 @@ func TestResolveForecast(t *testing.T) {
 	for _, f := range queryResponse.Forecasts {
 		if strings.Contains(f.Title, "\"The Fabelmans\"") {
 			fabelmansForecastId = f.Id
-			require.Equal(t, "UNRESOLVED", f.Resolution)
+			require.Equal(t, ResolutionUnresolved, f.Resolution)
 			require.NotEmpty(t, f.Estimates)
 			for _, p := range f.Estimates[0].Probabilities {
 				require.False(t, p.Outcome.Correct)
@@ -80,40 +190,17 @@ func TestResolveForecast(t *testing.T) {
 	require.NotEmpty(t, fabelmansForecastId)
 	require.NotEmpty(t, yesOutcomeId)
 
-	mutationResolveForecast := `
-		mutation resolveForecast($forecastId: ID!, $correctOutcomeId: ID) {
-			resolveForecast(forecastId: $forecastId, correctOutcomeId: $correctOutcomeId) {
-				id
-				title
-				resolution
-				estimates {
-					id
-					probabilities {
-						id
-						outcome {
-							id
-							text
-							correct
-						}
-					}
-				}
-			}
-		}`
-
-	var resolveForecastResponse struct {
-		ResolveForecast responseForecast
-	}
-
-	err = c.Post(
-		mutationResolveForecast,
-		&resolveForecastResponse,
-		client.Var("forecastId", fabelmansForecastId),
-		client.Var("correctOutcomeId", yesOutcomeId),
+	resolveForecastResponse, err := ResolveForecast(
+		context.Background(),
+		c,
+		fabelmansForecastId,
+		&yesOutcomeId,
+		nil,
 	)
 	require.NoError(t, err)
 
 	assert.Contains(t, resolveForecastResponse.ResolveForecast.Title, "\"The Fabelmans\"")
-	assert.Equal(t, "RESOLVED", resolveForecastResponse.ResolveForecast.Resolution)
+	assert.Equal(t, ResolutionResolved, resolveForecastResponse.ResolveForecast.Resolution)
 
 	require.NotEmpty(t, resolveForecastResponse.ResolveForecast.Estimates)
 	for _, p := range resolveForecastResponse.ResolveForecast.Estimates[0].Probabilities {
@@ -125,14 +212,12 @@ func TestResolveForecast(t *testing.T) {
 	}
 
 	// Verify that the same forecast can't be resolved again
-	var resolveForecastResponse2 struct {
-		ResolveForecast responseForecast
-	}
-	err = c.Post(
-		mutationResolveForecast,
-		&resolveForecastResponse2,
-		client.Var("forecastId", fabelmansForecastId),
-		client.Var("correctOutcomeId", yesOutcomeId),
+	_, err = ResolveForecast(
+		context.Background(),
+		c,
+		fabelmansForecastId,
+		&yesOutcomeId,
+		nil,
 	)
 	assert.ErrorContains(t, err, "forecast has already been resolved")
 }
@@ -140,50 +225,9 @@ func TestResolveForecast(t *testing.T) {
 // TestResolveForecast_WrongOutcomeId verifies that it's not possible to
 // specify an outcome ID of a different forecast when resolving the forecast.
 func TestResolveForecast_WrongOutcomeId(t *testing.T) {
-	c := initServerAndGetClient(t)
+	c := initServerAndGetClient2(t)
 
-	queryGetForecasts := `
-		query GetForecasts {
-			forecasts {
-				id
-				title
-				resolution
-				estimates {
-					id
-					probabilities {
-						id
-						outcome {
-							id
-							text
-							correct
-						}
-					}
-				}
-			}
-		}`
-
-	type responseForecast struct {
-		Id         string
-		Title      string
-		Resolution string
-		Estimates  []struct {
-			Id            string
-			Probabilities []struct {
-				Id      string
-				Outcome struct {
-					Id      string
-					Text    string
-					Correct bool
-				}
-			}
-		}
-	}
-
-	var queryResponse struct {
-		Forecasts []responseForecast
-	}
-
-	err := c.Post(queryGetForecasts, &queryResponse)
+	queryResponse, err := GetForecasts(context.Background(), c)
 	require.NoError(t, err)
 
 	var fabelmansForecastId string
@@ -192,7 +236,7 @@ func TestResolveForecast_WrongOutcomeId(t *testing.T) {
 	for _, f := range queryResponse.Forecasts {
 		if strings.Contains(f.Title, "\"The Fabelmans\"") {
 			fabelmansForecastId = f.Id
-			require.Equal(t, "UNRESOLVED", f.Resolution)
+			require.Equal(t, ResolutionUnresolved, f.Resolution)
 			require.NotEmpty(t, f.Estimates)
 			for _, p := range f.Estimates[0].Probabilities {
 				require.False(t, p.Outcome.Correct)
@@ -211,50 +255,23 @@ func TestResolveForecast_WrongOutcomeId(t *testing.T) {
 	require.NotEmpty(t, fabelmansForecastId)
 	require.NotEmpty(t, invalidOutcomeId)
 
-	mutationResolveForecast := `
-		mutation resolveForecast($forecastId: ID!, $correctOutcomeId: ID) {
-			resolveForecast(forecastId: $forecastId, correctOutcomeId: $correctOutcomeId) {
-				id
-				title
-				resolution
-				estimates {
-					id
-					probabilities {
-						id
-						outcome {
-							id
-							text
-							correct
-						}
-					}
-				}
-			}
-		}`
-
-	var resolveForecastResponse struct {
-		ResolveForecast responseForecast
-	}
-
-	err = c.Post(
-		mutationResolveForecast,
-		&resolveForecastResponse,
-		client.Var("forecastId", fabelmansForecastId),
-		client.Var("correctOutcomeId", invalidOutcomeId),
+	_, err = ResolveForecast(
+		context.Background(),
+		c,
+		fabelmansForecastId,
+		&invalidOutcomeId,
+		nil,
 	)
 	assert.ErrorContains(t, err, "can't match")
 
 	// Get all forecasts again and verify nothing has been changed
 
-	queryResponse = struct {
-		Forecasts []responseForecast
-	}{}
-
-	err = c.Post(queryGetForecasts, &queryResponse)
+	queryResponse, err = GetForecasts(context.Background(), c)
 	require.NoError(t, err)
 
 	for _, f := range queryResponse.Forecasts {
 		if f.Id == fabelmansForecastId {
-			assert.Equal(t, "UNRESOLVED", f.Resolution)
+			assert.Equal(t, ResolutionUnresolved, f.Resolution)
 		}
 		require.NotEmpty(t, f.Estimates)
 		for _, p := range f.Estimates[0].Probabilities {
@@ -270,436 +287,20 @@ func TestResolveForecast_WrongOutcomeId(t *testing.T) {
 	}
 }
 
-// TestResolveForecast_WithResolutionNA_NoOutcome verifies that it's
-// possible to resolve a forecast as NA (not applicable) and that in that case
-// no outcome is set to correct.
-func TestResolveForecast_WithResolutionNA_NoOutcome(t *testing.T) {
-	c := initServerAndGetClient(t)
-
-	queryGetForecasts := `
-		query GetForecasts {
-			forecasts {
-				id
-				title
-				resolution
-				estimates {
-					id
-					probabilities {
-						id
-						outcome {
-							id
-							text
-							correct
-						}
-					}
-				}
-			}
-		}`
-
-	type responseForecast struct {
-		Id         string
-		Title      string
-		Resolution string
-		Estimates  []struct {
-			Id            string
-			Probabilities []struct {
-				Id      string
-				Outcome struct {
-					Id      string
-					Text    string
-					Correct bool
-				}
-			}
-		}
-	}
-
-	var queryResponse struct {
-		Forecasts []responseForecast
-	}
-
-	err := c.Post(queryGetForecasts, &queryResponse)
+// initServerAndGetClient2 returns a graphql.Client generated by genqlient
+func initServerAndGetClient2(t *testing.T) graphql.Client {
+	t.Helper()
+	app := cleosrv.NewApp()
+	app.Config.Database = fmt.Sprintf("file:%s?mode=memory&cache=shared", t.Name())
+	db, err := app.InitDB()
 	require.NoError(t, err)
-
-	var fabelmansForecastId string
-
-	for _, f := range queryResponse.Forecasts {
-		if strings.Contains(f.Title, "\"The Fabelmans\"") {
-			fabelmansForecastId = f.Id
-			require.Equal(t, "UNRESOLVED", f.Resolution)
-			break
-		}
-	}
-	require.NotEmpty(t, fabelmansForecastId)
-
-	mutationResolveForecast := `
-		mutation resolveForecast($forecastId: ID!, $resolution: Resolution) {
-			resolveForecast(
-				forecastId: $forecastId,
-				resolution: $resolution,
-			) {
-				id
-				title
-				resolution
-			}
-		}`
-
-	var resolveForecastResponse struct {
-		ResolveForecast responseForecast
-	}
-
-	err = c.Post(
-		mutationResolveForecast,
-		&resolveForecastResponse,
-		client.Var("forecastId", fabelmansForecastId),
-		client.Var("resolution", "NOT_APPLICABLE"),
+	resolver := graph.NewResolver(db)
+	err = resolver.AddDummyData()
+	require.NoError(t, err)
+	srv := httptest.NewServer(
+		handler.NewDefaultServer(
+			generated.NewExecutableSchema(generated.Config{Resolvers: resolver}),
+		),
 	)
-	require.NoError(t, err)
-
-	assert.Contains(t, resolveForecastResponse.ResolveForecast.Title, "\"The Fabelmans\"")
-	assert.Equal(t, "NOT_APPLICABLE", resolveForecastResponse.ResolveForecast.Resolution)
-
-	// Get all forecasts again and verify no outcome is correct
-
-	queryResponse = struct {
-		Forecasts []responseForecast
-	}{}
-
-	err = c.Post(queryGetForecasts, &queryResponse)
-	require.NoError(t, err)
-
-	for _, f := range queryResponse.Forecasts {
-		if f.Id == fabelmansForecastId {
-			assert.Equal(t, "NOT_APPLICABLE", f.Resolution)
-			require.NotEmpty(t, f.Estimates)
-			for _, p := range f.Estimates[0].Probabilities {
-				assert.False(
-					t,
-					p.Outcome.Correct,
-					"the outcome %v should still have Correct == false",
-					p.Outcome.Text,
-				)
-			}
-		}
-	}
-}
-
-// TestResolveForecast_WithResolutionNA_AndOutcome verifies that it's possible
-// to resolve a forecast as NA (not applicable) and that in that case no
-// outcome is set to correct even if that outcome is passed as a parameter.
-func TestResolveForecast_WithResolutionNA_AndOutcome(t *testing.T) {
-	c := initServerAndGetClient(t)
-
-	queryGetForecasts := `
-		query GetForecasts {
-			forecasts {
-				id
-				title
-				resolution
-				estimates {
-					id
-					probabilities {
-						id
-						outcome {
-							id
-							text
-							correct
-						}
-					}
-				}
-			}
-		}`
-
-	type responseForecast struct {
-		Id         string
-		Title      string
-		Resolution string
-		Estimates  []struct {
-			Id            string
-			Probabilities []struct {
-				Id      string
-				Outcome struct {
-					Id      string
-					Text    string
-					Correct bool
-				}
-			}
-		}
-	}
-
-	var queryResponse struct {
-		Forecasts []responseForecast
-	}
-
-	err := c.Post(queryGetForecasts, &queryResponse)
-	require.NoError(t, err)
-
-	var fabelmansForecastId string
-	var yesOutcomeId string
-
-	for _, f := range queryResponse.Forecasts {
-		if strings.Contains(f.Title, "\"The Fabelmans\"") {
-			fabelmansForecastId = f.Id
-			require.Equal(t, "UNRESOLVED", f.Resolution)
-			require.NotEmpty(t, f.Estimates)
-			for _, p := range f.Estimates[0].Probabilities {
-				require.False(t, p.Outcome.Correct)
-				if p.Outcome.Text == "Yes" {
-					yesOutcomeId = p.Outcome.Id
-					break
-				}
-			}
-			break
-		}
-	}
-	require.NotEmpty(t, fabelmansForecastId)
-	require.NotEmpty(t, yesOutcomeId)
-
-	mutationResolveForecast := `
-		mutation resolveForecast(
-			$forecastId: ID!,
-			$resolution: Resolution,
-			$correctOutcomeId: ID,
-		) {
-			resolveForecast(
-				forecastId: $forecastId,
-				resolution: $resolution,
-				correctOutcomeId: $correctOutcomeId,
-			) {
-				id
-				title
-				resolution
-			}
-		}`
-
-	var resolveForecastResponse struct {
-		ResolveForecast responseForecast
-	}
-
-	err = c.Post(
-		mutationResolveForecast,
-		&resolveForecastResponse,
-		client.Var("forecastId", fabelmansForecastId),
-		client.Var("resolution", "NOT_APPLICABLE"),
-		client.Var("correctOutcomeId", yesOutcomeId),
-	)
-	require.NoError(t, err)
-
-	assert.Contains(t, resolveForecastResponse.ResolveForecast.Title, "\"The Fabelmans\"")
-	assert.Equal(t, "NOT_APPLICABLE", resolveForecastResponse.ResolveForecast.Resolution)
-
-	// Get all forecasts again and verify no outcome is correct
-
-	queryResponse = struct {
-		Forecasts []responseForecast
-	}{}
-
-	err = c.Post(queryGetForecasts, &queryResponse)
-	require.NoError(t, err)
-
-	for _, f := range queryResponse.Forecasts {
-		if f.Id == fabelmansForecastId {
-			assert.Equal(t, "NOT_APPLICABLE", f.Resolution)
-			require.NotEmpty(t, f.Estimates)
-			for _, p := range f.Estimates[0].Probabilities {
-				assert.False(
-					t,
-					p.Outcome.Correct,
-					"the outcome %v should still have Correct == false",
-					p.Outcome.Text,
-				)
-			}
-		}
-	}
-}
-
-// TestResolveForecast_NoOutcome verifies that it's not possible to resolve a
-// forecasts as RESOLVED if no Outcome is passed in.
-func TestResolveForecast_NoOutcome(t *testing.T) {
-	c := initServerAndGetClient(t)
-
-	queryGetForecasts := `
-		query GetForecasts {
-			forecasts {
-				id
-				title
-				resolution
-				estimates {
-					id
-					probabilities {
-						id
-						outcome {
-							id
-							text
-							correct
-						}
-					}
-				}
-			}
-		}`
-
-	type responseForecast struct {
-		Id         string
-		Title      string
-		Resolution string
-		Estimates  []struct {
-			Id            string
-			Probabilities []struct {
-				Id      string
-				Outcome struct {
-					Id      string
-					Text    string
-					Correct bool
-				}
-			}
-		}
-	}
-
-	var queryResponse struct {
-		Forecasts []responseForecast
-	}
-
-	err := c.Post(queryGetForecasts, &queryResponse)
-	require.NoError(t, err)
-
-	var fabelmansForecastId string
-	var yesOutcomeId string
-
-	for _, f := range queryResponse.Forecasts {
-		if strings.Contains(f.Title, "\"The Fabelmans\"") {
-			fabelmansForecastId = f.Id
-			require.Equal(t, "UNRESOLVED", f.Resolution)
-			require.NotEmpty(t, f.Estimates)
-			for _, p := range f.Estimates[0].Probabilities {
-				require.False(t, p.Outcome.Correct)
-				if p.Outcome.Text == "Yes" {
-					yesOutcomeId = p.Outcome.Id
-					break
-				}
-			}
-			break
-		}
-	}
-	require.NotEmpty(t, fabelmansForecastId)
-	require.NotEmpty(t, yesOutcomeId)
-
-	mutationResolveForecast := `
-		mutation resolveForecast($forecastId: ID!) {
-			resolveForecast(forecastId: $forecastId) {
-				id
-				title
-				resolution
-			}
-		}`
-
-	var resolveForecastResponse struct {
-		ResolveForecast responseForecast
-	}
-
-	err = c.Post(
-		mutationResolveForecast,
-		&resolveForecastResponse,
-		client.Var("forecastId", fabelmansForecastId),
-	)
-	assert.ErrorContains(t, err, "to resolve as RESOLVED, an Outcome must be specified")
-}
-
-// TestResolveForecast_WithResolutionUnresolved verifies that it's not possible
-// to resolve with resolution UNRESOLVED.
-func TestResolveForecast_WithResolutionUnresolved(t *testing.T) {
-	c := initServerAndGetClient(t)
-
-	queryGetForecasts := `
-		query GetForecasts {
-			forecasts {
-				id
-				title
-				resolution
-				estimates {
-					id
-					probabilities {
-						id
-						outcome {
-							id
-							text
-							correct
-						}
-					}
-				}
-			}
-		}`
-
-	type responseForecast struct {
-		Id         string
-		Title      string
-		Resolution string
-		Estimates  []struct {
-			Id            string
-			Probabilities []struct {
-				Id      string
-				Outcome struct {
-					Id      string
-					Text    string
-					Correct bool
-				}
-			}
-		}
-	}
-
-	var queryResponse struct {
-		Forecasts []responseForecast
-	}
-
-	err := c.Post(queryGetForecasts, &queryResponse)
-	require.NoError(t, err)
-
-	var fabelmansForecastId string
-	var yesOutcomeId string
-
-	for _, f := range queryResponse.Forecasts {
-		if strings.Contains(f.Title, "\"The Fabelmans\"") {
-			fabelmansForecastId = f.Id
-			require.Equal(t, "UNRESOLVED", f.Resolution)
-			require.NotEmpty(t, f.Estimates)
-			for _, p := range f.Estimates[0].Probabilities {
-				require.False(t, p.Outcome.Correct)
-				if p.Outcome.Text == "Yes" {
-					yesOutcomeId = p.Outcome.Id
-					break
-				}
-			}
-			break
-		}
-	}
-	require.NotEmpty(t, fabelmansForecastId)
-	require.NotEmpty(t, yesOutcomeId)
-
-	mutationResolveForecast := `
-		mutation resolveForecast(
-			$forecastId: ID!,
-			$resolution: Resolution,
-			$correctOutcomeId: ID,
-		) {
-			resolveForecast(
-				forecastId: $forecastId,
-				resolution: $resolution,
-				correctOutcomeId: $correctOutcomeId,
-			) {
-				id
-				title
-				resolution
-			}
-		}`
-
-	var resolveForecastResponse struct {
-		ResolveForecast responseForecast
-	}
-
-	err = c.Post(
-		mutationResolveForecast,
-		&resolveForecastResponse,
-		client.Var("forecastId", fabelmansForecastId),
-		client.Var("resolution", "UNRESOLVED"),
-		client.Var("correctOutcomeId", yesOutcomeId),
-	)
-	assert.ErrorContains(t, err, "resolution UNRESOLVED is not allowed")
+	return graphql.NewClient(srv.URL, srv.Client())
 }
