@@ -50,6 +50,12 @@ type Metadata struct {
 type NewEstimate struct {
 	Reason        string            `json:"reason"`
 	Probabilities []*NewProbability `json:"probabilities"`
+	// An optional date in the past when you created this estimate. This can be
+	// useful for cases when you wrote it down on a piece of paper or when importing
+	// from other software. When creating a new Forecast this value will be for
+	// the first Estimate (which will get the same timestamp as the
+	// Forecast.Created).
+	Created *time.Time `json:"created"`
 }
 
 type NewForecast struct {
@@ -57,6 +63,10 @@ type NewForecast struct {
 	Description string     `json:"description"`
 	Resolves    time.Time  `json:"resolves"`
 	Closes      *time.Time `json:"closes"`
+	// An optional date in the past when you created this forecast. This can be
+	// useful for cases when you wrote it down on a piece of paper or when importing
+	// from other software.
+	Created *time.Time `json:"created"`
 }
 
 type NewOutcome struct {

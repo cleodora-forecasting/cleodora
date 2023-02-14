@@ -240,6 +240,12 @@ func (v *GetForecastsResponse) GetForecasts() []GetForecastsForecastsForecast { 
 type NewEstimate struct {
 	Reason        string           `json:"reason"`
 	Probabilities []NewProbability `json:"probabilities"`
+	// An optional date in the past when you created this estimate. This can be
+	// useful for cases when you wrote it down on a piece of paper or when importing
+	// from other software. When creating a new Forecast this value will be for
+	// the first Estimate (which will get the same timestamp as the
+	// Forecast.Created).
+	Created *time.Time `json:"created"`
 }
 
 // GetReason returns NewEstimate.Reason, and is useful for accessing the field via an interface.
@@ -248,11 +254,18 @@ func (v *NewEstimate) GetReason() string { return v.Reason }
 // GetProbabilities returns NewEstimate.Probabilities, and is useful for accessing the field via an interface.
 func (v *NewEstimate) GetProbabilities() []NewProbability { return v.Probabilities }
 
+// GetCreated returns NewEstimate.Created, and is useful for accessing the field via an interface.
+func (v *NewEstimate) GetCreated() *time.Time { return v.Created }
+
 type NewForecast struct {
 	Title       string     `json:"title"`
 	Description string     `json:"description"`
 	Resolves    time.Time  `json:"resolves"`
 	Closes      *time.Time `json:"closes"`
+	// An optional date in the past when you created this forecast. This can be
+	// useful for cases when you wrote it down on a piece of paper or when importing
+	// from other software.
+	Created *time.Time `json:"created"`
 }
 
 // GetTitle returns NewForecast.Title, and is useful for accessing the field via an interface.
@@ -266,6 +279,9 @@ func (v *NewForecast) GetResolves() time.Time { return v.Resolves }
 
 // GetCloses returns NewForecast.Closes, and is useful for accessing the field via an interface.
 func (v *NewForecast) GetCloses() *time.Time { return v.Closes }
+
+// GetCreated returns NewForecast.Created, and is useful for accessing the field via an interface.
+func (v *NewForecast) GetCreated() *time.Time { return v.Created }
 
 type NewOutcome struct {
 	Text string `json:"text"`

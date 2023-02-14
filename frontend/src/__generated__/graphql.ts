@@ -82,12 +82,26 @@ export type MutationResolveForecastArgs = {
 };
 
 export type NewEstimate = {
+  /**
+   * An optional date in the past when you created this estimate. This can be
+   * useful for cases when you wrote it down on a piece of paper or when importing
+   * from other software. When creating a new Forecast this value will be for
+   * the first Estimate (which will get the same timestamp as the
+   * Forecast.Created).
+   */
+  created?: InputMaybe<Scalars['Time']>;
   probabilities: Array<NewProbability>;
   reason: Scalars['String'];
 };
 
 export type NewForecast = {
   closes?: InputMaybe<Scalars['Time']>;
+  /**
+   * An optional date in the past when you created this forecast. This can be
+   * useful for cases when you wrote it down on a piece of paper or when importing
+   * from other software.
+   */
+  created?: InputMaybe<Scalars['Time']>;
   description: Scalars['String'];
   resolves: Scalars['Time'];
   title: Scalars['String'];

@@ -75,11 +75,27 @@ input NewForecast {
   description: String!
   resolves: Time!
   closes: Time
+
+  """
+  An optional date in the past when you created this forecast. This can be
+  useful for cases when you wrote it down on a piece of paper or when importing
+  from other software.
+  """
+  created: Time
 }
 
 input NewEstimate {
   reason: String!
   probabilities: [NewProbability!]!
+
+  """
+  An optional date in the past when you created this estimate. This can be
+  useful for cases when you wrote it down on a piece of paper or when importing
+  from other software. When creating a new Forecast this value will be for
+  the first Estimate (which will get the same timestamp as the
+  Forecast.Created).
+  """
+  created: Time
 }
 
 input NewProbability {

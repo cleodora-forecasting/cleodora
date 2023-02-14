@@ -433,11 +433,27 @@ input NewForecast {
   description: String!
   resolves: Time!
   closes: Time
+
+  """
+  An optional date in the past when you created this forecast. This can be
+  useful for cases when you wrote it down on a piece of paper or when importing
+  from other software.
+  """
+  created: Time
 }
 
 input NewEstimate {
   reason: String!
   probabilities: [NewProbability!]!
+
+  """
+  An optional date in the past when you created this estimate. This can be
+  useful for cases when you wrote it down on a piece of paper or when importing
+  from other software. When creating a new Forecast this value will be for
+  the first Estimate (which will get the same timestamp as the
+  Forecast.Created).
+  """
+  created: Time
 }
 
 input NewProbability {
@@ -3608,7 +3624,7 @@ func (ec *executionContext) unmarshalInputNewEstimate(ctx context.Context, obj i
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"reason", "probabilities"}
+	fieldsInOrder := [...]string{"reason", "probabilities", "created"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -3631,6 +3647,14 @@ func (ec *executionContext) unmarshalInputNewEstimate(ctx context.Context, obj i
 			if err != nil {
 				return it, err
 			}
+		case "created":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("created"))
+			it.Created, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		}
 	}
 
@@ -3644,7 +3668,7 @@ func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj i
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"title", "description", "resolves", "closes"}
+	fieldsInOrder := [...]string{"title", "description", "resolves", "closes", "created"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -3680,6 +3704,14 @@ func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj i
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("closes"))
 			it.Closes, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "created":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("created"))
+			it.Created, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
