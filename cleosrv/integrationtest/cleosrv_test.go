@@ -8,6 +8,7 @@ import (
 
 	"github.com/99designs/gqlgen/client"
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/Khan/genqlient/graphql"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -97,7 +98,7 @@ func TestGetForecasts_OnlySomeFields(t *testing.T) {
 // TestGetForecasts_InvalidField verifies that an error is returned when
 // querying for a field that does not exist.
 func TestGetForecasts_InvalidField(t *testing.T) {
-	c := initServerAndGetClient(t)
+	c := initServerAndGetClient2(t)
 
 	query := `
 		query GetForecasts {
@@ -108,15 +109,17 @@ func TestGetForecasts_InvalidField(t *testing.T) {
 			}
 		}`
 
-	var response struct {
-		Forecasts []struct {
-			Id    string
-			Title string
-		}
+	req := graphql.Request{
+		Query: query,
 	}
+	response := graphql.Response{}
 
-	err := c.Post(query, &response)
-	assert.Contains(t, err.Error(), "http 422")
+	err := c.MakeRequest(
+		context.Background(),
+		&req,
+		&response,
+	)
+	assert.Contains(t, err.Error(), "422")
 	assert.Contains(t, err.Error(), "Cannot query field \\\"does_not_exist\\\"")
 }
 
