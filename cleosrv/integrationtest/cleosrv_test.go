@@ -2,19 +2,13 @@ package integrationtest
 
 import (
 	"context"
-	"fmt"
 	"testing"
 	"time"
 
 	"github.com/99designs/gqlgen/client"
-	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/Khan/genqlient/graphql"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-
-	"github.com/cleodora-forecasting/cleodora/cleosrv/cleosrv"
-	"github.com/cleodora-forecasting/cleodora/cleosrv/graph"
-	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 )
 
 // TestGetForecasts_GQClient verifies that the forecasts are returned and
@@ -123,10 +117,6 @@ func TestGetForecasts_InvalidField(t *testing.T) {
 	assert.Contains(t, err.Error(), "Cannot query field \\\"does_not_exist\\\"")
 }
 
-func timeToPointer(t time.Time) *time.Time {
-	return &t
-}
-
 func TestCreateForecast(t *testing.T) {
 	c := initServerAndGetClient2(t)
 
@@ -134,7 +124,7 @@ func TestCreateForecast(t *testing.T) {
 		Title: "Will it rain tomorrow?",
 		Description: "It counts as rain if between 9am and 9pm there are " +
 			"30 min or more of uninterrupted precipitation.",
-		Closes:   timeToPointer(time.Now().Add(24 * time.Hour)),
+		Closes:   timePointer(time.Now().Add(24 * time.Hour)),
 		Resolves: time.Now().Add(24 * time.Hour),
 	}
 
@@ -773,25 +763,4 @@ func TestGetVersion(t *testing.T) {
 
 	t.Log(resp)
 	assert.Equal(t, "dev", resp.Metadata.Version)
-}
-
-// initServerAndGetClient returns a gqlgen Client that is not meant for public
-// consumption by gqlgen. For that reason this function is deprecated, and it
-// should be replaced where possible with initServerAndGetClient2 .
-func initServerAndGetClient(t *testing.T) *client.Client {
-	t.Helper()
-	// Set up the server
-	app := cleosrv.NewApp()
-	app.Config.Database = fmt.Sprintf("file:%s?mode=memory&cache=shared", t.Name())
-	db, err := app.InitDB()
-	require.NoError(t, err)
-	resolver := graph.NewResolver(db)
-	err = resolver.AddDummyData()
-	require.NoError(t, err)
-	srv := handler.NewDefaultServer(
-		generated.NewExecutableSchema(generated.Config{Resolvers: resolver}),
-	)
-
-	c := client.New(srv)
-	return c
 }
