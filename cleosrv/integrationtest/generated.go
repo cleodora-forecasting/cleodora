@@ -14,8 +14,21 @@ import (
 //
 // A prediction about the future.
 type CreateForecastCreateForecast struct {
-	Id        string                                           `json:"id"`
-	Title     string                                           `json:"title"`
+	Id      string    `json:"id"`
+	Title   string    `json:"title"`
+	Created time.Time `json:"created"`
+	// The point in time at which you predict you will be able to resolve whether
+	// how the forecast resolved.
+	Resolves time.Time `json:"resolves"`
+	// The point in time at which you no longer want to update your probability
+	// estimates for the forecast. In most cases you won't need this. One example
+	// where you might is when you want to predict the outcome of an exam. You may
+	// want to set 'closes' to the time right before the exam starts, even though
+	// 'resolves' is several weeks later (when the exam results are published). This
+	// way your prediction history will only reflect your estimations before you
+	// took the exam, which is something you may want (or not, in which case you
+	// could simply not set 'closes').
+	Closes    *time.Time                                       `json:"closes"`
 	Estimates []*CreateForecastCreateForecastEstimatesEstimate `json:"estimates"`
 }
 
@@ -24,6 +37,15 @@ func (v *CreateForecastCreateForecast) GetId() string { return v.Id }
 
 // GetTitle returns CreateForecastCreateForecast.Title, and is useful for accessing the field via an interface.
 func (v *CreateForecastCreateForecast) GetTitle() string { return v.Title }
+
+// GetCreated returns CreateForecastCreateForecast.Created, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecast) GetCreated() time.Time { return v.Created }
+
+// GetResolves returns CreateForecastCreateForecast.Resolves, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecast) GetResolves() time.Time { return v.Resolves }
+
+// GetCloses returns CreateForecastCreateForecast.Closes, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecast) GetCloses() *time.Time { return v.Closes }
 
 // GetEstimates returns CreateForecastCreateForecast.Estimates, and is useful for accessing the field via an interface.
 func (v *CreateForecastCreateForecast) GetEstimates() []*CreateForecastCreateForecastEstimatesEstimate {
@@ -469,6 +491,9 @@ mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
 	createForecast(forecast: $forecast, estimate: $estimate) {
 		id
 		title
+		created
+		resolves
+		closes
 		estimates {
 			id
 			created
