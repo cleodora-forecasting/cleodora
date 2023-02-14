@@ -4,9 +4,121 @@ package integrationtest
 
 import (
 	"context"
+	"time"
 
 	"github.com/Khan/genqlient/graphql"
 )
+
+// CreateForecastCreateForecast includes the requested fields of the GraphQL type Forecast.
+// The GraphQL type's documentation follows.
+//
+// A prediction about the future.
+type CreateForecastCreateForecast struct {
+	Id        string                                           `json:"id"`
+	Title     string                                           `json:"title"`
+	Estimates []*CreateForecastCreateForecastEstimatesEstimate `json:"estimates"`
+}
+
+// GetId returns CreateForecastCreateForecast.Id, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecast) GetId() string { return v.Id }
+
+// GetTitle returns CreateForecastCreateForecast.Title, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecast) GetTitle() string { return v.Title }
+
+// GetEstimates returns CreateForecastCreateForecast.Estimates, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecast) GetEstimates() []*CreateForecastCreateForecastEstimatesEstimate {
+	return v.Estimates
+}
+
+// CreateForecastCreateForecastEstimatesEstimate includes the requested fields of the GraphQL type Estimate.
+// The GraphQL type's documentation follows.
+//
+// A list of probabilities (one for each outcome) together with a timestamp and
+// an explanation why you made this estimate. Every time you change your mind
+// about a forecast you will create a new Estimate.
+// All probabilities always add up to 100.
+type CreateForecastCreateForecastEstimatesEstimate struct {
+	Id            string                                                                   `json:"id"`
+	Created       time.Time                                                                `json:"created"`
+	Reason        string                                                                   `json:"reason"`
+	Probabilities []*CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbability `json:"probabilities"`
+}
+
+// GetId returns CreateForecastCreateForecastEstimatesEstimate.Id, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecastEstimatesEstimate) GetId() string { return v.Id }
+
+// GetCreated returns CreateForecastCreateForecastEstimatesEstimate.Created, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecastEstimatesEstimate) GetCreated() time.Time { return v.Created }
+
+// GetReason returns CreateForecastCreateForecastEstimatesEstimate.Reason, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecastEstimatesEstimate) GetReason() string { return v.Reason }
+
+// GetProbabilities returns CreateForecastCreateForecastEstimatesEstimate.Probabilities, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecastEstimatesEstimate) GetProbabilities() []*CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbability {
+	return v.Probabilities
+}
+
+// CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbability includes the requested fields of the GraphQL type Probability.
+// The GraphQL type's documentation follows.
+//
+// A number between 0 and 100 tied to a specific Outcome. It is always part of
+// an Estimate.
+type CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbability struct {
+	Id      string                                                                       `json:"id"`
+	Value   int                                                                          `json:"value"`
+	Outcome CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbabilityOutcome `json:"outcome"`
+}
+
+// GetId returns CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbability.Id, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbability) GetId() string {
+	return v.Id
+}
+
+// GetValue returns CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbability.Value, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbability) GetValue() int {
+	return v.Value
+}
+
+// GetOutcome returns CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbability.Outcome, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbability) GetOutcome() CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbabilityOutcome {
+	return v.Outcome
+}
+
+// CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbabilityOutcome includes the requested fields of the GraphQL type Outcome.
+// The GraphQL type's documentation follows.
+//
+// The possible results of a forecast. In the simplest case you will only have
+// two outcomes: Yes and No.
+type CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbabilityOutcome struct {
+	Id      string `json:"id"`
+	Text    string `json:"text"`
+	Correct bool   `json:"correct"`
+}
+
+// GetId returns CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbabilityOutcome.Id, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbabilityOutcome) GetId() string {
+	return v.Id
+}
+
+// GetText returns CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbabilityOutcome.Text, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbabilityOutcome) GetText() string {
+	return v.Text
+}
+
+// GetCorrect returns CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbabilityOutcome.Correct, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecastEstimatesEstimateProbabilitiesProbabilityOutcome) GetCorrect() bool {
+	return v.Correct
+}
+
+// CreateForecastResponse is returned by CreateForecast on success.
+type CreateForecastResponse struct {
+	CreateForecast CreateForecastCreateForecast `json:"createForecast"`
+}
+
+// GetCreateForecast returns CreateForecastResponse.CreateForecast, and is useful for accessing the field via an interface.
+func (v *CreateForecastResponse) GetCreateForecast() CreateForecastCreateForecast {
+	return v.CreateForecast
+}
 
 // GetForecastsForecastsForecast includes the requested fields of the GraphQL type Forecast.
 // The GraphQL type's documentation follows.
@@ -106,6 +218,54 @@ type GetForecastsResponse struct {
 
 // GetForecasts returns GetForecastsResponse.Forecasts, and is useful for accessing the field via an interface.
 func (v *GetForecastsResponse) GetForecasts() []GetForecastsForecastsForecast { return v.Forecasts }
+
+type NewEstimate struct {
+	Reason        string           `json:"reason"`
+	Probabilities []NewProbability `json:"probabilities"`
+}
+
+// GetReason returns NewEstimate.Reason, and is useful for accessing the field via an interface.
+func (v *NewEstimate) GetReason() string { return v.Reason }
+
+// GetProbabilities returns NewEstimate.Probabilities, and is useful for accessing the field via an interface.
+func (v *NewEstimate) GetProbabilities() []NewProbability { return v.Probabilities }
+
+type NewForecast struct {
+	Title       string     `json:"title"`
+	Description string     `json:"description"`
+	Resolves    time.Time  `json:"resolves"`
+	Closes      *time.Time `json:"closes"`
+}
+
+// GetTitle returns NewForecast.Title, and is useful for accessing the field via an interface.
+func (v *NewForecast) GetTitle() string { return v.Title }
+
+// GetDescription returns NewForecast.Description, and is useful for accessing the field via an interface.
+func (v *NewForecast) GetDescription() string { return v.Description }
+
+// GetResolves returns NewForecast.Resolves, and is useful for accessing the field via an interface.
+func (v *NewForecast) GetResolves() time.Time { return v.Resolves }
+
+// GetCloses returns NewForecast.Closes, and is useful for accessing the field via an interface.
+func (v *NewForecast) GetCloses() *time.Time { return v.Closes }
+
+type NewOutcome struct {
+	Text string `json:"text"`
+}
+
+// GetText returns NewOutcome.Text, and is useful for accessing the field via an interface.
+func (v *NewOutcome) GetText() string { return v.Text }
+
+type NewProbability struct {
+	Value   int        `json:"value"`
+	Outcome NewOutcome `json:"outcome"`
+}
+
+// GetValue returns NewProbability.Value, and is useful for accessing the field via an interface.
+func (v *NewProbability) GetValue() int { return v.Value }
+
+// GetOutcome returns NewProbability.Outcome, and is useful for accessing the field via an interface.
+func (v *NewProbability) GetOutcome() NewOutcome { return v.Outcome }
 
 type Resolution string
 
@@ -216,6 +376,18 @@ func (v *ResolveForecastResponse) GetResolveForecast() *ResolveForecastResolveFo
 	return v.ResolveForecast
 }
 
+// __CreateForecastInput is used internally by genqlient
+type __CreateForecastInput struct {
+	Forecast NewForecast `json:"forecast"`
+	Estimate NewEstimate `json:"estimate"`
+}
+
+// GetForecast returns __CreateForecastInput.Forecast, and is useful for accessing the field via an interface.
+func (v *__CreateForecastInput) GetForecast() NewForecast { return v.Forecast }
+
+// GetEstimate returns __CreateForecastInput.Estimate, and is useful for accessing the field via an interface.
+func (v *__CreateForecastInput) GetEstimate() NewEstimate { return v.Estimate }
+
 // __ResolveForecastInput is used internally by genqlient
 type __ResolveForecastInput struct {
 	ForecastId       string      `json:"forecastId"`
@@ -231,6 +403,55 @@ func (v *__ResolveForecastInput) GetCorrectOutcomeId() *string { return v.Correc
 
 // GetResolution returns __ResolveForecastInput.Resolution, and is useful for accessing the field via an interface.
 func (v *__ResolveForecastInput) GetResolution() *Resolution { return v.Resolution }
+
+func CreateForecast(
+	ctx context.Context,
+	client graphql.Client,
+	forecast NewForecast,
+	estimate NewEstimate,
+) (*CreateForecastResponse, error) {
+	req := &graphql.Request{
+		OpName: "CreateForecast",
+		Query: `
+mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
+	createForecast(forecast: $forecast, estimate: $estimate) {
+		id
+		title
+		estimates {
+			id
+			created
+			reason
+			probabilities {
+				id
+				value
+				outcome {
+					id
+					text
+					correct
+				}
+			}
+		}
+	}
+}
+`,
+		Variables: &__CreateForecastInput{
+			Forecast: forecast,
+			Estimate: estimate,
+		},
+	}
+	var err error
+
+	var data CreateForecastResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
 
 func GetForecasts(
 	ctx context.Context,

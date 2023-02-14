@@ -45,3 +45,24 @@ mutation ResolveForecast($forecastId: ID!, $correctOutcomeId: ID,  $resolution: 
         }
     }
 }
+
+mutation CreateForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
+    createForecast(forecast: $forecast, estimate: $estimate) {
+        id
+        title
+        estimates {
+            id
+            created
+            reason
+            probabilities {
+                id
+                value
+                outcome {
+                    id
+                    text
+                    correct
+                }
+            }
+        }
+    }
+}
