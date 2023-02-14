@@ -1,14 +1,16 @@
 package integrationtest
 
 import (
+	"context"
 	"testing"
 
+	"github.com/Khan/genqlient/graphql"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestGetVersion(t *testing.T) {
-	c := initServerAndGetClient(t)
+	client := initServerAndGetClient2(t)
 
 	query := `
 		query GetMetadata {
@@ -17,15 +19,19 @@ func TestGetVersion(t *testing.T) {
 			}
 		}`
 
-	var resp struct {
+	req := graphql.Request{
+		Query: query,
+	}
+
+	var data struct {
 		Metadata struct {
 			Version string
 		}
 	}
+	response := graphql.Response{Data: &data}
 
-	err := c.Post(query, &resp)
+	err := client.MakeRequest(context.Background(), &req, &response)
 	require.NoError(t, err)
 
-	t.Log(resp)
-	assert.Equal(t, "dev", resp.Metadata.Version)
+	assert.Equal(t, "dev", data.Metadata.Version)
 }
