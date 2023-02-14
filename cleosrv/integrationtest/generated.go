@@ -125,10 +125,22 @@ func (v *CreateForecastResponse) GetCreateForecast() CreateForecastCreateForecas
 //
 // A prediction about the future.
 type GetForecastsForecastsForecast struct {
-	Id         string                                            `json:"id"`
-	Title      string                                            `json:"title"`
-	Resolution Resolution                                        `json:"resolution"`
-	Estimates  []*GetForecastsForecastsForecastEstimatesEstimate `json:"estimates"`
+	Id         string     `json:"id"`
+	Title      string     `json:"title"`
+	Resolution Resolution `json:"resolution"`
+	// The point in time at which you predict you will be able to resolve whether
+	// how the forecast resolved.
+	Resolves time.Time `json:"resolves"`
+	// The point in time at which you no longer want to update your probability
+	// estimates for the forecast. In most cases you won't need this. One example
+	// where you might is when you want to predict the outcome of an exam. You may
+	// want to set 'closes' to the time right before the exam starts, even though
+	// 'resolves' is several weeks later (when the exam results are published). This
+	// way your prediction history will only reflect your estimations before you
+	// took the exam, which is something you may want (or not, in which case you
+	// could simply not set 'closes').
+	Closes    *time.Time                                        `json:"closes"`
+	Estimates []*GetForecastsForecastsForecastEstimatesEstimate `json:"estimates"`
 }
 
 // GetId returns GetForecastsForecastsForecast.Id, and is useful for accessing the field via an interface.
@@ -139,6 +151,12 @@ func (v *GetForecastsForecastsForecast) GetTitle() string { return v.Title }
 
 // GetResolution returns GetForecastsForecastsForecast.Resolution, and is useful for accessing the field via an interface.
 func (v *GetForecastsForecastsForecast) GetResolution() Resolution { return v.Resolution }
+
+// GetResolves returns GetForecastsForecastsForecast.Resolves, and is useful for accessing the field via an interface.
+func (v *GetForecastsForecastsForecast) GetResolves() time.Time { return v.Resolves }
+
+// GetCloses returns GetForecastsForecastsForecast.Closes, and is useful for accessing the field via an interface.
+func (v *GetForecastsForecastsForecast) GetCloses() *time.Time { return v.Closes }
 
 // GetEstimates returns GetForecastsForecastsForecast.Estimates, and is useful for accessing the field via an interface.
 func (v *GetForecastsForecastsForecast) GetEstimates() []*GetForecastsForecastsForecastEstimatesEstimate {
@@ -280,10 +298,22 @@ const (
 //
 // A prediction about the future.
 type ResolveForecastResolveForecast struct {
-	Id         string                                             `json:"id"`
-	Title      string                                             `json:"title"`
-	Resolution Resolution                                         `json:"resolution"`
-	Estimates  []*ResolveForecastResolveForecastEstimatesEstimate `json:"estimates"`
+	Id         string     `json:"id"`
+	Title      string     `json:"title"`
+	Resolution Resolution `json:"resolution"`
+	// The point in time at which you predict you will be able to resolve whether
+	// how the forecast resolved.
+	Resolves time.Time `json:"resolves"`
+	// The point in time at which you no longer want to update your probability
+	// estimates for the forecast. In most cases you won't need this. One example
+	// where you might is when you want to predict the outcome of an exam. You may
+	// want to set 'closes' to the time right before the exam starts, even though
+	// 'resolves' is several weeks later (when the exam results are published). This
+	// way your prediction history will only reflect your estimations before you
+	// took the exam, which is something you may want (or not, in which case you
+	// could simply not set 'closes').
+	Closes    *time.Time                                         `json:"closes"`
+	Estimates []*ResolveForecastResolveForecastEstimatesEstimate `json:"estimates"`
 }
 
 // GetId returns ResolveForecastResolveForecast.Id, and is useful for accessing the field via an interface.
@@ -294,6 +324,12 @@ func (v *ResolveForecastResolveForecast) GetTitle() string { return v.Title }
 
 // GetResolution returns ResolveForecastResolveForecast.Resolution, and is useful for accessing the field via an interface.
 func (v *ResolveForecastResolveForecast) GetResolution() Resolution { return v.Resolution }
+
+// GetResolves returns ResolveForecastResolveForecast.Resolves, and is useful for accessing the field via an interface.
+func (v *ResolveForecastResolveForecast) GetResolves() time.Time { return v.Resolves }
+
+// GetCloses returns ResolveForecastResolveForecast.Closes, and is useful for accessing the field via an interface.
+func (v *ResolveForecastResolveForecast) GetCloses() *time.Time { return v.Closes }
 
 // GetEstimates returns ResolveForecastResolveForecast.Estimates, and is useful for accessing the field via an interface.
 func (v *ResolveForecastResolveForecast) GetEstimates() []*ResolveForecastResolveForecastEstimatesEstimate {
@@ -465,6 +501,8 @@ query GetForecasts {
 		id
 		title
 		resolution
+		resolves
+		closes
 		estimates {
 			id
 			probabilities {
@@ -509,6 +547,8 @@ mutation ResolveForecast ($forecastId: ID!, $correctOutcomeId: ID, $resolution: 
 		id
 		title
 		resolution
+		resolves
+		closes
 		estimates {
 			id
 			probabilities {

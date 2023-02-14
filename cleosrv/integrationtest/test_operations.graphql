@@ -9,6 +9,8 @@ query GetForecasts {
         id
         title
         resolution
+        resolves
+        closes
         estimates {
             id
             probabilities {
@@ -32,6 +34,8 @@ mutation ResolveForecast($forecastId: ID!, $correctOutcomeId: ID,  $resolution: 
         id
         title
         resolution
+        resolves
+        closes
         estimates {
             id
             probabilities {
