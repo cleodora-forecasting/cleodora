@@ -37,6 +37,34 @@ func validateNewForecast(forecast model.NewForecast) error {
 			errors.New("title can't be empty"),
 		)
 	}
+	if forecast.Created.After(time.Now().UTC()) {
+		validationErr = multierror.Append(
+			validationErr,
+			errors.New("'created' can't be in the future"),
+		)
+	}
+	if forecast.Closes != nil && forecast.Closes.After(forecast.Resolves) {
+		validationErr = multierror.Append(
+			validationErr,
+			fmt.Errorf(
+				"'Closes' can't be set to a later date than 'Resolves'. "+
+					"Closes is '%v'. Resolves is '%v'",
+				*forecast.Closes,
+				forecast.Resolves,
+			),
+		)
+	}
+	if forecast.Resolves.Before(*forecast.Created) {
+		validationErr = multierror.Append(
+			validationErr,
+			fmt.Errorf(
+				"'Resolves' can't be set to an earlier date than 'Created'. "+
+					"Resolves is '%v'. Created is '%v'",
+				forecast.Resolves,
+				*forecast.Created,
+			),
+		)
+	}
 	return validationErr.ErrorOrNil()
 }
 
@@ -103,9 +131,14 @@ func convertNewEstimateToDBEstimate(estimate model.NewEstimate) []dbmodel.Estima
 		)
 	}
 
+	created := time.Now().UTC()
+	if estimate.Created != nil {
+		created = *estimate.Created
+	}
+
 	return []dbmodel.Estimate{
 		{
-			Created:       time.Now(),
+			Created:       created,
 			Reason:        html.EscapeString(estimate.Reason),
 			Probabilities: probabilities,
 		},

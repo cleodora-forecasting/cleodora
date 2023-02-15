@@ -9,6 +9,7 @@ import (
 	"github.com/99designs/gqlgen/client"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/Khan/genqlient/graphql"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/cleodora-forecasting/cleodora/cleosrv/cleosrv"
@@ -61,4 +62,16 @@ func resolutionPointer(r Resolution) *Resolution {
 
 func timePointer(t time.Time) *time.Time {
 	return &t
+}
+
+// assertTimeAlmostEqual asserts that the two time stamps are within 2 minutes
+// of each other. The two minutes are chosen to account for some delay in
+// test execution.
+func assertTimeAlmostEqual(t *testing.T, expected, actual time.Time) {
+	assert.InDelta(
+		t,
+		expected.UTC().Unix(),
+		actual.UTC().Unix(),
+		(2 * time.Minute).Seconds(),
+	)
 }
