@@ -346,17 +346,15 @@ func TestResolveForecast_ResolvesInFuture(t *testing.T) {
 	// Verify the dates have been set to 'now' (+/- 2 minutes to account for
 	// test execution delays).
 	assert.Equal(t, ResolutionResolved, resolveResponse.ResolveForecast.Resolution)
-	assert.InDelta(
+	assertTimeAlmostEqual(
 		t,
-		time.Now().UTC().Unix(),
-		resolveResponse.ResolveForecast.Resolves.UTC().Unix(),
-		(2 * time.Minute).Seconds(),
+		time.Now(),
+		resolveResponse.ResolveForecast.Resolves,
 	)
-	assert.InDelta(
+	assertTimeAlmostEqual(
 		t,
-		time.Now().UTC().Unix(),
-		resolveResponse.ResolveForecast.Closes.UTC().Unix(),
-		(2 * time.Minute).Seconds(),
+		time.Now(),
+		*resolveResponse.ResolveForecast.Closes,
 	)
 }
 
