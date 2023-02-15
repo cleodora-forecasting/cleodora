@@ -10,7 +10,7 @@ import (
 )
 
 func TestCreateForecast(t *testing.T) {
-	c := initServerAndGetClient2(t)
+	c := initServerAndGetClient(t)
 
 	newForecast := NewForecast{
 		Title: "Will it rain tomorrow?",
@@ -83,7 +83,7 @@ func TestCreateForecast(t *testing.T) {
 // TestCreateForecast_XSS verifies that HTML is correctly escaped (to
 // prevent XSS attacks).
 func TestCreateForecast_XSS(t *testing.T) {
-	c := initServerAndGetClient2(t)
+	c := initServerAndGetClient(t)
 
 	attack := "<script>alert(document.cookie)</script>"
 
@@ -326,7 +326,7 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 	for _, tt := range tests {
 		t.Log(tt.name)
 		t.Run(tt.name, func(t *testing.T) {
-			c := initServerAndGetClient2(t)
+			c := initServerAndGetClient(t)
 
 			newForecast := NewForecast{
 				Title: "Will it rain tomorrow?",
@@ -418,7 +418,7 @@ func TestCreateForecast_ValidateNewForecast(t *testing.T) {
 	for _, tt := range tests {
 		t.Log(tt.name)
 		t.Run(tt.name, func(t *testing.T) {
-			c := initServerAndGetClient2(t)
+			c := initServerAndGetClient(t)
 
 			newEstimate := NewEstimate{
 				Reason: "My weather app says it will rain",
@@ -557,7 +557,7 @@ func TestCreateForecast_WithTimestamps(t *testing.T) {
 	for _, tt := range tests {
 		t.Log(tt.name)
 		t.Run(tt.name, func(t *testing.T) {
-			c := initServerAndGetClient2(t)
+			c := initServerAndGetClient(t)
 
 			newForecast := NewForecast{
 				Title: "Will it rain tomorrow?",
@@ -632,7 +632,7 @@ func TestCreateForecast_WithTimestamps(t *testing.T) {
 // the initial estimate to match the forecast. Later estimates can have
 // different Created timestamps.
 func TestCreateForecast_NewEstimateCreatedIsIgnored(t *testing.T) {
-	c := initServerAndGetClient2(t)
+	c := initServerAndGetClient(t)
 	now := time.Now().UTC()
 	hoursAgo24 := now.Add(-24 * time.Hour)
 	hoursAgo5 := now.Add(-5 * time.Hour)

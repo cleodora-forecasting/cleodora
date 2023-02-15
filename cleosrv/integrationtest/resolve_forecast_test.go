@@ -75,7 +75,7 @@ func TestResolveForecast(t *testing.T) {
 	for _, tt := range tests {
 		t.Log(tt.name)
 		t.Run(tt.name, func(t *testing.T) {
-			c := initServerAndGetClient2(t)
+			c := initServerAndGetClient(t)
 
 			queryResponse, err := GetForecasts(context.Background(), c)
 			require.NoError(t, err)
@@ -152,7 +152,7 @@ func TestResolveForecast(t *testing.T) {
 // the forecast and set one of the Outcomes as correct.
 // It also verifies that the same forecast can't be resolved again.
 func TestResolveForecast_VerifyResponseValue(t *testing.T) {
-	c := initServerAndGetClient2(t)
+	c := initServerAndGetClient(t)
 
 	queryResponse, err := GetForecasts(context.Background(), c)
 	require.NoError(t, err)
@@ -215,7 +215,7 @@ func TestResolveForecast_VerifyResponseValue(t *testing.T) {
 // TestResolveForecast_WrongOutcomeId verifies that it's not possible to
 // specify an outcome ID of a different forecast when resolving the forecast.
 func TestResolveForecast_WrongOutcomeId(t *testing.T) {
-	c := initServerAndGetClient2(t)
+	c := initServerAndGetClient(t)
 
 	queryResponse, err := GetForecasts(context.Background(), c)
 	require.NoError(t, err)
@@ -280,7 +280,7 @@ func TestResolveForecast_WrongOutcomeId(t *testing.T) {
 // TestResolveForecast_ResolvesInFuture verifies that when resolves/closes are
 // set in the future they are set to now() when resolving.
 func TestResolveForecast_ResolvesInFuture(t *testing.T) {
-	c := initServerAndGetClient2(t)
+	c := initServerAndGetClient(t)
 
 	// Create a new forecast as set up
 
@@ -361,7 +361,7 @@ func TestResolveForecast_ResolvesInFuture(t *testing.T) {
 // TestResolveForecast_ResolvesInPast verifies that when resolves/closes are
 // set in the past they stay as they are.
 func TestResolveForecast_ResolvesInPast(t *testing.T) {
-	client := initServerAndGetClient2(t)
+	client := initServerAndGetClient(t)
 	getResponse, err := GetForecasts(context.Background(), client)
 	require.NoError(t, err)
 

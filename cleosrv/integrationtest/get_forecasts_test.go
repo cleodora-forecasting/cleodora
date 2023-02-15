@@ -12,7 +12,7 @@ import (
 // TestGetForecasts verifies that the forecasts are returned and
 // uses the gqlgen.client for it.
 func TestGetForecasts(t *testing.T) {
-	c := initServerAndGetClient2(t)
+	c := initServerAndGetClient(t)
 
 	response, err := GetForecasts(context.Background(), c)
 	require.NoError(t, err)
@@ -29,7 +29,7 @@ func TestGetForecasts(t *testing.T) {
 // TestGetForecasts_SomeFields verifies that the query can contain only a few
 // fields.
 func TestGetForecasts_OnlySomeFields(t *testing.T) {
-	c := initServerAndGetClient2(t)
+	c := initServerAndGetClient(t)
 
 	query := `
 		query GetForecasts {
@@ -63,7 +63,7 @@ func TestGetForecasts_OnlySomeFields(t *testing.T) {
 // TestGetForecasts_InvalidField verifies that an error is returned when
 // querying for a field that does not exist.
 func TestGetForecasts_InvalidField(t *testing.T) {
-	c := initServerAndGetClient2(t)
+	c := initServerAndGetClient(t)
 
 	query := `
 		query GetForecasts {

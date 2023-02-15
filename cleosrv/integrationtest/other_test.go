@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetVersion(t *testing.T) {
-	client := initServerAndGetClient2(t)
+	client := initServerAndGetClient(t)
 
 	query := `
 		query GetMetadata {
