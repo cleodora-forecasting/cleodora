@@ -32,9 +32,11 @@ describe('basic front page tests', () => {
         "--reason \"We're running a test, so it seems likely.\" " +
         "-p Yes=99 " +
         "-p No=1";
-    cy.exec(cmd)
-        .its('stdout')
-        .should('not.be.empty');
+    cy.exec(cmd).then((result) => {
+        expect(result.code).to.eq(0);
+        expect(result.stderr).to.be.empty;
+        expect(result.stdout).to.not.be.empty;
+    });
     cy.reload();
     cy.findByText("Is this a test forecast?");
   });
