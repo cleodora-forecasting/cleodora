@@ -5,7 +5,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/99designs/gqlgen/client"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -84,87 +83,37 @@ func TestCreateForecast(t *testing.T) {
 // TestCreateForecast_XSS verifies that HTML is correctly escaped (to
 // prevent XSS attacks).
 func TestCreateForecast_XSS(t *testing.T) {
-	c := initServerAndGetClient(t)
+	c := initServerAndGetClient2(t)
 
 	attack := "<script>alert(document.cookie)</script>"
 
-	newForecast := map[string]interface{}{
-		"title": "Will it rain tomorrow?" + attack,
-		"description": "It counts as rain if between 9am and 9pm there are " +
+	newForecast := NewForecast{
+		Title: "Will it rain tomorrow?" + attack,
+		Description: "It counts as rain if between 9am and 9pm there are " +
 			"30 min or more of uninterrupted precipitation." + attack,
-		"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
-		"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+		Closes:   timePointer(time.Now().Add(24 * time.Hour)),
+		Resolves: time.Now().Add(24 * time.Hour),
 	}
 
-	newEstimate := map[string]interface{}{
-		"reason": "My weather app says it will rain." + attack,
-		"probabilities": []map[string]interface{}{
+	newEstimate := NewEstimate{
+		Reason: "My weather app says it will rain." + attack,
+		Probabilities: []NewProbability{
 			{
-				"value": 70,
-				"outcome": map[string]interface{}{
-					"text": "Yes" + attack,
+				Value: 70,
+				Outcome: NewOutcome{
+					Text: "Yes" + attack,
 				},
 			},
 			{
-				"value": 30,
-				"outcome": map[string]interface{}{
-					"text": "No" + attack,
+				Value: 30,
+				Outcome: NewOutcome{
+					Text: "No" + attack,
 				},
 			},
 		},
 	}
 
-	query := `
-		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
-			createForecast(forecast: $forecast, estimate: $estimate) {
-				id
-				title
-                description
-				estimates {
-					id
-					created
-					reason
-					probabilities {
-						id
-						value
-						outcome {
-							id
-							text
-							correct
-						}
-					}
-				}
-			}
-		}`
-
-	var response struct {
-		CreateForecast struct {
-			Id          string
-			Title       string
-			Description string
-			Estimates   []struct {
-				Id            string
-				Created       string
-				Reason        string
-				Probabilities []struct {
-					Id      string
-					Value   int
-					Outcome struct {
-						Id      string
-						Text    string
-						Correct bool
-					}
-				}
-			}
-		}
-	}
-
-	err := c.Post(
-		query,
-		&response,
-		client.Var("forecast", newForecast),
-		client.Var("estimate", newEstimate),
-	)
+	response, err := CreateForecast(context.Background(), c, newForecast, newEstimate)
 	require.NoError(t, err)
 
 	assert.NotContains(t, response.CreateForecast.Title, attack)
@@ -187,24 +136,24 @@ func TestCreateForecast_XSS(t *testing.T) {
 func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 	tests := []struct {
 		name        string
-		newEstimate map[string]interface{}
+		newEstimate NewEstimate
 		expectedErr string
 	}{
 		{
 			name: "success",
-			newEstimate: map[string]interface{}{
-				"reason": "My weather app says it will rain",
-				"probabilities": []map[string]interface{}{
+			newEstimate: NewEstimate{
+				Reason: "My weather app says it will rain",
+				Probabilities: []NewProbability{
 					{
-						"value": 70,
-						"outcome": map[string]interface{}{
-							"text": "Yes",
+						Value: 70,
+						Outcome: NewOutcome{
+							Text: "Yes",
 						},
 					},
 					{
-						"value": 30,
-						"outcome": map[string]interface{}{
-							"text": "No",
+						Value: 30,
+						Outcome: NewOutcome{
+							Text: "No",
 						},
 					},
 				},
@@ -213,13 +162,13 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 		},
 		{
 			name: "single probability",
-			newEstimate: map[string]interface{}{
-				"reason": "My weather app says it will rain",
-				"probabilities": []map[string]interface{}{
+			newEstimate: NewEstimate{
+				Reason: "My weather app says it will rain",
+				Probabilities: []NewProbability{
 					{
-						"value": 100,
-						"outcome": map[string]interface{}{
-							"text": "Any outcome",
+						Value: 100,
+						Outcome: NewOutcome{
+							Text: "Any outcome",
 						},
 					},
 				},
@@ -228,31 +177,31 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 		},
 		{
 			name: "success with more probabilities",
-			newEstimate: map[string]interface{}{
-				"reason": "My weather app says it will rain",
-				"probabilities": []map[string]interface{}{
+			newEstimate: NewEstimate{
+				Reason: "My weather app says it will rain",
+				Probabilities: []NewProbability{
 					{
-						"value": 30,
-						"outcome": map[string]interface{}{
-							"text": "Yes, but less than 2 hours",
+						Value: 30,
+						Outcome: NewOutcome{
+							Text: "Yes, but less than 2 hours",
 						},
 					},
 					{
-						"value": 20,
-						"outcome": map[string]interface{}{
-							"text": "Yes, between 2 and 5 hours",
+						Value: 20,
+						Outcome: NewOutcome{
+							Text: "Yes, between 2 and 5 hours",
 						},
 					},
 					{
-						"value": 20,
-						"outcome": map[string]interface{}{
-							"text": "Yes, more than 5 hours",
+						Value: 20,
+						Outcome: NewOutcome{
+							Text: "Yes, more than 5 hours",
 						},
 					},
 					{
-						"value": 30,
-						"outcome": map[string]interface{}{
-							"text": "No",
+						Value: 30,
+						Outcome: NewOutcome{
+							Text: "No",
 						},
 					},
 				},
@@ -261,19 +210,19 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 		},
 		{
 			name: "reason cant be empty",
-			newEstimate: map[string]interface{}{
-				"reason": "",
-				"probabilities": []map[string]interface{}{
+			newEstimate: NewEstimate{
+				Reason: "",
+				Probabilities: []NewProbability{
 					{
-						"value": 70,
-						"outcome": map[string]interface{}{
-							"text": "Yes",
+						Value: 70,
+						Outcome: NewOutcome{
+							Text: "Yes",
 						},
 					},
 					{
-						"value": 30,
-						"outcome": map[string]interface{}{
-							"text": "No",
+						Value: 30,
+						Outcome: NewOutcome{
+							Text: "No",
 						},
 					},
 				},
@@ -282,19 +231,19 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 		},
 		{
 			name: "probabilities must add up to 100",
-			newEstimate: map[string]interface{}{
-				"reason": "My weather app says it will rain.",
-				"probabilities": []map[string]interface{}{
+			newEstimate: NewEstimate{
+				Reason: "My weather app says it will rain.",
+				Probabilities: []NewProbability{
 					{
-						"value": 70,
-						"outcome": map[string]interface{}{
-							"text": "Yes",
+						Value: 70,
+						Outcome: NewOutcome{
+							Text: "Yes",
 						},
 					},
 					{
-						"value": 20,
-						"outcome": map[string]interface{}{
-							"text": "No",
+						Value: 20,
+						Outcome: NewOutcome{
+							Text: "No",
 						},
 					},
 				},
@@ -303,19 +252,19 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 		},
 		{
 			name: "probabilities must be between 0 and 100",
-			newEstimate: map[string]interface{}{
-				"reason": "My weather app says it will rain.",
-				"probabilities": []map[string]interface{}{
+			newEstimate: NewEstimate{
+				Reason: "My weather app says it will rain.",
+				Probabilities: []NewProbability{
 					{
-						"value": -10,
-						"outcome": map[string]interface{}{
-							"text": "Yes",
+						Value: -10,
+						Outcome: NewOutcome{
+							Text: "Yes",
 						},
 					},
 					{
-						"value": 110,
-						"outcome": map[string]interface{}{
-							"text": "No",
+						Value: 110,
+						Outcome: NewOutcome{
+							Text: "No",
 						},
 					},
 				},
@@ -324,65 +273,27 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 		},
 		{
 			name: "probabilities cant be empty",
-			newEstimate: map[string]interface{}{
-				"reason":        "My weather app says it will rain.",
-				"probabilities": []map[string]interface{}{},
+			newEstimate: NewEstimate{
+				Reason:        "My weather app says it will rain.",
+				Probabilities: []NewProbability{},
 			},
 			expectedErr: "probabilities can't be empty",
 		},
 		{
-			name: "outcome must be set",
-			newEstimate: map[string]interface{}{
-				"reason": "My weather app says it will rain",
-				"probabilities": []map[string]interface{}{
-					{
-						"value":   70,
-						"outcome": nil,
-					},
-					{
-						"value": 30,
-						"outcome": map[string]interface{}{
-							"text": "No",
-						},
-					},
-				},
-			},
-			expectedErr: "cannot be null",
-		},
-		{
-			name: "outcome cant be empty",
-			newEstimate: map[string]interface{}{
-				"reason": "My weather app says it will rain",
-				"probabilities": []map[string]interface{}{
-					{
-						"value":   70,
-						"outcome": map[string]interface{}{},
-					},
-					{
-						"value": 30,
-						"outcome": map[string]interface{}{
-							"text": "No",
-						},
-					},
-				},
-			},
-			expectedErr: "must be defined",
-		},
-		{
 			name: "outcome text cant be empty",
-			newEstimate: map[string]interface{}{
-				"reason": "My weather app says it will rain",
-				"probabilities": []map[string]interface{}{
+			newEstimate: NewEstimate{
+				Reason: "My weather app says it will rain",
+				Probabilities: []NewProbability{
 					{
-						"value": 70,
-						"outcome": map[string]interface{}{
-							"text": "",
+						Value: 70,
+						Outcome: NewOutcome{
+							Text: "",
 						},
 					},
 					{
-						"value": 30,
-						"outcome": map[string]interface{}{
-							"text": "No",
+						Value: 30,
+						Outcome: NewOutcome{
+							Text: "No",
 						},
 					},
 				},
@@ -391,19 +302,19 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 		},
 		{
 			name: "outcomes cant be duplicates",
-			newEstimate: map[string]interface{}{
-				"reason": "My weather app says it will rain",
-				"probabilities": []map[string]interface{}{
+			newEstimate: NewEstimate{
+				Reason: "My weather app says it will rain",
+				Probabilities: []NewProbability{
 					{
-						"value": 70,
-						"outcome": map[string]interface{}{
-							"text": "No",
+						Value: 70,
+						Outcome: NewOutcome{
+							Text: "No",
 						},
 					},
 					{
-						"value": 30,
-						"outcome": map[string]interface{}{
-							"text": "No",
+						Value: 30,
+						Outcome: NewOutcome{
+							Text: "No",
 						},
 					},
 				},
@@ -415,38 +326,23 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 	for _, tt := range tests {
 		t.Log(tt.name)
 		t.Run(tt.name, func(t *testing.T) {
+			c := initServerAndGetClient2(t)
 
-			c := initServerAndGetClient(t)
-
-			newForecast := map[string]interface{}{
-				"title": "Will it rain tomorrow?",
-				"description": "It counts as rain if between 9am and 9pm there are " +
+			newForecast := NewForecast{
+				Title: "Will it rain tomorrow?",
+				Description: "It counts as rain if between 9am and 9pm there are " +
 					"30 min or more of uninterrupted precipitation.",
-				"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
-				"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+				Closes:   timePointer(time.Now().Add(24 * time.Hour)),
+				Resolves: time.Now().Add(24 * time.Hour),
 			}
 
-			query := `
-		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
-			createForecast(forecast: $forecast, estimate: $estimate) {
-				id
-				title
-			}
-		}`
-
-			var response struct {
-				CreateForecast struct {
-					Id    string
-					Title string
-				}
-			}
-
-			err := c.Post(
-				query,
-				&response,
-				client.Var("forecast", newForecast),
-				client.Var("estimate", tt.newEstimate),
+			_, err := CreateForecast(
+				context.Background(),
+				c,
+				newForecast,
+				tt.newEstimate,
 			)
+
 			if tt.expectedErr == "" { // success
 				assert.NoError(t, err)
 			} else {
@@ -461,178 +357,103 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 func TestCreateForecast_ValidateNewForecast(t *testing.T) {
 	tests := []struct {
 		name        string
-		newForecast map[string]interface{}
+		newForecast NewForecast
 		expectedErr string
 	}{
 		{
 			name: "success",
-			newForecast: map[string]interface{}{
-				"title": "Will it rain tomorrow?",
-				"description": "It counts as rain if between 9am and 9pm there are " +
+			newForecast: NewForecast{
+				Title: "Will it rain tomorrow?",
+				Description: "It counts as rain if between 9am and 9pm there are " +
 					"30 min or more of uninterrupted precipitation.",
-				"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
-				"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+				Closes:   timePointer(time.Now().Add(24 * time.Hour)),
+				Resolves: time.Now().Add(24 * time.Hour),
 			},
 			expectedErr: "",
 		},
 		{
 			name: "title cant be empty",
-			newForecast: map[string]interface{}{
-				"title": "",
-				"description": "It counts as rain if between 9am and 9pm there are " +
+			newForecast: NewForecast{
+				Title: "",
+				Description: "It counts as rain if between 9am and 9pm there are " +
 					"30 min or more of uninterrupted precipitation.",
-				"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
-				"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+				Closes:   timePointer(time.Now().Add(24 * time.Hour)),
+				Resolves: time.Now().Add(24 * time.Hour),
 			},
 			expectedErr: "title can't be empty",
 		},
 		{
 			name: "description can be empty",
-			newForecast: map[string]interface{}{
-				"title":       "Will it rain tomorrow?",
-				"description": "",
-				"closes":      time.Now().Add(24 * time.Hour).Format(time.RFC3339),
-				"resolves":    time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+			newForecast: NewForecast{
+				Title:       "Will it rain tomorrow?",
+				Description: "",
+				Closes:      timePointer(time.Now().Add(24 * time.Hour)),
+				Resolves:    time.Now().Add(24 * time.Hour),
 			},
 			expectedErr: "",
 		},
 		{
 			name: "closes can be empty",
-			newForecast: map[string]interface{}{
-				"title": "Will it rain tomorrow?",
-				"description": "It counts as rain if between 9am and 9pm there are " +
+			newForecast: NewForecast{
+				Title: "Will it rain tomorrow?",
+				Description: "It counts as rain if between 9am and 9pm there are " +
 					"30 min or more of uninterrupted precipitation.",
-				"closes":   nil,
-				"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+				Closes:   nil,
+				Resolves: time.Now().Add(24 * time.Hour),
 			},
 			expectedErr: "",
 		},
 		{
 			name: "closes can be omitted",
-			newForecast: map[string]interface{}{
-				"title": "Will it rain tomorrow?",
-				"description": "It counts as rain if between 9am and 9pm there are " +
+			newForecast: NewForecast{
+				Title: "Will it rain tomorrow?",
+				Description: "It counts as rain if between 9am and 9pm there are " +
 					"30 min or more of uninterrupted precipitation.",
-				"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
+				Resolves: time.Now().Add(24 * time.Hour),
 			},
 			expectedErr: "",
-		},
-		{
-			name: "resolves cant be empty",
-			newForecast: map[string]interface{}{
-				"title": "Will it rain tomorrow?",
-				"description": "It counts as rain if between 9am and 9pm there are " +
-					"30 min or more of uninterrupted precipitation.",
-				"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
-				"resolves": nil,
-			},
-			expectedErr: "cannot be null",
-		},
-		{
-			name: "resolves cant be omitted",
-			newForecast: map[string]interface{}{
-				"title": "Will it rain tomorrow?",
-				"description": "It counts as rain if between 9am and 9pm there are " +
-					"30 min or more of uninterrupted precipitation.",
-				"closes": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
-			},
-			expectedErr: "must be defined",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Log(tt.name)
 		t.Run(tt.name, func(t *testing.T) {
+			c := initServerAndGetClient2(t)
 
-			c := initServerAndGetClient(t)
-
-			newEstimate := map[string]interface{}{
-				"reason": "My weather app says it will rain",
-				"probabilities": []map[string]interface{}{
+			newEstimate := NewEstimate{
+				Reason: "My weather app says it will rain",
+				Probabilities: []NewProbability{
 					{
-						"value": 70,
-						"outcome": map[string]interface{}{
-							"text": "Yes",
+						Value: 70,
+						Outcome: NewOutcome{
+							Text: "Yes",
 						},
 					},
 					{
-						"value": 30,
-						"outcome": map[string]interface{}{
-							"text": "No",
+						Value: 30,
+						Outcome: NewOutcome{
+							Text: "No",
 						},
 					},
 				},
 			}
 
-			query := `
-		mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
-			createForecast(forecast: $forecast, estimate: $estimate) {
-				id
-				title
-			}
-		}`
-
-			var response struct {
-				CreateForecast struct {
-					Id    string
-					Title string
-				}
-			}
-
-			err := c.Post(
-				query,
-				&response,
-				client.Var("forecast", tt.newForecast),
-				client.Var("estimate", newEstimate),
+			response, err := CreateForecast(
+				context.Background(),
+				c,
+				tt.newForecast,
+				newEstimate,
 			)
+
 			if tt.expectedErr == "" { // success
 				require.NoError(t, err)
 				assert.NotEmpty(t, response.CreateForecast.Id)
-				assert.Equal(t, tt.newForecast["title"], response.CreateForecast.Title)
+				assert.Equal(t, tt.newForecast.Title, response.CreateForecast.Title)
 			} else {
 				assert.ErrorContains(t, err, tt.expectedErr)
 			}
 		})
 	}
-}
-
-func TestCreateForecast_FailsWithoutEstimate(t *testing.T) {
-	c := initServerAndGetClient(t)
-
-	newForecast := map[string]interface{}{
-		"title": "Will it rain tomorrow?",
-		"description": "It counts as rain if between 9am and 9pm there are " +
-			"30 min or more of uninterrupted precipitation.",
-		"closes":   time.Now().Add(24 * time.Hour).Format(time.RFC3339),
-		"resolves": time.Now().Add(24 * time.Hour).Format(time.RFC3339),
-	}
-
-	query := `
-		mutation createForecast($forecast: NewForecast!) {
-			createForecast(forecast: $forecast) {
-				id
-				title
-			}
-		}`
-
-	var response struct {
-		CreateForecast struct {
-			Id    string
-			Title string
-		}
-	}
-
-	// Note that the client 'c' never returns the JSON errors in response but
-	// stuffs it all into a string in 'err' and that's it. Otherwise, it would
-	// be nicer to more precisely check the error result.
-	err := c.Post(query, &response, client.Var("forecast", newForecast))
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "http 422")
-	assert.Contains(
-		t,
-		err.Error(),
-		"argument \\\"estimate\\\" of type \\\"NewEstimate!\\\" is required",
-	)
 }
 
 // TestCreateForecast_WithTimestamps verifies which different combinations of
