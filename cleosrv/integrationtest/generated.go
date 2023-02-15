@@ -14,9 +14,10 @@ import (
 //
 // A prediction about the future.
 type CreateForecastCreateForecast struct {
-	Id      string    `json:"id"`
-	Title   string    `json:"title"`
-	Created time.Time `json:"created"`
+	Id          string    `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Created     time.Time `json:"created"`
 	// The point in time at which you predict you will be able to resolve whether
 	// how the forecast resolved.
 	Resolves time.Time `json:"resolves"`
@@ -37,6 +38,9 @@ func (v *CreateForecastCreateForecast) GetId() string { return v.Id }
 
 // GetTitle returns CreateForecastCreateForecast.Title, and is useful for accessing the field via an interface.
 func (v *CreateForecastCreateForecast) GetTitle() string { return v.Title }
+
+// GetDescription returns CreateForecastCreateForecast.Description, and is useful for accessing the field via an interface.
+func (v *CreateForecastCreateForecast) GetDescription() string { return v.Description }
 
 // GetCreated returns CreateForecastCreateForecast.Created, and is useful for accessing the field via an interface.
 func (v *CreateForecastCreateForecast) GetCreated() time.Time { return v.Created }
@@ -491,6 +495,7 @@ mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
 	createForecast(forecast: $forecast, estimate: $estimate) {
 		id
 		title
+		description
 		created
 		resolves
 		closes

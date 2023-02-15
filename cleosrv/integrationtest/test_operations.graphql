@@ -54,6 +54,7 @@ mutation CreateForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
     createForecast(forecast: $forecast, estimate: $estimate) {
         id
         title
+        description
         created
         resolves
         closes
