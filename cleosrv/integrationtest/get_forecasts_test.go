@@ -9,40 +9,13 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestGetForecasts_GQClient verifies that the forecasts are returned and
+// TestGetForecasts verifies that the forecasts are returned and
 // uses the gqlgen.client for it.
-func TestGetForecasts_GQClient(t *testing.T) {
-	c := initServerAndGetClient(t)
+func TestGetForecasts(t *testing.T) {
+	c := initServerAndGetClient2(t)
 
-	query := `
-		query GetForecasts {
-			forecasts {
-				id
-				title
-				description
-				created
-				closes
-				resolves
-				resolution
-			}
-		}`
-
-	var response struct {
-		Forecasts []struct {
-			Closes      string
-			Created     string
-			Description string
-			Id          string
-			Resolution  string
-			Resolves    string
-			Title       string
-		}
-	}
-
-	err := c.Post(query, &response)
+	response, err := GetForecasts(context.Background(), c)
 	require.NoError(t, err)
-
-	t.Log(response)
 
 	require.Len(t, response.Forecasts, 3)
 	assert.Equal(
@@ -56,7 +29,7 @@ func TestGetForecasts_GQClient(t *testing.T) {
 // TestGetForecasts_SomeFields verifies that the query can contain only a few
 // fields.
 func TestGetForecasts_OnlySomeFields(t *testing.T) {
-	c := initServerAndGetClient(t)
+	c := initServerAndGetClient2(t)
 
 	query := `
 		query GetForecasts {
@@ -66,24 +39,24 @@ func TestGetForecasts_OnlySomeFields(t *testing.T) {
 			}
 		}`
 
-	var response struct {
+	var data struct {
 		Forecasts []struct {
 			Id    string
 			Title string
 		}
 	}
+	request := graphql.Request{Query: query}
+	response := graphql.Response{Data: &data}
 
-	err := c.Post(query, &response)
+	err := c.MakeRequest(context.Background(), &request, &response)
 	require.NoError(t, err)
 
-	t.Log(response)
-
-	require.Len(t, response.Forecasts, 3)
+	require.Len(t, data.Forecasts, 3)
 	assert.Equal(
 		t,
 		"Will the number of contributors to \"Cleodora\" be more than 3 at"+
 			" the end of 2022?",
-		response.Forecasts[2].Title,
+		data.Forecasts[2].Title,
 	)
 }
 
