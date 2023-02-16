@@ -19,21 +19,17 @@ import (
 
 // CreateForecast is the resolver for the createForecast field.
 func (r *mutationResolver) CreateForecast(ctx context.Context, forecast model.NewForecast, estimate model.NewEstimate) (*model.Forecast, error) {
-	if forecast.Created == nil {
-		now := time.Now().UTC()
-		forecast.Created = &now
-	}
-	err := validateNewForecast(forecast)
+	err := validateNewForecast(&forecast)
 	if err != nil {
 		return nil, fmt.Errorf("error validating NewForecast: %w", err)
-	}
-	err = validateNewEstimate(estimate)
-	if err != nil {
-		return nil, fmt.Errorf("error validating NewEstimate: %w", err)
 	}
 	// We want the first estimate to have the same 'Created' time as the
 	// forecast itself because it's logical that it would be that way.
 	estimate.Created = forecast.Created
+	err = validateNewEstimate(estimate)
+	if err != nil {
+		return nil, fmt.Errorf("error validating NewEstimate: %w", err)
+	}
 	dbForecast := dbmodel.Forecast{
 		Title:       html.EscapeString(forecast.Title),
 		Description: html.EscapeString(forecast.Description),

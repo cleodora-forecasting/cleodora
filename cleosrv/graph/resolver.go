@@ -29,12 +29,28 @@ func NewResolver(db *gorm.DB) *Resolver {
 	}
 }
 
-func validateNewForecast(forecast model.NewForecast) error {
+// validateNewForecast validates and makes some automatic changes to the
+// NewForecast if appropriate.
+func validateNewForecast(forecast *model.NewForecast) error {
 	var validationErr *multierror.Error
+	if forecast.Created == nil {
+		now := time.Now().UTC()
+		forecast.Created = &now
+	}
+	if forecast.Closes != nil && forecast.Closes.IsZero() {
+		// for more consistent DB handling of the data
+		forecast.Closes = nil
+	}
 	if forecast.Title == "" {
 		validationErr = multierror.Append(
 			validationErr,
 			errors.New("title can't be empty"),
+		)
+	}
+	if forecast.Created.IsZero() {
+		validationErr = multierror.Append(
+			validationErr,
+			errors.New("'created' can't be the zero time"),
 		)
 	}
 	if forecast.Created.After(time.Now().UTC()) {
@@ -52,6 +68,12 @@ func validateNewForecast(forecast model.NewForecast) error {
 				*forecast.Closes,
 				forecast.Resolves,
 			),
+		)
+	}
+	if forecast.Resolves.IsZero() {
+		validationErr = multierror.Append(
+			validationErr,
+			errors.New("'resolves' can't be the zero time"),
 		)
 	}
 	if forecast.Resolves.Before(*forecast.Created) {
