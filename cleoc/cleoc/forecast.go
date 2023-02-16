@@ -20,12 +20,13 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 	if err != nil {
 		return fmt.Errorf("could not parse 'resolves': %w", err)
 	}
-	var closesT time.Time
+	var closesT *time.Time
 	if opts.Closes != "" {
-		closesT, err = time.Parse(time.RFC3339, opts.Closes)
+		parsedTime, err := time.Parse(time.RFC3339, opts.Closes)
 		if err != nil {
 			return fmt.Errorf("could not parse 'closes': %w", err)
 		}
+		closesT = &parsedTime
 	}
 	ctx := context.Background()
 	client := graphql.NewClient(

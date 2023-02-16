@@ -47,7 +47,7 @@ type GetForecastsForecastsForecast struct {
 	// way your prediction history will only reflect your estimations before you
 	// took the exam, which is something you may want (or not, in which case you
 	// could simply not set 'closes').
-	Closes time.Time `json:"closes"`
+	Closes *time.Time `json:"closes"`
 	// The point in time at which you predict you will be able to resolve whether
 	// how the forecast resolved.
 	Resolves   time.Time  `json:"resolves"`
@@ -67,7 +67,7 @@ func (v *GetForecastsForecastsForecast) GetDescription() string { return v.Descr
 func (v *GetForecastsForecastsForecast) GetCreated() time.Time { return v.Created }
 
 // GetCloses returns GetForecastsForecastsForecast.Closes, and is useful for accessing the field via an interface.
-func (v *GetForecastsForecastsForecast) GetCloses() time.Time { return v.Closes }
+func (v *GetForecastsForecastsForecast) GetCloses() *time.Time { return v.Closes }
 
 // GetResolves returns GetForecastsForecastsForecast.Resolves, and is useful for accessing the field via an interface.
 func (v *GetForecastsForecastsForecast) GetResolves() time.Time { return v.Resolves }
@@ -91,7 +91,7 @@ type NewEstimate struct {
 	// from other software. When creating a new Forecast this value will be for
 	// the first Estimate (which will get the same timestamp as the
 	// Forecast.Created).
-	Created time.Time `json:"created"`
+	Created *time.Time `json:"created"`
 }
 
 // GetReason returns NewEstimate.Reason, and is useful for accessing the field via an interface.
@@ -101,17 +101,17 @@ func (v *NewEstimate) GetReason() string { return v.Reason }
 func (v *NewEstimate) GetProbabilities() []NewProbability { return v.Probabilities }
 
 // GetCreated returns NewEstimate.Created, and is useful for accessing the field via an interface.
-func (v *NewEstimate) GetCreated() time.Time { return v.Created }
+func (v *NewEstimate) GetCreated() *time.Time { return v.Created }
 
 type NewForecast struct {
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	Resolves    time.Time `json:"resolves"`
-	Closes      time.Time `json:"closes"`
+	Title       string     `json:"title"`
+	Description string     `json:"description"`
+	Resolves    time.Time  `json:"resolves"`
+	Closes      *time.Time `json:"closes"`
 	// An optional date in the past when you created this forecast. This can be
 	// useful for cases when you wrote it down on a piece of paper or when importing
 	// from other software.
-	Created time.Time `json:"created"`
+	Created *time.Time `json:"created"`
 }
 
 // GetTitle returns NewForecast.Title, and is useful for accessing the field via an interface.
@@ -124,10 +124,10 @@ func (v *NewForecast) GetDescription() string { return v.Description }
 func (v *NewForecast) GetResolves() time.Time { return v.Resolves }
 
 // GetCloses returns NewForecast.Closes, and is useful for accessing the field via an interface.
-func (v *NewForecast) GetCloses() time.Time { return v.Closes }
+func (v *NewForecast) GetCloses() *time.Time { return v.Closes }
 
 // GetCreated returns NewForecast.Created, and is useful for accessing the field via an interface.
-func (v *NewForecast) GetCreated() time.Time { return v.Created }
+func (v *NewForecast) GetCreated() *time.Time { return v.Created }
 
 type NewOutcome struct {
 	Text string `json:"text"`
