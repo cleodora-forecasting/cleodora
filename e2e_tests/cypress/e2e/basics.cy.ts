@@ -24,11 +24,14 @@ describe('basic front page tests', () => {
   });
 
   it('contains new forecast', () => {
+    const resolves = new Date();
+    resolves.setDate(resolves.getDate() + 1);
+    const resolvesISO = resolves.toISOString();
     const cmd = cleocPath + " " +
         "--url " + Cypress.config('baseUrl') + " " +
         "add forecast " +
         "-t 'Is this a test forecast?' " +
-        "-r '2022-12-01T15:00:00+01:00' " +
+        `-r '${resolvesISO}' ` +
         "--reason \"We're running a test, so it seems likely.\" " +
         "-p Yes=99 " +
         "-p No=1";
