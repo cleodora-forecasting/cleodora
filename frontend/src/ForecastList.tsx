@@ -35,7 +35,7 @@ export const ForecastList: FC = () => {
     let errorBox:JSX.Element;
     if (error) {
         const errMessages = new Array(error.message);
-        if (error.message == 'NetworkError when attempting to fetch' +
+        if (error.message === 'NetworkError when attempting to fetch' +
             ' resource.') {
             errMessages.push('Make sure the API is running and reachable.');
         }
