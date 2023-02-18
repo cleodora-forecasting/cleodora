@@ -6,23 +6,25 @@ import userEvent from "@testing-library/user-event";
 import {server} from "./mocks/server";
 import {graphql} from "msw";
 
+type AddForecastRequest = {
+    variables: {
+        forecast:
+            {
+                title: string;
+                resolves: string;
+                closes: string;
+                description: string;
+            };
+        estimate: {
+            reason: string;
+            probabilities: {value: number; outcome: {text: string}; }[];
+        };
+    };
+}
+
 test('after adding a forecast a success msg is shown', async () => {
     const user = userEvent.setup()
-    let requestBody: {
-        variables: {
-            forecast:
-                {
-                    title: string;
-                    resolves: string;
-                    closes: string;
-                    description: string;
-                };
-            estimate: {
-                reason: string;
-                probabilities: {value: number; outcome: {text: string}; }[];
-            };
-        };
-    } | undefined;
+    let requestBody: AddForecastRequest | undefined;
 
     server.use(
         graphql.mutation("createForecast", async (req, res, ctx) => {
