@@ -17,6 +17,7 @@ import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import dayjs, {Dayjs} from "dayjs";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {v4 as uuid} from "uuid";
 
 const ADD_FORECAST = gql(`
@@ -70,6 +71,10 @@ export const AddForecast: FC = () => {
                 return p;
             }
         }));
+    }
+
+    function removeProbability(id: string) {
+        setProbabilities(probabilities.filter(value => value.id !== id));
     }
 
     // https://rajputankit22.medium.com/add-dynamically-textfields-in-react-js-71320aee9a8d
@@ -175,6 +180,15 @@ export const AddForecast: FC = () => {
                                             startAdornment: <InputAdornment position="start">%</InputAdornment>,
                                         }}
                                     />
+                                </Grid>
+                                <Grid item>
+                                    <IconButton
+                                        style={{color: 'darkred'}}
+                                        aria-label="delete probability"
+                                        onClick={_ => removeProbability(prob.id)}
+                                    >
+                                        <DeleteOutlineIcon />
+                                    </IconButton>
                                 </Grid>
                             </Grid>
                         ))}
