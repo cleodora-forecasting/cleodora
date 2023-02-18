@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useState, useRef, useEffect} from "react";
 import {useMutation} from "@apollo/client";
 import {GET_FORECASTS} from "./ForecastList";
 import {gql} from "./__generated__"
@@ -39,6 +39,15 @@ export const AddForecast: FC = () => {
         {"id": uuid(), "outcome": "", value: 0},
     ];
     const [outcomes, setOutcomes] = useState(initialOutcomes);
+    const outcomeRefs = useRef<HTMLInputElement[]>([]);
+    const [focusLastOutcome, setFocusLastOutcome] = useState(false);
+
+    useEffect(() => {
+        if (focusLastOutcome) {
+            const len = outcomeRefs.current.length;
+            outcomeRefs.current[len-1].focus();
+        }
+    }, [focusLastOutcome]);
 
     const [addForecast, {error, data}] = useMutation<CreateForecastMutation, CreateForecastMutationVariables>(ADD_FORECAST, {
         refetchQueries: [
@@ -156,8 +165,14 @@ export const AddForecast: FC = () => {
                                         required
                                         value={prob.outcome}
                                         onChange={e => updateOutcome(prob.id, e.target.value, prob.value)}
+                                        onBlur={_ => setFocusLastOutcome(false)}
                                         label={`${index+1}. Outcome`}
                                         variant="outlined"
+                                        inputRef={(el) => {
+                                            if (el && el instanceof HTMLInputElement) {
+                                                outcomeRefs.current[index] = el;
+                                            }
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item>
@@ -197,7 +212,10 @@ export const AddForecast: FC = () => {
                                     variant="outlined"
                                     startIcon={<AddCircleOutlineIcon />}
                                     aria-label="add outcome"
-                                    onClick={_ => setOutcomes(old => [...old, {"id": uuid(), "outcome": "", "value": 0}])}
+                                    onClick={_ => {
+                                        setOutcomes(old => [...old, {"id": uuid(), "outcome": "", "value": 0}]);
+                                        setFocusLastOutcome(true);
+                                    }}
                                 >
                                     Outcome
                                 </Button>
