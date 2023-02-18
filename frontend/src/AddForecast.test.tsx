@@ -55,12 +55,14 @@ test('after adding a forecast a success msg is shown', async () => {
     await user.clear(screen.getByLabelText('Resolves *'));
     await user.type(screen.getByLabelText('Resolves *'), inputResolves);
     await user.type(screen.getByLabelText('Reason *'), expectedReason);
-    await user.type(await screen.findByLabelText('1. Outcome *'), 'Yes');
-    await user.type(await screen.findByLabelText('1. Probability *'), '95');
-    await user.click(await screen.findByLabelText('add probability'));
-    await user.type(await screen.findByLabelText('2. Outcome *'), 'No');
-    await user.type(await screen.findByLabelText('2. Probability *'), '5');
-    await user.click(await screen.findByRole("button", {name: "Add Forecast"}));
+    await user.type(screen.getByLabelText('1. Outcome *'), 'Yes');
+    await user.type(screen.getByLabelText('1. Probability *'), '95');
+    await user.type(screen.getByLabelText('2. Outcome *'), 'No');
+    await user.type(screen.getByLabelText('2. Probability *'), '4');
+    await user.click(screen.getByLabelText('add probability'));
+    await user.type(await screen.findByLabelText('3. Outcome *'), 'Maybe');
+    await user.type(await screen.findByLabelText('3. Probability *'), '1');
+    await user.click(screen.getByRole("button", {name: "Add Forecast"}));
 
     expect(await screen.findByText('Saved "Mock title" with ID 999.')).toBeInTheDocument();
     expect(requestBody).toBeTruthy();
@@ -75,16 +77,15 @@ test('after adding a forecast a success msg is shown', async () => {
 
     // Probability estimate
     expect(requestBody.variables.estimate.reason).toBe(expectedReason);
-    expect(requestBody.variables.estimate.probabilities).toHaveLength(2);
-    let probYes = requestBody.variables.estimate.probabilities[0];
-    let probNo = requestBody.variables.estimate.probabilities[1];
-    if (probYes.value !== 95) {
-        // switch around, since we shouldn't assume order
-        probYes = requestBody.variables.estimate.probabilities[1];
-        probNo = requestBody.variables.estimate.probabilities[0];
-    }
-    expect(probYes.value).toBe(95);
-    expect(probYes.outcome.text).toBe('Yes');
-    expect(probNo.value).toBe(5);
-    expect(probNo.outcome.text).toBe('No');
+    expect(requestBody.variables.estimate.probabilities).toHaveLength(3);
+    const expectedProbabilities = new Map<string, number>([
+        ['Yes', 95],
+        ['No', 4],
+        ['Maybe', 1],
+    ]);
+    requestBody.variables.estimate.probabilities.map(p => {
+        expect(expectedProbabilities.get(p.outcome.text)).toBe(p.value);
+        // ensure every outcome only appears once
+        expectedProbabilities.delete(p.outcome.text);
+    });
 }, 15000);

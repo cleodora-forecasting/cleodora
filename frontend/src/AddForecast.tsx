@@ -2,7 +2,6 @@ import React, {FC, useState} from "react";
 import {useMutation} from "@apollo/client";
 import {GET_FORECASTS} from "./ForecastList";
 import {gql} from "./__generated__"
-import {NewProbability} from "./__generated__/graphql";
 import {
     CreateForecastMutation,
     CreateForecastMutationVariables,
@@ -18,6 +17,7 @@ import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import dayjs, {Dayjs} from "dayjs";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import {v4 as uuid} from "uuid";
 
 const ADD_FORECAST = gql(`
     mutation createForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
@@ -34,9 +34,12 @@ export const AddForecast: FC = () => {
     const [closes, setCloses] = React.useState<Dayjs | null>(null);
     const [resolves, setResolves] = useState(dayjs());
     const [reason, setReason] = useState('');
-    const [probabilities, setProbabilities] = useState([{outcome: {text: ''}, value: 0} as NewProbability]);
+    const initialProbabilities = [
+        {"id": uuid(), "outcome": "", value: 0},
+        {"id": uuid(), "outcome": "", value: 0},
+    ];
+    const [probabilities, setProbabilities] = useState(initialProbabilities);
 
-//    useMutation<TableSizeMutation, TableSizeMutationVariables>
     const [addForecast, {error, data}] = useMutation<CreateForecastMutation, CreateForecastMutationVariables>(ADD_FORECAST, {
         refetchQueries: [
             {query: GET_FORECASTS}, // TODO needs refactor, should not be
@@ -53,23 +56,20 @@ export const AddForecast: FC = () => {
             },
             estimate: {
                 reason,
-                probabilities
+                probabilities: probabilities.map(v => {return {outcome: {text: v.outcome}, value: v.value}}),
             }
         },
     });
 
     // https://beta.reactjs.org/learn/updating-arrays-in-state#replacing-items-in-an-array
-    function handleModifyProbability(index: number, outcome: string, value: number) {
-        const nextProbabilities = probabilities.map((c, i) => {
-            if (i === index) {
-                // Increment the clicked counter
-                return {outcome: {text: outcome}, value: value};
+    function handleModifyProbability(idToUpdate: string, outcome: string, value: number) {
+        setProbabilities(probabilities.map(p => {
+            if (idToUpdate === p.id) {
+                return {"id": p.id, "outcome": outcome, "value": value};
             } else {
-                // The rest haven't changed
-                return c;
+                return p;
             }
-        });
-        setProbabilities(nextProbabilities);
+        }));
     }
 
     // https://rajputankit22.medium.com/add-dynamically-textfields-in-react-js-71320aee9a8d
@@ -85,7 +85,7 @@ export const AddForecast: FC = () => {
                         setCloses(null);
                         setResolves(dayjs());
                         setReason('');
-                        setProbabilities([{value: 0, outcome: {text: ''}}]);
+                        setProbabilities(initialProbabilities);
                     }).catch(reason => (console.log("error addForecast()", reason)));
                 }}>
                     <Grid container direction="column" alignItems="flex-start" spacing={3} justifyItems="flex-start">
@@ -145,13 +145,13 @@ export const AddForecast: FC = () => {
                             <Grid item>
                                 <p style={{maxWidth: 400}}>Specify all possible outcomes/answers to the forecast, each with a probability of 0-100% . The total probability must add up to 100% . For example "Yes" with 30% and "No" with 70%.</p>
                             </Grid>
-                        {probabilities.map((prob, index, {length}) => (
-                            <Grid item container key={index} spacing={1} alignItems="center">
+                        {probabilities.map((prob, index,{length}) =>  (
+                            <Grid item container key={prob.id} spacing={1} alignItems="center">
                                 <Grid item>
                                     <TextField
                                         required
-                                        value={prob.outcome.text}
-                                        onChange={e => handleModifyProbability(index, e.target.value, prob.value)}
+                                        value={prob.outcome}
+                                        onChange={e => handleModifyProbability(prob.id, e.target.value, prob.value)}
                                         label={`${index+1}. Outcome`}
                                         variant="outlined"
                                     />
@@ -164,7 +164,7 @@ export const AddForecast: FC = () => {
                                             if (isNaN(Number(e.target.value))) {
                                                 return
                                             }
-                                            handleModifyProbability(index, prob.outcome.text, Number(e.target.value))
+                                            handleModifyProbability(prob.id, prob.outcome, Number(e.target.value))
                                         }}
                                         inputProps={{inputMode: "numeric", pattern: '[0-9]+'}}
                                         InputLabelProps={{shrink: true}}
@@ -180,7 +180,7 @@ export const AddForecast: FC = () => {
                                     <Grid item>
                                         <IconButton
                                             aria-label="add probability"
-                                            onClick={_ => setProbabilities(old => [...old, {outcome: {text: ''}, value: 0}])}
+                                            onClick={_ => setProbabilities(old => [...old, {"id": uuid(), "outcome": "", "value": 0}])}
                                         >
                                             <AddCircleOutlineIcon />
                                         </IconButton>
