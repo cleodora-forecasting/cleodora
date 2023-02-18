@@ -14,7 +14,7 @@ import {
     InputAdornment
 } from "@mui/material";
 import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
-import dayjs, {Dayjs} from "dayjs";
+import dayjs from "dayjs";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -32,7 +32,6 @@ const ADD_FORECAST = gql(`
 export const AddForecast: FC = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [closes, setCloses] = React.useState<Dayjs | null>(null);
     const [resolves, setResolves] = useState(dayjs());
     const [reason, setReason] = useState('');
     const initialOutcomes = [
@@ -52,7 +51,6 @@ export const AddForecast: FC = () => {
             forecast: {
                 title,
                 description,
-                closes,
                 resolves,
             },
             estimate: {
@@ -107,7 +105,6 @@ export const AddForecast: FC = () => {
                     addForecast().then(() => {
                         setTitle('');
                         setDescription('');
-                        setCloses(null);
                         setResolves(dayjs());
                         setReason('');
                         setOutcomes(initialOutcomes);
@@ -147,21 +144,6 @@ export const AddForecast: FC = () => {
                                         {...params}
                                         required
                                         helperText="Date when you'll know the answer."
-                                    />
-                                )}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <DateTimePicker
-                                label="Closes"
-                                value={closes}
-                                onChange={(newValue: Dayjs | null) => {
-                                    setCloses(newValue);
-                                }}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        helperText="Optional date when you'll stop updating."
                                     />
                                 )}
                             />

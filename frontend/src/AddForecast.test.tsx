@@ -12,7 +12,6 @@ type AddForecastRequest = {
             {
                 title: string;
                 resolves: string;
-                closes: string;
                 description: string;
             };
         estimate: {
@@ -53,7 +52,6 @@ test('after adding a forecast a success msg is shown', async () => {
     const expectedReason = "It was written carefully and is not complicated.";
 
     await user.type(screen.getByLabelText('Title *'), expectedTitle);
-    await user.clear(screen.getByLabelText('Closes'));
     await user.clear(screen.getByLabelText('Resolves *'));
     await user.type(screen.getByLabelText('Resolves *'), inputResolves);
     await user.type(screen.getByLabelText('Reason *'), expectedReason);
@@ -74,7 +72,6 @@ test('after adding a forecast a success msg is shown', async () => {
     expect(requestBody.variables.forecast.title).toBe(expectedTitle);
 
     expect(requestBody.variables.forecast.resolves).toBe(expectedResolves);
-    expect(requestBody.variables.forecast.closes).toBeNull();
     expect(requestBody.variables.forecast.description).toBe("");
 
     // Probability estimate
