@@ -35,11 +35,11 @@ export const AddForecast: FC = () => {
     const [closes, setCloses] = React.useState<Dayjs | null>(null);
     const [resolves, setResolves] = useState(dayjs());
     const [reason, setReason] = useState('');
-    const initialProbabilities = [
+    const initialOutcomes = [
         {"id": uuid(), "outcome": "", value: 0},
         {"id": uuid(), "outcome": "", value: 0},
     ];
-    const [probabilities, setProbabilities] = useState(initialProbabilities);
+    const [outcomes, setOutcomes] = useState(initialOutcomes);
 
     const [addForecast, {error, data}] = useMutation<CreateForecastMutation, CreateForecastMutationVariables>(ADD_FORECAST, {
         refetchQueries: [
@@ -57,7 +57,7 @@ export const AddForecast: FC = () => {
             },
             estimate: {
                 reason,
-                probabilities: probabilities.map(v => {return {outcome: {text: v.outcome}, value: v.value}}),
+                probabilities: outcomes.map(v => {return {outcome: {text: v.outcome}, value: v.value}}),
             }
         },
     });
@@ -83,9 +83,9 @@ export const AddForecast: FC = () => {
 
 
     // https://beta.reactjs.org/learn/updating-arrays-in-state#replacing-items-in-an-array
-    function handleModifyProbability(idToUpdate: string, outcome: string, value: number) {
-        setProbabilities(probabilities.map(p => {
-            if (idToUpdate === p.id) {
+    function updateOutcome(id: string, outcome: string, value: number) {
+        setOutcomes(outcomes.map(p => {
+            if (id === p.id) {
                 return {"id": p.id, "outcome": outcome, "value": value};
             } else {
                 return p;
@@ -93,8 +93,8 @@ export const AddForecast: FC = () => {
         }));
     }
 
-    function removeProbability(id: string) {
-        setProbabilities(probabilities.filter(value => value.id !== id));
+    function deleteOutcome(id: string) {
+        setOutcomes(outcomes.filter(value => value.id !== id));
     }
 
     // https://rajputankit22.medium.com/add-dynamically-textfields-in-react-js-71320aee9a8d
@@ -110,7 +110,7 @@ export const AddForecast: FC = () => {
                         setCloses(null);
                         setResolves(dayjs());
                         setReason('');
-                        setProbabilities(initialProbabilities);
+                        setOutcomes(initialOutcomes);
                     }).catch(reason => (console.log("error addForecast()", reason)));
                 }}>
                     <Grid container direction="column" alignItems="flex-start" spacing={3} justifyItems="flex-start">
@@ -166,17 +166,14 @@ export const AddForecast: FC = () => {
                                 )}
                             />
                         </Grid>
-                        <Grid item container direction="column" spacing={2}>
-                            <Grid item>
-                                <p style={{maxWidth: 400}}>Specify all possible outcomes/answers to the forecast, each with a probability of 0-100% . The total probability must add up to 100% . For example "Yes" with 30% and "No" with 70%.</p>
-                            </Grid>
-                        {probabilities.map((prob, index) =>  (
+                        <Grid item container direction="column" spacing={1}>
+                        {outcomes.map((prob, index) =>  (
                             <Grid item container key={prob.id} spacing={1} alignItems="center">
                                 <Grid item>
                                     <TextField
                                         required
                                         value={prob.outcome}
-                                        onChange={e => handleModifyProbability(prob.id, e.target.value, prob.value)}
+                                        onChange={e => updateOutcome(prob.id, e.target.value, prob.value)}
                                         label={`${index+1}. Outcome`}
                                         variant="outlined"
                                     />
@@ -189,7 +186,7 @@ export const AddForecast: FC = () => {
                                             if (isNaN(Number(e.target.value))) {
                                                 return
                                             }
-                                            handleModifyProbability(prob.id, prob.outcome, Number(e.target.value))
+                                            updateOutcome(prob.id, prob.outcome, Number(e.target.value))
                                         }}
                                         inputProps={{inputMode: "numeric", pattern: '[0-9]+'}}
                                         InputLabelProps={{shrink: true}}
@@ -204,8 +201,8 @@ export const AddForecast: FC = () => {
                                 <Grid item>
                                     <IconButton
                                         style={{color: 'darkred'}}
-                                        aria-label="delete probability"
-                                        onClick={_ => removeProbability(prob.id)}
+                                        aria-label="delete outcome"
+                                        onClick={_ => deleteOutcome(prob.id)}
                                     >
                                         <DeleteOutlineIcon />
                                     </IconButton>
@@ -214,12 +211,13 @@ export const AddForecast: FC = () => {
                         ))}
                             <Grid item>
                                 <Button
+                                    size="small"
                                     variant="outlined"
                                     startIcon={<AddCircleOutlineIcon />}
-                                    aria-label="add probability"
-                                    onClick={_ => setProbabilities(old => [...old, {"id": uuid(), "outcome": "", "value": 0}])}
+                                    aria-label="add outcome"
+                                    onClick={_ => setOutcomes(old => [...old, {"id": uuid(), "outcome": "", "value": 0}])}
                                 >
-                                    Add Probability
+                                    Outcome
                                 </Button>
                             </Grid>
                         </Grid>
