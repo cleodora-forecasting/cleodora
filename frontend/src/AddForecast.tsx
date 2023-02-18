@@ -145,7 +145,7 @@ export const AddForecast: FC = () => {
                             <Grid item>
                                 <p style={{maxWidth: 400}}>Specify all possible outcomes/answers to the forecast, each with a probability of 0-100% . The total probability must add up to 100% . For example "Yes" with 30% and "No" with 70%.</p>
                             </Grid>
-                        {probabilities.map((prob, index,{length}) =>  (
+                        {probabilities.map((prob, index) =>  (
                             <Grid item container key={prob.id} spacing={1} alignItems="center">
                                 <Grid item>
                                     <TextField
@@ -176,19 +176,18 @@ export const AddForecast: FC = () => {
                                         }}
                                     />
                                 </Grid>
-                                {index + 1 === length ?
-                                    <Grid item>
-                                        <IconButton
-                                            aria-label="add probability"
-                                            onClick={_ => setProbabilities(old => [...old, {"id": uuid(), "outcome": "", "value": 0}])}
-                                        >
-                                            <AddCircleOutlineIcon />
-                                        </IconButton>
-                                    </Grid>
-                                    : null
-                                }
                             </Grid>
                         ))}
+                            <Grid item>
+                                <Button
+                                    variant="outlined"
+                                    startIcon={<AddCircleOutlineIcon />}
+                                    aria-label="add probability"
+                                    onClick={_ => setProbabilities(old => [...old, {"id": uuid(), "outcome": "", "value": 0}])}
+                                >
+                                    Add Probability
+                                </Button>
+                            </Grid>
                         </Grid>
                         <Grid item>
                             <TextField
