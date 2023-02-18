@@ -62,6 +62,26 @@ export const AddForecast: FC = () => {
         },
     });
 
+    let messageBox:JSX.Element = <></>;
+    if (error) {
+        const errMessages = new Array(error.message);
+        if (error.message.includes('NetworkError')) {
+            errMessages.push('Make sure the API is running and reachable.');
+        }
+        messageBox =
+            <p style={{color:"red"}}>
+                <strong>{error.name}: </strong>
+                {errMessages.join(' ')}
+            </p>
+    } else if (data && data.createForecast) {
+        messageBox =
+            <p style={{color: "green"}}>
+                Saved "{data.createForecast.title}" with
+                ID {data.createForecast.id}.
+            </p>
+        }
+
+
     // https://beta.reactjs.org/learn/updating-arrays-in-state#replacing-items-in-an-array
     function handleModifyProbability(idToUpdate: string, outcome: string, value: number) {
         setProbabilities(probabilities.map(p => {
@@ -215,14 +235,7 @@ export const AddForecast: FC = () => {
                             />
                         </Grid>
                         <Grid item>
-                            {error ?
-                                <p style={{color: "red"}}>Oh no! {error.message}</p> : null}
-                            {data && data.createForecast ?
-                                <p style={{color: "green"}}>
-                                    Saved "{data.createForecast.title}" with
-                                    ID {data.createForecast.id}.
-                                </p>
-                                : null}
+                            {messageBox}
                             <Button variant="outlined" type="submit">Add Forecast</Button>
                         </Grid>
                     </Grid>
