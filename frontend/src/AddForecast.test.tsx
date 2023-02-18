@@ -58,10 +58,14 @@ test('after adding a forecast a success msg is shown', async () => {
     await user.type(screen.getByLabelText('1. Outcome *'), 'Yes');
     await user.type(screen.getByLabelText('1. Probability *'), '95');
     await user.type(screen.getByLabelText('2. Outcome *'), 'No');
-    await user.type(screen.getByLabelText('2. Probability *'), '4');
+    await user.type(screen.getByLabelText('2. Probability *'), '99');
     await user.click(screen.getByLabelText('add outcome'));
     await user.type(await screen.findByLabelText('3. Outcome *'), 'Maybe');
     await user.type(await screen.findByLabelText('3. Probability *'), '1');
+    await user.click(screen.getByLabelText('delete 2. outcome'));
+    await user.click(screen.getByLabelText('add outcome'));
+    await user.type(await screen.findByLabelText('3. Outcome *'), 'No');
+    await user.type(await screen.findByLabelText('3. Probability *'), '4');
     await user.click(screen.getByRole("button", {name: "Add Forecast"}));
 
     expect(await screen.findByText('Saved "Mock title" with ID 999.')).toBeInTheDocument();

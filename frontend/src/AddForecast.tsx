@@ -183,7 +183,7 @@ export const AddForecast: FC = () => {
                                 <Grid item>
                                     <IconButton
                                         style={{color: 'darkred'}}
-                                        aria-label="delete outcome"
+                                        aria-label={`delete ${index+1}. outcome`}
                                         onClick={_ => deleteOutcome(prob.id)}
                                     >
                                         <DeleteOutlineIcon />
