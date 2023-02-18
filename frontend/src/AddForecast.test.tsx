@@ -86,7 +86,7 @@ test('after adding a forecast a success msg is shown', async () => {
         ['No', 4],
         ['Maybe', 1],
     ]);
-    requestBody.variables.estimate.probabilities.map(p => {
+    requestBody.variables.estimate.probabilities.forEach(p => {
         expect(expectedProbabilities.get(p.outcome.text)).toBe(p.value);
         // ensure every outcome only appears once
         expectedProbabilities.delete(p.outcome.text);
