@@ -16,12 +16,15 @@ export const GET_FORECASTS = gql(`
             resolution
             estimates {
                 id
+                created
+                reason
                 probabilities {
                     id
                     value
                     outcome {
                         id
                         text
+                        correct
                     }
                 }
             }

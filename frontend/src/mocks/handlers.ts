@@ -31,6 +31,9 @@ export const handlers: RequestHandler[] = [
                        "estimates":[
                            {
                                "id":"1",
+                               "reason": "It's the type of film the Academy" +
+                                   " loves",
+                               "created": "2022-10-30T17:05:00+01:00",
                                "probabilities":[
                                    {
                                        "id":"1",
@@ -38,6 +41,7 @@ export const handlers: RequestHandler[] = [
                                        "outcome":{
                                            "id":"1",
                                            "text":"Yes",
+                                           "correct": false,
                                            "__typename":"Outcome"
                                        },
                                        "__typename":"Probability"
@@ -48,6 +52,7 @@ export const handlers: RequestHandler[] = [
                                        "outcome":{
                                            "id":"2",
                                            "text":"No",
+                                           "correct": false,
                                            "__typename":"Outcome"
                                        },
                                        "__typename":"Probability"
