@@ -28,7 +28,93 @@ const ADD_FORECAST = gql(`
         }
     }
 `);
-//` as DocumentNode<CreateForecastMutation, CreateForecastMutationVariables>);
+
+const AddOutcomes: FC<{
+    outcomes:{id: string, outcome: string, value: number}[],
+    addOutcome: () => void,
+    updateOutcome: (id: string, outcome: string, probability: number) => void,
+    deleteOutcome: (id:string) => void,
+}> = ({outcomes, addOutcome, updateOutcome, deleteOutcome}) => {
+    const outcomeRefs = useRef<HTMLInputElement[]>([]);
+    const focusLastOutcome = useRef(false);
+
+    useEffect(() => {
+        if (focusLastOutcome.current) {
+            focusLastOutcome.current = false;
+            const len = outcomeRefs.current.length;
+            outcomeRefs.current[len-1].focus();
+        }
+    });
+
+    return (
+        <>
+            {outcomes.map((prob, index) =>  (
+                <Grid item container key={prob.id} spacing={1} alignItems="center">
+                    <Grid item>
+                        <TextField
+                            required
+                            value={prob.outcome}
+                            onChange={e => updateOutcome(prob.id, e.target.value, prob.value)}
+                            label={`${index+1}. Outcome`}
+                            variant="outlined"
+                            inputRef={(el) => {
+                                if (el && el instanceof HTMLInputElement) {
+                                    outcomeRefs.current[index] = el;
+                                }
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            required
+                            value={prob.value}
+                            onChange={e => {
+                                if (isNaN(Number(e.target.value))) {
+                                    return
+                                }
+                                updateOutcome(prob.id, prob.outcome, Number(e.target.value))
+                            }}
+                            inputProps={{inputMode: "numeric", pattern: '[0-9]+'}}
+                            InputLabelProps={{shrink: true}}
+                            label={`${index+1}. Probability`}
+                            variant="outlined"
+                            sx={{ m: 1, width: '25ch' }}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <IconButton
+                            style={{color: 'darkred'}}
+                            aria-label={`delete ${index+1}. outcome`}
+                            onClick={_ => deleteOutcome(prob.id)}
+                        >
+                            <DeleteOutlineIcon />
+                        </IconButton>
+                    </Grid>
+                </Grid>
+            ))}
+            <Grid item>
+                <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<AddCircleOutlineIcon />}
+                    aria-label="add outcome"
+                    onClick={_ => {
+                        addOutcome();
+                        focusLastOutcome.current = true;
+                    }}
+                >
+                    Outcome
+                </Button>
+            </Grid>
+        </>
+    );
+};
+
+
+
 export const AddForecast: FC = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -87,7 +173,7 @@ export const AddForecast: FC = () => {
                 Saved "{data.createForecast.title}" with
                 ID {data.createForecast.id}.
             </p>
-        }
+    }
 
 
     // https://beta.reactjs.org/learn/updating-arrays-in-state#replacing-items-in-an-array
@@ -103,6 +189,10 @@ export const AddForecast: FC = () => {
 
     function deleteOutcome(id: string) {
         setOutcomes(outcomes.filter(value => value.id !== id));
+    }
+
+    function addOutcome() {
+        setOutcomes([...outcomes, {"id": uuid(), "outcome": "", "value": 0}]);
     }
 
     // https://rajputankit22.medium.com/add-dynamically-textfields-in-react-js-71320aee9a8d
@@ -159,67 +249,12 @@ export const AddForecast: FC = () => {
                             />
                         </Grid>
                         <Grid item container direction="column" spacing={1}>
-                        {outcomes.map((prob, index) =>  (
-                            <Grid item container key={prob.id} spacing={1} alignItems="center">
-                                <Grid item>
-                                    <TextField
-                                        required
-                                        value={prob.outcome}
-                                        onChange={e => updateOutcome(prob.id, e.target.value, prob.value)}
-                                        label={`${index+1}. Outcome`}
-                                        variant="outlined"
-                                        inputRef={(el) => {
-                                            if (el && el instanceof HTMLInputElement) {
-                                                outcomeRefs.current[index] = el;
-                                            }
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        required
-                                        value={prob.value}
-                                        onChange={e => {
-                                            if (isNaN(Number(e.target.value))) {
-                                                return
-                                            }
-                                            updateOutcome(prob.id, prob.outcome, Number(e.target.value))
-                                        }}
-                                        inputProps={{inputMode: "numeric", pattern: '[0-9]+'}}
-                                        InputLabelProps={{shrink: true}}
-                                        label={`${index+1}. Probability`}
-                                        variant="outlined"
-                                        sx={{ m: 1, width: '25ch' }}
-                                        InputProps={{
-                                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item>
-                                    <IconButton
-                                        style={{color: 'darkred'}}
-                                        aria-label={`delete ${index+1}. outcome`}
-                                        onClick={_ => deleteOutcome(prob.id)}
-                                    >
-                                        <DeleteOutlineIcon />
-                                    </IconButton>
-                                </Grid>
-                            </Grid>
-                        ))}
-                            <Grid item>
-                                <Button
-                                    size="small"
-                                    variant="outlined"
-                                    startIcon={<AddCircleOutlineIcon />}
-                                    aria-label="add outcome"
-                                    onClick={_ => {
-                                        setOutcomes(old => [...old, {"id": uuid(), "outcome": "", "value": 0}]);
-                                        focusLastOutcome.current = true;
-                                    }}
-                                >
-                                    Outcome
-                                </Button>
-                            </Grid>
+                            <AddOutcomes
+                                outcomes={outcomes}
+                                addOutcome={addOutcome}
+                                updateOutcome={updateOutcome}
+                                deleteOutcome={deleteOutcome}
+                            />
                         </Grid>
                         <Grid item>
                             <TextField
