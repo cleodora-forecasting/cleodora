@@ -5,9 +5,6 @@ kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
-[build]
-  image = "cleodora/cleodora:latest"
-
 [env]
   CLEOSRV_FRONTEND_FOOTER_TEXT = "This is a public development demo version of Cleodora. All data will be deleted every 24 hours."
 

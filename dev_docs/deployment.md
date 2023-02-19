@@ -2,21 +2,14 @@
 
 ## Docker
 
-TODO Does not work right now because Goreleaser expects a different format and
-cleosrv can't be copied to the current directory because there already is a
-directory with that name.
-
 ```bash
 mage clean
 mage build
-cp dist/cleosrv_linux_amd64_v1/cleosrv .
 DOCKER_TAG=0.1.0.dev.`git rev-parse --short HEAD`
 echo "DOCKER_TAG: ${DOCKER_TAG}"
 docker build --tag cleodora/cleodora:${DOCKER_TAG} .
 docker run -p 8080:8080 -v cleodora_data:/data cleodora/cleodora:${DOCKER_TAG}
 docker push cleodora/cleodora:${DOCKER_TAG}
-#docker tag cleodora/cleodora:${DOCKER_TAG} cleodora/cleodora:latest
-#docker push cleodora/cleodora:latest
 ```
 
 Always start the container with a named volume (and keep using the same name,
@@ -45,7 +38,9 @@ mentioned above):
 ## fly.io (demo.cleodora.org)
 
 ```bash
-flyctl deploy
+mage clean
+mage build
+flyctl deploy --local-only # use local Docker to build
 ./scripts/demoDummyData.sh
 ```
 

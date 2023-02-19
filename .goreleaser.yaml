@@ -54,7 +54,8 @@ builds:
       - goos: windows
         goarch: arm64
 dockers:
-  - image_templates:
+  - dockerfile: Dockerfile.goreleaser
+    image_templates:
       - "cleodora/cleodora:{{ .Tag }}"
       - "cleodora/cleodora:v{{ .Major }}"
       - "cleodora/cleodora:v{{ .Major }}.{{ .Minor }}"
