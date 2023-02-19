@@ -41,7 +41,7 @@ const AddOutcomes: FC<{
     useEffect(() => {
         if (focusLastOutcome.current) {
             focusLastOutcome.current = false;
-            const len = outcomeRefs.current.length;
+            const len = outcomes.length;
             outcomeRefs.current[len-1].focus();
         }
     });
