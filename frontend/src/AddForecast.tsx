@@ -40,14 +40,15 @@ export const AddForecast: FC = () => {
     ];
     const [outcomes, setOutcomes] = useState(initialOutcomes);
     const outcomeRefs = useRef<HTMLInputElement[]>([]);
-    const [focusLastOutcome, setFocusLastOutcome] = useState(false);
+    const focusLastOutcome = useRef(false);
 
     useEffect(() => {
-        if (focusLastOutcome) {
+        if (focusLastOutcome.current) {
+            focusLastOutcome.current = false;
             const len = outcomeRefs.current.length;
             outcomeRefs.current[len-1].focus();
         }
-    }, [focusLastOutcome]);
+    });
 
     const [addForecast, {error, data}] = useMutation<CreateForecastMutation, CreateForecastMutationVariables>(ADD_FORECAST, {
         refetchQueries: [
@@ -165,7 +166,6 @@ export const AddForecast: FC = () => {
                                         required
                                         value={prob.outcome}
                                         onChange={e => updateOutcome(prob.id, e.target.value, prob.value)}
-                                        onBlur={_ => setFocusLastOutcome(false)}
                                         label={`${index+1}. Outcome`}
                                         variant="outlined"
                                         inputRef={(el) => {
@@ -214,7 +214,7 @@ export const AddForecast: FC = () => {
                                     aria-label="add outcome"
                                     onClick={_ => {
                                         setOutcomes(old => [...old, {"id": uuid(), "outcome": "", "value": 0}]);
-                                        setFocusLastOutcome(true);
+                                        focusLastOutcome.current = true;
                                     }}
                                 >
                                     Outcome
