@@ -81,10 +81,6 @@ export const ForecastList: FC = () => {
                                 ).join(" | ")
                             }
                         }
-                        let closes = ""
-                        if (f.closes) {
-                            closes = new Date(f.closes as string).toLocaleString()
-                        }
                         return (
                             <TableRow
                                 key={f.id}
@@ -98,9 +94,6 @@ export const ForecastList: FC = () => {
                                 >
                                     {f.title}
                                 </TableCell>
-                                <TableCell
-                                    align="right">{new Date(f.created as string).toLocaleString()}</TableCell>
-                                <TableCell align="right">{closes}</TableCell>
                                 <TableCell
                                     align="right">{new Date(f.resolves as string).toLocaleString()}</TableCell>
                                 <TableCell
@@ -122,8 +115,6 @@ export const ForecastList: FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Title</TableCell>
-                            <TableCell align="right">Created</TableCell>
-                            <TableCell align="right">Closes</TableCell>
                             <TableCell align="right">Resolves</TableCell>
                             <TableCell align="right">Resolution</TableCell>
                             <TableCell align="right">Estimate</TableCell>

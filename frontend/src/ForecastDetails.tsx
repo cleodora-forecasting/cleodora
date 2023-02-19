@@ -30,9 +30,9 @@ export const ForecastDetails: FC<{forecast: Forecast, open: boolean, handleClose
             <ul>
                 <li><strong>ID: </strong>{forecast.id}</li>
                 <li><strong>Resolution: </strong>{forecast.resolution}</li>
-                <li><strong>Created: </strong>{forecast.created}</li>
-                <li><strong>Resolves: </strong>{forecast.resolves}</li>
-                <li><strong>Closes: </strong>{forecast.closes}</li>
+                <li><strong>Created: </strong>{new Date(forecast.created as string).toLocaleString()}</li>
+                <li><strong>Resolves: </strong>{new Date(forecast.resolves as string).toLocaleString()}</li>
+                <li><strong>Closes: </strong>{forecast.closes ? new Date(forecast.closes as string).toLocaleString() : ''}</li>
             </ul>
             <p>{forecast.description}</p>
             <h3>Estimates</h3>
@@ -43,7 +43,7 @@ export const ForecastDetails: FC<{forecast: Forecast, open: boolean, handleClose
                     }
                     return (
                         <div key={estimate.id}>
-                            <h4>{estimate.created}</h4>
+                            <h4>{new Date(estimate.created as string).toLocaleString()}</h4>
                             <p>{estimate.reason}</p>
                             <ul>
                                 {estimate.probabilities.map(probability => {
