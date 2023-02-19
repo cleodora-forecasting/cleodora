@@ -18,7 +18,7 @@ set -o pipefail
     --url https://demo.cleodora.org \
     add forecast \
     --title "Will I go at least 10 times to the gym this month?" \
-    --resolves 2023-02-01T00:00:00+01:00 \
+    --resolves `date -Iseconds -d "+30 days"` \
     --probability Yes=65 \
     --probability No=35 \
     --reason "Past experience"
@@ -27,7 +27,7 @@ set -o pipefail
     --url https://demo.cleodora.org \
     add forecast \
     --title "Will I finish the financial report this week?" \
-    --resolves 2023-01-16T00:00:00+01:00 \
+    --resolves `date -Iseconds -d "+7 days"` \
     --probability Yes=15 \
     --probability No=85 \
     --reason "I haven't even started"
@@ -36,7 +36,7 @@ set -o pipefail
     --url https://demo.cleodora.org \
     add forecast \
     --title "How many cookies will I eat in the evening?" \
-    --resolves 2023-02-01T00:00:00+01:00 \
+    --resolves `date -Iseconds -d "+1 day"` \
     --probability None=5 \
     --probability "Less than 5=20" \
     --probability "5 to 15=60" \
