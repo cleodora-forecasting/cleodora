@@ -87,6 +87,7 @@ export const ForecastList: FC = () => {
                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                 hover
                                 onClick={_ => {setSelectedForecast(f); setOpenDetails(true)}}
+                                style={{cursor: 'pointer'}}
                             >
                                 <TableCell
                                     component="th"
