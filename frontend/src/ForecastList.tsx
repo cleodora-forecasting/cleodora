@@ -1,8 +1,10 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import {useQuery} from "@apollo/client";
 import {gql} from "./__generated__"
 import {Paper, Table,
     TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from '@mui/material'
+import {ForecastDetails} from "./ForecastDetails";
+import {Forecast} from "./__generated__/graphql";
 
 export const GET_FORECASTS = gql(`
     query GetForecasts {
@@ -34,6 +36,9 @@ export const GET_FORECASTS = gql(`
 
 export const ForecastList: FC = () => {
     const {error, data} = useQuery(GET_FORECASTS);
+
+    const [selectedForecast, setSelectedForecast] = useState<Forecast|null>(null);
+    const [openDetails, setOpenDetails] = useState(false);
 
     let errorBox:JSX.Element;
     if (error) {
@@ -84,9 +89,15 @@ export const ForecastList: FC = () => {
                             <TableRow
                                 key={f.id}
                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                hover
+                                onClick={_ => {setSelectedForecast(f); setOpenDetails(true)}}
                             >
-                                <TableCell component="th"
-                                           scope="row">{f.title}</TableCell>
+                                <TableCell
+                                    component="th"
+                                    scope="row"
+                                >
+                                    {f.title}
+                                </TableCell>
                                 <TableCell
                                     align="right">{new Date(f.created as string).toLocaleString()}</TableCell>
                                 <TableCell align="right">{closes}</TableCell>
@@ -123,5 +134,13 @@ export const ForecastList: FC = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            {selectedForecast ?
+                <ForecastDetails
+                    forecast={selectedForecast}
+                    open={openDetails}
+                    handleClose={() => setOpenDetails(false)}
+                />
+                : <></>
+            }
         </div>);
 }
