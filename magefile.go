@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/carolynvs/magex/mgx"
 	"github.com/carolynvs/magex/pkg"
@@ -312,6 +313,9 @@ func DeployDemo() error {
 		"deploy",
 		"--local-only", // use local Docker to build
 	)
+	fmt.Println("Sleeping 30s so demo.cleodora.org comes up")
+	// sometimes it takes a little until the new instance is fully active
+	time.Sleep(30 * time.Second)
 	_ = must.RunV("./scripts/demoDummyData.sh")
 	return nil
 }
