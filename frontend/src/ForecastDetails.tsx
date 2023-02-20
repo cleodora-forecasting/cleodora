@@ -11,7 +11,7 @@ import Draggable from 'react-draggable';
 
 const PaperComponent: FC = (props) => {
     return (
-        <Draggable>
+        <Draggable handle="#draggable-dialog-title">
             <Paper {...props} />
         </Draggable>
     )
@@ -25,7 +25,9 @@ export const ForecastDetails: FC<{forecast: Forecast, open: boolean, handleClose
         PaperComponent={PaperComponent}
         aria-labelledby="draggable-dialog-title"
     >
-        <DialogTitle id="draggable-dialog-title">{forecast.title}</DialogTitle>
+        <DialogTitle id="draggable-dialog-title" style={{cursor: "grab"}}>
+            {forecast.title}
+        </DialogTitle>
         <DialogContent>
             <ul>
                 <li><strong>ID: </strong>{forecast.id}</li>
