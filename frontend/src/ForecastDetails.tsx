@@ -21,7 +21,7 @@ export const ForecastDetails: FC<{forecast: Forecast, open: boolean, handleClose
     return (
     <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={(event, reason) => handleClose()}
         PaperComponent={PaperComponent}
         aria-labelledby="draggable-dialog-title"
     >
