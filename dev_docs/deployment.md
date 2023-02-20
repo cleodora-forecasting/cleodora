@@ -38,10 +38,7 @@ mentioned above):
 ## fly.io (demo.cleodora.org)
 
 ```bash
-mage clean
-mage build
-flyctl deploy --local-only # use local Docker to build
-./scripts/demoDummyData.sh
+mage deployDemo
 ```
 
 

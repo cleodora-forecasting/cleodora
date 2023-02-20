@@ -285,3 +285,33 @@ func getCurrentBuildTarget() (string, error) {
 	}
 	return "", fmt.Errorf("unknown goarch: %v", goarch)
 }
+
+// DeployDemo deploy and overwrite demo.cleodora.org
+func DeployDemo() error {
+	buildTarget, err := getCurrentBuildTarget()
+	mgx.Must(err)
+	if buildTarget != "linux_amd64_v1" {
+		return fmt.Errorf(
+			"the Dockerfile is hardcoded to use 'linux_amd64_v1' and not '%v'",
+			buildTarget,
+		)
+	}
+	mg.Deps(Clean)
+	mg.Deps(InstallDeps)
+	mg.Deps(Lint)
+	mg.Deps(Generate)
+	err = shx.Run("git", "diff", "--quiet", "--exit-code")
+	mg.Deps(Test)
+	mg.Deps(E2ETest)
+	if err != nil {
+		return fmt.Errorf("There are uncommitted changes! Exiting")
+	}
+	mg.Deps(Build)
+	_ = must.RunV(
+		"flyctl",
+		"deploy",
+		"--local-only", // use local Docker to build
+	)
+	_ = must.RunV("./scripts/demoDummyData.sh")
+	return nil
+}
