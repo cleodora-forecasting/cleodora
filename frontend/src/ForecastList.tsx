@@ -5,6 +5,7 @@ import {Paper, Table,
     TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from '@mui/material'
 import {ForecastDetails} from "./ForecastDetails";
 import {Forecast} from "./__generated__/graphql";
+import {ResolutionChip} from "./ResolutionChip";
 
 export const GET_FORECASTS = gql(`
     query GetForecasts {
@@ -98,7 +99,7 @@ export const ForecastList: FC = () => {
                                 <TableCell
                                     align="right">{new Date(f.resolves as string).toLocaleString()}</TableCell>
                                 <TableCell
-                                    align="right">{f.resolution}</TableCell>
+                                    align="right"><ResolutionChip resolution={f.resolution} /></TableCell>
                                 <TableCell align="right">{estimates}</TableCell>
                             </TableRow>
                         )

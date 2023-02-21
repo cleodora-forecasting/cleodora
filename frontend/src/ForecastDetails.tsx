@@ -8,6 +8,7 @@ import {
     DialogTitle, Paper
 } from "@mui/material";
 import Draggable from 'react-draggable';
+import {ResolutionChip} from "./ResolutionChip";
 
 const PaperComponent: FC = (props) => {
     return (
@@ -29,9 +30,9 @@ export const ForecastDetails: FC<{forecast: Forecast, open: boolean, handleClose
             {forecast.title}
         </DialogTitle>
         <DialogContent>
+            <ResolutionChip resolution={forecast.resolution} />
             <ul>
                 <li><strong>ID: </strong>{forecast.id}</li>
-                <li><strong>Resolution: </strong>{forecast.resolution}</li>
                 <li><strong>Created: </strong>{new Date(forecast.created as string).toLocaleString()}</li>
                 <li><strong>Resolves: </strong>{new Date(forecast.resolves as string).toLocaleString()}</li>
                 <li><strong>Closes: </strong>{forecast.closes ? new Date(forecast.closes as string).toLocaleString() : ''}</li>
