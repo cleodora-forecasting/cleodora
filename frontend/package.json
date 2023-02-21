@@ -73,7 +73,7 @@
     "@graphql-codegen/cli": "^3.0.0",
     "@graphql-codegen/client-preset": "^2.0.0",
     "@types/jest": "^29.4.0",
-    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.52.0",
     "eslint": "^8.34.0",
     "msw": "^1.0.1",
