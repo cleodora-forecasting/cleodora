@@ -65,21 +65,26 @@ export const ForecastList: FC = () => {
             {
                 data.forecasts.map(
                     f => {
-                        let estimates = ""
+                        let outcomes: JSX.Element | string = <></>;
                         if (Array.isArray(f.estimates)) {
                             // TODO the next line depends much
                             //  on what the API returns. It
                             //  probably needs to be adjusted.
                             const lastEstimate = f.estimates[f.estimates.length - 1];
-                            if (lastEstimate != null) {
-                                estimates = lastEstimate.probabilities.map(
+                            if (lastEstimate != null && lastEstimate.probabilities.length > 0) {
+                                outcomes = lastEstimate.probabilities.map(
                                     p => {
                                         if (p != null) {
-                                            return p.outcome.text + ": " + p.value.toString() + "%"
+                                            const content = p.outcome.text + ": " + p.value.toString() + "%";
+                                            if (p.outcome.correct) {
+                                                return <strong>{content}</strong>
+                                            } else {
+                                                return content
+                                            }
                                         }
                                         return ""
                                     }
-                                ).join(" | ")
+                                ).reduce((result, item) => <>{result} | {item}</>)
                             }
                         }
                         return (
@@ -100,7 +105,7 @@ export const ForecastList: FC = () => {
                                     align="right">{new Date(f.resolves as string).toLocaleString()}</TableCell>
                                 <TableCell
                                     align="right"><ResolutionChip resolution={f.resolution} /></TableCell>
-                                <TableCell align="right">{estimates}</TableCell>
+                                <TableCell align="right">{outcomes}</TableCell>
                             </TableRow>
                         )
                     }
