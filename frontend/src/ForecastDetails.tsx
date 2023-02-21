@@ -1,11 +1,12 @@
 import {FC} from "react";
-import {Forecast}  from "./__generated__/graphql";
+import {Forecast, Resolution} from "./__generated__/graphql";
 import {
     Button,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle, Paper
+    DialogTitle,
+    Paper
 } from "@mui/material";
 import Draggable from 'react-draggable';
 import {ResolutionChip} from "./ResolutionChip";
@@ -19,6 +20,25 @@ const PaperComponent: FC = (props) => {
 }
 
 export const ForecastDetails: FC<{forecast: Forecast, open: boolean, handleClose: () => void}> = ({forecast, open, handleClose}) => {
+
+    const getCorrectOutcome = () => {
+        let outcome = <></>;
+        if (forecast &&
+            forecast.resolution === Resolution.Resolved &&
+            forecast.estimates &&
+            forecast.estimates.length > 0 &&
+            forecast.estimates[0]
+        ) {
+            forecast.estimates[0].probabilities.forEach(function (p) {
+                if (p && p.outcome.correct) {
+                    outcome = <strong>({p.outcome.text})</strong>;
+                    return
+                }
+            });
+        }
+        return outcome;
+    };
+
     return (
     <Dialog
         open={open}
@@ -30,7 +50,7 @@ export const ForecastDetails: FC<{forecast: Forecast, open: boolean, handleClose
             {forecast.title}
         </DialogTitle>
         <DialogContent>
-            <ResolutionChip resolution={forecast.resolution} />
+            <ResolutionChip resolution={forecast.resolution} /> {getCorrectOutcome()}
             <ul>
                 <li><strong>ID: </strong>{forecast.id}</li>
                 <li><strong>Created: </strong>{new Date(forecast.created as string).toLocaleString()}</li>
