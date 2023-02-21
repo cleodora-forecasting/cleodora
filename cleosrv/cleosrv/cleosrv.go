@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -88,7 +89,14 @@ Listening on: %s
 }
 
 func (a *App) InitDB() (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open(a.Config.Database), &gorm.Config{})
+	db, err := gorm.Open(
+		sqlite.Open(a.Config.Database),
+		&gorm.Config{
+			NowFunc: func() time.Time {
+				return time.Now().UTC()
+			},
+		},
+	)
 	if err != nil {
 		return nil, err
 	}
