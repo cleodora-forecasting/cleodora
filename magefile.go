@@ -146,6 +146,10 @@ func MergeDependabot() error {
 		"refs/remotes/origin/dependabot/",
 	)
 	mgx.Must(err)
+	if out == "" {
+		fmt.Println("Nothing to merge")
+		return nil
+	}
 
 	for _, pr := range strings.Split(out, "\n") {
 		fmt.Printf("PR: %v\n", pr)
