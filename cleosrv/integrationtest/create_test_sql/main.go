@@ -115,37 +115,36 @@ func getVersion(c graphql.Client) (string, error) {
 }
 
 func executeQueries(c graphql.Client) error {
-	variables := map[string]interface{}{
-		"forecast": map[string]interface{}{
-			"description": "",
-			"resolves":    time.Now().UTC().Add(30 * 24 * time.Hour).Format(time.RFC3339),
-			"title":       "Will it rain next month?",
-		},
-		"estimate": map[string]interface{}{
-			"probabilities": []map[string]interface{}{
-				{
-					"outcome": map[string]interface{}{
-						"text": "Yes",
-					},
-					"value": 20,
-				},
-				{
-					"outcome": map[string]interface{}{
-						"text": "No",
-					},
-					"value": 80,
-				},
+	now := time.Now().UTC()
+
+	f1 := integrationtest.NewForecast{
+		Title:       "Will it rain next month?",
+		Description: "",
+		Resolves:    now.Add(30 * 24 * time.Hour),
+	}
+	e1 := integrationtest.NewEstimate{
+		Reason: "Just a hunch.",
+		Probabilities: []integrationtest.NewProbability{
+			{
+				Value:   20,
+				Outcome: integrationtest.NewOutcome{Text: "Yes"},
 			},
-			"reason": "Just a hunch.",
+			{
+				Value:   80,
+				Outcome: integrationtest.NewOutcome{Text: "No"},
+			},
 		},
 	}
-
-	err := createForecast(c, variables)
+	resp, err := integrationtest.CreateForecast(context.Background(), c, f1, e1)
 	if err != nil {
-		return err
+		return fmt.Errorf("create f1: %w", err)
+	}
+	if resp.CreateForecast.Id == "" {
+		return fmt.Errorf("unexpected response f1: %v", resp)
 	}
 
-	// Create another forecast with 'resolves' in the past and 'closes' after 'resolves'.
+	// Create another forecast with 'created', 'resolves' and 'closes' in the
+	// past.
 	// Also use some strange timezone for them.
 
 	newYork, err := time.LoadLocation("America/New_York")
@@ -153,73 +152,37 @@ func executeQueries(c graphql.Client) error {
 		return fmt.Errorf("can't get TZ loc: %w", err)
 	}
 
-	variables = map[string]interface{}{
-		"forecast": map[string]interface{}{
-			"description": "",
-			"resolves":    time.Now().In(newYork).Add(-30 * 24 * time.Hour).Format(time.RFC3339),
-			"closes":      time.Now().In(newYork).Add(-15 * 24 * time.Hour).Format(time.RFC3339),
-			"title":       "Will it rain next month? (2)",
-		},
-		"estimate": map[string]interface{}{
-			"probabilities": []map[string]interface{}{
-				{
-					"outcome": map[string]interface{}{
-						"text": "Yes",
-					},
-					"value": 20,
-				},
-				{
-					"outcome": map[string]interface{}{
-						"text": "No",
-					},
-					"value": 80,
-				},
+	f2 := integrationtest.NewForecast{
+		Title:       "Will it rain next month?",
+		Description: "",
+		Created:     timePointer(now.Add(-30 * 24 * time.Hour).In(newYork)),
+		Closes:      timePointer(now.Add(-20 * 24 * time.Hour).In(newYork)),
+		Resolves:    now.Add(-10 * 24 * time.Hour).In(newYork),
+	}
+	e2 := integrationtest.NewEstimate{
+		Reason: "Just a hunch.",
+		Probabilities: []integrationtest.NewProbability{
+			{
+				Value:   20,
+				Outcome: integrationtest.NewOutcome{Text: "Yes"},
 			},
-			"reason": "Just a hunch.",
+			{
+				Value:   80,
+				Outcome: integrationtest.NewOutcome{Text: "No"},
+			},
 		},
 	}
-
-	err = createForecast(c, variables)
+	resp, err = integrationtest.CreateForecast(context.Background(), c, f2, e2)
 	if err != nil {
-		return err
+		return fmt.Errorf("create f2: %w", err)
+	}
+	if resp.CreateForecast.Id == "" {
+		return fmt.Errorf("unexpected response f2: %v", resp)
 	}
 
 	return nil
 }
 
-func createForecast(c graphql.Client, variables map[string]interface{}) error {
-	query := `
-mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
-	createForecast(forecast: $forecast, estimate: $estimate) {
-		id
-		title
-	}
-}`
-
-	var responseData struct {
-		CreateForecast struct {
-			Id    string
-			Title string
-		}
-	}
-
-	req := graphql.Request{
-		Query:     query,
-		Variables: variables,
-	}
-	response := graphql.Response{Data: &responseData}
-
-	err := c.MakeRequest(
-		context.Background(),
-		&req,
-		&response,
-	)
-	if err != nil {
-		return fmt.Errorf("making request: %w", err)
-	}
-
-	if responseData.CreateForecast.Id == "" {
-		return fmt.Errorf("unexpected response: %v", responseData)
-	}
-	return nil
+func timePointer(t time.Time) *time.Time {
+	return &t
 }
