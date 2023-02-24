@@ -25,6 +25,12 @@ query GetForecasts {
     }
 }
 
+query GetMetadata {
+    metadata {
+        version
+    }
+}
+
 mutation ResolveForecast($forecastId: ID!, $correctOutcomeId: ID,  $resolution: Resolution) {
     resolveForecast(
             forecastId: $forecastId,

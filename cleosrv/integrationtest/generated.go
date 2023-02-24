@@ -263,6 +263,25 @@ type GetForecastsResponse struct {
 // GetForecasts returns GetForecastsResponse.Forecasts, and is useful for accessing the field via an interface.
 func (v *GetForecastsResponse) GetForecasts() []GetForecastsForecastsForecast { return v.Forecasts }
 
+// GetMetadataMetadata includes the requested fields of the GraphQL type Metadata.
+// The GraphQL type's documentation follows.
+//
+// Information about the application itself e.g. the current version.
+type GetMetadataMetadata struct {
+	Version string `json:"version"`
+}
+
+// GetVersion returns GetMetadataMetadata.Version, and is useful for accessing the field via an interface.
+func (v *GetMetadataMetadata) GetVersion() string { return v.Version }
+
+// GetMetadataResponse is returned by GetMetadata on success.
+type GetMetadataResponse struct {
+	Metadata GetMetadataMetadata `json:"metadata"`
+}
+
+// GetMetadata returns GetMetadataResponse.Metadata, and is useful for accessing the field via an interface.
+func (v *GetMetadataResponse) GetMetadata() GetMetadataMetadata { return v.Metadata }
+
 type NewEstimate struct {
 	Reason        string           `json:"reason"`
 	Probabilities []NewProbability `json:"probabilities"`
@@ -567,6 +586,34 @@ query GetForecasts {
 	var err error
 
 	var data GetForecastsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func GetMetadata(
+	ctx context.Context,
+	client graphql.Client,
+) (*GetMetadataResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetMetadata",
+		Query: `
+query GetMetadata {
+	metadata {
+		version
+	}
+}
+`,
+	}
+	var err error
+
+	var data GetMetadataResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
