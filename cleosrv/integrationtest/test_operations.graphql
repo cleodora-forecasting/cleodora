@@ -7,12 +7,14 @@
 query GetForecasts {
     forecasts {
         id
+        created
         title
         resolution
         resolves
         closes
         estimates {
             id
+            created
             probabilities {
                 id
                 outcome {

@@ -152,6 +152,7 @@ func (v *CreateForecastResponse) GetCreateForecast() CreateForecastCreateForecas
 // A prediction about the future.
 type GetForecastsForecastsForecast struct {
 	Id         string     `json:"id"`
+	Created    time.Time  `json:"created"`
 	Title      string     `json:"title"`
 	Resolution Resolution `json:"resolution"`
 	// The point in time at which you predict you will be able to resolve whether
@@ -171,6 +172,9 @@ type GetForecastsForecastsForecast struct {
 
 // GetId returns GetForecastsForecastsForecast.Id, and is useful for accessing the field via an interface.
 func (v *GetForecastsForecastsForecast) GetId() string { return v.Id }
+
+// GetCreated returns GetForecastsForecastsForecast.Created, and is useful for accessing the field via an interface.
+func (v *GetForecastsForecastsForecast) GetCreated() time.Time { return v.Created }
 
 // GetTitle returns GetForecastsForecastsForecast.Title, and is useful for accessing the field via an interface.
 func (v *GetForecastsForecastsForecast) GetTitle() string { return v.Title }
@@ -198,11 +202,15 @@ func (v *GetForecastsForecastsForecast) GetEstimates() []*GetForecastsForecastsF
 // All probabilities always add up to 100.
 type GetForecastsForecastsForecastEstimatesEstimate struct {
 	Id            string                                                                    `json:"id"`
+	Created       time.Time                                                                 `json:"created"`
 	Probabilities []*GetForecastsForecastsForecastEstimatesEstimateProbabilitiesProbability `json:"probabilities"`
 }
 
 // GetId returns GetForecastsForecastsForecastEstimatesEstimate.Id, and is useful for accessing the field via an interface.
 func (v *GetForecastsForecastsForecastEstimatesEstimate) GetId() string { return v.Id }
+
+// GetCreated returns GetForecastsForecastsForecastEstimatesEstimate.Created, and is useful for accessing the field via an interface.
+func (v *GetForecastsForecastsForecastEstimatesEstimate) GetCreated() time.Time { return v.Created }
 
 // GetProbabilities returns GetForecastsForecastsForecastEstimatesEstimate.Probabilities, and is useful for accessing the field via an interface.
 func (v *GetForecastsForecastsForecastEstimatesEstimate) GetProbabilities() []*GetForecastsForecastsForecastEstimatesEstimateProbabilitiesProbability {
@@ -564,12 +572,14 @@ func GetForecasts(
 query GetForecasts {
 	forecasts {
 		id
+		created
 		title
 		resolution
 		resolves
 		closes
 		estimates {
 			id
+			created
 			probabilities {
 				id
 				outcome {
