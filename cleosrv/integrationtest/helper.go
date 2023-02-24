@@ -2,7 +2,9 @@ package integrationtest
 
 import (
 	"fmt"
+	"io"
 	"net/http/httptest"
+	"os"
 	"testing"
 	"time"
 
@@ -56,4 +58,26 @@ func assertTimeAlmostEqual(t *testing.T, expected, actual time.Time) {
 		actual.UTC().Unix(),
 		(2 * time.Minute).Seconds(),
 	)
+}
+
+func CopyFile(src string, dst string) error {
+	// Open original file
+	srcF, err := os.Open(src)
+	if err != nil {
+		return fmt.Errorf("open src: %w", err)
+	}
+	defer func() { _ = srcF.Close() }()
+
+	// Create new file
+	dstF, err := os.Create(dst)
+	if err != nil {
+		return fmt.Errorf("open dst: %w", err)
+	}
+	defer func() { _ = dstF.Close() }()
+
+	_, err = io.Copy(dstF, srcF)
+	if err != nil {
+		return fmt.Errorf("copying file: %w", err)
+	}
+	return nil
 }
