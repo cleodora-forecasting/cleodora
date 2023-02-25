@@ -119,7 +119,7 @@ func executeQueries(c graphql.Client) error {
 		"forecast": map[string]interface{}{
 			"description": "",
 			"resolves":    time.Now().UTC().Add(30 * 24 * time.Hour).Format(time.RFC3339),
-			"title":       "Will it rain next month?",
+			"title":       "Just a regular forecast (0.1.1)",
 		},
 		"estimate": map[string]interface{}{
 			"probabilities": []map[string]interface{}{
@@ -158,7 +158,7 @@ func executeQueries(c graphql.Client) error {
 			"description": "",
 			"resolves":    time.Now().In(newYork).Add(-30 * 24 * time.Hour).Format(time.RFC3339),
 			"closes":      time.Now().In(newYork).Add(-15 * 24 * time.Hour).Format(time.RFC3339),
-			"title":       "Will it rain next month? (2)",
+			"title":       "Forecast with illogical created/resolves/closes (0.1.1)",
 		},
 		"estimate": map[string]interface{}{
 			"probabilities": []map[string]interface{}{
@@ -173,6 +173,74 @@ func executeQueries(c graphql.Client) error {
 						"text": "No",
 					},
 					"value": 80,
+				},
+			},
+			"reason": "Just a hunch.",
+		},
+	}
+
+	err = createForecast(c, variables)
+	if err != nil {
+		return err
+	}
+
+	variables = map[string]interface{}{
+		"forecast": map[string]interface{}{
+			"description": "",
+			"resolves":    time.Now().UTC().Add(30 * 24 * time.Hour).Format(time.RFC3339),
+			"closes":      time.Now().UTC().Add(40 * 24 * time.Hour).Format(time.RFC3339),
+			"title":       "Forecast with closes after resolves (0.1.1)",
+		},
+		"estimate": map[string]interface{}{
+			"probabilities": []map[string]interface{}{
+				{
+					"outcome": map[string]interface{}{
+						"text": "Yes",
+					},
+					"value": 20,
+				},
+				{
+					"outcome": map[string]interface{}{
+						"text": "No",
+					},
+					"value": 80,
+				},
+			},
+			"reason": "Just a hunch.",
+		},
+	}
+
+	err = createForecast(c, variables)
+	if err != nil {
+		return err
+	}
+
+	variables = map[string]interface{}{
+		"forecast": map[string]interface{}{
+			"description": "",
+			"resolves":    time.Now().UTC().Add(30 * 24 * time.Hour).Format(time.RFC3339),
+			"closes":      time.Time{}.Format(time.RFC3339), // null value
+			"title":       "Forecast with closes set to Go time null value and 3 outcomes (0.1.1)",
+		},
+		"estimate": map[string]interface{}{
+			"probabilities": []map[string]interface{}{
+				{
+					"outcome": map[string]interface{}{
+						"text": "Yes",
+					},
+					"value": 20,
+				},
+				{
+					"outcome": map[string]interface{}{
+						"text": "No",
+					},
+					"value": 30,
+				},
+				{
+					"outcome": map[string]interface{}{
+						"text": "Maybe",
+					},
+					"value": 50,
 				},
 			},
 			"reason": "Just a hunch.",
