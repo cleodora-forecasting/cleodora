@@ -810,3 +810,69 @@ mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
 	)
 	assert.ErrorContains(t, err, "'created' can't be the zero time")
 }
+
+func TestCreateForecast_TimestampsAreConvertedToUTC(t *testing.T) {
+	c := initServerAndGetClient(t, "")
+
+	newYork, err := time.LoadLocation("America/New_York")
+	require.NoError(t, err)
+	kolkata, err := time.LoadLocation("Asia/Kolkata")
+	require.NoError(t, err)
+
+	forecast := NewForecast{
+		Title:       "Will it rain tomorrow?",
+		Description: "",
+		Resolves:    time.Now().In(newYork).Add(30 * 24 * time.Hour),
+		Closes:      timePointer(time.Now().In(kolkata).Add(20 * 24 * time.Hour)),
+		Created:     timePointer(time.Now().In(newYork)),
+	}
+
+	estimate := NewEstimate{
+		Reason: "Based on the weather report.",
+		Probabilities: []NewProbability{
+			{
+				Value:   20,
+				Outcome: NewOutcome{Text: "Yes"},
+			}, {
+				Value:   80,
+				Outcome: NewOutcome{Text: "No"},
+			},
+		},
+	}
+
+	resp, err := CreateForecast(
+		context.Background(),
+		c,
+		forecast,
+		estimate,
+	)
+	require.NoError(t, err)
+
+	assertUTC(t, resp.CreateForecast.Created)
+	assertTimeAlmostEqual(
+		t,
+		time.Now().UTC(),
+		resp.CreateForecast.Created,
+	)
+
+	assertUTC(t, *resp.CreateForecast.Closes)
+	assertTimeAlmostEqual(
+		t,
+		time.Now().UTC().Add(20*24*time.Hour),
+		*resp.CreateForecast.Closes,
+	)
+
+	assertUTC(t, resp.CreateForecast.Resolves)
+	assertTimeAlmostEqual(
+		t,
+		time.Now().UTC().Add(30*24*time.Hour),
+		resp.CreateForecast.Resolves,
+	)
+
+	assertUTC(t, resp.CreateForecast.Estimates[0].Created)
+	assertTimeAlmostEqual(
+		t,
+		time.Now().UTC(),
+		resp.CreateForecast.Estimates[0].Created,
+	)
+}

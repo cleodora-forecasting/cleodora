@@ -30,7 +30,7 @@ func NewResolver(db *gorm.DB) *Resolver {
 }
 
 // validateNewForecast validates and makes some automatic changes to the
-// NewForecast if appropriate.
+// forecast if appropriate.
 func validateNewForecast(forecast *model.NewForecast) error {
 	var validationErr *multierror.Error
 	if forecast.Created == nil {
@@ -59,6 +59,7 @@ func validateNewForecast(forecast *model.NewForecast) error {
 			errors.New("'created' can't be in the future"),
 		)
 	}
+	forecast.Created = timeToUTCPtr(*forecast.Created)
 	if forecast.Closes != nil && forecast.Closes.After(forecast.Resolves) {
 		validationErr = multierror.Append(
 			validationErr,
@@ -69,6 +70,9 @@ func validateNewForecast(forecast *model.NewForecast) error {
 				forecast.Resolves,
 			),
 		)
+	}
+	if forecast.Closes != nil {
+		forecast.Closes = timeToUTCPtr(*forecast.Closes)
 	}
 	if forecast.Resolves.IsZero() {
 		validationErr = multierror.Append(
@@ -87,9 +91,12 @@ func validateNewForecast(forecast *model.NewForecast) error {
 			),
 		)
 	}
+	forecast.Resolves = timeToUTC(forecast.Resolves)
 	return validationErr.ErrorOrNil()
 }
 
+// validateNewEstimate validates and makes some automatic changes to the
+// estimate if appropriate.
 func validateNewEstimate(estimate model.NewEstimate) error {
 	var validationErr *multierror.Error
 	if estimate.Reason == "" {
@@ -134,7 +141,19 @@ func validateNewEstimate(estimate model.NewEstimate) error {
 			fmt.Errorf("probabilities must add up to 100, not %v", sumProbabilities),
 		)
 	}
+	if estimate.Created != nil {
+		estimate.Created = timeToUTCPtr(*estimate.Created)
+	}
 	return validationErr.ErrorOrNil()
+}
+
+func timeToUTC(t time.Time) time.Time {
+	return t.UTC()
+}
+
+func timeToUTCPtr(t time.Time) *time.Time {
+	temp := t.UTC()
+	return &temp
 }
 
 func convertNewEstimateToDBEstimate(estimate model.NewEstimate) []dbmodel.Estimate {
