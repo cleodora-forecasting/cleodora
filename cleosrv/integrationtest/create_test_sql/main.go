@@ -84,15 +84,15 @@ Example:
 
 	c := graphql.NewClient("http://localhost:8080/query", nil)
 
-	if err = executeQueries(c); err != nil {
-		return err
-	}
-
 	version, err := getVersion(c)
 	if err != nil {
 		return fmt.Errorf("getting version: %w", err)
 	}
 	fmt.Println("cleosrv version:", version)
+
+	if err = executeQueries(c, version); err != nil {
+		return err
+	}
 
 	err = cleosrvCmd.Process.Kill()
 	if err != nil {
@@ -114,11 +114,11 @@ func getVersion(c graphql.Client) (string, error) {
 	return resp.Metadata.Version, nil
 }
 
-func executeQueries(c graphql.Client) error {
+func executeQueries(c graphql.Client, version string) error {
 	now := time.Now().UTC()
 
 	f1 := integrationtest.NewForecast{
-		Title:       "Will it rain next month?",
+		Title:       fmt.Sprintf("Just a regular forecast (%v)", version),
 		Description: "",
 		Resolves:    now.Add(30 * 24 * time.Hour),
 	}
@@ -153,7 +153,10 @@ func executeQueries(c graphql.Client) error {
 	}
 
 	f2 := integrationtest.NewForecast{
-		Title:       "Will it rain next month?",
+		Title: fmt.Sprintf(
+			"Forecast with created/resolves/closes in the past (%v)",
+			version,
+		),
 		Description: "",
 		Created:     timePointer(now.Add(-30 * 24 * time.Hour).In(newYork)),
 		Closes:      timePointer(now.Add(-20 * 24 * time.Hour).In(newYork)),
@@ -178,6 +181,40 @@ func executeQueries(c graphql.Client) error {
 	}
 	if resp.CreateForecast.Id == "" {
 		return fmt.Errorf("unexpected response f2: %v", resp)
+	}
+
+	f3 := integrationtest.NewForecast{
+		Title: fmt.Sprintf(
+			"Forecast with closes set to Go time null value and 3 outcomes (%v)",
+			version,
+		),
+		Description: "",
+		Closes:      timePointer(time.Time{}),
+		Resolves:    time.Now().UTC().Add(30 * 24 * time.Hour),
+	}
+	e3 := integrationtest.NewEstimate{
+		Reason: "Just a hunch.",
+		Probabilities: []integrationtest.NewProbability{
+			{
+				Value:   20,
+				Outcome: integrationtest.NewOutcome{Text: "Yes"},
+			},
+			{
+				Value:   30,
+				Outcome: integrationtest.NewOutcome{Text: "No"},
+			},
+			{
+				Value:   50,
+				Outcome: integrationtest.NewOutcome{Text: "Maybe"},
+			},
+		},
+	}
+	resp, err = integrationtest.CreateForecast(context.Background(), c, f3, e3)
+	if err != nil {
+		return fmt.Errorf("create f3: %w", err)
+	}
+	if resp.CreateForecast.Id == "" {
+		return fmt.Errorf("unexpected response f3: %v", resp)
 	}
 
 	return nil

@@ -21,5 +21,5 @@ func TestUpdate_From_0_1_1(t *testing.T) {
 	c := initServerAndGetClient(t, dbPath)
 	resp, err := GetForecasts(context.Background(), c)
 	require.NoError(t, err)
-	require.Len(t, resp.Forecasts, 2)
+	require.Len(t, resp.Forecasts, 4)
 }
