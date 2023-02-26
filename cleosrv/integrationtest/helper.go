@@ -60,6 +60,19 @@ func assertTimeAlmostEqual(t *testing.T, expected, actual time.Time) {
 	)
 }
 
+func assertUTC(t *testing.T, dt time.Time) {
+	t.Helper()
+	_, offset := dt.Zone()
+	assert.Equal(
+		t,
+		0,
+		offset,
+		"time %v should be in UTC with offset zero but has offset: %v",
+		dt,
+		offset,
+	)
+}
+
 func CopyFile(src string, dst string) error {
 	// Open original file
 	srcF, err := os.Open(src)
