@@ -11,6 +11,8 @@ import (
 	"html"
 	"time"
 
+	"gorm.io/gorm"
+
 	"github.com/cleodora-forecasting/cleodora/cleosrv/dbmodel"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/model"
@@ -40,10 +42,12 @@ func (r *mutationResolver) CreateForecast(ctx context.Context, forecast model.Ne
 		Estimates:   convertNewEstimateToDBEstimate(estimate),
 	}
 
-	ret := r.db.Create(&dbForecast)
-
-	if ret.Error != nil {
-		return nil, ret.Error
+	err = r.db.Transaction(func(tx *gorm.DB) error {
+		ret := tx.Create(&dbForecast)
+		return ret.Error
+	})
+	if err != nil {
+		return nil, fmt.Errorf("creating forecast: %w", err)
 	}
 
 	retForecast := model.Forecast{
@@ -56,7 +60,6 @@ func (r *mutationResolver) CreateForecast(ctx context.Context, forecast model.Ne
 		Resolution:  model.Resolution(dbForecast.Resolution),
 		Estimates:   convertEstimatesDBToGQL(dbForecast.Estimates),
 	}
-
 	return &retForecast, nil
 }
 
