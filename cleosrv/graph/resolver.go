@@ -33,19 +33,19 @@ func NewResolver(db *gorm.DB) *Resolver {
 // forecast if appropriate.
 func validateNewForecast(forecast *model.NewForecast) error {
 	var validationErr *multierror.Error
-	if forecast.Created == nil {
-		now := time.Now().UTC()
-		forecast.Created = &now
-	}
-	if forecast.Closes != nil && forecast.Closes.IsZero() {
-		// for more consistent DB handling of the data
-		forecast.Closes = nil
-	}
+	now := time.Now().UTC()
+
+	// Validate title
 	if forecast.Title == "" {
 		validationErr = multierror.Append(
 			validationErr,
 			errors.New("title can't be empty"),
 		)
+	}
+
+	//  Validate created
+	if forecast.Created == nil {
+		forecast.Created = &now
 	}
 	if forecast.Created.IsZero() {
 		validationErr = multierror.Append(
@@ -53,27 +53,36 @@ func validateNewForecast(forecast *model.NewForecast) error {
 			errors.New("'created' can't be the zero time"),
 		)
 	}
-	if forecast.Created.After(time.Now().UTC()) {
+	if forecast.Created.After(now) {
 		validationErr = multierror.Append(
 			validationErr,
 			errors.New("'created' can't be in the future"),
 		)
 	}
 	forecast.Created = timeToUTCPtr(*forecast.Created)
-	if forecast.Closes != nil && forecast.Closes.After(forecast.Resolves) {
-		validationErr = multierror.Append(
-			validationErr,
-			fmt.Errorf(
-				"'Closes' can't be set to a later date than 'Resolves'. "+
-					"Closes is '%v'. Resolves is '%v'",
-				*forecast.Closes,
-				forecast.Resolves,
-			),
-		)
-	}
+
+	// Validate closes
 	if forecast.Closes != nil {
 		forecast.Closes = timeToUTCPtr(*forecast.Closes)
+		if forecast.Closes.After(forecast.Resolves) {
+			validationErr = multierror.Append(
+				validationErr,
+				fmt.Errorf(
+					"'Closes' can't be set to a later date than 'Resolves'. "+
+						"Closes is '%v'. Resolves is '%v'",
+					*forecast.Closes,
+					forecast.Resolves,
+				),
+			)
+		}
+		if forecast.Closes.IsZero() {
+			// for more consistent DB handling of the data
+			forecast.Closes = nil
+		}
 	}
+
+	// Validate resolves
+	forecast.Resolves = timeToUTC(forecast.Resolves)
 	if forecast.Resolves.IsZero() {
 		validationErr = multierror.Append(
 			validationErr,
@@ -91,7 +100,7 @@ func validateNewForecast(forecast *model.NewForecast) error {
 			),
 		)
 	}
-	forecast.Resolves = timeToUTC(forecast.Resolves)
+
 	return validationErr.ErrorOrNil()
 }
 
@@ -99,12 +108,16 @@ func validateNewForecast(forecast *model.NewForecast) error {
 // estimate if appropriate.
 func validateNewEstimate(estimate model.NewEstimate) error {
 	var validationErr *multierror.Error
+
+	// Validate reason
 	if estimate.Reason == "" {
 		validationErr = multierror.Append(
 			validationErr,
 			errors.New("'reason' can't be empty"),
 		)
 	}
+
+	// Validate probabilities
 	if len(estimate.Probabilities) == 0 {
 		validationErr = multierror.Append(
 			validationErr,
@@ -141,9 +154,12 @@ func validateNewEstimate(estimate model.NewEstimate) error {
 			fmt.Errorf("probabilities must add up to 100, not %v", sumProbabilities),
 		)
 	}
+
+	// Validate created
 	if estimate.Created != nil {
 		estimate.Created = timeToUTCPtr(*estimate.Created)
 	}
+
 	return validationErr.ErrorOrNil()
 }
 
@@ -172,14 +188,9 @@ func convertNewEstimateToDBEstimate(estimate model.NewEstimate) []dbmodel.Estima
 		)
 	}
 
-	created := time.Now().UTC()
-	if estimate.Created != nil {
-		created = *estimate.Created
-	}
-
 	return []dbmodel.Estimate{
 		{
-			Created:       created,
+			Created:       *estimate.Created,
 			Reason:        html.EscapeString(estimate.Reason),
 			Probabilities: probabilities,
 		},
