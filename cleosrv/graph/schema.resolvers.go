@@ -11,12 +11,11 @@ import (
 	"html"
 	"time"
 
-	"gorm.io/gorm"
-
 	"github.com/cleodora-forecasting/cleodora/cleosrv/dbmodel"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/model"
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
+	"gorm.io/gorm"
 )
 
 // CreateForecast is the resolver for the createForecast field.
