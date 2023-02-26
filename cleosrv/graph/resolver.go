@@ -44,14 +44,8 @@ func validateNewForecast(forecast *model.NewForecast) error {
 	}
 
 	//  Validate created
-	if forecast.Created == nil {
+	if forecast.Created == nil || forecast.Created.IsZero() {
 		forecast.Created = &now
-	}
-	if forecast.Created.IsZero() {
-		validationErr = multierror.Append(
-			validationErr,
-			errors.New("'created' can't be the zero time"),
-		)
 	}
 	if forecast.Created.After(now) {
 		validationErr = multierror.Append(

@@ -5,7 +5,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Khan/genqlient/graphql"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -554,14 +553,14 @@ func TestCreateForecast_WithTimestamps(t *testing.T) {
 			expectedErr:      "",
 		},
 		{
-			name:             "created zero time is invalid",
+			name:             "created zero time is interpreted as 'now'",
 			inputCreated:     timePointer(time.Time{}),
-			inputResolves:    timePointer(now),
+			inputResolves:    timePointer(now.Add(24 * time.Hour)),
 			inputCloses:      nil,
-			expectedCreated:  nil,
-			expectedResolves: nil,
+			expectedCreated:  timePointer(now),
+			expectedResolves: timePointer(now.Add(24 * time.Hour)),
 			expectedCloses:   nil,
-			expectedErr:      "'created' can't be the zero time",
+			expectedErr:      "",
 		},
 		{
 			name:             "closes zero time is interpreted as nil",
@@ -742,73 +741,6 @@ func TestCreateForecast_NewEstimateCreatedIsIgnored(t *testing.T) {
 		hoursAgo24,
 		response.CreateForecast.Estimates[0].Created,
 	)
-}
-
-// TestCreateForecast_CreatedZeroTimeIsInvalid validates that 'Created' is
-// not the Go time.Time zero time.
-// The zero value of time.Time is January 1, year 1, 00:00:00.000000000 UTC
-// and in practice it should only occur when a Go client forgets to initialize
-// the value. Therefore, we don't allow it.
-// Note that this test is somewhat redundant with a table test above, with the
-// difference that this test does not ask for 'created' in the response, which
-// is another spot where an error could occur. It was in fact the case that
-// previously it was possible to store the zero value in the DB, only to fail
-// when retrieving it.
-func TestCreateForecast_CreatedZeroTimeIsInvalid(t *testing.T) {
-	c := initServerAndGetClient(t, "")
-	now := time.Now().UTC()
-
-	newForecast := map[string]interface{}{
-		"title": "Will it rain tomorrow?",
-		"description": "It counts as rain if between 9am and 9pm there are " +
-			"30 min or more of uninterrupted precipitation.",
-		"resolves": now.Add(24 * time.Hour),
-		"created":  "0001-01-01T00:00:00Z", // this is what cleoc is sending, for whatever reason
-	}
-
-	newEstimate := map[string]interface{}{
-		"reason": "My weather app says it will rain.",
-		"probabilities": []map[string]interface{}{
-			{
-				"value": 70,
-				"outcome": map[string]interface{}{
-					"text": "Yes",
-				},
-			},
-			{
-				"value": 30,
-				"outcome": map[string]interface{}{
-					"text": "No",
-				},
-			},
-		},
-	}
-
-	req := &graphql.Request{
-		OpName: "CreateForecast",
-		Query: `
-mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
-	createForecast(forecast: $forecast, estimate: $estimate) {
-		id
-		title
-	}
-}
-`,
-		Variables: map[string]interface{}{
-			"forecast": newForecast,
-			"estimate": newEstimate,
-		},
-	}
-
-	var data map[string]interface{}
-	resp := &graphql.Response{Data: &data}
-
-	err := c.MakeRequest(
-		context.Background(),
-		req,
-		resp,
-	)
-	assert.ErrorContains(t, err, "'created' can't be the zero time")
 }
 
 func TestCreateForecast_TimestampsAreConvertedToUTC(t *testing.T) {
