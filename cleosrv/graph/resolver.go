@@ -102,6 +102,7 @@ func validateNewForecast(forecast *model.NewForecast) error {
 // estimate if appropriate.
 func validateNewEstimate(estimate model.NewEstimate) error {
 	var validationErr *multierror.Error
+	now := time.Now().UTC()
 
 	// Validate reason
 	if estimate.Reason == "" {
@@ -152,6 +153,9 @@ func validateNewEstimate(estimate model.NewEstimate) error {
 	// Validate created
 	if estimate.Created != nil {
 		estimate.Created = timeToUTCPtr(*estimate.Created)
+	}
+	if estimate.Created == nil || estimate.Created.IsZero() {
+		estimate.Created = &now
 	}
 
 	return validationErr.ErrorOrNil()
