@@ -48,7 +48,7 @@ Cleodora is different from [PredictionBook](https://predictionbook.com) because:
   Ruby on Rails.
 * The Cleodora UI aims to look more modern and be mobile friendly.
 * In PredictionBook it's only possible to make binary (yes/no) forecasts
-  whereas making ones with several possible answers is on the roadmap for
+  whereas making ones with three or more possible answers is supported by
   Cleodora.
 * Development of PredictionBook seems to have stopped, except for dependency
   updates and bug fixes. Note that this is not necessarily bad. If a tool does
