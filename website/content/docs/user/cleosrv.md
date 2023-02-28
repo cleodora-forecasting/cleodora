@@ -11,7 +11,7 @@ bookToc: true
 
 # cleosrv
 
-**Latest release: 0.1.1**
+**Latest release: 0.2.0**
 
 `cleosrv` (Cleodora server) is the main application. It includes a beautiful
 web UI (user interface) that you can access from your browser as well as a
@@ -26,10 +26,10 @@ automatically created it if does not exist.
 ## Installing cleosrv
 
 Download the latest release for
-[Windows (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.1/cleosrv_0.1.1_windows_amd64.zip),
-[Linux (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.1/cleosrv_0.1.1_linux_amd64.tar.gz),
-[Linux ARM (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.1/cleosrv_0.1.1_linux_arm64.tar.gz) or
-[Mac OS (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.1.1/cleosrv_0.1.1_darwin_amd64.tar.gz).
+[Windows (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.2.0/cleosrv_0.2.0_Windows_64bit.zip),
+[Linux (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.2.0/cleosrv_0.2.0_Linux_64bit.tar.gz),
+[Linux ARM (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.2.0/cleosrv_0.2.0_Linux_ARM64.tar.gz) or
+[MacOS (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.2.0/cleosrv_0.2.0_macOS_64bit.tar.gz).
 
 Unpack the archive wherever you want it. There will only be a single executable
 inside named `cleosrv` or `cleosrv.exe`.
