@@ -3,6 +3,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
 	"fmt"
@@ -313,6 +314,91 @@ func All() {
 	ensureGitDiffEmpty()
 }
 
+// Release builds and releases all packages
+func Release() error {
+	ensureGitDiffEmpty()
+
+	// Changelog
+	changelogPath := "temp_changelog.md"
+	if _, err := os.Stat(changelogPath); errors.Is(err, os.ErrNotExist) {
+		msg := `'%v' does not exist. You should:
+* Update:
+    vim website/content/docs/changelog.md
+* Commit the changes
+* Execute:
+    cp website/content/docs/changelog.md temp_changelog.md
+    vim temp_changelog.md
+* Remove everything except the current release from that file. Also
+  remove the version title because it becomes redundant`
+		return fmt.Errorf(msg, changelogPath)
+	}
+	changelogContent, err := os.ReadFile(changelogPath)
+	mgx.Must(err)
+	fmt.Println(strings.Repeat("=", 80))
+	fmt.Print(string(changelogContent))
+	fmt.Println(strings.Repeat("=", 80))
+	if !ask("Is the changelog correct?", false) {
+		return fmt.Errorf("'%v' is not ready", changelogPath)
+	}
+
+	// Download links
+	if !ask("Are the download links on the website up-to-date?", false) {
+		msg := `the download links are not ready. You should:
+* Update:
+    vim website/content/docs/user/_index.md
+* Commit the changes`
+		return errors.New(msg)
+	}
+
+	// GITHUB_TOKEN
+	if _, present := os.LookupEnv("GITHUB_TOKEN"); !present {
+		msg := `GITHUB_TOKEN for goreleaser is missing
+Instructions to create it:
+  * https://github.com/settings/personal-access-tokens/new
+  * Access on the cleodora-forecasting organization and repository
+    cleodora-forecasting/cleodora
+  * Give the token no organization permissions and the following repository
+    permissions:
+    * Read access to metadata
+    * Read and Write access to code
+Then set is as an ENV variable:
+    GITHUB_TOKEN=asdf mage release`
+		return errors.New(msg)
+	}
+
+	// Ensure tests run etc.
+	mg.Deps(All)
+
+	// Tag ready and checked out
+	out, err := shx.Output("git", "tag", "--points-at", "HEAD")
+	mgx.Must(err)
+	if out == "" {
+		msg := `no tag is checked out. You should:
+* Create a tag:
+    git tag vX.Y.Z
+* OR check out the correct tag (if changelog etc. is ready there):
+    git checkout vX.Y.Z`
+		mgx.Must(errors.New(msg))
+	}
+
+	// Explicitly call Clean() because it's not enough that it was already
+	// called as an indirect dependency earlier because goreleaser expects
+	// dist/ to be empty.
+	Clean()
+
+	_ = must.RunV(
+		"go",
+		"run",
+		"github.com/goreleaser/goreleaser",
+		"release",
+		"--release-notes",
+		changelogPath,
+	)
+
+	mgx.Must(sh.Rm(changelogPath))
+	return nil
+}
+
 func ensureGitDiffEmpty() {
 	err := shx.Run("git", "diff", "--quiet", "--exit-code")
 	if err != nil {
@@ -325,5 +411,32 @@ func ensureOnMainBranch() {
 	mgx.Must(err)
 	if out != "main" {
 		mgx.Must(errors.New("Not on main! Exiting"))
+	}
+}
+
+// ask a yes/no question.
+func ask(question string, defaultYes bool) bool {
+	choices := "Y/n"
+	if !defaultYes {
+		choices = "y/N"
+	}
+
+	r := bufio.NewReader(os.Stdin)
+	var s string
+
+	for {
+		fmt.Printf("%s (%s) ", question, choices)
+		s, _ = r.ReadString('\n')
+		s = strings.TrimSpace(s)
+		if s == "" {
+			return defaultYes
+		}
+		s = strings.ToLower(s)
+		if s == "y" || s == "yes" {
+			return true
+		}
+		if s == "n" || s == "no" {
+			return false
+		}
 	}
 }

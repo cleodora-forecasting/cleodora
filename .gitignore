@@ -5,6 +5,6 @@
 oryxBuildBinary
 
 # Temporary file used for release.
-changelog.md
+temp_changelog.md
 
 /e2e_tests.db
