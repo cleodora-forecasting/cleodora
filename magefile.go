@@ -4,6 +4,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -126,20 +127,13 @@ func InstallDeps() {
 
 // MergeDependabot merges all open dependabot PRs.
 func MergeDependabot() error {
-	out, err := shx.Output("git", "rev-parse", "--abbrev-ref", "HEAD")
-	mgx.Must(err)
-	if out != "main" {
-		return fmt.Errorf("Not on main! Exiting")
-	}
-	err = shx.Run("git", "diff", "--quiet", "--exit-code")
-	if err != nil {
-		return fmt.Errorf("There are uncommitted changes! Exiting")
-	}
+	ensureOnMainBranch()
+	ensureGitDiffEmpty()
 
 	_ = must.RunV("git", "fetch")
 	_ = must.RunV("git", "remote", "prune", "origin")
 
-	out, err = shx.Output(
+	out, err := shx.Output(
 		"git",
 		"for-each-ref",
 		"--format=%(refname)",
@@ -162,19 +156,7 @@ func MergeDependabot() error {
 		fmt.Println()
 	}
 	fmt.Println("All PRs merged")
-
-	InstallDeps()
-	Lint()
-	Generate()
-
-	err = shx.Run("git", "diff", "--exit-code")
-	if err != nil {
-		return fmt.Errorf("Code was changed via lint/generate: %w", err)
-	}
-
-	Test()
-	E2ETest()
-
+	mg.Deps(All)
 	fmt.Println("Successfully done. You must run 'git push' to publish the changes.")
 	return nil
 }
@@ -291,7 +273,7 @@ func getCurrentBuildTarget() (string, error) {
 	return "", fmt.Errorf("unknown goarch: %v", goarch)
 }
 
-// DeployDemo deploy and overwrite demo.cleodora.org
+// DeployDemo deploy and overwrite demo.cleodora.org .
 func DeployDemo() error {
 	buildTarget, err := getCurrentBuildTarget()
 	mgx.Must(err)
@@ -301,17 +283,7 @@ func DeployDemo() error {
 			buildTarget,
 		)
 	}
-	mg.Deps(Clean)
-	mg.Deps(InstallDeps)
-	mg.Deps(Lint)
-	mg.Deps(Generate)
-	err = shx.Run("git", "diff", "--quiet", "--exit-code")
-	mg.Deps(Test)
-	mg.Deps(E2ETest)
-	if err != nil {
-		return fmt.Errorf("There are uncommitted changes! Exiting")
-	}
-	mg.Deps(Build)
+	mg.Deps(All)
 	_ = must.RunV(
 		"flyctl",
 		"deploy",
@@ -322,4 +294,36 @@ func DeployDemo() error {
 	time.Sleep(30 * time.Second)
 	_ = must.RunV("./scripts/demoDummyData.sh")
 	return nil
+}
+
+// All includes the most important targets such as Lint, Test, E2ETest.
+func All() {
+	mg.Deps(Clean)
+	mg.Deps(InstallDeps)
+	mg.Deps(Lint)
+	mg.Deps(Generate)
+
+	// run it once here to exit early because the tests can take a while
+	ensureGitDiffEmpty()
+
+	mg.Deps(Test)
+	mg.Deps(E2ETest)
+	mg.Deps(Build)
+
+	ensureGitDiffEmpty()
+}
+
+func ensureGitDiffEmpty() {
+	err := shx.Run("git", "diff", "--quiet", "--exit-code")
+	if err != nil {
+		mgx.Must(errors.New("There are uncommitted changes! Exiting"))
+	}
+}
+
+func ensureOnMainBranch() {
+	out, err := shx.Output("git", "rev-parse", "--abbrev-ref", "HEAD")
+	mgx.Must(err)
+	if out != "main" {
+		mgx.Must(errors.New("Not on main! Exiting"))
+	}
 }
