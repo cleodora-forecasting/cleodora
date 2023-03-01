@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Khan/genqlient/graphql"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -807,4 +808,74 @@ func TestCreateForecast_TimestampsAreConvertedToUTC(t *testing.T) {
 		time.Now().UTC(),
 		resp.CreateForecast.Estimates[0].Created,
 	)
+}
+
+// TestCreateForecast_TimestampsWithoutTZIsInvalid verifies that the timestamp
+// must contain a time zone. It's a low level test to ensure that Go on the
+// client (test) side does not do any automatic conversions before sending the
+// request or after receiving the response.
+// Timestamps are expected to be in RFC3339Nano format
+// (2006-01-02T15:04:05.999999999Z07:00).
+func TestCreateForecast_TimestampsWithoutTZIsInvalid(t *testing.T) {
+	c := initServerAndGetClient(t, "")
+
+	query := `
+mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
+	createForecast(forecast: $forecast, estimate: $estimate) {
+		id
+		created
+	}
+}`
+
+	variables := map[string]interface{}{
+		"forecast": map[string]interface{}{
+			"description": "",
+			"created":     "2022-12-01T10:00:00",
+			"resolves":    time.Now().UTC().Add(24 * time.Hour).Format(time.RFC3339),
+			"title":       "Will it rain tomorrow?",
+		},
+		"estimate": map[string]interface{}{
+			"probabilities": []map[string]interface{}{
+				{
+					"outcome": map[string]interface{}{
+						"text": "Yes",
+					},
+					"value": 20,
+				},
+				{
+					"outcome": map[string]interface{}{
+						"text": "No",
+					},
+					"value": 80,
+				},
+			},
+			"reason": "Just a hunch.",
+		},
+	}
+
+	req := graphql.Request{
+		Query:     query,
+		Variables: variables,
+		OpName:    "CreateForecast",
+	}
+
+	var responseData struct {
+		CreateForecast struct {
+			Id      string
+			Created string
+		}
+	}
+
+	res := graphql.Response{
+		Data:       &responseData,
+		Extensions: nil,
+		Errors:     nil,
+	}
+
+	err := c.MakeRequest(
+		context.Background(),
+		&req,
+		&res,
+	)
+	assert.ErrorContains(t, err, "input: createForecast.forecast.created parsing time")
 }
