@@ -27,7 +27,7 @@ Examples of such forecasts:
 * Will the number of contributors to "Cleodora" be more than 5 at the end of
   2023?
 
-![cleosrv web frontend](website/content/docs/user/cleosrv_frontend.png "cleosrv web frontend")
+![cleosrv web frontend](website/static/cleosrv_frontend.png "cleosrv web frontend")
 
 
 # Contributing
