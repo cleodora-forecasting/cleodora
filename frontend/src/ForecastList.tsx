@@ -1,11 +1,15 @@
 import React, {FC, useState} from "react";
 import {useQuery} from "@apollo/client";
 import {gql} from "./__generated__"
-import {Paper, Table,
-    TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from '@mui/material'
+import {
+    Button, Paper, Table,
+    TableBody, TableCell, TableContainer, TableHead, TableRow, Typography
+} from '@mui/material'
 import {ForecastDetails} from "./ForecastDetails";
-import {Forecast} from "./__generated__/graphql";
+import {Forecast, Resolution} from "./__generated__/graphql";
 import {ResolutionChip} from "./ResolutionChip";
+import {AltRouteOutlined} from "@mui/icons-material";
+import { ResolveForecastDialog } from "./ResolveForecastDialog";
 
 export const GET_FORECASTS = gql(`
     query GetForecasts {
@@ -39,7 +43,14 @@ export const ForecastList: FC = () => {
     const {error, data} = useQuery(GET_FORECASTS);
 
     const [selectedForecast, setSelectedForecast] = useState<Forecast|null>(null);
-    const [openDetails, setOpenDetails] = useState(false);
+    const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+    const [openResolveDialog, setOpenResolveDialog] = useState(false);
+
+    // The purpose of the following two pieces of state is to ensure the
+    // dialogs are always re-created after closing them, so they don't keep
+    // state themselves.
+    const [detailsDialogCounter, setDetailsDialogCounter] = useState(0);
+    const [resolveDialogCounter, setResolveDialogCounter] = useState(0);
 
     let errorBox:JSX.Element;
     if (error) {
@@ -92,12 +103,12 @@ export const ForecastList: FC = () => {
                                 key={f.id}
                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                 hover
-                                onClick={_ => {setSelectedForecast(f); setOpenDetails(true)}}
-                                style={{cursor: 'pointer'}}
                             >
                                 <TableCell
                                     component="th"
                                     scope="row"
+                                    onClick={_ => {setSelectedForecast(f); setOpenDetailsDialog(true)}}
+                                    style={{cursor: 'pointer'}}
                                 >
                                     {f.title}
                                 </TableCell>
@@ -106,6 +117,25 @@ export const ForecastList: FC = () => {
                                 <TableCell
                                     align="right"><ResolutionChip resolution={f.resolution} /></TableCell>
                                 <TableCell align="right">{outcomes}</TableCell>
+                                <TableCell align="right">
+                                    {
+                                        f.resolution === Resolution.Unresolved ?
+                                        <Button
+                                            size="small"
+                                            variant="outlined"
+                                            startIcon={<AltRouteOutlined/>}
+                                            aria-label={"resolve '" + f.title + "'"}
+                                            onClick={_ => {
+                                                setSelectedForecast(f);
+                                                setOpenResolveDialog(true);
+                                            }}
+                                        >
+                                            Resolve
+                                        </Button>
+                                        :
+                                        <></>
+                                    }
+                                </TableCell>
                             </TableRow>
                         )
                     }
@@ -125,6 +155,7 @@ export const ForecastList: FC = () => {
                             <TableCell align="right">Resolves</TableCell>
                             <TableCell align="right">Resolution</TableCell>
                             <TableCell align="right">Estimate</TableCell>
+                            <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -135,8 +166,24 @@ export const ForecastList: FC = () => {
             {selectedForecast ?
                 <ForecastDetails
                     forecast={selectedForecast}
-                    open={openDetails}
-                    handleClose={() => setOpenDetails(false)}
+                    key={`detailsDialog_${detailsDialogCounter}`}
+                    open={openDetailsDialog}
+                    handleClose={() => {
+                        setOpenDetailsDialog(false);
+                        setDetailsDialogCounter(detailsDialogCounter+1);
+                    }}
+                />
+                : <></>
+            }
+            {selectedForecast ?
+                <ResolveForecastDialog
+                    forecast={selectedForecast}
+                    key={`resolveDialog_${resolveDialogCounter}`}
+                    open={openResolveDialog}
+                    handleClose={() => {
+                        setOpenResolveDialog(false);
+                        setResolveDialogCounter(resolveDialogCounter+1);
+                    }}
                 />
                 : <></>
             }
