@@ -22,6 +22,8 @@ additional work before they can be merged.
 
 ## Getting Started
 
+* If you want to contribute you are expected to adhere to the
+  [Code of Conduct](CODE_OF_CONDUCT.md) so you should read it first.
 * Try the live demo to get a first impression https://demo.cleodora.org
 * Install cleodora and try it on your computer, as described
   [here](https://cleodora.org/docs/user/).
