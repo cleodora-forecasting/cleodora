@@ -16,29 +16,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-The numbers in parentheses are GitHub issues that you can find
-[here](https://github.com/cleodora-forecasting/cleodora/issues). They are
-useful if you want to learn some more details about a specific changelog entry.
-
 
 ## Unreleased
 
 ### Added
 
 * API, Frontend: Resolve forecasts (i.e. decide which outcome was actually the
-  correct one). (#154, #155)
+  correct one).
+  ([#154](https://github.com/cleodora-forecasting/cleodora/issues/154),
+  [#155](https://github.com/cleodora-forecasting/cleodora/issues/155))
 * Frontend: Forecast details dialog that can be opened by clicking on the
-  forecast title. (#296)
+  forecast title.
+  ([#296](https://github.com/cleodora-forecasting/cleodora/issues/296))
 
 
 ### Fixed
 
-* Frontend: Display more detailed error messages. (#173, #212)
+* Frontend: Display more detailed error messages.
+  ([#173](https://github.com/cleodora-forecasting/cleodora/issues/173),
+  [#212](https://github.com/cleodora-forecasting/cleodora/issues/212))
 * API: Ensure the forecast date values are logical i.e. _created_ must be
   before _closes_ which in turn must be before _resolves_. Existing data is
-  automatically migrated to enforce this constraint. (#234, #264)
+  automatically migrated to enforce this constraint.
+  ([#234](https://github.com/cleodora-forecasting/cleodora/issues/234),
+  [#264](https://github.com/cleodora-forecasting/cleodora/issues/264))
 * Frontend: When adding a new outcome in the _Add Forecast_ form the focus
-  moves to that new outcome so you can start typing directly. (#161)
+  moves to that new outcome so you can start typing directly.
+  ([#161](https://github.com/cleodora-forecasting/cleodora/issues/161))
 
 
 ### Changed
@@ -47,8 +51,10 @@ useful if you want to learn some more details about a specific changelog entry.
   they will always be converted to UTC in the backend and returned as such. In
   the web frontend everything is converted to the time zone of the browser
   before displaying it. Existing data is automatically transformed to use UTC.
-  (#265, #264)
-* Frontend: Simplify the _Add Forecast_ form on the main page. (#233)
+  ([#265](https://github.com/cleodora-forecasting/cleodora/issues/265),
+  [#264](https://github.com/cleodora-forecasting/cleodora/issues/264))
+* Frontend: Simplify the _Add Forecast_ form on the main page.
+  ([#233](https://github.com/cleodora-forecasting/cleodora/issues/233))
 * Frontend: Prettify and simplify the forecast list.
 * Frontend: In _Add Forecast_ form show two outcome rows by default because
   making a forecast with a single outcome makes little or no sense.
