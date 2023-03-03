@@ -37,7 +37,6 @@ useful if you want to learn some more details about a specific changelog entry.
 * API: Ensure the forecast date values are logical i.e. _created_ must be
   before _closes_ which in turn must be before _resolves_. Existing data is
   automatically migrated to enforce this constraint. (#234, #264)
-* Frontend: Simplify the _Add Forecast_ form on the main page. (#233)
 * Frontend: When adding a new outcome in the _Add Forecast_ form the focus
   moves to that new outcome so you can start typing directly. (#161)
 
@@ -49,7 +48,10 @@ useful if you want to learn some more details about a specific changelog entry.
   the web frontend everything is converted to the time zone of the browser
   before displaying it. Existing data is automatically transformed to use UTC.
   (#265, #264)
+* Frontend: Simplify the _Add Forecast_ form on the main page. (#233)
 * Frontend: Prettify and simplify the forecast list.
+* Frontend: In _Add Forecast_ form show two outcome rows by default because
+  making a forecast with a single outcome makes little or no sense.
 
 
 [Git history](https://github.com/cleodora-forecasting/cleodora/compare/v0.1.1...HEAD)
