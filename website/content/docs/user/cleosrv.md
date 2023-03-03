@@ -11,6 +11,8 @@ bookToc: true
 
 # cleosrv
 
+**Latest release: 0.1.1**
+
 `cleosrv` (Cleodora server) is the main application. It includes a beautiful
 web UI (user interface) that you can access from your browser as well as a
 GraphQL API (which you can ignore if you don't know what that is).
@@ -31,6 +33,17 @@ Download the latest release for
 
 Unpack the archive wherever you want it. There will only be a single executable
 inside named `cleosrv` or `cleosrv.exe`.
+
+
+## Updating cleosrv
+
+Download the latest release (see above) and replace the existing `cleosrv` or
+`cleosrv.exe` executable on your PC. All data in your database will be
+transformed automatically to be compatible with the new version when you start
+cleosrv.
+
+After updating to a newer version do not open the same database with the old
+version.
 
 
 ## Running cleosrv

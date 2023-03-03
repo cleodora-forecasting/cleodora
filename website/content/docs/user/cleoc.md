@@ -11,6 +11,8 @@ bookToc: true
 
 # cleoc
 
+**Latest release: 0.1.1**
+
 `cleoc` (Cleodora client) is a Cleodora CLI (command-line interface) client to
 interact with a `cleosrv` Cleodora server.
 
@@ -33,6 +35,12 @@ Download the latest release for
 
 Unpack the archive wherever you want it. There will only be a single executable
 inside named `cleoc` or `cleoc.exe`.
+
+
+## Updating cleoc
+
+Download the latest release (see above) and replace the existing `cleoc` or
+`cleoc.exe` executable on your PC.
 
 
 ## Running cleoc
