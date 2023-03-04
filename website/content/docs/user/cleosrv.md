@@ -40,10 +40,13 @@ inside named `cleosrv` or `cleosrv.exe`.
 Download the latest release (see above) and replace the existing `cleosrv` or
 `cleosrv.exe` executable on your PC. All data in your database will be
 transformed automatically to be compatible with the new version when you start
-cleosrv.
+`cleosrv`.
+
+Before updating it's a good idea to back up the database. See below for
+instructions.
 
 After updating to a newer version do not open the same database with the old
-version.
+`cleosrv` version.
 
 
 ## Running cleosrv
