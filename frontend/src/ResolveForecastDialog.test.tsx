@@ -3,6 +3,9 @@ import {Forecast, Resolution} from "./__generated__/graphql";
 import {client} from "./client";
 import {ApolloProvider} from "@apollo/client";
 import {ResolveForecastDialog} from "./ResolveForecastDialog";
+import userEvent from "@testing-library/user-event";
+import {server} from "./mocks/server";
+import {graphql} from "msw";
 
 function addDays(date: Date, days: number) {
     const result = new Date(date);
@@ -59,4 +62,215 @@ test('the resolve dialog is displayed', () => {
     expect(screen.getByText("Yes")).toBeInTheDocument();
     expect(screen.getByText("No")).toBeInTheDocument();
     expect(screen.getByText("No correct outcome (resolve forecast as N/A)")).toBeInTheDocument();
+});
+
+type ResolveForecastRequest = {
+    variables: {
+        forecastId: string,
+        resolution: string,
+        correctOutcomeId: string,
+    };
+}
+
+test('forecast can be resolved with outcome', async () => {
+    const user = userEvent.setup();
+    let requestBody: ResolveForecastRequest | undefined;
+
+    server.use(
+        graphql.mutation("resolveForecast", async (req, res, ctx) => {
+            requestBody = await req.json();
+            return res(
+                ctx.data({
+                    "resolveForecast": {
+                        "id": "999",
+                        "title": "Mock title",
+                        "resolution": "RESOLVED",
+                        "resolves": addDays(now, 30),
+                        "closes": null,
+                        "estimates": [
+                            {
+                                "id": "e01",
+                                probabilities: [
+                                    {
+                                        id: "p01",
+                                        outcome: {
+                                            id: "o01",
+                                            text: "Yes",
+                                            correct: true,
+                                        },
+                                    },
+                                    {
+                                        id: "p02",
+                                        outcome: {
+                                            id: "o02",
+                                            text: "No",
+                                            correct: false,
+                                        },
+                                    },
+                                ],
+                            },
+                        ],
+                        "__typename": "Forecast"
+                    }
+                }),
+            )
+        }),
+    );
+
+    const now = new Date();
+    const forecast: Forecast = {
+        id: "f01",
+        resolution: Resolution.Unresolved,
+        resolves: addDays(now, 30),
+        title: "Will it rain tomorrow?",
+        created: now,
+        description: "If it rains continuously for more than 30 minutes, that" +
+            " counts as rain.",
+        estimates: [
+            {
+                id: "e01",
+                reason: "The weather report says so",
+                created: now,
+                probabilities: [
+                    {
+                        id: "p01",
+                        value: 20,
+                        outcome: {
+                            id: "o01",
+                            text: "Yes",
+                            correct: false,
+                        },
+                    },
+                    {
+                        id: "p02",
+                        value: 80,
+                        outcome: {
+                            id: "o02",
+                            text: "No",
+                            correct: false,
+                        },
+                    },
+                ],
+            },
+        ],
+    };
+
+    let handleCloseCalled = false;
+
+    render(
+        <ApolloProvider client={client}>
+            <ResolveForecastDialog forecast={forecast} open={true} handleClose={() => handleCloseCalled=true} />
+        </ApolloProvider>
+    );
+
+    expect(screen.getByRole("heading", {name: "Will it rain tomorrow?"})).toBeInTheDocument();
+    await user.click(screen.getByLabelText('Yes'));
+    await user.click(screen.getByRole("button", {name: "Save"}));
+
+    expect(handleCloseCalled).toBe(true);
+
+    expect(requestBody).toBeTruthy();
+    if (!requestBody) {
+        return
+    }
+    expect(requestBody.variables.forecastId).toBe("f01");
+    expect(requestBody.variables.correctOutcomeId).toBe("o01");
+    // The API assumes RESOLVED when no resolution is passed
+    expect(requestBody.variables.resolution).toBeUndefined();
+});
+
+test('error is displayed', async () => {
+    const user = userEvent.setup();
+    let requestBody: ResolveForecastRequest | undefined;
+
+    server.use(
+        graphql.mutation("resolveForecast", async (req, res, ctx) => {
+            requestBody = await req.json();
+            return res(
+                ctx.errors([
+                    {
+                        name: "whatever",
+                        message: "API test error",
+                    }
+                ])
+            )
+        }),
+    );
+
+    const now = new Date();
+    const forecast: Forecast = {
+        id: "f01",
+        resolution: Resolution.Unresolved,
+        resolves: addDays(now, 30),
+        title: "Will it rain tomorrow?",
+        created: now,
+        description: "If it rains continuously for more than 30 minutes, that" +
+            " counts as rain.",
+        estimates: [
+            {
+                id: "e01",
+                reason: "The weather report says so",
+                created: now,
+                probabilities: [
+                    {
+                        id: "p01",
+                        value: 20,
+                        outcome: {
+                            id: "o01",
+                            text: "Yes",
+                            correct: false,
+                        },
+                    },
+                    {
+                        id: "p02",
+                        value: 80,
+                        outcome: {
+                            id: "o02",
+                            text: "No",
+                            correct: false,
+                        },
+                    },
+                ],
+            },
+        ],
+    };
+
+    let handleCloseCalled = false;
+
+    render(
+        <ApolloProvider client={client}>
+            <ResolveForecastDialog forecast={forecast} open={true} handleClose={() => handleCloseCalled=true} />
+        </ApolloProvider>
+    );
+
+    expect(screen.getByRole("heading", {name: "Will it rain tomorrow?"})).toBeInTheDocument();
+    await user.click(screen.getByLabelText('Yes'));
+    await user.click(screen.getByRole("button", {name: "Save"}));
+
+    // on error the dialog should not close
+    expect(handleCloseCalled).toBe(false);
+
+    const errFinder = (content: string, element: Element | null): boolean => {
+        const message = "ApolloError: API test error";
+        if (element &&
+            element.tagName.toLowerCase() === 'p' &&
+            element.textContent === message
+        ) {
+            // eslint-disable-next-line jest/no-conditional-expect
+            expect(element).toHaveStyle("color: red");
+            return true;
+        }
+        return false;
+    }
+
+    expect(await screen.findByText(errFinder)).toBeTruthy();
+
+    expect(requestBody).toBeTruthy();
+    if (!requestBody) {
+        return
+    }
+    expect(requestBody.variables.forecastId).toBe("f01");
+    expect(requestBody.variables.correctOutcomeId).toBe("o01");
+    // The API assumes RESOLVED when no resolution is passed
+    expect(requestBody.variables.resolution).toBeUndefined();
 });

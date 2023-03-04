@@ -83,19 +83,22 @@ export const ResolveForecastDialog: FC<{
                 correctOutcomeId: outcome,
             }
         }
-        resolveForecastMutation({variables: queryVars})
-            .then(value => {
-                if (!value.errors) {
-                    handleClose();
-                }
-            })
-            .catch(reason => {
-                console.log("error resolveForecastMutation catch", reason);
-            });
+        void resolveForecastMutation({variables: queryVars});
     }
 
 
-    const [resolveForecastMutation, {error}] = useMutation<ResolveForecastMutation, ResolveForecastMutationVariables>(RESOLVE_FORECAST);
+    const [resolveForecastMutation, {error}] = useMutation<
+        ResolveForecastMutation,
+        ResolveForecastMutationVariables>(
+            RESOLVE_FORECAST,
+        {
+            onCompleted: _ => handleClose(),
+            // it seems to be necessary to call onError so that the
+            // 'error' variable works correctly.
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            onError: _ => {},
+            },
+        );
 
     let messageBox:JSX.Element = <></>;
     if (error) {
