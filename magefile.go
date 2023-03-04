@@ -342,10 +342,13 @@ func Release() error {
 	}
 
 	// Download links
-	if !ask("Are the download links on the website up-to-date?", false) {
+	if !ask(
+		"Are the download links and 'latest release' on the website up-to-date?",
+		false,
+	) {
 		msg := `the download links are not ready. You should:
 * Update:
-    vim website/content/docs/user/_index.md
+    vim website/content/docs/user/*
 * Commit the changes`
 		return errors.New(msg)
 	}
