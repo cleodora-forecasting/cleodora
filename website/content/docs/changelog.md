@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v0.2.0
 
+Release date: 2023-03-04
+
+
 ### Added
 
 * API, Frontend: Resolve forecasts (i.e. decide which outcome was actually the
@@ -70,6 +73,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v0.1.1
 
+Release date: 2023-01-11
+
+
 ### Added
 
 * Doc: Improved user and developer documentation
@@ -84,6 +90,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## v0.1.0
+
+Release date: 2023-01-10
+
 
 ### Added
 
