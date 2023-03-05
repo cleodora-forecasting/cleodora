@@ -121,6 +121,103 @@ func TestUpdate_From_0_1_1(t *testing.T) {
 	assert.Len(t, respGetForecasts.Forecasts, 5)
 }
 
+func TestUpdate_From_0_2_0(t *testing.T) {
+	tDir, err := os.MkdirTemp("", t.Name()+"_")
+	require.NoError(t, err)
+	dbSrc := filepath.Join("testdata", "test_0.2.0.db")
+	dbPath := filepath.Join(tDir, "test.db")
+	t.Log("executing with DB", dbPath)
+	err = CopyFile(dbSrc, dbPath)
+	require.NoError(t, err)
+
+	c := initServerAndGetClient(t, dbPath)
+	respGetForecasts, err := GetForecasts(context.Background(), c)
+	require.NoError(t, err)
+
+	expectedTitles := []string{
+		"Just a regular forecast (0.2.0)",
+		"Forecast with created/resolves/closes in the past (0.2.0)",
+		"Forecast with closes set to Go time null value and 3 outcomes (0.2.0)",
+	}
+	var foundTitles []string
+	for _, f := range respGetForecasts.Forecasts {
+		foundTitles = append(foundTitles, f.Title)
+		t.Log(f)
+		assertUTC(t, f.Created)
+		assertUTC(t, f.Resolves)
+		if f.Closes != nil {
+			assertUTC(t, *f.Closes)
+		}
+		for _, e := range f.Estimates {
+			assertUTC(t, e.Created)
+		}
+
+		if f.Title == "Forecast with closes set to Go time null value and 3 outcomes (0.2.0)" {
+			assert.Nil(t, f.Closes)
+		}
+		if f.Title == "Just a regular forecast (0.2.0)" {
+			// Verify some values that we know are contained in the DB to
+			// ensure nothing got lost. If the DB is re-generated, this part of
+			// the test probably has to be updated.
+			expectedCreated, err := time.Parse(
+				time.RFC3339,
+				"2023-03-05T18:58:13.806546739Z",
+			)
+			assert.Nil(t, err)
+			assert.Equal(t, expectedCreated, f.Created)
+			expectedResolves, err := time.Parse(
+				time.RFC3339,
+				"2023-04-04T18:58:13.805714705Z",
+			)
+			assert.Nil(t, err)
+			assert.Equal(t, expectedResolves, f.Resolves)
+			assert.Nil(t, f.Closes)
+		}
+	}
+	assert.ElementsMatch(t, expectedTitles, foundTitles)
+
+	// Create a new forecast to verify it's possible after an update
+
+	newForecast := NewForecast{
+		Title: "Will it rain tomorrow?",
+		Description: "It counts as rain if between 9am and 9pm there are " +
+			"30 min or more of uninterrupted precipitation.",
+		Closes:   timePointer(time.Now().Add(24 * time.Hour)),
+		Resolves: time.Now().Add(24 * time.Hour),
+	}
+
+	newEstimate := NewEstimate{
+		Reason: "My weather app says it will rain.",
+		Probabilities: []NewProbability{
+			{
+				Value: 70,
+				Outcome: NewOutcome{
+					Text: "Yes",
+				},
+			},
+			{
+				Value: 30,
+				Outcome: NewOutcome{
+					Text: "No",
+				},
+			},
+		},
+	}
+
+	respCreate, err := CreateForecast(
+		context.Background(),
+		c,
+		newForecast,
+		newEstimate,
+	)
+	require.NoError(t, err)
+	assert.Equal(t, "Will it rain tomorrow?", respCreate.CreateForecast.Title)
+
+	respGetForecasts, err = GetForecasts(context.Background(), c)
+	require.NoError(t, err)
+	assert.Len(t, respGetForecasts.Forecasts, 4)
+}
+
 // TestUpdate_From_0_1_1_sqlite3_dump verifies that the sqlite3 dump (if the
 // tool is installed) only contains time zones of the form +00:00 and does not
 // contain the Go null time.
