@@ -31,11 +31,14 @@ because:
 
 Cleodora is different from [Metaculus](https://metaculus.com) because:
 
-* Running it locally on your computer will be the default and all forecasts are
-  private, whereas on Metaculus everything is public.
-* Cleodora is about your own forecasts, not other people's.
-* You are able to make forecasts that are not of public interest, whereas on
-  Metaculus all forecasts are carefully curated.
+* Running it locally on your computer will be the default.
+* Metaculus's focus is on questions of public interest that are edited and
+  curated by the administrators, whereas Cleodora's focus is on your personal
+  forecasts.
+* That being said, the [Metaculus private
+  questions](https://www.metaculus.com/help/faq/#question-private) come very
+  close to what Cleodora does and even allow you to share those questions with
+  other users, which is currently not possible with Cleodora.
 
 
 ## PredictionBook
