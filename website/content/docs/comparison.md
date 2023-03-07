@@ -39,6 +39,9 @@ Cleodora is different from [Metaculus](https://metaculus.com) because:
   questions](https://www.metaculus.com/help/faq/#question-private) come very
   close to what Cleodora does and even allow you to share those questions with
   other users, which is currently not possible with Cleodora.
+* Metaculus question types can only be binary (yes/no), numeric range or date
+  range, whereas Cleodora allows you to specify as many outcomes per forecast
+  as you want.
 
 
 ## PredictionBook
