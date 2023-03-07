@@ -8,3 +8,4 @@ oryxBuildBinary
 temp_changelog.md
 
 /e2e_tests.db
+/dependabot_pr_skip

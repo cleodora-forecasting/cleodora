@@ -134,6 +134,12 @@ func MergeDependabot() error {
 	_ = must.RunV("git", "fetch")
 	_ = must.RunV("git", "remote", "prune", "origin")
 
+	skipContent, err := os.ReadFile("dependabot_pr_skip")
+	if err != nil && !errors.Is(err, os.ErrNotExist) {
+		return err
+	}
+	prsToSkip := strings.Split(string(skipContent), "\n")
+
 	out, err := shx.Output(
 		"git",
 		"for-each-ref",
@@ -146,8 +152,15 @@ func MergeDependabot() error {
 		return nil
 	}
 
+PRLoop:
 	for _, pr := range strings.Split(out, "\n") {
 		fmt.Printf("PR: %v\n", pr)
+		for _, prToSkip := range prsToSkip {
+			if pr == prToSkip {
+				fmt.Println("***** Skipping this PR! *****")
+				continue PRLoop
+			}
+		}
 		err = shx.Run("git", "merge-base", "--is-ancestor", pr, "HEAD")
 		if err == nil {
 			fmt.Println("Already merged")
