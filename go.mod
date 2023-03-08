@@ -3,7 +3,7 @@ module github.com/cleodora-forecasting/cleodora
 go 1.19
 
 require (
-	github.com/99designs/gqlgen v0.17.25
+	github.com/99designs/gqlgen v0.17.26
 	github.com/Khan/genqlient v0.5.0
 	github.com/adrg/xdg v0.4.0
 	github.com/carolynvs/magex v0.9.0
