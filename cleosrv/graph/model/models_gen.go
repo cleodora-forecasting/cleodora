@@ -37,7 +37,7 @@ type Forecast struct {
 	// way your prediction history will only reflect your estimations before you
 	// took the exam, which is something you may want (or not, in which case you
 	// could simply not set 'closes').
-	Closes     *time.Time  `json:"closes"`
+	Closes     *time.Time  `json:"closes,omitempty"`
 	Resolution Resolution  `json:"resolution"`
 	Estimates  []*Estimate `json:"estimates"`
 }
@@ -55,18 +55,18 @@ type NewEstimate struct {
 	// from other software. When creating a new Forecast this value will be for
 	// the first Estimate (which will get the same timestamp as the
 	// Forecast.Created).
-	Created *time.Time `json:"created"`
+	Created *time.Time `json:"created,omitempty"`
 }
 
 type NewForecast struct {
 	Title       string     `json:"title"`
 	Description string     `json:"description"`
 	Resolves    time.Time  `json:"resolves"`
-	Closes      *time.Time `json:"closes"`
+	Closes      *time.Time `json:"closes,omitempty"`
 	// An optional date in the past when you created this forecast. This can be
 	// useful for cases when you wrote it down on a piece of paper or when importing
 	// from other software.
-	Created *time.Time `json:"created"`
+	Created *time.Time `json:"created,omitempty"`
 }
 
 type NewOutcome struct {
