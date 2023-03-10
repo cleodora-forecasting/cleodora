@@ -10,7 +10,7 @@ require (
 	github.com/glebarez/sqlite v1.7.0
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/golangci/golangci-lint v1.51.2
-	github.com/goreleaser/goreleaser v1.16.0
+	github.com/goreleaser/goreleaser v1.16.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/magefile/mage v1.14.0
