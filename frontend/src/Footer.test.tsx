@@ -15,6 +15,6 @@ test('footer displays a version and a footer text', async () => {
 
     expect(within(footer).getByText("cleodora.org")).toBeInTheDocument();
 
-    await within(footer).findByText("99.99.99+test");
-    await within(footer).findByText("Footer text for a test");
+    expect(await within(footer).findByText("99.99.99+test")).toBeInTheDocument();
+    expect(await within(footer).findByText("Footer text for a test")).toBeInTheDocument();
 });
