@@ -47,13 +47,19 @@ test('after adding a forecast a success msg is shown', async () => {
     );
 
     const expectedTitle = "Will this test pass?";
-    const inputResolves = "01/13/2023 10:00 AM";
+    const inputResolves = ["01", "13", "2023", "10", "00", "AM"];
     const expectedResolves = "2023-01-13T10:00:00.000Z";
     const expectedReason = "It was written carefully and is not complicated.";
 
     await user.type(screen.getByLabelText('Title *'), expectedTitle);
-    await user.clear(screen.getByLabelText('Resolves *'));
-    await user.type(screen.getByLabelText('Resolves *'), inputResolves);
+
+    // For some reason when selecting the 'resolves' field the last
+    // element (AM/PM) is selected, so we need to move 5 times to the left.
+    await user.click(screen.getByLabelText('Resolves *'));
+    await user.keyboard('{ArrowLeft}'.repeat(5));
+    for (const value of inputResolves) {
+        await user.keyboard(value);
+    }
     await user.type(screen.getByLabelText('Reason *'), expectedReason);
     await user.type(screen.getByLabelText('1. Outcome *'), 'Yes');
     await user.type(screen.getByLabelText('1. Probability *'), '95');
@@ -120,14 +126,17 @@ test('add a forecast by tabbing with the keyboard', async () => {
     );
 
     const expectedTitle = "Will this test pass?";
-    const inputResolves = "01/13/2023 10:00 AM";
+    const inputResolves = ["01", "13", "2023", "10", "00", "AM"];
     const expectedResolves = "2023-01-13T10:00:00.000Z";
     const expectedReason = "It was written carefully and is not complicated.";
 
     await user.type(screen.getByLabelText('Title *'), expectedTitle);
     await user.tab(); // to description
     await user.tab(); // to resolves
-    await user.keyboard('{Delete}'.repeat(20) + inputResolves);
+    await user.keyboard('{ArrowLeft}');
+    for (const value of inputResolves) {
+        await user.keyboard(value);
+    }
     await user.tab(); // to calendar icon
     await user.tab(); // to 1. Outcome
     await user.keyboard("Yes");

@@ -118,7 +118,7 @@ const AddOutcomes: FC<{
 export const AddForecast: FC = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [resolves, setResolves] = useState(dayjs());
+    const [resolves, setResolves] = useState(dayjs().second(0).millisecond(0));
     const [reason, setReason] = useState('');
     const initialOutcomes = [
         {"id": uuid(), "outcome": "", value: 0},
@@ -239,13 +239,7 @@ export const AddForecast: FC = () => {
                                     }
                                     setResolves(newValue);
                                 }}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        required
-                                        helperText="Date when you'll know the answer."
-                                    />
-                                )}
+                                componentsProps={{ textField: { required: true, helperText: "Date when you'll know the answer." } }}
                             />
                         </Grid>
                         <Grid item container direction="column" spacing={1}>

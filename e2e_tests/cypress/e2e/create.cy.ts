@@ -8,10 +8,12 @@ describe('create forecast', () => {
         const randomNum = Math.floor(Math.random() * 10000);
         const title = `Is this a forecast created on the main page? (${randomNum})`;
         const nextYear = (new Date().getFullYear() + 1).toString()
-        const resolves = `01/01/${nextYear} 12:00 PM`;
+        const resolves = `0101${nextYear}1200PM`;
 
         cy.findByLabelText('Title *').type(title);
-        cy.findByLabelText('Resolves *').clear().type(resolves);
+        // For some reason when selecting the 'resolves' field the last
+        // element (AM/PM) is selected, so we need to move 5 times to the left.
+        cy.findByLabelText('Resolves *').type('{leftArrow}'.repeat(5)+resolves);
         cy.findByLabelText('1. Outcome *').type('Yes');
         cy.findByLabelText('1. Probability *').type('95');
         cy.findByLabelText('2. Outcome *').type('No');
