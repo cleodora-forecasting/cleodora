@@ -156,7 +156,8 @@ PRLoop:
 	for _, pr := range strings.Split(out, "\n") {
 		fmt.Printf("PR: %v\n", pr)
 		for _, prToSkip := range prsToSkip {
-			if pr == prToSkip {
+			prToSkip = strings.TrimSpace(prToSkip)
+			if prToSkip != "" && strings.HasSuffix(pr, prToSkip) {
 				fmt.Println("***** Skipping this PR! *****")
 				continue PRLoop
 			}
