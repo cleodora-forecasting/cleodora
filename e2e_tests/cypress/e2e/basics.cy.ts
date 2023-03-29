@@ -15,7 +15,8 @@ describe('basic front page tests', () => {
   });
 
   it('title input field for new forecast exists', () => {
-    cy.findByLabelText('Title *').click().type('Does cypress work?')
+    cy.findByLabelText('Title *').click();
+    cy.findByLabelText('Title *').type('Does cypress work?');
   });
 
   it('renders the page title and header', () => {
