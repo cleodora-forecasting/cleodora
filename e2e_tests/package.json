@@ -8,7 +8,7 @@
     "@typescript-eslint/parser": "^5.57.0",
     "cypress": "^12.8.1",
     "eslint": "^8.36.0",
-    "eslint-plugin-cypress": "^2.13.1",
+    "eslint-plugin-cypress": "^2.13.2",
     "typescript": "^5.0.2"
   }
 }
