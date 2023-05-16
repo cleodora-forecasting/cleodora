@@ -167,6 +167,15 @@ func (v *__CreateForecastInput) GetForecast() NewForecast { return v.Forecast }
 // GetEstimate returns __CreateForecastInput.Estimate, and is useful for accessing the field via an interface.
 func (v *__CreateForecastInput) GetEstimate() NewEstimate { return v.Estimate }
 
+// The query or mutation executed by CreateForecast.
+const CreateForecast_Operation = `
+mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
+	createForecast(forecast: $forecast, estimate: $estimate) {
+		id
+	}
+}
+`
+
 func CreateForecast(
 	ctx context.Context,
 	client graphql.Client,
@@ -175,13 +184,7 @@ func CreateForecast(
 ) (*CreateForecastResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateForecast",
-		Query: `
-mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
-	createForecast(forecast: $forecast, estimate: $estimate) {
-		id
-	}
-}
-`,
+		Query:  CreateForecast_Operation,
 		Variables: &__CreateForecastInput{
 			Forecast: forecast,
 			Estimate: estimate,
@@ -201,13 +204,8 @@ mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
 	return &data, err
 }
 
-func GetForecasts(
-	ctx context.Context,
-	client graphql.Client,
-) (*GetForecastsResponse, error) {
-	req := &graphql.Request{
-		OpName: "GetForecasts",
-		Query: `
+// The query or mutation executed by GetForecasts.
+const GetForecasts_Operation = `
 query GetForecasts {
 	forecasts {
 		id
@@ -219,7 +217,15 @@ query GetForecasts {
 		resolution
 	}
 }
-`,
+`
+
+func GetForecasts(
+	ctx context.Context,
+	client graphql.Client,
+) (*GetForecastsResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetForecasts",
+		Query:  GetForecasts_Operation,
 	}
 	var err error
 

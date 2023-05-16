@@ -509,15 +509,8 @@ func (v *__ResolveForecastInput) GetCorrectOutcomeId() *string { return v.Correc
 // GetResolution returns __ResolveForecastInput.Resolution, and is useful for accessing the field via an interface.
 func (v *__ResolveForecastInput) GetResolution() *Resolution { return v.Resolution }
 
-func CreateForecast(
-	ctx context.Context,
-	client graphql.Client,
-	forecast NewForecast,
-	estimate NewEstimate,
-) (*CreateForecastResponse, error) {
-	req := &graphql.Request{
-		OpName: "CreateForecast",
-		Query: `
+// The query or mutation executed by CreateForecast.
+const CreateForecast_Operation = `
 mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
 	createForecast(forecast: $forecast, estimate: $estimate) {
 		id
@@ -542,7 +535,17 @@ mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
 		}
 	}
 }
-`,
+`
+
+func CreateForecast(
+	ctx context.Context,
+	client graphql.Client,
+	forecast NewForecast,
+	estimate NewEstimate,
+) (*CreateForecastResponse, error) {
+	req := &graphql.Request{
+		OpName: "CreateForecast",
+		Query:  CreateForecast_Operation,
 		Variables: &__CreateForecastInput{
 			Forecast: forecast,
 			Estimate: estimate,
@@ -562,13 +565,8 @@ mutation CreateForecast ($forecast: NewForecast!, $estimate: NewEstimate!) {
 	return &data, err
 }
 
-func GetForecasts(
-	ctx context.Context,
-	client graphql.Client,
-) (*GetForecastsResponse, error) {
-	req := &graphql.Request{
-		OpName: "GetForecasts",
-		Query: `
+// The query or mutation executed by GetForecasts.
+const GetForecasts_Operation = `
 query GetForecasts {
 	forecasts {
 		id
@@ -591,7 +589,15 @@ query GetForecasts {
 		}
 	}
 }
-`,
+`
+
+func GetForecasts(
+	ctx context.Context,
+	client graphql.Client,
+) (*GetForecastsResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetForecasts",
+		Query:  GetForecasts_Operation,
 	}
 	var err error
 
@@ -607,19 +613,22 @@ query GetForecasts {
 	return &data, err
 }
 
+// The query or mutation executed by GetMetadata.
+const GetMetadata_Operation = `
+query GetMetadata {
+	metadata {
+		version
+	}
+}
+`
+
 func GetMetadata(
 	ctx context.Context,
 	client graphql.Client,
 ) (*GetMetadataResponse, error) {
 	req := &graphql.Request{
 		OpName: "GetMetadata",
-		Query: `
-query GetMetadata {
-	metadata {
-		version
-	}
-}
-`,
+		Query:  GetMetadata_Operation,
 	}
 	var err error
 
@@ -635,16 +644,8 @@ query GetMetadata {
 	return &data, err
 }
 
-func ResolveForecast(
-	ctx context.Context,
-	client graphql.Client,
-	forecastId string,
-	correctOutcomeId *string,
-	resolution *Resolution,
-) (*ResolveForecastResponse, error) {
-	req := &graphql.Request{
-		OpName: "ResolveForecast",
-		Query: `
+// The query or mutation executed by ResolveForecast.
+const ResolveForecast_Operation = `
 mutation ResolveForecast ($forecastId: ID!, $correctOutcomeId: ID, $resolution: Resolution) {
 	resolveForecast(forecastId: $forecastId, correctOutcomeId: $correctOutcomeId, resolution: $resolution) {
 		id
@@ -665,7 +666,18 @@ mutation ResolveForecast ($forecastId: ID!, $correctOutcomeId: ID, $resolution: 
 		}
 	}
 }
-`,
+`
+
+func ResolveForecast(
+	ctx context.Context,
+	client graphql.Client,
+	forecastId string,
+	correctOutcomeId *string,
+	resolution *Resolution,
+) (*ResolveForecastResponse, error) {
+	req := &graphql.Request{
+		OpName: "ResolveForecast",
+		Query:  ResolveForecast_Operation,
 		Variables: &__ResolveForecastInput{
 			ForecastId:       forecastId,
 			CorrectOutcomeId: correctOutcomeId,
