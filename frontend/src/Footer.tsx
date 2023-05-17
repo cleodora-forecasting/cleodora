@@ -26,13 +26,13 @@ export const Footer: FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             const data = await fetch("config.json");
-            const json = await data.json();
-            setConfig(json as FrontendConfig);
+            const json = await data.json() as FrontendConfig;
+            setConfig(json);
         };
         fetchData()
             .catch(
                 (reason) => {
-                    console.error(`Error getting config.json: ${reason}`)
+                    console.error("Error getting config.json: ", reason)
                 }
             );
     }, []);
