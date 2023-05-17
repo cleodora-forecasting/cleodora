@@ -24,23 +24,19 @@ export const Footer: FC = () => {
     const [config, setConfig] = useState({} as FrontendConfig);
 
     useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = () => {
-        fetch("config.json")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setConfig(result as FrontendConfig)
-                 }
-            )
+        const fetchData = async () => {
+            const data = await fetch("config.json");
+            const json = await data.json();
+            setConfig(json as FrontendConfig);
+        };
+        fetchData()
             .catch(
                 (reason) => {
-                    console.log("Error getting config", reason)
+                    console.error(`Error getting config.json: ${reason}`)
                 }
-            )
-    };
+            );
+    }, []);
+
 
     return <footer>
         <Grid container spacing={2}>
