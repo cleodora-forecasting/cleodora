@@ -46,6 +46,9 @@ mutation ResolveForecast($forecastId: ID!, $correctOutcomeId: ID,  $resolution: 
         closes
         estimates {
             id
+            created
+            reason
+            brierScore
             probabilities {
                 id
                 outcome {

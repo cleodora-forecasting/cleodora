@@ -414,11 +414,25 @@ func (v *ResolveForecastResolveForecast) GetEstimates() []*ResolveForecastResolv
 // All probabilities always add up to 100.
 type ResolveForecastResolveForecastEstimatesEstimate struct {
 	Id            string                                                                     `json:"id"`
+	Created       time.Time                                                                  `json:"created"`
+	Reason        string                                                                     `json:"reason"`
+	BrierScore    *float64                                                                   `json:"brierScore"`
 	Probabilities []*ResolveForecastResolveForecastEstimatesEstimateProbabilitiesProbability `json:"probabilities"`
 }
 
 // GetId returns ResolveForecastResolveForecastEstimatesEstimate.Id, and is useful for accessing the field via an interface.
 func (v *ResolveForecastResolveForecastEstimatesEstimate) GetId() string { return v.Id }
+
+// GetCreated returns ResolveForecastResolveForecastEstimatesEstimate.Created, and is useful for accessing the field via an interface.
+func (v *ResolveForecastResolveForecastEstimatesEstimate) GetCreated() time.Time { return v.Created }
+
+// GetReason returns ResolveForecastResolveForecastEstimatesEstimate.Reason, and is useful for accessing the field via an interface.
+func (v *ResolveForecastResolveForecastEstimatesEstimate) GetReason() string { return v.Reason }
+
+// GetBrierScore returns ResolveForecastResolveForecastEstimatesEstimate.BrierScore, and is useful for accessing the field via an interface.
+func (v *ResolveForecastResolveForecastEstimatesEstimate) GetBrierScore() *float64 {
+	return v.BrierScore
+}
 
 // GetProbabilities returns ResolveForecastResolveForecastEstimatesEstimate.Probabilities, and is useful for accessing the field via an interface.
 func (v *ResolveForecastResolveForecastEstimatesEstimate) GetProbabilities() []*ResolveForecastResolveForecastEstimatesEstimateProbabilitiesProbability {
@@ -655,6 +669,9 @@ mutation ResolveForecast ($forecastId: ID!, $correctOutcomeId: ID, $resolution: 
 		closes
 		estimates {
 			id
+			created
+			reason
+			brierScore
 			probabilities {
 				id
 				outcome {
