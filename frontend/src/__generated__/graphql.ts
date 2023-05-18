@@ -23,6 +23,7 @@ export type Scalars = {
  */
 export type Estimate = {
   __typename?: 'Estimate';
+  brierScore?: Maybe<Scalars['Float']>;
   created: Scalars['Time'];
   id: Scalars['ID'];
   probabilities: Array<Maybe<Probability>>;

@@ -18,6 +18,7 @@ type Estimate struct {
 	Created       time.Time      `json:"created"`
 	Reason        string         `json:"reason"`
 	Probabilities []*Probability `json:"probabilities"`
+	BrierScore    *float64       `json:"brierScore,omitempty"`
 }
 
 // A prediction about the future.

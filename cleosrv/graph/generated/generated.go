@@ -46,6 +46,7 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Estimate struct {
+		BrierScore    func(childComplexity int) int
 		Created       func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Probabilities func(childComplexity int) int
@@ -113,6 +114,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "Estimate.brierScore":
+		if e.complexity.Estimate.BrierScore == nil {
+			break
+		}
+
+		return e.complexity.Estimate.BrierScore(childComplexity), true
 
 	case "Estimate.created":
 		if e.complexity.Estimate.Created == nil {
@@ -403,6 +411,7 @@ type Estimate {
   created: Time!
   reason: String!
   probabilities: [Probability]!
+  brierScore: Float
 }
 
 """
@@ -790,6 +799,47 @@ func (ec *executionContext) fieldContext_Estimate_probabilities(ctx context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _Estimate_brierScore(ctx context.Context, field graphql.CollectedField, obj *model.Estimate) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Estimate_brierScore(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.BrierScore, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*float64)
+	fc.Result = res
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Estimate_brierScore(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Estimate",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Forecast_id(ctx context.Context, field graphql.CollectedField, obj *model.Forecast) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Forecast_id(ctx, field)
 	if err != nil {
@@ -1142,6 +1192,8 @@ func (ec *executionContext) fieldContext_Forecast_estimates(ctx context.Context,
 				return ec.fieldContext_Estimate_reason(ctx, field)
 			case "probabilities":
 				return ec.fieldContext_Estimate_probabilities(ctx, field)
+			case "brierScore":
+				return ec.fieldContext_Estimate_brierScore(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Estimate", field.Name)
 		},
@@ -3845,6 +3897,10 @@ func (ec *executionContext) _Estimate(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "brierScore":
+
+			out.Values[i] = ec._Estimate_brierScore(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5057,6 +5113,22 @@ func (ec *executionContext) marshalOEstimate2ᚖgithubᚗcomᚋcleodoraᚑforeca
 		return graphql.Null
 	}
 	return ec._Estimate(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOFloat2ᚖfloat64(ctx context.Context, v interface{}) (*float64, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalFloatContext(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel ast.SelectionSet, v *float64) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalFloatContext(*v)
+	return graphql.WrapContextMarshaler(ctx, res)
 }
 
 func (ec *executionContext) marshalOForecast2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐForecast(ctx context.Context, sel ast.SelectionSet, v *model.Forecast) graphql.Marshaler {
