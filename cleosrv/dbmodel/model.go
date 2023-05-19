@@ -23,6 +23,7 @@ type Estimate struct {
 	Created       time.Time
 	Reason        string
 	Probabilities []Probability
+	BrierScore    *float64
 }
 
 type Probability struct {

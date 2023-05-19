@@ -405,3 +405,82 @@ func TestResolveForecast_ResolvesInPast(t *testing.T) {
 		assert.Equal(t, currentCloses.UTC(), resolveResponse.ResolveForecast.Closes.UTC())
 	}
 }
+
+func TestResolveForecast_GetBrierScore(t *testing.T) {
+	client := initServerAndGetClient(t, "")
+	getResponse, err := GetForecasts(context.Background(), client)
+	require.NoError(t, err)
+
+	var forecastId string
+	var outcomeNoId string
+
+	for _, f := range getResponse.Forecasts {
+		if f.Title == "Will the number of contributors to \"Cleodora\" be more "+
+			"than 3 at the end of 2022?" {
+			forecastId = f.Id
+			require.Equal(t, ResolutionUnresolved, f.Resolution)
+			for _, e := range f.Estimates {
+				// Verify that the Brier score is unset at the beginning when the
+				// forecast is still unresolved.
+				require.Nil(t, e.BrierScore)
+			}
+			for _, p := range f.Estimates[0].Probabilities {
+				if p.Outcome.Text == "No" {
+					outcomeNoId = p.Outcome.Id
+					break
+				}
+			}
+			break
+		}
+	}
+	require.NotEmpty(t, forecastId, "did not find the expected forecast")
+	require.NotEmpty(t, outcomeNoId)
+
+	resolveResponse, err := ResolveForecast(
+		context.Background(),
+		client,
+		forecastId,
+		&outcomeNoId,
+		nil,
+	)
+	require.NoError(t, err)
+
+	t.Log(resolveResponse.ResolveForecast.Estimates)
+
+	for _, e := range resolveResponse.ResolveForecast.Estimates {
+		fmt.Println("estimate ID", e.Id)
+		if e.Created.Format(time.RFC3339) == "2022-10-01T11:00:00+01:00" {
+			// Yes: 15, No: 85 (correct: No)
+			assert.NotNil(t, e.BrierScore)
+			if e.BrierScore != nil {
+				assert.Equal(t, 0.045, *e.BrierScore)
+			}
+		} else if e.Created.Format(time.RFC3339) == "2022-12-24T23:33:04+01:00" {
+			// Yes: 1, No: 99 (correct: No)
+			assert.NotNil(t, e.BrierScore)
+			if e.BrierScore != nil {
+				assert.Equal(t, 0.0002, *e.BrierScore)
+			}
+		} else {
+			t.Fatalf("unexepcted estimate %v", e)
+		}
+	}
+
+	// Get the forecasts again and verify that the Brier score is now set.
+
+	getResponse, err = GetForecasts(context.Background(), client)
+	require.NoError(t, err)
+
+	for _, f := range getResponse.Forecasts {
+		if f.Title == "Will the number of contributors to \"Cleodora\" be more "+
+			"than 3 at the end of 2022?" {
+			assert.Equal(t, ResolutionResolved, f.Resolution)
+			for _, e := range f.Estimates {
+				// Verify that the Brier score is now set.
+				require.NotNil(t, e.BrierScore)
+				assert.GreaterOrEqual(t, *e.BrierScore, 0.0)
+				assert.LessOrEqual(t, *e.BrierScore, 2.0)
+			}
+		}
+	}
+}

@@ -317,4 +317,14 @@ var dbMigrations = []dbMigration{
 			return nil
 		},
 	},
+	{
+		ID: "0.3.0 add estimate.brier_score column",
+		Up: func(db *gorm.DB) error {
+			type Estimate struct {
+				gorm.Model
+				BrierScore *float64
+			}
+			return db.AutoMigrate(&Estimate{})
+		},
+	},
 }

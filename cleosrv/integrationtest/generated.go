@@ -203,6 +203,7 @@ func (v *GetForecastsForecastsForecast) GetEstimates() []*GetForecastsForecastsF
 type GetForecastsForecastsForecastEstimatesEstimate struct {
 	Id            string                                                                    `json:"id"`
 	Created       time.Time                                                                 `json:"created"`
+	BrierScore    *float64                                                                  `json:"brierScore"`
 	Probabilities []*GetForecastsForecastsForecastEstimatesEstimateProbabilitiesProbability `json:"probabilities"`
 }
 
@@ -211,6 +212,11 @@ func (v *GetForecastsForecastsForecastEstimatesEstimate) GetId() string { return
 
 // GetCreated returns GetForecastsForecastsForecastEstimatesEstimate.Created, and is useful for accessing the field via an interface.
 func (v *GetForecastsForecastsForecastEstimatesEstimate) GetCreated() time.Time { return v.Created }
+
+// GetBrierScore returns GetForecastsForecastsForecastEstimatesEstimate.BrierScore, and is useful for accessing the field via an interface.
+func (v *GetForecastsForecastsForecastEstimatesEstimate) GetBrierScore() *float64 {
+	return v.BrierScore
+}
 
 // GetProbabilities returns GetForecastsForecastsForecastEstimatesEstimate.Probabilities, and is useful for accessing the field via an interface.
 func (v *GetForecastsForecastsForecastEstimatesEstimate) GetProbabilities() []*GetForecastsForecastsForecastEstimatesEstimateProbabilitiesProbability {
@@ -592,6 +598,7 @@ query GetForecasts {
 		estimates {
 			id
 			created
+			brierScore
 			probabilities {
 				id
 				outcome {

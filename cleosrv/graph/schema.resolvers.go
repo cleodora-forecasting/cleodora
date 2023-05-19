@@ -11,11 +11,12 @@ import (
 	"html"
 	"time"
 
+	"gorm.io/gorm"
+
 	"github.com/cleodora-forecasting/cleodora/cleosrv/dbmodel"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/model"
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
-	"gorm.io/gorm"
 )
 
 // CreateForecast is the resolver for the createForecast field.
@@ -153,6 +154,47 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 			_ = tx.Rollback()
 			return nil, fmt.Errorf("error updating outcome: %w", ret.Error)
 		}
+
+		type EstimateBrier struct {
+			ID    uint
+			Brier float64
+		}
+
+		var estimateBriers []EstimateBrier
+
+		ret := tx.Table("estimates").
+			Select(
+				"estimates.id, "+
+					"SUM("+
+					"(100*outcomes.correct-probabilities.value)*"+
+					"(100*outcomes.correct-probabilities.value)/"+
+					"10000.0"+
+					") as brier",
+			).
+			Joins(
+				"INNER JOIN probabilities ON probabilities.estimate_id=estimates.id",
+			).
+			Joins(
+				"INNER JOIN outcomes ON probabilities.outcome_id=outcomes.id",
+			).
+			Where("estimates.forecast_id = ?", forecastID).
+			Group("estimates.id").
+			Scan(&estimateBriers)
+
+		if ret.Error != nil {
+			_ = tx.Rollback()
+			return nil, fmt.Errorf("error calculating brier score: %w", ret.Error)
+		}
+
+		for _, r := range estimateBriers {
+			ret := tx.Model(&dbmodel.Estimate{}).
+				Where("id = ?", r.ID).
+				Update("brier_score", r.Brier)
+			if ret.Error != nil {
+				_ = tx.Rollback()
+				return nil, fmt.Errorf("error updating brier score: %w", ret.Error)
+			}
+		}
 	}
 
 	// TODO preload uses multiple queries and can be optimized with joins
@@ -186,6 +228,7 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 				Created:       e.Created,
 				Reason:        e.Reason,
 				Probabilities: probabilities,
+				BrierScore:    e.BrierScore,
 			},
 		)
 	}
@@ -247,6 +290,7 @@ func (r *queryResolver) Forecasts(ctx context.Context) ([]*model.Forecast, error
 					Created:       e.Created,
 					Reason:        e.Reason,
 					Probabilities: probabilities,
+					BrierScore:    e.BrierScore,
 				},
 			)
 		}
