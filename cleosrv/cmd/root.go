@@ -16,6 +16,7 @@ import (
 var cfgFile string
 var address string
 var database string
+var printVersion bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -32,6 +33,10 @@ forecasts.
 Visit https://cleodora.org for more information.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if printVersion {
+			versionCmd := buildVersionCommand()
+			return versionCmd.RunE(cmd, args)
+		}
 		app := cleosrv.NewApp()
 		app.Config.Address = viper.GetString("address")
 		app.Config.Database = viper.GetString("database")
@@ -57,6 +62,14 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
+
+	rootCmd.Flags().BoolVarP(
+		&printVersion,
+		"version",
+		"v",
+		false,
+		"Print the version",
+	)
 
 	rootCmd.PersistentFlags().StringVar(
 		&cfgFile,

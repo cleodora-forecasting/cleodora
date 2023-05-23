@@ -8,15 +8,18 @@ import (
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
 )
 
-// versionCmd represents the version command.
-var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Print the version",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(cleoutils.Version)
-	},
+func buildVersionCommand() *cobra.Command {
+	var versionCmd = &cobra.Command{
+		Use:   "version",
+		Short: "Print the version",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			fmt.Println(cleoutils.Version)
+			return nil
+		},
+	}
+	return versionCmd
 }
 
 func init() {
-	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(buildVersionCommand())
 }
