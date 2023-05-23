@@ -238,6 +238,9 @@ func executeQueries(c graphql.Client, version string) error {
 		&yesOutcomeId,
 		&resolutionResolved,
 	)
+	if err != nil {
+		return fmt.Errorf("resolve f3 err: %w", err)
+	}
 
 	if resolveResp.ResolveForecast.Resolution != integrationtest.ResolutionResolved {
 		return fmt.Errorf("resolution is not RESOLVED: %v", resolveResp)
