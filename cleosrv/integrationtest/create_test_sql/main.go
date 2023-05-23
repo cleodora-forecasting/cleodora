@@ -217,6 +217,35 @@ func executeQueries(c graphql.Client, version string) error {
 		return fmt.Errorf("unexpected response f3: %v", resp)
 	}
 
+	// Resolve the forecast f3
+	f3Id := resp.CreateForecast.Id
+	yesOutcomeId := ""
+	for _, p := range resp.CreateForecast.Estimates[0].Probabilities {
+		if p.Outcome.Text == "Yes" {
+			yesOutcomeId = p.Outcome.Id
+		}
+	}
+	if yesOutcomeId == "" {
+		return fmt.Errorf("could not find outcome 'Yes': %v", resp)
+	}
+
+	// Backport this script to 0.2.0 then overwrite the DB
+	resolutionResolved := integrationtest.ResolutionResolved
+	resolveResp, err := integrationtest.ResolveForecast(
+		context.Background(),
+		c,
+		f3Id,
+		&yesOutcomeId,
+		&resolutionResolved,
+	)
+
+	if resolveResp.ResolveForecast.Resolution != integrationtest.ResolutionResolved {
+		return fmt.Errorf("resolution is not RESOLVED: %v", resolveResp)
+	}
+	if resolveResp.ResolveForecast.Id != f3Id {
+		return fmt.Errorf("the IDs don't match: %v", resolveResp)
+	}
+
 	return nil
 }
 
