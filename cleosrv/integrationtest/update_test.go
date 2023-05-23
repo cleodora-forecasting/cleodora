@@ -161,13 +161,13 @@ func TestUpdate_From_0_2_0(t *testing.T) {
 			// the test probably has to be updated.
 			expectedCreated, err := time.Parse(
 				time.RFC3339,
-				"2023-03-05T18:58:13.806546739Z",
+				"2023-05-23T19:29:17.430422361Z",
 			)
 			assert.Nil(t, err)
 			assert.Equal(t, expectedCreated, f.Created)
 			expectedResolves, err := time.Parse(
 				time.RFC3339,
-				"2023-04-04T18:58:13.805714705Z",
+				"2023-06-22T19:29:17.429495586Z",
 			)
 			assert.Nil(t, err)
 			assert.Equal(t, expectedResolves, f.Resolves)
