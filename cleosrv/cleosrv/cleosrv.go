@@ -327,4 +327,52 @@ var dbMigrations = []dbMigration{
 			return db.AutoMigrate(&Estimate{})
 		},
 	},
+	{
+		ID: "0.3.0 calculate estimate.brier_score for resolved forecasts",
+		Up: func(db *gorm.DB) error {
+			type EstimateBrier struct {
+				ID    uint
+				Brier float64
+			}
+
+			var estimateBriers []EstimateBrier
+
+			ret := db.Table("estimates").
+				Select(
+					"estimates.id, " +
+						"SUM(" +
+						"(100*outcomes.correct-probabilities.value)*" +
+						"(100*outcomes.correct-probabilities.value)/" +
+						"10000.0" +
+						") as brier",
+				).
+				Joins(
+					"INNER JOIN probabilities ON probabilities.estimate_id=estimates.id",
+				).
+				Joins(
+					"INNER JOIN outcomes ON probabilities.outcome_id=outcomes.id",
+				).
+				Joins(
+					"INNER JOIN forecasts ON forecasts.id=estimates.forecast_id",
+				).
+				Where("forecasts.resolution=\"RESOLVED\"").
+				Group("estimates.id").
+				Scan(&estimateBriers)
+
+			if ret.Error != nil {
+				return fmt.Errorf("error calculating brier score: %w", ret.Error)
+			}
+
+			for _, r := range estimateBriers {
+				ret := db.Model(&dbmodel.Estimate{}).
+					Where("id = ?", r.ID).
+					Update("brier_score", r.Brier)
+				if ret.Error != nil {
+					return fmt.Errorf("error updating brier score: %w", ret.Error)
+				}
+			}
+
+			return nil
+		},
+	},
 }

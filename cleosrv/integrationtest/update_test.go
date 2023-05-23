@@ -216,6 +216,30 @@ func TestUpdate_From_0_2_0(t *testing.T) {
 	respGetForecasts, err = GetForecasts(context.Background(), c)
 	require.NoError(t, err)
 	assert.Len(t, respGetForecasts.Forecasts, 4)
+
+	// Verify f3 forecast (that was resolved with version 0.2.0) has a Brier score.
+	// (1−0.2)^2+(0-0.3)^2+(0-0.5)^2 = 0.98
+	thirdForecastFound := false
+	thirdForecastTitle := "Forecast with closes set to Go time null value and 3 outcomes (0.2.0)"
+	for _, f := range respGetForecasts.Forecasts {
+		if f.Title == thirdForecastTitle {
+			assert.Equal(t, ResolutionResolved, f.Resolution)
+			assert.NotNil(t, f.Estimates[0].BrierScore)
+			if f.Estimates[0].BrierScore != nil {
+				assert.Equal(t, 0.98, *f.Estimates[0].BrierScore)
+			}
+			thirdForecastFound = true
+		} else {
+			assert.Equal(t, ResolutionUnresolved, f.Resolution)
+			assert.Nil(t, f.Estimates[0].BrierScore)
+		}
+	}
+	assert.True(
+		t,
+		thirdForecastFound,
+		"third forecast '%v' not found",
+		thirdForecastTitle,
+	)
 }
 
 // TestUpdate_From_0_1_1_sqlite3_dump verifies that the sqlite3 dump (if the
