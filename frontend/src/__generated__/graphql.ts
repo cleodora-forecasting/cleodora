@@ -5,14 +5,16 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  Time: any;
+  ID: { input: string | number; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  Time: { input: any; output: any; }
 };
 
 /**
@@ -23,11 +25,11 @@ export type Scalars = {
  */
 export type Estimate = {
   __typename?: 'Estimate';
-  brierScore?: Maybe<Scalars['Float']>;
-  created: Scalars['Time'];
-  id: Scalars['ID'];
+  brierScore?: Maybe<Scalars['Float']['output']>;
+  created: Scalars['Time']['output'];
+  id: Scalars['ID']['output'];
   probabilities: Array<Maybe<Probability>>;
-  reason: Scalars['String'];
+  reason: Scalars['String']['output'];
 };
 
 /** A prediction about the future. */
@@ -43,24 +45,24 @@ export type Forecast = {
    * took the exam, which is something you may want (or not, in which case you
    * could simply not set 'closes').
    */
-  closes?: Maybe<Scalars['Time']>;
-  created: Scalars['Time'];
-  description: Scalars['String'];
+  closes?: Maybe<Scalars['Time']['output']>;
+  created: Scalars['Time']['output'];
+  description: Scalars['String']['output'];
   estimates: Array<Maybe<Estimate>>;
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   resolution: Resolution;
   /**
    * The point in time at which you predict you will be able to resolve whether
    * how the forecast resolved.
    */
-  resolves: Scalars['Time'];
-  title: Scalars['String'];
+  resolves: Scalars['Time']['output'];
+  title: Scalars['String']['output'];
 };
 
 /** Information about the application itself e.g. the current version. */
 export type Metadata = {
   __typename?: 'Metadata';
-  version: Scalars['String'];
+  version: Scalars['String']['output'];
 };
 
 export type Mutation = {
@@ -77,8 +79,8 @@ export type MutationCreateForecastArgs = {
 
 
 export type MutationResolveForecastArgs = {
-  correctOutcomeId?: InputMaybe<Scalars['ID']>;
-  forecastId: Scalars['ID'];
+  correctOutcomeId?: InputMaybe<Scalars['ID']['input']>;
+  forecastId: Scalars['ID']['input'];
   resolution?: InputMaybe<Resolution>;
 };
 
@@ -90,31 +92,31 @@ export type NewEstimate = {
    * the first Estimate (which will get the same timestamp as the
    * Forecast.Created).
    */
-  created?: InputMaybe<Scalars['Time']>;
+  created?: InputMaybe<Scalars['Time']['input']>;
   probabilities: Array<NewProbability>;
-  reason: Scalars['String'];
+  reason: Scalars['String']['input'];
 };
 
 export type NewForecast = {
-  closes?: InputMaybe<Scalars['Time']>;
+  closes?: InputMaybe<Scalars['Time']['input']>;
   /**
    * An optional date in the past when you created this forecast. This can be
    * useful for cases when you wrote it down on a piece of paper or when importing
    * from other software.
    */
-  created?: InputMaybe<Scalars['Time']>;
-  description: Scalars['String'];
-  resolves: Scalars['Time'];
-  title: Scalars['String'];
+  created?: InputMaybe<Scalars['Time']['input']>;
+  description: Scalars['String']['input'];
+  resolves: Scalars['Time']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type NewOutcome = {
-  text: Scalars['String'];
+  text: Scalars['String']['input'];
 };
 
 export type NewProbability = {
   outcome: NewOutcome;
-  value: Scalars['Int'];
+  value: Scalars['Int']['input'];
 };
 
 /**
@@ -123,9 +125,9 @@ export type NewProbability = {
  */
 export type Outcome = {
   __typename?: 'Outcome';
-  correct: Scalars['Boolean'];
-  id: Scalars['ID'];
-  text: Scalars['String'];
+  correct: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  text: Scalars['String']['output'];
 };
 
 /**
@@ -134,9 +136,9 @@ export type Outcome = {
  */
 export type Probability = {
   __typename?: 'Probability';
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   outcome: Outcome;
-  value: Scalars['Int'];
+  value: Scalars['Int']['output'];
 };
 
 export type Query = {
@@ -170,9 +172,9 @@ export type GetForecastsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetForecastsQuery = { __typename?: 'Query', forecasts: Array<{ __typename?: 'Forecast', id: string, title: string, description: string, created: any, closes?: any | null, resolves: any, resolution: Resolution, estimates: Array<{ __typename?: 'Estimate', id: string, created: any, reason: string, probabilities: Array<{ __typename?: 'Probability', id: string, value: number, outcome: { __typename?: 'Outcome', id: string, text: string, correct: boolean } } | null> } | null> }> };
 
 export type ResolveForecastMutationVariables = Exact<{
-  forecastId: Scalars['ID'];
+  forecastId: Scalars['ID']['input'];
   resolution?: InputMaybe<Resolution>;
-  correctOutcomeId?: InputMaybe<Scalars['ID']>;
+  correctOutcomeId?: InputMaybe<Scalars['ID']['input']>;
 }>;
 
 
