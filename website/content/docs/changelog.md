@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+* API: Estimates from forecasts that have been resolved now include the Brier
+  score. ([#298](https://github.com/cleodora-forecasting/cleodora/issues/298))
+
 [Git history](https://github.com/cleodora-forecasting/cleodora/compare/v0.2.0...HEAD)
 
 
