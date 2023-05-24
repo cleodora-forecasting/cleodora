@@ -76,5 +76,15 @@ describe('resolve forecast', () => {
       cy.findByText('RESOLVED').should('exist');
       cy.findByText('No: 1%').should('have.css', 'font-weight', '700');
     });
+
+    // Verify the Brier score
+    cy.get('@row').within(() => {
+      cy.findByText(title).click();
+    });
+    cy.findByRole('dialog').within(() => {
+      cy.findByText((_, e) => e?.textContent === 'Brier Score: 1.9602')
+          .should('exist');
+      cy.findByRole('button', { name: 'Close' }).click();
+    });
   })
 })
