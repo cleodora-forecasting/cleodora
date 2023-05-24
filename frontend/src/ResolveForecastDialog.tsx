@@ -40,6 +40,7 @@ const RESOLVE_FORECAST = gql(`
             closes
             estimates {
                 id
+                brierScore
                 probabilities {
                     id
                     outcome {

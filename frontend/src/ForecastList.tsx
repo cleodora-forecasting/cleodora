@@ -25,6 +25,7 @@ export const GET_FORECASTS = gql(`
                 id
                 created
                 reason
+                brierScore
                 probabilities {
                     id
                     value

@@ -67,7 +67,8 @@ export const ForecastDetails: FC<{forecast: Forecast, open: boolean, handleClose
                     return (
                         <div key={estimate.id}>
                             <h4>{new Date(estimate.created as string).toLocaleString()}</h4>
-                            <p>{estimate.reason}</p>
+                            <p><strong>Brier Score: </strong>{estimate.brierScore}</p>
+                            <p><strong>Reason: </strong>{estimate.reason}</p>
                             <ul>
                                 {estimate.probabilities.map(probability => {
                                     if (probability === null) {
