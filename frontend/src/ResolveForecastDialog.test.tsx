@@ -28,6 +28,7 @@ test('the resolve dialog is displayed', () => {
                 id: "e01",
                 reason: "The weather report says so",
                 created: now,
+                brierScore: null,
                 probabilities: [
                     {
                         id: "p01",
@@ -90,6 +91,7 @@ test('forecast can be resolved with outcome', async () => {
                         "estimates": [
                             {
                                 "id": "e01",
+                                brierScore: 2.0,
                                 probabilities: [
                                     {
                                         id: "p01",
@@ -131,6 +133,7 @@ test('forecast can be resolved with outcome', async () => {
                 id: "e01",
                 reason: "The weather report says so",
                 created: now,
+                brierScore: null,
                 probabilities: [
                     {
                         id: "p01",
@@ -211,6 +214,7 @@ test('error is displayed', async () => {
                 id: "e01",
                 reason: "The weather report says so",
                 created: now,
+                brierScore: null,
                 probabilities: [
                     {
                         id: "p01",

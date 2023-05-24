@@ -34,6 +34,7 @@ export const handlers: RequestHandler[] = [
                                "reason": "It's the type of film the Academy" +
                                    " loves",
                                "created": "2022-10-30T17:05:00+01:00",
+                               "brierScore": null,
                                "probabilities":[
                                    {
                                        "id":"1",
@@ -60,8 +61,8 @@ export const handlers: RequestHandler[] = [
                                    ],
                                "__typename":"Estimate"
                            }
-                           ]
-                       ,"__typename":"Forecast"
+                       ],
+                       "__typename":"Forecast"
                    }
                ]
            }),
