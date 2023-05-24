@@ -147,6 +147,8 @@ func createDummyForecast_CPEExam(db *gorm.DB) error {
 		return ret.Error
 	}
 
+	brierScore := 0.4968
+
 	forecast := dbmodel.Forecast{
 		Title: "What grade will I get in my upcoming CPE exam?",
 		Description: "CPE C2 exam. Grade C1 is the worst passing grade. " +
@@ -173,6 +175,7 @@ func createDummyForecast_CPEExam(db *gorm.DB) error {
 				),
 				Reason: "I'm well prepared and performed well on test" +
 					" exams.",
+				BrierScore: &brierScore,
 				Probabilities: []dbmodel.Probability{
 					{
 						Value:     40,
