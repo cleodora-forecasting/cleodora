@@ -331,6 +331,13 @@ func All() {
 // Release builds and releases all packages
 func Release() error {
 	ensureGitDiffEmpty()
+	out, err := shx.Output("git", "status", "-s")
+	mgx.Must(err)
+	if out != "" {
+		// goreleaser requires this
+		msg := "The Git repo must be completely clean without untracked files."
+		mgx.Must(errors.New(msg))
+	}
 
 	// Changelog
 	changelogPath := "temp_changelog.md"
@@ -342,8 +349,12 @@ func Release() error {
 * Execute:
     cp website/content/docs/changelog.md temp_changelog.md
     vim temp_changelog.md
-* Remove everything except the current release from that file. Also
-  remove the version title and the release date because it becomes redundant`
+* Make the following changes:
+  * Remove everything except the current release.
+  * Remove the version title and the release date because it becomes redundant
+  * Format it without line breaks within bullet points because the GitHub UI
+    seems to prefer it like that.
+`
 		return fmt.Errorf(msg, changelogPath)
 	}
 	changelogContent, err := os.ReadFile(changelogPath)
@@ -383,13 +394,14 @@ Then set is as an ENV variable:
 		return errors.New(msg)
 	}
 
-	// Ensure tests run etc.
-	mg.Deps(All)
+	if ask("Run all tests, linters etc.?", true) {
+		mg.Deps(All)
+	}
 
 	// Tag ready and checked out
-	out, err := shx.Output("git", "tag", "--points-at", "HEAD")
+	currentTag, err := shx.Output("git", "tag", "--points-at", "HEAD")
 	mgx.Must(err)
-	if out == "" {
+	if currentTag == "" {
 		msg := `no tag is checked out. You should:
 * Create a tag:
     git tag vX.Y.Z
@@ -397,11 +409,24 @@ Then set is as an ENV variable:
     git checkout vX.Y.Z`
 		mgx.Must(errors.New(msg))
 	}
+	if len(strings.Split(currentTag, "\n")) > 1 {
+		// goreleaser assumes one tag by default. It could be changed, but it
+		// does not seem necessary to support this right now.
+		// https://goreleaser.com/cookbooks/set-a-custom-git-tag/
+		mgx.Must(
+			fmt.Errorf(
+				"There is more than one tag: %v",
+				strings.Split(currentTag, "\n"),
+			),
+		)
+	}
 
 	// Explicitly call Clean() because it's not enough that it was already
 	// called as an indirect dependency earlier because goreleaser expects
 	// dist/ to be empty.
 	Clean()
+
+	_ = must.RunV("git", "push", "origin", currentTag)
 
 	_ = must.RunV(
 		"go",
