@@ -22,7 +22,8 @@ Cleodora is free and **open source** software. You can use it to track
 **systematically improve** at making such predictions/forecasts.
 
 Cleodora is a **web application** that you can download to your computer and
-then access via your web browser
+then access via your web browser. It requires no setup (single binary) and
+runs on Microsoft Windows, macOS and Linux.
 
 For **example** you can forecast _"Will I increase my salary by 20% within the
 next 24 months?"_. You predict "Yes" with a confidence of 60%. As the months
