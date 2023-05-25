@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the Brier score.
   ([#298](https://github.com/cleodora-forecasting/cleodora/issues/298),
   [#499](https://github.com/cleodora-forecasting/cleodora/issues/499))
+* The `cleosrv` binary now also supports a `--version/-v` flag in addition to
+  the identical `version` subcommand because it's more convenient.
 
 [Git history](https://github.com/cleodora-forecasting/cleodora/compare/v0.2.0...HEAD)
 
