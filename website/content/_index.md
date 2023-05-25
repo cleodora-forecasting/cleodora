@@ -15,16 +15,14 @@ bookToc: true
 
 <img align="right" src="/logo_full.png">
 
-**Get started: [Live Demo](https://demo.cleodora.org) | [Installation and Usage Documentation]({{< ref "user" >}})**
+**Get started: [Live Demo](https://demo.cleodora.org) | [User Documentation]({{< ref "user" >}})**
 
-Cleodora is an **open source** piece of software that is in the early stages of
-development. I am looking for people to [**collaborate**]({{< ref "development" >}}) in creating it.
+Cleodora is free and **open source** software. You can use it to track
+**personal forecasts** and, by getting feedback on your performance,
+**systematically improve** at making such predictions/forecasts.
 
-It's a **web application** that you can download to your computer and then
-access via your web browser
-
-The **goal** is to track **personal forecasts** and, by getting feedback on your
-performance, **systematically improve** at making such forecasts.
+Cleodora is a **web application** that you can download to your computer and
+then access via your web browser
 
 For **example** you can forecast _"Will I increase my salary by 20% within the
 next 24 months?"_. You predict "Yes" with a confidence of 60%. As the months
