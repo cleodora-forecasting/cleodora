@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+[Git history](https://github.com/cleodora-forecasting/cleodora/compare/v0.3.0...HEAD)
+
+
+## v0.3.0
+
+Release date: 2023-05-25
+
+
 ### Added
 
 * API, Frontend: Estimates from forecasts that have been resolved now include
@@ -28,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * The `cleosrv` binary now also supports a `--version/-v` flag in addition to
   the identical `version` subcommand because it's more convenient.
 
-[Git history](https://github.com/cleodora-forecasting/cleodora/compare/v0.2.0...HEAD)
+[Git history](https://github.com/cleodora-forecasting/cleodora/compare/v0.2.0...v0.3.0)
 
 
 ## v0.2.0

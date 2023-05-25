@@ -343,7 +343,7 @@ func Release() error {
     cp website/content/docs/changelog.md temp_changelog.md
     vim temp_changelog.md
 * Remove everything except the current release from that file. Also
-  remove the version title because it becomes redundant`
+  remove the version title and the release date because it becomes redundant`
 		return fmt.Errorf(msg, changelogPath)
 	}
 	changelogContent, err := os.ReadFile(changelogPath)

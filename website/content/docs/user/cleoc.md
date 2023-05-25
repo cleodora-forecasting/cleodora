@@ -11,7 +11,7 @@ bookToc: true
 
 # cleoc
 
-**Latest release: 0.2.0**
+**Latest release: 0.3.0**
 
 `cleoc` (Cleodora client) is a Cleodora CLI (command-line interface) client to
 interact with a `cleosrv` Cleodora server.
@@ -28,10 +28,10 @@ machine or somewhere else.
 ## Installing cleoc
 
 Download the latest release for
-[Windows (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.2.0/cleoc_0.2.0_Windows_64bit.zip),
-[Linux (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.2.0/cleoc_0.2.0_Linux_64bit.tar.gz),
-[Linux ARM (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.2.0/cleoc_0.2.0_Linux_ARM64.tar.gz) or
-[MacOS (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.2.0/cleoc_0.2.0_macOS_64bit.tar.gz).
+[Windows (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.3.0/cleoc_0.3.0_Windows_64bit.zip),
+[Linux (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.3.0/cleoc_0.3.0_Linux_64bit.tar.gz),
+[Linux ARM (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.3.0/cleoc_0.3.0_Linux_ARM64.tar.gz) or
+[MacOS (64bit)](https://github.com/cleodora-forecasting/cleodora/releases/download/v0.3.0/cleoc_0.3.0_macOS_64bit.tar.gz).
 
 Unpack the archive wherever you want it. There will only be a single executable
 inside named `cleoc` or `cleoc.exe`.
