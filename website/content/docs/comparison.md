@@ -16,7 +16,7 @@ bookToc: true
 Cleodora is different from [Manifold Markets](https://manifold.markets)
 because:
 
-* Running it locally on your computer will be the default and all forecasts are
+* Running it locally on your computer is the default and all forecasts are
   private whereas, on Manifold everything is public.
 * Cleodora is about your own forecasts, not other people's.
 * You can directly measure the quality of your forecasts instead of only
@@ -31,7 +31,7 @@ because:
 
 Cleodora is different from [Metaculus](https://metaculus.com) because:
 
-* Running it locally on your computer will be the default.
+* Running it locally on your computer is the default.
 * Metaculus's focus is on questions of public interest that are edited and
   curated by the administrators, whereas Cleodora's focus is on your personal
   forecasts.
@@ -48,10 +48,10 @@ Cleodora is different from [Metaculus](https://metaculus.com) because:
 
 Cleodora is different from [PredictionBook](https://predictionbook.com) because:
 
-* Running it locally on your computer will be the default, and will be easier
+* Running it locally on your computer is the default, and is easier
   than with PredictionBook because Cleodora is single binary, no dependencies
-  and Linux/OSX/Windows cross platform. To run PredictionBook locally you need
-  Ruby on Rails.
+  and cross platform (Microsoft Windows, macOS, Linux). To run PredictionBook
+  locally you need Ruby on Rails.
 * The Cleodora UI aims to look more modern and be mobile friendly.
 * In PredictionBook it's only possible to make binary (yes/no) forecasts
   whereas making ones with three or more possible answers is supported by
@@ -61,7 +61,7 @@ Cleodora is different from [PredictionBook](https://predictionbook.com) because:
   what it's supposed to do, why continue tinkering with it?
 
 That being said, if you want a great and working tool **right now**,
-PredictionBook should be your choice. It essentially does everything Cleodora
+PredictionBook is a good choice. It essentially does everything Cleodora
 aims to do in the future. The Credence game is also really cool and fun, albeit
 a little US-centric.
 
