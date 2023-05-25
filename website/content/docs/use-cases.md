@@ -51,13 +51,13 @@ On November 4th 2022 Mindy resolves the forecast to "Yes":
 * Reasoning: Tom just announced that he will leave by November 30th.
 
 Cleodora now calculates Mindy's Brier score for her forecast. The Brier score
-is a common measure for forecast accuracy where 0 is best and 1 is worst:
+is a common measure for forecast accuracy where 0 is best and 2 is worst:
 
-* January 2nd 2022 (11 months, 29 days before resolution): 0.16
-* March 12th 2022 (9 months, 19 days before resolution): 0.09
-* June 30th 2022 (6 months, 1 day before resolution): 0.49
-* August 1st 2022 (4 months, 30 days before resolution): 0.02
-* Overall average: 0.19
+* January 2nd 2022 (11 months, 29 days before resolution): 0.320
+* March 12th 2022 (9 months, 19 days before resolution): 0.180
+* June 30th 2022 (6 months, 1 day before resolution): 0.980
+* August 1st 2022 (4 months, 30 days before resolution): 0.045
+* Overall average: 0.381
 
 Mindy analyzes how her Brier score evolved over time and sees that it tanked on
 June 30th. Reading her reasoning at the time she decides that she should not
