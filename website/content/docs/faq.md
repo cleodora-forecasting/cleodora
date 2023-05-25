@@ -26,6 +26,19 @@ then?), to communicate more clearly with other people and to discover
 systematic ways in which you are erring (e.g. you tend to be too optimistic
 concerning your favorite political party).
 
+Some resources to learn more about forecasting:
+
+* [Superforecasting: The Art and Science of
+  Prediction](https://www.goodreads.com/book/show/23995360-superforecasting)
+  (book)
+* [The Signal and the Noise: Why So Many Predictions Fail — But Some
+  Don't](https://www.goodreads.com/book/show/13588394-the-signal-and-the-noise)
+  (book)
+* [Thinking in Bets: Making Smarter Decisions When You Don't Have All the
+  Facts](https://www.goodreads.com/book/show/35957157-thinking-in-bets) (book)
+* [Superforecasting | Philip
+  Tetlock](https://www.youtube.com/watch?v=pedNak4S9IE) (video/talk)
+
 
 ## A future event either happens or it doesn't, does it make sense to attach a probability to it?
 
