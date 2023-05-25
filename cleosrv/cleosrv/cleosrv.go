@@ -123,6 +123,9 @@ func migrateDB(db *gorm.DB) error {
 	if err != nil {
 		return fmt.Errorf("auto migrating 'migrations' table: %w", err)
 	}
+	// If the DB is completely new then we just insert all migrations as 'done'
+	// i.e. they are not really executed because the createDb() function is
+	// expected to do everything necessary for creating a valid new DB.
 	if dbIsEmpty {
 		err := db.Transaction(func(tx *gorm.DB) error {
 			err := createDb(tx)
@@ -149,6 +152,7 @@ func migrateDB(db *gorm.DB) error {
 		})
 		return err
 	}
+	// If the DB is not new, then we run the missing migrations.
 	for _, m := range dbMigrations {
 		var count int64
 		ret := db.Model(&Migrations{}).Where("id = ?", m.ID).Count(&count)
@@ -183,6 +187,8 @@ func migrateDB(db *gorm.DB) error {
 	return nil
 }
 
+// createDb is expected to execute all that is necessary to create a valid new
+// DB. Existing migrations will not be executed for such a new DB.
 func createDb(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&dbmodel.Forecast{},
