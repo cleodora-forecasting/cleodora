@@ -95,6 +95,22 @@ Later versions of Cleodora will also have a public instance with multiple
 users, but the focus will always be on personal forecasts.
 
 
+## Can't you just use a spreadsheet (Excel, Calc, Sheets)?
+
+Yes and no. If you just want to represent a list of forecast and for every
+forecast the same possible outcomes (e.g. Yes/No) with a probability then it's
+trivial to implement in a spreadsheet because it's two-dimensional data. But
+what if for each forecast you want to predict different outcomes? And if you
+want to update the probabilities you estimated over time and keep a record of
+the previous probabilities? And if you want to sort the forecasts into
+different categories? You end up with multi-dimensional data that is not
+trivial to represent.
+
+It also becomes harder to focus on specific forecasts, searching and filtering,
+seeing forecasting ability within a certain category and such features that are
+or will become part of Cleodora.
+
+
 ## Why the name Cleodora?
 
 Cleodora (/kliːəˈdɔːrə/) is a nymph from Greek mythology who was able to
