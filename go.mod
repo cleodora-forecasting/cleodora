@@ -18,7 +18,7 @@ require (
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
-	github.com/vektah/gqlparser/v2 v2.5.2-0.20230422221642-25e09f9d292d
+	github.com/vektah/gqlparser/v2 v2.5.3
 	gorm.io/gorm v1.25.1
 )
 
@@ -307,7 +307,7 @@ require (
 	github.com/sashamelentyev/interfacebloat v1.1.0 // indirect
 	github.com/sashamelentyev/usestdlibvars v1.23.0 // indirect
 	github.com/securego/gosec/v2 v2.16.0 // indirect
-	github.com/sergi/go-diff v1.2.0 // indirect
+	github.com/sergi/go-diff v1.3.1 // indirect
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c // indirect
 	github.com/sigstore/cosign/v2 v2.0.0 // indirect
 	github.com/sigstore/rekor v1.2.0 // indirect
