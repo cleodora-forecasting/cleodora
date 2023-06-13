@@ -1,4 +1,7 @@
-import {render, screen} from "@testing-library/react";
+import {
+    render,
+    screen, waitFor,
+} from "@testing-library/react";
 import {Forecast, Resolution} from "./__generated__/graphql";
 import {client} from "./client";
 import {ApolloProvider} from "@apollo/client";
@@ -80,6 +83,8 @@ test('forecast can be resolved with outcome', async () => {
     server.use(
         graphql.mutation("resolveForecast", async (req, res, ctx) => {
             requestBody = await req.json();
+            // Simulate a delay like a real request
+            await new Promise(f => setTimeout(f, 200));
             return res(
                 ctx.data({
                     "resolveForecast": {
@@ -158,11 +163,11 @@ test('forecast can be resolved with outcome', async () => {
         ],
     };
 
-    let handleCloseCalled = false;
+    const handleClose = jest.fn();
 
     render(
         <ApolloProvider client={client}>
-            <ResolveForecastDialog forecast={forecast} open={true} handleClose={() => handleCloseCalled=true} />
+            <ResolveForecastDialog forecast={forecast} open={true} handleClose={handleClose} />
         </ApolloProvider>
     );
 
@@ -170,7 +175,7 @@ test('forecast can be resolved with outcome', async () => {
     await user.click(screen.getByLabelText('Yes'));
     await user.click(screen.getByRole("button", {name: "Save"}));
 
-    expect(handleCloseCalled).toBe(true);
+    await waitFor(() => expect(handleClose).toHaveBeenCalledTimes(1));
 
     expect(requestBody).toBeTruthy();
     if (!requestBody) {
