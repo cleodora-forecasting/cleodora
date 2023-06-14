@@ -194,6 +194,7 @@ test('error is displayed', async () => {
     server.use(
         graphql.mutation("resolveForecast", async (req, res, ctx) => {
             requestBody = await req.json();
+            await new Promise(f => setTimeout(f, 200));
             return res(
                 ctx.errors([
                     {

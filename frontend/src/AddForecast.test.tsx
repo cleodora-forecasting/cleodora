@@ -28,6 +28,7 @@ test('after adding a forecast a success msg is shown', async () => {
     server.use(
         graphql.mutation("createForecast", async (req, res, ctx) => {
             requestBody = await req.json();
+            await new Promise(f => setTimeout(f, 200));
             return res(
                 ctx.data({
                     "createForecast": {
@@ -107,6 +108,7 @@ test('add a forecast by tabbing with the keyboard', async () => {
     server.use(
         graphql.mutation("createForecast", async (req, res, ctx) => {
             requestBody = await req.json();
+            await new Promise(f => setTimeout(f, 200));
             return res(
                 ctx.data({
                     "createForecast": {
