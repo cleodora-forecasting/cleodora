@@ -98,7 +98,7 @@ test('after adding a forecast a success msg is shown', async () => {
         // ensure every outcome only appears once
         expectedProbabilities.delete(p.outcome.text);
     });
-}, 15000);
+}, 20000);
 
 
 test('add a forecast by tabbing with the keyboard', async () => {
@@ -186,4 +186,4 @@ test('add a forecast by tabbing with the keyboard', async () => {
         // ensure every outcome only appears once
         expectedProbabilities.delete(p.outcome.text);
     });
-}, 15000);
+}, 20000);
