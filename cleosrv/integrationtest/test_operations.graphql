@@ -86,3 +86,21 @@ mutation CreateForecast($forecast: NewForecast!, $estimate: NewEstimate!) {
         }
     }
 }
+
+mutation CreateEstimate($forecastId: ID!, $estimate: NewEstimate!) {
+    createEstimate(forecastId: $forecastId, estimate: $estimate) {
+        id
+        created
+        brierScore
+        reason
+        probabilities {
+            id
+            value
+            outcome {
+                id
+                correct
+                text
+            }
+        }
+    }
+}
