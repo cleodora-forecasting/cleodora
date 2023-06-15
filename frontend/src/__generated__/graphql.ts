@@ -67,8 +67,15 @@ export type Metadata = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createEstimate: Estimate;
   createForecast: Forecast;
   resolveForecast?: Maybe<Forecast>;
+};
+
+
+export type MutationCreateEstimateArgs = {
+  estimate: NewEstimate;
+  forecastId: Scalars['ID']['input'];
 };
 
 
