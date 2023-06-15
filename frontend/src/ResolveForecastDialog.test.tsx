@@ -163,11 +163,11 @@ test('forecast can be resolved with outcome', async () => {
         ],
     };
 
-    const handleClose = jest.fn();
+    const dialogCloseHandler = jest.fn();
 
     render(
         <ApolloProvider client={client}>
-            <ResolveForecastDialog forecast={forecast} open={true} handleClose={handleClose} />
+            <ResolveForecastDialog forecast={forecast} open={true} handleClose={dialogCloseHandler} />
         </ApolloProvider>
     );
 
@@ -175,7 +175,7 @@ test('forecast can be resolved with outcome', async () => {
     await user.click(screen.getByLabelText('Yes'));
     await user.click(screen.getByRole("button", {name: "Save"}));
 
-    await waitFor(() => expect(handleClose).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(dialogCloseHandler).toHaveBeenCalledTimes(1));
 
     expect(requestBody).toBeTruthy();
     if (!requestBody) {
@@ -245,20 +245,17 @@ test('error is displayed', async () => {
         ],
     };
 
-    let handleCloseCalled = false;
+    const dialogCloseHandler = jest.fn();
 
     render(
         <ApolloProvider client={client}>
-            <ResolveForecastDialog forecast={forecast} open={true} handleClose={() => handleCloseCalled=true} />
+            <ResolveForecastDialog forecast={forecast} open={true} handleClose={dialogCloseHandler} />
         </ApolloProvider>
     );
 
     expect(screen.getByRole("heading", {name: "Will it rain tomorrow?"})).toBeInTheDocument();
     await user.click(screen.getByLabelText('Yes'));
     await user.click(screen.getByRole("button", {name: "Save"}));
-
-    // on error the dialog should not close
-    expect(handleCloseCalled).toBe(false);
 
     const errFinder = (content: string, element: Element | null): boolean => {
         const message = "ApolloError: API test error";
@@ -274,6 +271,13 @@ test('error is displayed', async () => {
     }
 
     expect(await screen.findByText(errFinder)).toBeTruthy();
+
+    // The function to close the dialog should not have been called. It's
+    // safer to check for this after looking for the error messages because
+    // closing the dialog is only attempted once the network requests
+    // complete, so checking immediately clicking "Save" could lead to a
+    // false negative.
+    expect(dialogCloseHandler).not.toHaveBeenCalled();
 
     expect(requestBody).toBeTruthy();
     if (!requestBody) {
