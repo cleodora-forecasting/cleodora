@@ -323,6 +323,28 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 			expectedErr: "outcome text can't be nil when creating a Forecast",
 		},
 		{
+			name: "outcome Id cant be set", // not allowed during Forecast creation
+			newEstimate: NewEstimate{
+				Reason: "My weather app says it will rain",
+				Probabilities: []NewProbability{
+					{
+						Value: 70,
+						Outcome: NewOutcome{
+							Text: strPtr("Yes"),
+							Id:   strPtr("23"),
+						},
+					},
+					{
+						Value: 30,
+						Outcome: NewOutcome{
+							Text: strPtr("No"),
+						},
+					},
+				},
+			},
+			expectedErr: "outcome Id can't be set when creating a Forecast",
+		},
+		{
 			name: "outcomes cant be duplicates",
 			newEstimate: NewEstimate{
 				Reason: "My weather app says it will rain",

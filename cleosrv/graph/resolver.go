@@ -122,6 +122,12 @@ func validateNewEstimate(estimate model.NewEstimate) error {
 	sumProbabilities := 0
 	existingOutcomes := map[string]bool{}
 	for _, p := range estimate.Probabilities {
+		if p.Outcome.ID != nil {
+			validationErr = multierror.Append(
+				validationErr,
+				errors.New("outcome Id can't be set when creating a Forecast"),
+			)
+		}
 		if p.Outcome.Text == nil {
 			validationErr = multierror.Append(
 				validationErr,
