@@ -27,13 +27,13 @@ func TestCreateForecast(t *testing.T) {
 			{
 				Value: 70,
 				Outcome: NewOutcome{
-					Text: "Yes",
+					Text: strPtr("Yes"),
 				},
 			},
 			{
 				Value: 30,
 				Outcome: NewOutcome{
-					Text: "No",
+					Text: strPtr("No"),
 				},
 			},
 		},
@@ -102,13 +102,13 @@ func TestCreateForecast_XSS(t *testing.T) {
 			{
 				Value: 70,
 				Outcome: NewOutcome{
-					Text: "Yes" + attack,
+					Text: strPtr("Yes" + attack),
 				},
 			},
 			{
 				Value: 30,
 				Outcome: NewOutcome{
-					Text: "No" + attack,
+					Text: strPtr("No" + attack),
 				},
 			},
 		},
@@ -148,13 +148,13 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 					{
 						Value: 70,
 						Outcome: NewOutcome{
-							Text: "Yes",
+							Text: strPtr("Yes"),
 						},
 					},
 					{
 						Value: 30,
 						Outcome: NewOutcome{
-							Text: "No",
+							Text: strPtr("No"),
 						},
 					},
 				},
@@ -169,7 +169,7 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 					{
 						Value: 100,
 						Outcome: NewOutcome{
-							Text: "Any outcome",
+							Text: strPtr("Any outcome"),
 						},
 					},
 				},
@@ -184,25 +184,25 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 					{
 						Value: 30,
 						Outcome: NewOutcome{
-							Text: "Yes, but less than 2 hours",
+							Text: strPtr("Yes, but less than 2 hours"),
 						},
 					},
 					{
 						Value: 20,
 						Outcome: NewOutcome{
-							Text: "Yes, between 2 and 5 hours",
+							Text: strPtr("Yes, between 2 and 5 hours"),
 						},
 					},
 					{
 						Value: 20,
 						Outcome: NewOutcome{
-							Text: "Yes, more than 5 hours",
+							Text: strPtr("Yes, more than 5 hours"),
 						},
 					},
 					{
 						Value: 30,
 						Outcome: NewOutcome{
-							Text: "No",
+							Text: strPtr("No"),
 						},
 					},
 				},
@@ -217,13 +217,13 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 					{
 						Value: 70,
 						Outcome: NewOutcome{
-							Text: "Yes",
+							Text: strPtr("Yes"),
 						},
 					},
 					{
 						Value: 30,
 						Outcome: NewOutcome{
-							Text: "No",
+							Text: strPtr("No"),
 						},
 					},
 				},
@@ -238,13 +238,13 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 					{
 						Value: 70,
 						Outcome: NewOutcome{
-							Text: "Yes",
+							Text: strPtr("Yes"),
 						},
 					},
 					{
 						Value: 20,
 						Outcome: NewOutcome{
-							Text: "No",
+							Text: strPtr("No"),
 						},
 					},
 				},
@@ -259,13 +259,13 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 					{
 						Value: -10,
 						Outcome: NewOutcome{
-							Text: "Yes",
+							Text: strPtr("Yes"),
 						},
 					},
 					{
 						Value: 110,
 						Outcome: NewOutcome{
-							Text: "No",
+							Text: strPtr("No"),
 						},
 					},
 				},
@@ -288,13 +288,13 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 					{
 						Value: 70,
 						Outcome: NewOutcome{
-							Text: "",
+							Text: strPtr(""),
 						},
 					},
 					{
 						Value: 30,
 						Outcome: NewOutcome{
-							Text: "No",
+							Text: strPtr("No"),
 						},
 					},
 				},
@@ -309,13 +309,13 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 					{
 						Value: 70,
 						Outcome: NewOutcome{
-							Text: "No",
+							Text: strPtr("No"),
 						},
 					},
 					{
 						Value: 30,
 						Outcome: NewOutcome{
-							Text: "No",
+							Text: strPtr("No"),
 						},
 					},
 				},
@@ -427,13 +427,13 @@ func TestCreateForecast_ValidateNewForecast(t *testing.T) {
 					{
 						Value: 70,
 						Outcome: NewOutcome{
-							Text: "Yes",
+							Text: strPtr("Yes"),
 						},
 					},
 					{
 						Value: 30,
 						Outcome: NewOutcome{
-							Text: "No",
+							Text: strPtr("No"),
 						},
 					},
 				},
@@ -639,13 +639,13 @@ func TestCreateForecast_WithTimestamps(t *testing.T) {
 					{
 						Value: 70,
 						Outcome: NewOutcome{
-							Text: "Yes",
+							Text: strPtr("Yes"),
 						},
 					},
 					{
 						Value: 30,
 						Outcome: NewOutcome{
-							Text: "No",
+							Text: strPtr("No"),
 						},
 					},
 				},
@@ -718,13 +718,13 @@ func TestCreateForecast_NewEstimateCreatedIsIgnored(t *testing.T) {
 			{
 				Value: 70,
 				Outcome: NewOutcome{
-					Text: "Yes",
+					Text: strPtr("Yes"),
 				},
 			},
 			{
 				Value: 30,
 				Outcome: NewOutcome{
-					Text: "No",
+					Text: strPtr("No"),
 				},
 			},
 		},
@@ -765,10 +765,10 @@ func TestCreateForecast_TimestampsAreConvertedToUTC(t *testing.T) {
 		Probabilities: []NewProbability{
 			{
 				Value:   20,
-				Outcome: NewOutcome{Text: "Yes"},
+				Outcome: NewOutcome{Text: strPtr("Yes")},
 			}, {
 				Value:   80,
-				Outcome: NewOutcome{Text: "No"},
+				Outcome: NewOutcome{Text: strPtr("No")},
 			},
 		},
 	}

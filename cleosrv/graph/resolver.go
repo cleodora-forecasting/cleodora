@@ -122,19 +122,20 @@ func validateNewEstimate(estimate model.NewEstimate) error {
 	sumProbabilities := 0
 	existingOutcomes := map[string]bool{}
 	for _, p := range estimate.Probabilities {
-		if p.Outcome.Text == "" {
+		outcomeText := *p.Outcome.Text
+		if outcomeText == "" {
 			validationErr = multierror.Append(
 				validationErr,
 				errors.New("outcome text can't be empty"),
 			)
 		}
-		if _, ok := existingOutcomes[p.Outcome.Text]; ok {
+		if _, ok := existingOutcomes[outcomeText]; ok {
 			validationErr = multierror.Append(
 				validationErr,
-				fmt.Errorf("outcome '%v' is a duplicate", p.Outcome.Text),
+				fmt.Errorf("outcome '%v' is a duplicate", outcomeText),
 			)
 		}
-		existingOutcomes[p.Outcome.Text] = true
+		existingOutcomes[outcomeText] = true
 		if p.Value < 0 || p.Value > 100 {
 			validationErr = multierror.Append(
 				validationErr,
@@ -179,7 +180,7 @@ func convertNewEstimateToDBEstimate(estimate model.NewEstimate) []dbmodel.Estima
 			dbmodel.Probability{
 				Value: p.Value,
 				Outcome: dbmodel.Outcome{
-					Text:    html.EscapeString(p.Outcome.Text),
+					Text:    html.EscapeString(*p.Outcome.Text),
 					Correct: false,
 				},
 			},

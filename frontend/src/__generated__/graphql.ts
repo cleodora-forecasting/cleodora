@@ -118,7 +118,8 @@ export type NewForecast = {
 };
 
 export type NewOutcome = {
-  text: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['ID']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type NewProbability = {

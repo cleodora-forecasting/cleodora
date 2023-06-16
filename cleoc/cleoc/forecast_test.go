@@ -21,7 +21,7 @@ type createForecastBody struct {
 	Query         string
 	Variables     struct {
 		Estimate struct {
-			Probabilities []probability
+			Probabilities []newProbability
 			Reason        string
 		}
 		Forecast struct {
@@ -33,13 +33,13 @@ type createForecastBody struct {
 	}
 }
 
-type probability struct {
+type newProbability struct {
 	Value   int
-	Outcome outcome
+	Outcome newOutcome
 }
 
-type outcome struct {
-	Text string
+type newOutcome struct {
+	Text *string
 }
 
 // TestApp_AddForecast_Simple is contained in TestApp_AddForecast_Probabilities
@@ -62,21 +62,21 @@ func TestApp_AddForecast_Simple(t *testing.T) {
 		)
 		assert.Len(t, bodyStruct.Variables.Estimate.Probabilities, 2)
 
-		expectedProbabilities := []probability{
+		expectedProbabilities := []newProbability{
 			{
 				Value: 20,
-				Outcome: outcome{
-					Text: "Yes",
+				Outcome: newOutcome{
+					Text: strPtr("Yes"),
 				},
 			},
 			{
 				Value: 80,
-				Outcome: outcome{
-					Text: "No",
+				Outcome: newOutcome{
+					Text: strPtr("No"),
 				},
 			},
 		}
-		assert.ElementsMatch(t, expectedProbabilities, bodyStruct.Variables.Estimate.Probabilities)
+		assertNewProbabilitiesMatch(t, expectedProbabilities, bodyStruct.Variables.Estimate.Probabilities)
 
 		// Send a response
 		w.Header().Set("Content-Type", "application/json")
@@ -139,21 +139,21 @@ func TestApp_AddForecast_Error(t *testing.T) {
 		)
 		assert.Len(t, bodyStruct.Variables.Estimate.Probabilities, 2)
 
-		expectedProbabilities := []probability{
+		expectedProbabilities := []newProbability{
 			{
 				Value: 20,
-				Outcome: outcome{
-					Text: "Yes",
+				Outcome: newOutcome{
+					Text: strPtr("Yes"),
 				},
 			},
 			{
 				Value: 80,
-				Outcome: outcome{
-					Text: "No",
+				Outcome: newOutcome{
+					Text: strPtr("No"),
 				},
 			},
 		}
-		assert.ElementsMatch(t, expectedProbabilities, bodyStruct.Variables.Estimate.Probabilities)
+		assertNewProbabilitiesMatch(t, expectedProbabilities, bodyStruct.Variables.Estimate.Probabilities)
 
 		// Send a response, copied from an actual response due to an erroneous
 		// request where 'title' was missing
@@ -222,22 +222,22 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 	tests := []struct {
 		name                  string
 		inputProbabilities    map[string]int
-		expectedProbabilities []probability
+		expectedProbabilities []newProbability
 	}{
 		{
 			name:               "20-80",
 			inputProbabilities: map[string]int{"Yes": 20, "No": 80},
-			expectedProbabilities: []probability{
+			expectedProbabilities: []newProbability{
 				{
 					Value: 20,
-					Outcome: outcome{
-						Text: "Yes",
+					Outcome: newOutcome{
+						Text: strPtr("Yes"),
 					},
 				},
 				{
 					Value: 80,
-					Outcome: outcome{
-						Text: "No",
+					Outcome: newOutcome{
+						Text: strPtr("No"),
 					},
 				},
 			},
@@ -249,23 +249,23 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 				"Yes, less than 1 hour": 20,
 				"No":                    10,
 			},
-			expectedProbabilities: []probability{
+			expectedProbabilities: []newProbability{
 				{
 					Value: 70,
-					Outcome: outcome{
-						Text: "Yes, more than 1 hour",
+					Outcome: newOutcome{
+						Text: strPtr("Yes, more than 1 hour"),
 					},
 				},
 				{
 					Value: 20,
-					Outcome: outcome{
-						Text: "Yes, less than 1 hour",
+					Outcome: newOutcome{
+						Text: strPtr("Yes, less than 1 hour"),
 					},
 				},
 				{
 					Value: 10,
-					Outcome: outcome{
-						Text: "No",
+					Outcome: newOutcome{
+						Text: strPtr("No"),
 					},
 				},
 			},
@@ -288,7 +288,11 @@ func TestApp_AddForecast_Probabilities(t *testing.T) {
 					"The weather prediction says so",
 					bodyStruct.Variables.Estimate.Reason,
 				)
-				assert.ElementsMatch(t, tt.expectedProbabilities, bodyStruct.Variables.Estimate.Probabilities)
+				assertNewProbabilitiesMatch(
+					t,
+					tt.expectedProbabilities,
+					bodyStruct.Variables.Estimate.Probabilities,
+				)
 
 				// Send a response
 				w.Header().Set("Content-Type", "application/json")
@@ -534,5 +538,65 @@ func TestAddForecastOptions_Validate(t *testing.T) {
 			}
 			tt.wantErr(t, opts.Validate())
 		})
+	}
+}
+
+// strPtr returns the pointer of a string
+func strPtr(s string) *string {
+	return &s
+}
+
+func assertNewProbabilitiesMatch(
+	t *testing.T,
+	expectedProbs []newProbability,
+	actualProbs []newProbability,
+) {
+	t.Helper()
+	if len(expectedProbs) != len(actualProbs) {
+		assert.Fail(
+			t,
+			"lengths don't match",
+			"expectedProbs %v, actualProbs %v",
+			len(expectedProbs),
+			len(actualProbs),
+		)
+		return
+	}
+	foundOutcomes := map[string]int{}
+	for _, p := range expectedProbs {
+		if p.Outcome.Text != nil {
+			foundOutcomes[*p.Outcome.Text] = 0
+		}
+	}
+	if len(expectedProbs) != len(foundOutcomes) {
+		assert.Fail(
+			t,
+			"length of found outcomes does not match",
+			"expectedProbs %v, outcomes %v",
+			len(expectedProbs),
+			len(foundOutcomes),
+		)
+		return
+	}
+
+	for _, exP := range expectedProbs {
+		for _, acP := range actualProbs {
+			if exP.Outcome.Text != nil &&
+				acP.Outcome.Text != nil &&
+				*exP.Outcome.Text == *acP.Outcome.Text &&
+				exP.Value == acP.Value {
+				foundOutcomes[*exP.Outcome.Text] += 1
+			}
+		}
+	}
+
+	for outcome, count := range foundOutcomes {
+		assert.Equal(t,
+			1,
+			count,
+			"outcome %v should have been found once but was found %v times",
+			outcome,
+			count,
+		)
 	}
 }

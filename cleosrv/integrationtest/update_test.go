@@ -95,13 +95,13 @@ func TestUpdate_From_0_1_1(t *testing.T) {
 			{
 				Value: 70,
 				Outcome: NewOutcome{
-					Text: "Yes",
+					Text: strPtr("Yes"),
 				},
 			},
 			{
 				Value: 30,
 				Outcome: NewOutcome{
-					Text: "No",
+					Text: strPtr("No"),
 				},
 			},
 		},
@@ -192,13 +192,13 @@ func TestUpdate_From_0_2_0(t *testing.T) {
 			{
 				Value: 70,
 				Outcome: NewOutcome{
-					Text: "Yes",
+					Text: strPtr("Yes"),
 				},
 			},
 			{
 				Value: 30,
 				Outcome: NewOutcome{
-					Text: "No",
+					Text: strPtr("No"),
 				},
 			},
 		},

@@ -429,11 +429,15 @@ func (v *NewForecast) GetCloses() *time.Time { return v.Closes }
 func (v *NewForecast) GetCreated() *time.Time { return v.Created }
 
 type NewOutcome struct {
-	Text string `json:"text"`
+	Id   *string `json:"id"`
+	Text *string `json:"text"`
 }
 
+// GetId returns NewOutcome.Id, and is useful for accessing the field via an interface.
+func (v *NewOutcome) GetId() *string { return v.Id }
+
 // GetText returns NewOutcome.Text, and is useful for accessing the field via an interface.
-func (v *NewOutcome) GetText() string { return v.Text }
+func (v *NewOutcome) GetText() *string { return v.Text }
 
 type NewProbability struct {
 	Value   int        `json:"value"`

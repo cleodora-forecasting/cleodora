@@ -71,7 +71,8 @@ type NewForecast struct {
 }
 
 type NewOutcome struct {
-	Text string `json:"text"`
+	ID   *string `json:"id,omitempty"`
+	Text *string `json:"text,omitempty"`
 }
 
 type NewProbability struct {

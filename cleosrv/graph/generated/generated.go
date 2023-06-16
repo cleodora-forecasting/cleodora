@@ -522,7 +522,13 @@ input NewProbability {
 }
 
 input NewOutcome {
-  text: String!
+  # Either ` + "`" + `id` + "`" + ` or ` + "`" + `text` + "`" + ` must be set. If ` + "`" + `id` + "`" + ` is set the existing Outcome with
+  # that ` + "`" + `id` + "`" + ` will be used. Otherwise a new Outcome with the ` + "`" + `text` + "`" + ` will be
+  # created. When creating a new Forecast it is always necessary to create
+  # new outcomes because even if they have the same ` + "`" + `text` + "`" + ` as other Outcomes
+  # they might be correct rather than incorrect for a given Forecast.
+  id: ID
+  text: String
 }
 
 type Mutation {
@@ -3934,18 +3940,27 @@ func (ec *executionContext) unmarshalInputNewOutcome(ctx context.Context, obj in
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"text"}
+	fieldsInOrder := [...]string{"id", "text"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
 		case "text":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("text"))
-			data, err := ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}

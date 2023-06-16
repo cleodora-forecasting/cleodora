@@ -94,3 +94,8 @@ func CopyFile(src string, dst string) error {
 	}
 	return nil
 }
+
+// strPtr returns the pointer of a string
+func strPtr(s string) *string {
+	return &s
+}

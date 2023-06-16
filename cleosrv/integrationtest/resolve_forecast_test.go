@@ -298,13 +298,13 @@ func TestResolveForecast_ResolvesInFuture(t *testing.T) {
 			{
 				Value: 70,
 				Outcome: NewOutcome{
-					Text: "Yes",
+					Text: strPtr("Yes"),
 				},
 			},
 			{
 				Value: 30,
 				Outcome: NewOutcome{
-					Text: "No",
+					Text: strPtr("No"),
 				},
 			},
 		},

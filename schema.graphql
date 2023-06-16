@@ -104,7 +104,13 @@ input NewProbability {
 }
 
 input NewOutcome {
-  text: String!
+  # Either `id` or `text` must be set. If `id` is set the existing Outcome with
+  # that `id` will be used. Otherwise a new Outcome with the `text` will be
+  # created. When creating a new Forecast it is always necessary to create
+  # new outcomes because even if they have the same `text` as other Outcomes
+  # they might be correct rather than incorrect for a given Forecast.
+  id: ID
+  text: String
 }
 
 type Mutation {

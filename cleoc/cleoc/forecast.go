@@ -63,12 +63,13 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 func parseProbabilities(probabilities map[string]int) ([]gqclient.NewProbability, error) {
 	var reqProbabilities []gqclient.NewProbability
 	for outcome, value := range probabilities {
+		outcome := outcome // because below we get the pointer
 		reqProbabilities = append(
 			reqProbabilities,
 			gqclient.NewProbability{
 				Value: value,
 				Outcome: gqclient.NewOutcome{
-					Text: outcome,
+					Text: &outcome,
 				},
 			},
 		)
