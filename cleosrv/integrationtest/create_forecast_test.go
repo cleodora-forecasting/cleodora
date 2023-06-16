@@ -302,6 +302,27 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 			expectedErr: "outcome text can't be empty",
 		},
 		{
+			name: "outcome text cant be nil", // not allowed during Forecast creation
+			newEstimate: NewEstimate{
+				Reason: "My weather app says it will rain",
+				Probabilities: []NewProbability{
+					{
+						Value: 70,
+						Outcome: NewOutcome{
+							Text: nil,
+						},
+					},
+					{
+						Value: 30,
+						Outcome: NewOutcome{
+							Text: strPtr("No"),
+						},
+					},
+				},
+			},
+			expectedErr: "outcome text can't be nil when creating a Forecast",
+		},
+		{
 			name: "outcomes cant be duplicates",
 			newEstimate: NewEstimate{
 				Reason: "My weather app says it will rain",
