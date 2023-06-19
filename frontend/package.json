@@ -71,7 +71,7 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^4.0.1",
-    "@graphql-codegen/client-preset": "^4.0.0",
+    "@graphql-codegen/client-preset": "^4.0.1",
     "@graphql-typed-document-node/core": "^3.2.0",
     "@types/jest": "^29.5.2",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
