@@ -322,6 +322,46 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 			},
 			expectedErr: "outcome 'No' is a duplicate",
 		},
+		{
+			name: "NewOutcome must be specified",
+			newEstimate: NewEstimate{
+				Reason: "My weather app says it will rain",
+				Probabilities: []NewProbability{
+					{
+						Value:     70,
+						OutcomeId: strPtr("3333"),
+					},
+					{
+						Value:     30,
+						OutcomeId: strPtr("4444"),
+					},
+				},
+			},
+			expectedErr: "NewOutcome must be set when creating a new forecast",
+		},
+		{
+			name: "outcomeId cant be passed in",
+			newEstimate: NewEstimate{
+				Reason: "My weather app says it will rain",
+				Probabilities: []NewProbability{
+					{
+						Value: 70,
+						Outcome: &NewOutcome{
+							Text: "Yes",
+						},
+						OutcomeId: strPtr("3333"),
+					},
+					{
+						Value: 30,
+						Outcome: &NewOutcome{
+							Text: "No",
+						},
+						OutcomeId: strPtr("4444"),
+					},
+				},
+			},
+			expectedErr: "outcomeId must be unset when creating a new forecast",
+		},
 	}
 
 	for _, tt := range tests {

@@ -122,19 +122,32 @@ func validateNewEstimate(estimate model.NewEstimate) error {
 	sumProbabilities := 0
 	existingOutcomes := map[string]bool{}
 	for _, p := range estimate.Probabilities {
-		if p.Outcome.Text == "" {
+		if p.Outcome == nil {
 			validationErr = multierror.Append(
 				validationErr,
-				errors.New("outcome text can't be empty"),
+				errors.New("NewOutcome must be set when creating a new forecast"),
 			)
+		} else {
+			if p.OutcomeID != nil {
+				validationErr = multierror.Append(
+					validationErr,
+					errors.New("outcomeId must be unset when creating a new forecast"),
+				)
+			}
+			if p.Outcome.Text == "" {
+				validationErr = multierror.Append(
+					validationErr,
+					errors.New("outcome text can't be empty"),
+				)
+			}
+			if _, ok := existingOutcomes[p.Outcome.Text]; ok {
+				validationErr = multierror.Append(
+					validationErr,
+					fmt.Errorf("outcome '%v' is a duplicate", p.Outcome.Text),
+				)
+			}
+			existingOutcomes[p.Outcome.Text] = true
 		}
-		if _, ok := existingOutcomes[p.Outcome.Text]; ok {
-			validationErr = multierror.Append(
-				validationErr,
-				fmt.Errorf("outcome '%v' is a duplicate", p.Outcome.Text),
-			)
-		}
-		existingOutcomes[p.Outcome.Text] = true
 		if p.Value < 0 || p.Value > 100 {
 			validationErr = multierror.Append(
 				validationErr,
