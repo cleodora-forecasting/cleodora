@@ -97,20 +97,23 @@ input NewEstimate {
 
 input NewProbability {
   value: Int!
-  outcome: NewOutcome!
-  # Later this could be extended to also support creating new probabilities
-  # with existing outcomes e.g. newOutcome and outcome fields that are both
-  # optional.
+
+  """
+  A NewOutcome that needs to be specified when creating a Forecast for the very
+  first time. It must not be included when creating later Estimates for an
+  existing Forecast.
+  """
+  outcome: NewOutcome
+
+  """
+  An Outcome ID that needs to be specified when creating an Estimate for an
+  existing Forecast. It must not be included when creating a Forecast.
+  """
+  outcomeId: ID
 }
 
 input NewOutcome {
-  # Either `id` or `text` must be set. If `id` is set the existing Outcome with
-  # that `id` will be used. Otherwise a new Outcome with the `text` will be
-  # created. When creating a new Forecast it is always necessary to create
-  # new outcomes because even if they have the same `text` as other Outcomes
-  # they might be correct rather than incorrect for a given Forecast.
-  id: ID
-  text: String
+  text: String!
 }
 
 type Mutation {

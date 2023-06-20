@@ -118,12 +118,21 @@ export type NewForecast = {
 };
 
 export type NewOutcome = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  text?: InputMaybe<Scalars['String']['input']>;
+  text: Scalars['String']['input'];
 };
 
 export type NewProbability = {
-  outcome: NewOutcome;
+  /**
+   * A NewOutcome that needs to be specified when creating a Forecast for the very
+   * first time. It must not be included when creating later Estimates for an
+   * existing Forecast.
+   */
+  outcome?: InputMaybe<NewOutcome>;
+  /**
+   * An Outcome ID that needs to be specified when creating an Estimate for an
+   * existing Forecast. It must not be included when creating a Forecast.
+   */
+  outcomeId?: InputMaybe<Scalars['ID']['input']>;
   value: Scalars['Int']['input'];
 };
 

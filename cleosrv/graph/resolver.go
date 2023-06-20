@@ -122,33 +122,19 @@ func validateNewEstimate(estimate model.NewEstimate) error {
 	sumProbabilities := 0
 	existingOutcomes := map[string]bool{}
 	for _, p := range estimate.Probabilities {
-		if p.Outcome.ID != nil {
-			validationErr = multierror.Append(
-				validationErr,
-				errors.New("outcome Id can't be set when creating a Forecast"),
-			)
-		}
-		if p.Outcome.Text == nil {
-			validationErr = multierror.Append(
-				validationErr,
-				errors.New("outcome text can't be nil when creating a Forecast"),
-			)
-			continue
-		}
-		outcomeText := *p.Outcome.Text
-		if outcomeText == "" {
+		if p.Outcome.Text == "" {
 			validationErr = multierror.Append(
 				validationErr,
 				errors.New("outcome text can't be empty"),
 			)
 		}
-		if _, ok := existingOutcomes[outcomeText]; ok {
+		if _, ok := existingOutcomes[p.Outcome.Text]; ok {
 			validationErr = multierror.Append(
 				validationErr,
-				fmt.Errorf("outcome '%v' is a duplicate", outcomeText),
+				fmt.Errorf("outcome '%v' is a duplicate", p.Outcome.Text),
 			)
 		}
-		existingOutcomes[outcomeText] = true
+		existingOutcomes[p.Outcome.Text] = true
 		if p.Value < 0 || p.Value > 100 {
 			validationErr = multierror.Append(
 				validationErr,
@@ -193,7 +179,7 @@ func convertNewEstimateToDBEstimate(estimate model.NewEstimate) []dbmodel.Estima
 			dbmodel.Probability{
 				Value: p.Value,
 				Outcome: dbmodel.Outcome{
-					Text:    html.EscapeString(*p.Outcome.Text),
+					Text:    html.EscapeString(p.Outcome.Text),
 					Correct: false,
 				},
 			},

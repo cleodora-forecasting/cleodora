@@ -94,14 +94,14 @@ func TestUpdate_From_0_1_1(t *testing.T) {
 		Probabilities: []NewProbability{
 			{
 				Value: 70,
-				Outcome: NewOutcome{
-					Text: strPtr("Yes"),
+				Outcome: &NewOutcome{
+					Text: "Yes",
 				},
 			},
 			{
 				Value: 30,
-				Outcome: NewOutcome{
-					Text: strPtr("No"),
+				Outcome: &NewOutcome{
+					Text: "No",
 				},
 			},
 		},
@@ -191,14 +191,14 @@ func TestUpdate_From_0_2_0(t *testing.T) {
 		Probabilities: []NewProbability{
 			{
 				Value: 70,
-				Outcome: NewOutcome{
-					Text: strPtr("Yes"),
+				Outcome: &NewOutcome{
+					Text: "Yes",
 				},
 			},
 			{
 				Value: 30,
-				Outcome: NewOutcome{
-					Text: strPtr("No"),
+				Outcome: &NewOutcome{
+					Text: "No",
 				},
 			},
 		},

@@ -429,26 +429,31 @@ func (v *NewForecast) GetCloses() *time.Time { return v.Closes }
 func (v *NewForecast) GetCreated() *time.Time { return v.Created }
 
 type NewOutcome struct {
-	Id   *string `json:"id"`
-	Text *string `json:"text"`
+	Text string `json:"text"`
 }
 
-// GetId returns NewOutcome.Id, and is useful for accessing the field via an interface.
-func (v *NewOutcome) GetId() *string { return v.Id }
-
 // GetText returns NewOutcome.Text, and is useful for accessing the field via an interface.
-func (v *NewOutcome) GetText() *string { return v.Text }
+func (v *NewOutcome) GetText() string { return v.Text }
 
 type NewProbability struct {
-	Value   int        `json:"value"`
-	Outcome NewOutcome `json:"outcome"`
+	Value int `json:"value"`
+	// A NewOutcome that needs to be specified when creating a Forecast for the very
+	// first time. It must not be included when creating later Estimates for an
+	// existing Forecast.
+	Outcome *NewOutcome `json:"outcome"`
+	// An Outcome ID that needs to be specified when creating an Estimate for an
+	// existing Forecast. It must not be included when creating a Forecast.
+	OutcomeId *string `json:"outcomeId"`
 }
 
 // GetValue returns NewProbability.Value, and is useful for accessing the field via an interface.
 func (v *NewProbability) GetValue() int { return v.Value }
 
 // GetOutcome returns NewProbability.Outcome, and is useful for accessing the field via an interface.
-func (v *NewProbability) GetOutcome() NewOutcome { return v.Outcome }
+func (v *NewProbability) GetOutcome() *NewOutcome { return v.Outcome }
+
+// GetOutcomeId returns NewProbability.OutcomeId, and is useful for accessing the field via an interface.
+func (v *NewProbability) GetOutcomeId() *string { return v.OutcomeId }
 
 type Resolution string
 

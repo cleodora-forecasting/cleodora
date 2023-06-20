@@ -127,11 +127,11 @@ func executeQueries(c graphql.Client, version string) error {
 		Probabilities: []integrationtest.NewProbability{
 			{
 				Value:   20,
-				Outcome: integrationtest.NewOutcome{Text: strPtr("Yes")},
+				Outcome: &integrationtest.NewOutcome{Text: "Yes"},
 			},
 			{
 				Value:   80,
-				Outcome: integrationtest.NewOutcome{Text: strPtr("No")},
+				Outcome: &integrationtest.NewOutcome{Text: "No"},
 			},
 		},
 	}
@@ -167,11 +167,11 @@ func executeQueries(c graphql.Client, version string) error {
 		Probabilities: []integrationtest.NewProbability{
 			{
 				Value:   20,
-				Outcome: integrationtest.NewOutcome{Text: strPtr("Yes")},
+				Outcome: &integrationtest.NewOutcome{Text: "Yes"},
 			},
 			{
 				Value:   80,
-				Outcome: integrationtest.NewOutcome{Text: strPtr("No")},
+				Outcome: &integrationtest.NewOutcome{Text: "No"},
 			},
 		},
 	}
@@ -197,15 +197,15 @@ func executeQueries(c graphql.Client, version string) error {
 		Probabilities: []integrationtest.NewProbability{
 			{
 				Value:   20,
-				Outcome: integrationtest.NewOutcome{Text: strPtr("Yes")},
+				Outcome: &integrationtest.NewOutcome{Text: "Yes"},
 			},
 			{
 				Value:   30,
-				Outcome: integrationtest.NewOutcome{Text: strPtr("No")},
+				Outcome: &integrationtest.NewOutcome{Text: "No"},
 			},
 			{
 				Value:   50,
-				Outcome: integrationtest.NewOutcome{Text: strPtr("Maybe")},
+				Outcome: &integrationtest.NewOutcome{Text: "Maybe"},
 			},
 		},
 	}
@@ -254,9 +254,4 @@ func executeQueries(c graphql.Client, version string) error {
 
 func timePointer(t time.Time) *time.Time {
 	return &t
-}
-
-// strPtr returns the pointer of a string
-func strPtr(s string) *string {
-	return &s
 }

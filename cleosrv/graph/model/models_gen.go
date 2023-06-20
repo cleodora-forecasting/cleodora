@@ -71,13 +71,18 @@ type NewForecast struct {
 }
 
 type NewOutcome struct {
-	ID   *string `json:"id,omitempty"`
-	Text *string `json:"text,omitempty"`
+	Text string `json:"text"`
 }
 
 type NewProbability struct {
-	Value   int         `json:"value"`
-	Outcome *NewOutcome `json:"outcome"`
+	Value int `json:"value"`
+	// A NewOutcome that needs to be specified when creating a Forecast for the very
+	// first time. It must not be included when creating later Estimates for an
+	// existing Forecast.
+	Outcome *NewOutcome `json:"outcome,omitempty"`
+	// An Outcome ID that needs to be specified when creating an Estimate for an
+	// existing Forecast. It must not be included when creating a Forecast.
+	OutcomeID *string `json:"outcomeId,omitempty"`
 }
 
 // The possible results of a forecast. In the simplest case you will only have

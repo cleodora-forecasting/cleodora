@@ -515,20 +515,23 @@ input NewEstimate {
 
 input NewProbability {
   value: Int!
-  outcome: NewOutcome!
-  # Later this could be extended to also support creating new probabilities
-  # with existing outcomes e.g. newOutcome and outcome fields that are both
-  # optional.
+
+  """
+  A NewOutcome that needs to be specified when creating a Forecast for the very
+  first time. It must not be included when creating later Estimates for an
+  existing Forecast.
+  """
+  outcome: NewOutcome
+
+  """
+  An Outcome ID that needs to be specified when creating an Estimate for an
+  existing Forecast. It must not be included when creating a Forecast.
+  """
+  outcomeId: ID
 }
 
 input NewOutcome {
-  # Either ` + "`" + `id` + "`" + ` or ` + "`" + `text` + "`" + ` must be set. If ` + "`" + `id` + "`" + ` is set the existing Outcome with
-  # that ` + "`" + `id` + "`" + ` will be used. Otherwise a new Outcome with the ` + "`" + `text` + "`" + ` will be
-  # created. When creating a new Forecast it is always necessary to create
-  # new outcomes because even if they have the same ` + "`" + `text` + "`" + ` as other Outcomes
-  # they might be correct rather than incorrect for a given Forecast.
-  id: ID
-  text: String
+  text: String!
 }
 
 type Mutation {
@@ -3940,27 +3943,18 @@ func (ec *executionContext) unmarshalInputNewOutcome(ctx context.Context, obj in
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"id", "text"}
+	fieldsInOrder := [...]string{"text"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "id":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ID = data
 		case "text":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("text"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3978,7 +3972,7 @@ func (ec *executionContext) unmarshalInputNewProbability(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"value", "outcome"}
+	fieldsInOrder := [...]string{"value", "outcome", "outcomeId"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -3998,11 +3992,20 @@ func (ec *executionContext) unmarshalInputNewProbability(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("outcome"))
-			data, err := ec.unmarshalNNewOutcome2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewOutcome(ctx, v)
+			data, err := ec.unmarshalONewOutcome2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewOutcome(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Outcome = data
+		case "outcomeId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("outcomeId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OutcomeID = data
 		}
 	}
 
@@ -4940,11 +4943,6 @@ func (ec *executionContext) unmarshalNNewForecast2githubᚗcomᚋcleodoraᚑfore
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNNewOutcome2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewOutcome(ctx context.Context, v interface{}) (*model.NewOutcome, error) {
-	res, err := ec.unmarshalInputNewOutcome(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNNewProbability2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewProbabilityᚄ(ctx context.Context, v interface{}) ([]*model.NewProbability, error) {
 	var vSlice []interface{}
 	if v != nil {
@@ -5378,6 +5376,14 @@ func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.Se
 	}
 	res := graphql.MarshalID(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalONewOutcome2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewOutcome(ctx context.Context, v interface{}) (*model.NewOutcome, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputNewOutcome(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOProbability2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐProbability(ctx context.Context, sel ast.SelectionSet, v *model.Probability) graphql.Marshaler {
