@@ -329,11 +329,11 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 				Probabilities: []NewProbability{
 					{
 						Value:     70,
-						OutcomeId: strPtr("3333"),
+						OutcomeId: strPointer("3333"),
 					},
 					{
 						Value:     30,
-						OutcomeId: strPtr("4444"),
+						OutcomeId: strPointer("4444"),
 					},
 				},
 			},
@@ -349,14 +349,14 @@ func TestCreateForecast_ValidateNewEstimate(t *testing.T) {
 						Outcome: &NewOutcome{
 							Text: "Yes",
 						},
-						OutcomeId: strPtr("3333"),
+						OutcomeId: strPointer("3333"),
 					},
 					{
 						Value: 30,
 						Outcome: &NewOutcome{
 							Text: "No",
 						},
-						OutcomeId: strPtr("4444"),
+						OutcomeId: strPointer("4444"),
 					},
 				},
 			},

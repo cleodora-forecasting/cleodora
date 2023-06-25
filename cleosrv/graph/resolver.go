@@ -3,9 +3,11 @@ package graph
 //go:generate go run github.com/99designs/gqlgen generate
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"html"
+	"strconv"
 	"time"
 
 	"github.com/hashicorp/go-multierror"
@@ -27,6 +29,115 @@ func NewResolver(db *gorm.DB) *Resolver {
 	return &Resolver{
 		db: db,
 	}
+}
+
+// createEstimate validates the input data and creates a new Estimate.
+func (r *Resolver) createEstimate(
+	ctx context.Context,
+	forecastID string,
+	estimate model.NewEstimate,
+) (*model.Estimate, error) {
+	var e *model.Estimate
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		var err error
+		e, err = createEstimate(tx, ctx, forecastID, estimate)
+		return err
+	})
+	return e, err
+}
+
+// createEstimate is a helper function that assumes that it is already wrapped
+// in a DB transaction.
+func createEstimate(
+	tx *gorm.DB,
+	ctx context.Context,
+	forecastID string,
+	estimate model.NewEstimate,
+) (*model.Estimate, error) {
+	if err := validateNewEstimate(&estimate, false); err != nil {
+		return nil, fmt.Errorf("error validating NewEstimate: %w", err)
+	}
+	forecast := dbmodel.Forecast{}
+	ret := tx.Where("id = ?", forecastID).First(&forecast)
+	if ret.Error != nil {
+		return nil, fmt.Errorf("error getting Forecast with ID %v: %w", forecastID, ret.Error)
+	}
+
+	var validOutcomeIds []string
+
+	ret = tx.Model(&dbmodel.Outcome{}).Joins(
+		"INNER JOIN probabilities ON probabilities.outcome_id == outcomes.id",
+	).Joins(
+		"INNER JOIN estimates ON estimates.id == probabilities.estimate_id",
+	).Where("estimates.forecast_id = ?", forecastID).
+		Distinct().Pluck("outcomes.id", &validOutcomeIds)
+	if ret.Error != nil {
+		return nil, fmt.Errorf("error getting outcome IDs: %w", ret.Error)
+	}
+
+	var submittedOutcomeIds []string
+	for _, p := range estimate.Probabilities {
+		submittedOutcomeIds = append(submittedOutcomeIds, *p.OutcomeID)
+	}
+
+	invalidOutcomeIds := stringSetDiff(submittedOutcomeIds, validOutcomeIds)
+	if len(invalidOutcomeIds) > 0 {
+		return nil, fmt.Errorf("invalid Outcome IDs: %v", invalidOutcomeIds)
+	}
+
+	missingOutcomeIds := stringSetDiff(validOutcomeIds, submittedOutcomeIds)
+	if len(missingOutcomeIds) > 0 {
+		return nil, fmt.Errorf("missing Outcome IDs: %v", missingOutcomeIds)
+	}
+
+	var probabilities []dbmodel.Probability
+
+	for _, p := range estimate.Probabilities {
+		outcomeID, err := strconv.ParseUint(*p.OutcomeID, 10, 64)
+		if err != nil {
+			return nil, fmt.Errorf("can't parse %v as uint: %w", outcomeID, err)
+		}
+		probabilities = append(
+			probabilities,
+			dbmodel.Probability{
+				Value:     p.Value,
+				OutcomeID: uint(outcomeID),
+			},
+		)
+	}
+
+	dbEstimate := dbmodel.Estimate{
+		Created:       *estimate.Created,
+		Reason:        estimate.Reason,
+		Probabilities: probabilities,
+	}
+
+	err := tx.Model(&forecast).Association("Estimates").Append(&dbEstimate)
+	if err != nil {
+		return nil, fmt.Errorf("error creating Estimate: %w", err)
+	}
+
+	return convertEstimateDBToGQL(dbEstimate), nil
+}
+
+// stringSetDiff returns the strings in the slice a that are not in slice b.
+// The slices are treated as sets so duplicate values will disappear.
+func stringSetDiff(a, b []string) []string {
+	setA := map[string]bool{}
+	for _, e := range a {
+		setA[e] = true
+	}
+	setB := map[string]bool{}
+	for _, e := range b {
+		setB[e] = true
+	}
+	var result []string
+	for e := range setA {
+		if !setB[e] {
+			result = append(result, e)
+		}
+	}
+	return result
 }
 
 // validateNewForecast validates and makes some automatic changes to the
@@ -100,7 +211,7 @@ func validateNewForecast(forecast *model.NewForecast) error {
 
 // validateNewEstimate validates and makes some automatic changes to the
 // estimate if appropriate.
-func validateNewEstimate(estimate model.NewEstimate) error {
+func validateNewEstimate(estimate *model.NewEstimate, duringCreateForecast bool) error {
 	var validationErr *multierror.Error
 	now := time.Now().UTC()
 
@@ -122,31 +233,51 @@ func validateNewEstimate(estimate model.NewEstimate) error {
 	sumProbabilities := 0
 	existingOutcomes := map[string]bool{}
 	for _, p := range estimate.Probabilities {
-		if p.Outcome == nil {
-			validationErr = multierror.Append(
-				validationErr,
-				errors.New("NewOutcome must be set when creating a new forecast"),
-			)
-		} else {
-			if p.OutcomeID != nil {
+		if duringCreateForecast {
+			if p.Outcome == nil {
 				validationErr = multierror.Append(
 					validationErr,
-					errors.New("outcomeId must be unset when creating a new forecast"),
+					errors.New("NewOutcome must be set when creating a new forecast"),
 				)
+			} else {
+				if p.OutcomeID != nil {
+					validationErr = multierror.Append(
+						validationErr,
+						errors.New("outcomeId must be unset when creating a new forecast"),
+					)
+				}
+				if p.Outcome.Text == "" {
+					validationErr = multierror.Append(
+						validationErr,
+						errors.New("outcome text can't be empty"),
+					)
+				}
+				if _, ok := existingOutcomes[p.Outcome.Text]; ok {
+					validationErr = multierror.Append(
+						validationErr,
+						fmt.Errorf("outcome '%v' is a duplicate", p.Outcome.Text),
+					)
+				}
+				existingOutcomes[p.Outcome.Text] = true
 			}
-			if p.Outcome.Text == "" {
+		} else { // !duringCreateForecast
+			if p.Outcome != nil {
 				validationErr = multierror.Append(
 					validationErr,
-					errors.New("outcome text can't be empty"),
+					errors.New("NewOutcome must be unset when adding an estimate"),
 				)
 			}
-			if _, ok := existingOutcomes[p.Outcome.Text]; ok {
+			if p.OutcomeID == nil {
 				validationErr = multierror.Append(
 					validationErr,
-					fmt.Errorf("outcome '%v' is a duplicate", p.Outcome.Text),
+					errors.New("outcomeId must be set when adding an estimate"),
+				)
+			} else if *p.OutcomeID == "" {
+				validationErr = multierror.Append(
+					validationErr,
+					errors.New("outcomeId must not be empty when adding an estimate"),
 				)
 			}
-			existingOutcomes[p.Outcome.Text] = true
 		}
 		if p.Value < 0 || p.Value > 100 {
 			validationErr = multierror.Append(
@@ -165,7 +296,16 @@ func validateNewEstimate(estimate model.NewEstimate) error {
 
 	// Validate created
 	if estimate.Created != nil {
-		estimate.Created = timeToUTCPtr(*estimate.Created)
+		estimate.Created = timeToUTCPtr(*estimate.Created) // convert to UTC
+		if estimate.Created.After(now) {
+			validationErr = multierror.Append(
+				validationErr,
+				fmt.Errorf(
+					"'created' can't be in the future: %v",
+					estimate.Created,
+				),
+			)
+		}
 	}
 	if estimate.Created == nil || estimate.Created.IsZero() {
 		estimate.Created = &now

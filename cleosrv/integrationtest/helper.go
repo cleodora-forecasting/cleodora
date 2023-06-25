@@ -1,6 +1,7 @@
 package integrationtest
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http/httptest"
@@ -46,6 +47,11 @@ func resolutionPointer(r Resolution) *Resolution {
 
 func timePointer(t time.Time) *time.Time {
 	return &t
+}
+
+// strPointer returns the pointer of a string
+func strPointer(s string) *string {
+	return &s
 }
 
 // assertTimeAlmostEqual asserts that the two time stamps are within 2 minutes
@@ -95,7 +101,35 @@ func CopyFile(src string, dst string) error {
 	return nil
 }
 
-// strPtr returns the pointer of a string
-func strPtr(s string) *string {
-	return &s
+// simpleCreateForecastHelper creates a new Forecast with little configurability by setting
+// default values (e.g. it resolves in 24 hours). It's useful for simplifying test code.
+func simpleCreateForecastHelper(
+	t *testing.T,
+	client graphql.Client,
+	title string,
+	probabilities map[string]int,
+) *CreateForecastResponse {
+	t.Helper()
+	newForecast := NewForecast{
+		Title:       title,
+		Description: "",
+		Resolves:    time.Now().Add(24 * time.Hour),
+	}
+	var newProbabilities []NewProbability
+	for outcome, p := range probabilities {
+		newProbabilities = append(
+			newProbabilities,
+			NewProbability{
+				Value:   p,
+				Outcome: &NewOutcome{Text: outcome},
+			})
+	}
+
+	newEstimate := NewEstimate{
+		Reason:        "Just a hunch.",
+		Probabilities: newProbabilities,
+	}
+	resp, err := CreateForecast(context.Background(), client, newForecast, newEstimate)
+	require.NoError(t, err)
+	return resp
 }

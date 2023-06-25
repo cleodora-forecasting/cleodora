@@ -27,7 +27,7 @@ func (r *mutationResolver) CreateForecast(ctx context.Context, forecast model.Ne
 	// We want the first estimate to have the same 'Created' time as the
 	// forecast itself because it's logical that it would be that way.
 	estimate.Created = forecast.Created
-	err = validateNewEstimate(estimate)
+	err = validateNewEstimate(&estimate, true)
 	if err != nil {
 		return nil, fmt.Errorf("error validating NewEstimate: %w", err)
 	}
@@ -250,7 +250,7 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 
 // CreateEstimate is the resolver for the createEstimate field.
 func (r *mutationResolver) CreateEstimate(ctx context.Context, forecastID string, estimate model.NewEstimate) (*model.Estimate, error) {
-	panic(fmt.Errorf("not implemented: CreateEstimate - createEstimate"))
+	return r.createEstimate(ctx, forecastID, estimate)
 }
 
 // Forecasts is the resolver for the forecasts field.
