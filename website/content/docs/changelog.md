@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+* API: Allow adding new estimates to existing forecasts.
+  ([#276](https://github.com/cleodora-forecasting/cleodora/issues/276))
+
 [Git history](https://github.com/cleodora-forecasting/cleodora/compare/v0.3.0...HEAD)
 
 
