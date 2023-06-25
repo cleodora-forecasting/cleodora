@@ -302,6 +302,7 @@ func DeployDemo() error {
 	_ = must.RunV(
 		"flyctl",
 		"deploy",
+		"--auto-confirm",
 		"--local-only", // use local Docker to build
 	)
 	fmt.Println("Sleeping 30s so demo.cleodora.org comes up")
