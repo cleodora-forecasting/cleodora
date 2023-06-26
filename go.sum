@@ -428,8 +428,8 @@ contrib.go.opencensus.io/integrations/ocsql v0.1.7/go.mod h1:8DsSdjz3F+APR+0z0Wk
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/4meepo/tagalign v1.2.2 h1:kQeUTkFTaBRtd/7jm8OKJl9iHk0gAO+TDFPHGSna0aw=
 github.com/4meepo/tagalign v1.2.2/go.mod h1:Q9c1rYMZJc9dPRkbQPpcBNCLEmY2njbAsXhQOZFE2dE=
-github.com/99designs/gqlgen v0.17.33 h1:VTUpAtElDszatPSe26N0SD0deJCSxb7TZLlUb6JnVRY=
-github.com/99designs/gqlgen v0.17.33/go.mod h1:ygDK+m8zGpoQuSh8xoq80UfisR5JTZr7mN57qXlSIZs=
+github.com/99designs/gqlgen v0.17.34 h1:5cS5/OKFguQt+Ws56uj9FlG2xm1IlcJWNF2jrMIKYFQ=
+github.com/99designs/gqlgen v0.17.34/go.mod h1:Axcd3jIFHBVcqzixujJQr1wGqE+lGTpz6u4iZBZg1G8=
 github.com/Abirdcfly/dupword v0.0.11 h1:z6v8rMETchZXUIuHxYNmlUAuKuB21PeaSymTed16wgU=
 github.com/Abirdcfly/dupword v0.0.11/go.mod h1:wH8mVGuf3CP5fsBTkfWwwwKTjDnVVCxtU8d8rgeVYXA=
 github.com/AdaLogics/go-fuzz-headers v0.0.0-20210715213245-6c3934b029d8/go.mod h1:CzsSbkDixRphAF5hS6wbMKq0eI6ccJRb7/A0M6JBnwg=
@@ -2434,8 +2434,8 @@ github.com/uudashr/gocognit v1.0.6 h1:2Cgi6MweCsdB6kpcVQp7EW4U23iBFQWfTXiWlyp842
 github.com/uudashr/gocognit v1.0.6/go.mod h1:nAIUuVBnYU7pcninia3BHOvQkpQCeO76Uscky5BOwcY=
 github.com/vbatts/tar-split v0.11.2 h1:Via6XqJr0hceW4wff3QRzD5gAk/tatMw/4ZA7cTlIME=
 github.com/vbatts/tar-split v0.11.2/go.mod h1:vV3ZuO2yWSVsz+pfFzDG/upWH1JhjOiEaWq6kXyQ3VI=
-github.com/vektah/gqlparser/v2 v2.5.3 h1:goUwv4+blhtwR3GwefadPVI4ubYc/WZSypljWMQa6IE=
-github.com/vektah/gqlparser/v2 v2.5.3/go.mod h1:z8xXUff237NntSuH8mLFijZ+1tjV1swDbpDqjJmk6ME=
+github.com/vektah/gqlparser/v2 v2.5.4 h1:TKZYLje269xipIHcoHPR0eRE40ONGjEXrbiN2SvurgY=
+github.com/vektah/gqlparser/v2 v2.5.4/go.mod h1:z8xXUff237NntSuH8mLFijZ+1tjV1swDbpDqjJmk6ME=
 github.com/vishvananda/netlink v0.0.0-20181108222139-023a6dafdcdf/go.mod h1:+SR5DhBJrl6ZM7CoCKvpw5BKroDKQ+PJqOg65H/2ktk=
 github.com/vishvananda/netlink v1.1.0/go.mod h1:cTgwzPIzzgDAYoQrMm0EdrjRUBkTqKYppBueQtXaqoE=
 github.com/vishvananda/netlink v1.1.1-0.20201029203352-d40f9887b852/go.mod h1:twkDnbuQxJYemMlGd4JFIcuhgX83tXhKS2B/PRMpOho=
