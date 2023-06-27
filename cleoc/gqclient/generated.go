@@ -215,6 +215,11 @@ func CreateForecast(
 
 // The query or mutation executed by GetForecasts.
 const GetForecasts_Operation = `
+# These queries should possibly all be inlined where they are used. See
+# https://github.com/Khan/genqlient/blob/main/docs/INTRODUCTION.md
+# 
+# On the other hand the GUI might also need exactly the same queries, so maybe
+# also centralize and re-use this file?
 query GetForecasts {
 	forecasts {
 		id

@@ -743,6 +743,11 @@ func CreateForecast(
 
 // The query or mutation executed by GetForecasts.
 const GetForecasts_Operation = `
+# This file contains GraphQL operations that are used in the integration
+# tests. By putting them here you ensure useful code is generated for them
+# e.g. functions to call and return types.
+# For very specific operations that you only need in one or two tests it's
+# probably better to call client.MakeRequest() directly.
 query GetForecasts {
 	forecasts {
 		id
