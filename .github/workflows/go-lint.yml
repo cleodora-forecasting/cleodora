@@ -26,6 +26,23 @@ permissions:
   # Optional: allow read access to pull request. Use with `only-new-issues` option.
   # pull-requests: read
 jobs:
+
+  goreleaser-check:
+    name: goreleaser-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Run check
+        shell: bash
+        run: go run github.com/goreleaser/goreleaser check
+
   golangci:
     timeout-minutes: 5
     strategy:
