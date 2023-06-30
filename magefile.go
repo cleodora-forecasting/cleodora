@@ -91,6 +91,13 @@ func Lint() {
 		"--build-tags",
 		"mage",
 	)
+	_ = must.RunV(
+		"go",
+		"run",
+		"github.com/goreleaser/goreleaser",
+		"check",
+		"--quiet",
+	)
 	_ = mustFrontend.RunV("npm", "run", "lint")
 	_ = mustE2E.RunV("npm", "run", "lint")
 }
