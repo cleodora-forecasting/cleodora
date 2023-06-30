@@ -6,7 +6,7 @@ Note that instead of setting all this up on your computer, you can use
 **Gitpod** or **GitHub Codespaces** for pre-configured dev environments
 directly in your browser. See below.
 
-* [Install Go](https://go.dev/doc/install) 1.18 or higher
+* [Install Go](https://go.dev/doc/install) 1.20 or higher
 * [Install npm](https://nodejs.org/en/download/) v16.18.0 or higher
 * (optional) [Install hugo](https://gohugo.io/installation/) (extended flavor)
   v0.97.3 or higher to make changes to the cleodora.org website
