@@ -67,7 +67,6 @@ dockers:
 
 archives:
   - id: cleosrv
-    rlcp: true
     builds:
       - cleosrv
     name_template: >-
@@ -86,7 +85,6 @@ archives:
       - none*
 
   - id: cleoc
-    rlcp: true
     builds:
       - cleoc
     name_template: >-
