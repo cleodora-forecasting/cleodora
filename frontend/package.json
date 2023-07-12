@@ -6,7 +6,7 @@
     "@apollo/client": "^3.7.17",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@fontsource/roboto": "^5.0.4",
+    "@fontsource/roboto": "^5.0.5",
     "@mui/icons-material": "^5.14.0",
     "@mui/material": "^5.14.0",
     "@mui/x-date-pickers": "^6.9.2",
