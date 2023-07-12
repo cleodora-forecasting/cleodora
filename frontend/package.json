@@ -24,7 +24,7 @@
     "react-scripts": "5.0.1",
     "svgo": "^3.0.2",
     "uuidv4": "^6.2.13",
-    "web-vitals": "^3.3.2"
+    "web-vitals": "^3.4.0"
   },
   "scripts": {
     "start": "BROWSER=none react-scripts start",
