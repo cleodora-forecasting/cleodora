@@ -8,7 +8,7 @@ require (
 	github.com/adrg/xdg v0.4.0
 	github.com/carolynvs/magex v0.9.0
 	github.com/glebarez/sqlite v1.9.0
-	github.com/go-chi/chi/v5 v5.0.8
+	github.com/go-chi/chi/v5 v5.0.10
 	github.com/golangci/golangci-lint v1.53.3
 	github.com/goreleaser/goreleaser v1.19.2
 	github.com/gorilla/websocket v1.5.0
