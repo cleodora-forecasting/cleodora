@@ -623,6 +623,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 		resolution                Resolution
 		forecastCreatedDate       *time.Time
 		forecastResolvesDate      time.Time
+		forecastClosesDate        *time.Time
 		secondEstimateCreatedDate *time.Time
 		expectedErr               string
 	}{
@@ -631,6 +632,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionUnresolved,
 			forecastCreatedDate:       nil,
 			forecastResolvesDate:      now.Add(24 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: nil,
 			expectedErr:               "",
 		},
@@ -639,6 +641,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionUnresolved,
 			forecastCreatedDate:       nil,
 			forecastResolvesDate:      now.Add(24 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(1 * time.Hour)),
 			expectedErr:               "'created' can't be in the future",
 		},
@@ -647,6 +650,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionResolved,
 			forecastCreatedDate:       nil,
 			forecastResolvesDate:      now.Add(24 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(1 * time.Hour)),
 			expectedErr:               "'created' can't be in the future",
 		},
@@ -655,6 +659,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionNotApplicable,
 			forecastCreatedDate:       nil,
 			forecastResolvesDate:      now.Add(24 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(1 * time.Hour)),
 			expectedErr:               "'created' can't be in the future",
 		},
@@ -667,6 +672,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			forecastCreatedDate: nil,
 			// note that if the resolves date is in the future it is set to now() when resolving
 			forecastResolvesDate:      now.Add(24 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: nil,
 			expectedErr: "'estimate.created' is set to a later date than 'forecast." +
 				"resolves'",
@@ -677,6 +683,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionNotApplicable,
 			forecastCreatedDate:       nil,
 			forecastResolvesDate:      now.Add(24 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: nil,
 			expectedErr: "'estimate.created' is set to a later date than 'forecast." +
 				"resolves'",
@@ -686,6 +693,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionUnresolved,
 			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
 			forecastResolvesDate:      now.Add(24 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(-23 * time.Hour)),
 			expectedErr:               "",
 		},
@@ -694,6 +702,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionResolved,
 			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
 			forecastResolvesDate:      now.Add(24 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(-23 * time.Hour)),
 			expectedErr:               "",
 		},
@@ -702,6 +711,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionNotApplicable,
 			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
 			forecastResolvesDate:      now.Add(24 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(-23 * time.Hour)),
 			expectedErr:               "",
 		},
@@ -711,6 +721,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionUnresolved,
 			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
 			forecastResolvesDate:      now.Add(24 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(-25 * time.Hour)),
 			expectedErr: "'estimate.created' is set to an earlier date than 'forecast." +
 				"created'",
@@ -721,6 +732,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionResolved,
 			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
 			forecastResolvesDate:      now.Add(24 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(-25 * time.Hour)),
 			expectedErr: "'estimate.created' is set to an earlier date than 'forecast." +
 				"created'",
@@ -731,6 +743,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionNotApplicable,
 			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
 			forecastResolvesDate:      now.Add(24 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(-25 * time.Hour)),
 			expectedErr: "'estimate.created' is set to an earlier date than 'forecast." +
 				"created'",
@@ -741,6 +754,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionUnresolved,
 			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
 			forecastResolvesDate:      now.Add(-23 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(-22 * time.Hour)),
 			expectedErr:               "",
 		},
@@ -750,6 +764,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionResolved,
 			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
 			forecastResolvesDate:      now.Add(-23 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(-22 * time.Hour)),
 			expectedErr: "'estimate.created' is set to a later date than 'forecast." +
 				"resolves'",
@@ -760,6 +775,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionNotApplicable,
 			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
 			forecastResolvesDate:      now.Add(-23 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(-22 * time.Hour)),
 			expectedErr: "'estimate.created' is set to a later date than 'forecast." +
 				"resolves'",
@@ -770,6 +786,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionResolved,
 			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
 			forecastResolvesDate:      now.Add(-23 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(-23 * time.Hour)),
 			expectedErr:               "",
 		},
@@ -779,8 +796,39 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 			resolution:                ResolutionNotApplicable,
 			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
 			forecastResolvesDate:      now.Add(-23 * time.Hour),
+			forecastClosesDate:        nil,
 			secondEstimateCreatedDate: timePointer(now.Add(-23 * time.Hour)),
 			expectedErr:               "",
+		},
+		{
+			name: "(unresolved) error if estimate.created is after " +
+				"forecast.closes",
+			resolution:                ResolutionUnresolved,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(-20 * time.Hour),
+			forecastClosesDate:        timePointer(now.Add(-22 * time.Hour)),
+			secondEstimateCreatedDate: timePointer(now.Add(-21 * time.Hour)),
+			expectedErr:               "'estimate.created' is set to a later date than 'forecast.closes'",
+		},
+		{
+			name: "(resolved) error if estimate.created is after " +
+				"forecast.closes",
+			resolution:                ResolutionResolved,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(-20 * time.Hour),
+			forecastClosesDate:        timePointer(now.Add(-22 * time.Hour)),
+			secondEstimateCreatedDate: timePointer(now.Add(-21 * time.Hour)),
+			expectedErr:               "'estimate.created' is set to a later date than 'forecast.closes'",
+		},
+		{
+			name: "(NA resolved) error if estimate.created is after " +
+				"forecast.closes",
+			resolution:                ResolutionNotApplicable,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(-20 * time.Hour),
+			forecastClosesDate:        timePointer(now.Add(-22 * time.Hour)),
+			secondEstimateCreatedDate: timePointer(now.Add(-21 * time.Hour)),
+			expectedErr:               "'estimate.created' is set to a later date than 'forecast.closes'",
 		},
 	}
 	for _, tt := range tests {
@@ -795,6 +843,7 @@ func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 				Description: "",
 				Created:     tt.forecastCreatedDate,
 				Resolves:    tt.forecastResolvesDate,
+				Closes:      tt.forecastClosesDate,
 			}
 
 			initialEstimate := NewEstimate{

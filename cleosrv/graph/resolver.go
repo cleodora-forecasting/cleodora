@@ -69,6 +69,12 @@ func createEstimate(
 			"created'")
 	}
 
+	if forecast.Closes != nil && estimate.Created.After(*forecast.Closes) {
+		return nil, errors.New("'estimate." +
+			"created' is set to a later date than 'forecast." +
+			"closes'")
+	}
+
 	if forecast.Resolution != dbmodel.ResolutionUnresolved {
 		if estimate.Created.After(forecast.Resolves) {
 			return nil, errors.New("'estimate." +
