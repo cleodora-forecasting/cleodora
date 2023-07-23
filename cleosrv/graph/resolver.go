@@ -63,6 +63,20 @@ func createEstimate(
 		return nil, fmt.Errorf("error getting Forecast with ID %v: %w", forecastID, ret.Error)
 	}
 
+	if estimate.Created.Before(forecast.Created) {
+		return nil, errors.New("'estimate." +
+			"created' is set to an earlier date than 'forecast." +
+			"created'")
+	}
+
+	if forecast.Resolution != dbmodel.ResolutionUnresolved {
+		if estimate.Created.After(forecast.Resolves) {
+			return nil, errors.New("'estimate." +
+				"created' is set to a later date than 'forecast." +
+				"resolves'")
+		}
+	}
+
 	var validOutcomeIds []string
 
 	ret = tx.Model(&dbmodel.Outcome{}).Joins(

@@ -550,34 +550,237 @@ func TestCreateEstimate_ReasonCantBeEmpty(t *testing.T) {
 	assert.ErrorContains(t, err, "'reason' can't be empty")
 }
 
-// TestCreateEstimate_VerifyCreated ensures that the Estimate.
-// created date is interpreted as expected.
-func TestCreateEstimate_VerifyCreated(t *testing.T) {
+// TestCreateEstimate_VerifyCreatedNilIsNow ensures that Estimate.
+// created == nil is interpreted as now().
+func TestCreateEstimate_VerifyCreatedNilIsNow(t *testing.T) {
+	now := time.Now().UTC()
+
+	c := initServerAndGetClient(t, "")
+
+	createForecastResponse := simpleCreateForecastHelper(
+		t,
+		c,
+		"Test Forecast",
+		map[string]int{"Yes": 20, "No": 80},
+	)
+
+	forecastId := createForecastResponse.CreateForecast.Id
+	yesId := ""
+	noId := ""
+	for _, p := range createForecastResponse.CreateForecast.Estimates[0].Probabilities {
+		if p.Outcome.Text == "Yes" {
+			yesId = p.Outcome.Id
+		}
+		if p.Outcome.Text == "No" {
+			noId = p.Outcome.Id
+		}
+	}
+	require.NotEmpty(t, forecastId)
+	require.NotEmpty(t, yesId)
+	require.NotEmpty(t, noId)
+
+	secondEstimate := NewEstimate{
+		Reason: "I got some new information.",
+		Probabilities: []NewProbability{
+			{
+				Value:     10,
+				OutcomeId: &yesId,
+			},
+			{
+				Value:     90,
+				OutcomeId: &noId,
+			},
+		},
+		Created: nil,
+	}
+
+	resp, err := CreateEstimate(
+		context.Background(),
+		c,
+		forecastId,
+		secondEstimate,
+	)
+
+	require.NoError(t, err)
+	assertTimeAlmostEqual(t, now, resp.CreateEstimate.Created)
+}
+
+// TestCreateEstimate_VerifyCreatedDateBehavior verifies which Estimate.
+// created values are valid and which are not in different circumstances.
+// The reason why it is allowed to set Estimate.
+// created in the past even for resolved forecasts is for importing data.
+// It's convenient to be able to directly mark the Forecast as resolved and only afterwards
+// import all the Estimates.
+// It is debatable whether this is a good idea or whether it should not be possible to add
+// Estimates to resolved Forecasts.
+// This tests exists in any case to document the current behavior (yes,
+// it is possible to add Estimates to resolved Forecasts).
+func TestCreateEstimate_VerifyCreatedDateBehavior(t *testing.T) {
 	now := time.Now().UTC()
 
 	tests := []struct {
-		name            string
-		inputCreated    *time.Time
-		expectedCreated *time.Time
-		expectedErr     string
+		name                      string
+		resolution                Resolution
+		forecastCreatedDate       *time.Time
+		forecastResolvesDate      time.Time
+		secondEstimateCreatedDate *time.Time
+		expectedErr               string
 	}{
 		{
-			name:            "default created is now",
-			inputCreated:    nil,
-			expectedCreated: &now,
-			expectedErr:     "",
+			name:                      "(unresolved) default successful case",
+			resolution:                ResolutionUnresolved,
+			forecastCreatedDate:       nil,
+			forecastResolvesDate:      now.Add(24 * time.Hour),
+			secondEstimateCreatedDate: nil,
+			expectedErr:               "",
 		},
 		{
-			name:            "created can't be in the future",
-			inputCreated:    timePointer(now.Add(24 * time.Hour)),
-			expectedCreated: nil,
-			expectedErr:     "'created' can't be in the future",
+			name:                      "(unresolved) error if estimate.created is in the future",
+			resolution:                ResolutionUnresolved,
+			forecastCreatedDate:       nil,
+			forecastResolvesDate:      now.Add(24 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(1 * time.Hour)),
+			expectedErr:               "'created' can't be in the future",
 		},
 		{
-			name:            "created can be in the past",
-			inputCreated:    timePointer(now.Add(-24 * time.Hour)),
-			expectedCreated: timePointer(now.Add(-24 * time.Hour)),
-			expectedErr:     "",
+			name:                      "(resolved) error if estimate.created is in the future",
+			resolution:                ResolutionResolved,
+			forecastCreatedDate:       nil,
+			forecastResolvesDate:      now.Add(24 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(1 * time.Hour)),
+			expectedErr:               "'created' can't be in the future",
+		},
+		{
+			name:                      "(NA resolved) error if estimate.created is in the future",
+			resolution:                ResolutionNotApplicable,
+			forecastCreatedDate:       nil,
+			forecastResolvesDate:      now.Add(24 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(1 * time.Hour)),
+			expectedErr:               "'created' can't be in the future",
+		},
+		{
+			// This test will lead to an error because when resolving the forecast the resolves
+			// date is set to now(). When adding another estimate without date, now() will be
+			// used again, but it will then lead to a later timestamp than the first now().
+			name:                "(resolved) error if estimate has no created date",
+			resolution:          ResolutionResolved,
+			forecastCreatedDate: nil,
+			// note that if the resolves date is in the future it is set to now() when resolving
+			forecastResolvesDate:      now.Add(24 * time.Hour),
+			secondEstimateCreatedDate: nil,
+			expectedErr: "'estimate.created' is set to a later date than 'forecast." +
+				"resolves'",
+		},
+		{
+			// See the previous test for an explanation
+			name:                      "(NA resolved) error if estimate.created is nil",
+			resolution:                ResolutionNotApplicable,
+			forecastCreatedDate:       nil,
+			forecastResolvesDate:      now.Add(24 * time.Hour),
+			secondEstimateCreatedDate: nil,
+			expectedErr: "'estimate.created' is set to a later date than 'forecast." +
+				"resolves'",
+		},
+		{
+			name:                      "(unresolved) success if estimate.created date is in the past",
+			resolution:                ResolutionUnresolved,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(24 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(-23 * time.Hour)),
+			expectedErr:               "",
+		},
+		{
+			name:                      "(resolved) success if estimate.created date is in the past",
+			resolution:                ResolutionResolved,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(24 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(-23 * time.Hour)),
+			expectedErr:               "",
+		},
+		{
+			name:                      "(NA resolved) success if estimate.created date is in the past",
+			resolution:                ResolutionNotApplicable,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(24 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(-23 * time.Hour)),
+			expectedErr:               "",
+		},
+		{
+			name: "(unresolved) error if estimate.created is before forecast." +
+				"created",
+			resolution:                ResolutionUnresolved,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(24 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(-25 * time.Hour)),
+			expectedErr: "'estimate.created' is set to an earlier date than 'forecast." +
+				"created'",
+		},
+		{
+			name: "(resolved) error if estimate.created is before forecast." +
+				"created",
+			resolution:                ResolutionResolved,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(24 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(-25 * time.Hour)),
+			expectedErr: "'estimate.created' is set to an earlier date than 'forecast." +
+				"created'",
+		},
+		{
+			name: "(NA resolved) error if estimate.created is before " +
+				"forecast.created",
+			resolution:                ResolutionNotApplicable,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(24 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(-25 * time.Hour)),
+			expectedErr: "'estimate.created' is set to an earlier date than 'forecast." +
+				"created'",
+		},
+		{
+			name: "(unresolved) success if estimate.created is after forecast." +
+				"resolves, which is in the past",
+			resolution:                ResolutionUnresolved,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(-23 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(-22 * time.Hour)),
+			expectedErr:               "",
+		},
+		{
+			name: "(resolved) error if estimate.created is after forecast." +
+				"resolves, which is in the past",
+			resolution:                ResolutionResolved,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(-23 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(-22 * time.Hour)),
+			expectedErr: "'estimate.created' is set to a later date than 'forecast." +
+				"resolves'",
+		},
+		{
+			name: "(NA resolved) error if estimate.created is after forecast." +
+				"resolves which is in the past",
+			resolution:                ResolutionNotApplicable,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(-23 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(-22 * time.Hour)),
+			expectedErr: "'estimate.created' is set to a later date than 'forecast." +
+				"resolves'",
+		},
+		{
+			name: "(resolved) success if estimate.created is equal to " +
+				"forecast.resolves",
+			resolution:                ResolutionResolved,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(-23 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(-23 * time.Hour)),
+			expectedErr:               "",
+		},
+		{
+			name: "(NA resolved) success if estimate.created is equal to " +
+				"forecast.resolves",
+			resolution:                ResolutionNotApplicable,
+			forecastCreatedDate:       timePointer(now.Add(-24 * time.Hour)),
+			forecastResolvesDate:      now.Add(-23 * time.Hour),
+			secondEstimateCreatedDate: timePointer(now.Add(-23 * time.Hour)),
+			expectedErr:               "",
 		},
 	}
 	for _, tt := range tests {
@@ -585,12 +788,35 @@ func TestCreateEstimate_VerifyCreated(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			c := initServerAndGetClient(t, "")
 
-			createForecastResponse := simpleCreateForecastHelper(
-				t,
+			// 1. Create a new forecast
+
+			newForecast := NewForecast{
+				Title:       "Test Forecast",
+				Description: "",
+				Created:     tt.forecastCreatedDate,
+				Resolves:    tt.forecastResolvesDate,
+			}
+
+			initialEstimate := NewEstimate{
+				Reason: "Just a hunch.",
+				Probabilities: []NewProbability{
+					{
+						Value:   20,
+						Outcome: &NewOutcome{Text: "Yes"},
+					},
+					{
+						Value:   80,
+						Outcome: &NewOutcome{Text: "No"},
+					},
+				},
+			}
+			createForecastResponse, err := CreateForecast(
+				context.Background(),
 				c,
-				"Test Forecast",
-				map[string]int{"Yes": 20, "No": 80},
+				newForecast,
+				initialEstimate,
 			)
+			require.NoError(t, err)
 
 			forecastId := createForecastResponse.CreateForecast.Id
 			yesId := ""
@@ -607,7 +833,31 @@ func TestCreateEstimate_VerifyCreated(t *testing.T) {
 			require.NotEmpty(t, yesId)
 			require.NotEmpty(t, noId)
 
-			newEstimate := NewEstimate{
+			// 2. Resolve the forecast (if necessary)
+
+			if tt.resolution == ResolutionResolved {
+				_, err := ResolveForecast(
+					context.Background(),
+					c,
+					forecastId,
+					&yesId,
+					&tt.resolution,
+				)
+				require.NoError(t, err)
+			} else if tt.resolution == ResolutionNotApplicable {
+				_, err := ResolveForecast(
+					context.Background(),
+					c,
+					forecastId,
+					nil,
+					&tt.resolution,
+				)
+				require.NoError(t, err)
+			}
+
+			// 3. Add a new estimate to the forecast
+
+			secondEstimate := NewEstimate{
 				Reason: "I got some new information.",
 				Probabilities: []NewProbability{
 					{
@@ -619,21 +869,22 @@ func TestCreateEstimate_VerifyCreated(t *testing.T) {
 						OutcomeId: &noId,
 					},
 				},
-				Created: tt.inputCreated,
+				Created: tt.secondEstimateCreatedDate,
 			}
 
-			resp, err := CreateEstimate(
+			_, err = CreateEstimate(
 				context.Background(),
 				c,
 				forecastId,
-				newEstimate,
+				secondEstimate,
 			)
 			if tt.expectedErr == "" {
-				require.NoError(t, err)
-				assertTimeAlmostEqual(t, *tt.expectedCreated, resp.CreateEstimate.Created)
+				assert.NoError(t, err)
 			} else {
-				require.ErrorContains(t, err, tt.expectedErr)
+				assert.ErrorContains(t, err, tt.expectedErr)
 			}
+
+			// 4. Done
 		})
 	}
 }
