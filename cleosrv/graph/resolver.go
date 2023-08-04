@@ -4,7 +4,6 @@ package graph
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"html"
 	"strconv"
@@ -15,6 +14,7 @@ import (
 
 	"github.com/cleodora-forecasting/cleodora/cleosrv/dbmodel"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/model"
+	"github.com/cleodora-forecasting/cleodora/cleoutils/errors"
 )
 
 // This file will not be regenerated automatically.
@@ -55,12 +55,12 @@ func createEstimate(
 	estimate model.NewEstimate,
 ) (*model.Estimate, error) {
 	if err := validateNewEstimate(&estimate, false); err != nil {
-		return nil, fmt.Errorf("error validating NewEstimate: %w", err)
+		return nil, errors.Newf("error validating NewEstimate: %w", err)
 	}
 	forecast := dbmodel.Forecast{}
 	ret := tx.Where("id = ?", forecastID).First(&forecast)
 	if ret.Error != nil {
-		return nil, fmt.Errorf("error getting Forecast with ID %v: %w", forecastID, ret.Error)
+		return nil, errors.Newf("error getting Forecast with ID %v: %w", forecastID, ret.Error)
 	}
 
 	if estimate.Created.Before(forecast.Created) {
@@ -92,7 +92,7 @@ func createEstimate(
 	).Where("estimates.forecast_id = ?", forecastID).
 		Distinct().Pluck("outcomes.id", &validOutcomeIds)
 	if ret.Error != nil {
-		return nil, fmt.Errorf("error getting outcome IDs: %w", ret.Error)
+		return nil, errors.Newf("error getting outcome IDs: %w", ret.Error)
 	}
 
 	var submittedOutcomeIds []string
@@ -102,12 +102,12 @@ func createEstimate(
 
 	invalidOutcomeIds := stringSetDiff(submittedOutcomeIds, validOutcomeIds)
 	if len(invalidOutcomeIds) > 0 {
-		return nil, fmt.Errorf("invalid Outcome IDs: %v", invalidOutcomeIds)
+		return nil, errors.Newf("invalid Outcome IDs: %v", invalidOutcomeIds)
 	}
 
 	missingOutcomeIds := stringSetDiff(validOutcomeIds, submittedOutcomeIds)
 	if len(missingOutcomeIds) > 0 {
-		return nil, fmt.Errorf("missing Outcome IDs: %v", missingOutcomeIds)
+		return nil, errors.Newf("missing Outcome IDs: %v", missingOutcomeIds)
 	}
 
 	var probabilities []dbmodel.Probability
@@ -115,7 +115,7 @@ func createEstimate(
 	for _, p := range estimate.Probabilities {
 		outcomeID, err := strconv.ParseUint(*p.OutcomeID, 10, 64)
 		if err != nil {
-			return nil, fmt.Errorf("can't parse %v as uint: %w", outcomeID, err)
+			return nil, errors.Newf("can't parse %v as uint: %w", outcomeID, err)
 		}
 		probabilities = append(
 			probabilities,
@@ -134,7 +134,7 @@ func createEstimate(
 
 	err := tx.Model(&forecast).Association("Estimates").Append(&dbEstimate)
 	if err != nil {
-		return nil, fmt.Errorf("error creating Estimate: %w", err)
+		return nil, errors.Newf("error creating Estimate: %w", err)
 	}
 
 	return convertEstimateDBToGQL(dbEstimate), nil
@@ -192,7 +192,7 @@ func validateNewForecast(forecast *model.NewForecast) error {
 		if forecast.Closes.After(forecast.Resolves) {
 			validationErr = multierror.Append(
 				validationErr,
-				fmt.Errorf(
+				errors.Newf(
 					"'Closes' can't be set to a later date than 'Resolves'. "+
 						"Closes is '%v'. Resolves is '%v'",
 					*forecast.Closes,
@@ -217,7 +217,7 @@ func validateNewForecast(forecast *model.NewForecast) error {
 	if forecast.Resolves.Before(*forecast.Created) {
 		validationErr = multierror.Append(
 			validationErr,
-			fmt.Errorf(
+			errors.Newf(
 				"'Resolves' can't be set to an earlier date than 'Created'. "+
 					"Resolves is '%v'. Created is '%v'",
 				forecast.Resolves,
@@ -275,7 +275,7 @@ func validateNewEstimate(estimate *model.NewEstimate, duringCreateForecast bool)
 				if _, ok := existingOutcomes[p.Outcome.Text]; ok {
 					validationErr = multierror.Append(
 						validationErr,
-						fmt.Errorf("outcome '%v' is a duplicate", p.Outcome.Text),
+						errors.Newf("outcome '%v' is a duplicate", p.Outcome.Text),
 					)
 				}
 				existingOutcomes[p.Outcome.Text] = true
@@ -302,7 +302,7 @@ func validateNewEstimate(estimate *model.NewEstimate, duringCreateForecast bool)
 		if p.Value < 0 || p.Value > 100 {
 			validationErr = multierror.Append(
 				validationErr,
-				fmt.Errorf("probabilities must be between 0 and 100, not %v", p.Value),
+				errors.Newf("probabilities must be between 0 and 100, not %v", p.Value),
 			)
 		}
 		sumProbabilities += p.Value
@@ -310,7 +310,7 @@ func validateNewEstimate(estimate *model.NewEstimate, duringCreateForecast bool)
 	if sumProbabilities != 100 {
 		validationErr = multierror.Append(
 			validationErr,
-			fmt.Errorf("probabilities must add up to 100, not %v", sumProbabilities),
+			errors.Newf("probabilities must add up to 100, not %v", sumProbabilities),
 		)
 	}
 
@@ -320,7 +320,7 @@ func validateNewEstimate(estimate *model.NewEstimate, duringCreateForecast bool)
 		if estimate.Created.After(now) {
 			validationErr = multierror.Append(
 				validationErr,
-				fmt.Errorf(
+				errors.Newf(
 					"'created' can't be in the future: %v",
 					estimate.Created,
 				),

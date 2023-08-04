@@ -18,6 +18,7 @@ import (
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
+	"github.com/cleodora-forecasting/cleodora/cleoutils/errors"
 )
 
 type App struct {
@@ -56,7 +57,7 @@ Listening on: %s
 
 	err := os.MkdirAll(filepath.Dir(a.Config.Database), 0770)
 	if err != nil {
-		return fmt.Errorf("error making directories for database %v: %w", a.Config.Database, err)
+		return errors.Newf("error making directories for database %v: %w", a.Config.Database, err)
 	}
 
 	router := chi.NewRouter()
@@ -103,7 +104,7 @@ func (a *App) InitDB() (*gorm.DB, error) {
 
 	err = migrateDB(db)
 	if err != nil {
-		return nil, fmt.Errorf("migrating data: %w", err)
+		return nil, errors.Newf("migrating data: %w", err)
 	}
 
 	return db, nil
@@ -121,7 +122,7 @@ func migrateDB(db *gorm.DB) error {
 		return tx.Migrator().AutoMigrate(&Migrations{})
 	})
 	if err != nil {
-		return fmt.Errorf("auto migrating 'migrations' table: %w", err)
+		return errors.Newf("auto migrating 'migrations' table: %w", err)
 	}
 	// If the DB is completely new then we just insert all migrations as 'done'
 	// i.e. they are not really executed because the createDb() function is
@@ -130,7 +131,7 @@ func migrateDB(db *gorm.DB) error {
 		err := db.Transaction(func(tx *gorm.DB) error {
 			err := createDb(tx)
 			if err != nil {
-				return fmt.Errorf("creating tables: %w", err)
+				return errors.Newf("creating tables: %w", err)
 			}
 			// save all migrations as done in the DB, without executing the
 			// functions.
@@ -146,7 +147,7 @@ func migrateDB(db *gorm.DB) error {
 			}
 			ret := tx.Create(mEntries)
 			if ret.Error != nil {
-				return fmt.Errorf("storing migrations as done in DB: %w", ret.Error)
+				return errors.Newf("storing migrations as done in DB: %w", ret.Error)
 			}
 			return nil
 		})
@@ -157,7 +158,7 @@ func migrateDB(db *gorm.DB) error {
 		var count int64
 		ret := db.Model(&Migrations{}).Where("id = ?", m.ID).Count(&count)
 		if ret.Error != nil {
-			return fmt.Errorf("selecting migration %v: %w", m.ID, ret.Error)
+			return errors.Newf("selecting migration %v: %w", m.ID, ret.Error)
 		}
 		if count == 1 {
 			continue // migration already ran in the past
@@ -167,7 +168,7 @@ func migrateDB(db *gorm.DB) error {
 			if m.Up != nil {
 				err = m.Up(tx)
 				if err != nil {
-					return fmt.Errorf("running %v: %w", m.ID, err)
+					return errors.Newf("running %v: %w", m.ID, err)
 				}
 			}
 			ret = tx.Create(Migrations{
@@ -175,7 +176,7 @@ func migrateDB(db *gorm.DB) error {
 				Applied: time.Now().UTC(),
 			})
 			if ret.Error != nil {
-				return fmt.Errorf("saving migration %v: %w", m.ID, ret.Error)
+				return errors.Newf("saving migration %v: %w", m.ID, ret.Error)
 			}
 			fmt.Printf("Finished DB migration '%v'\n", m.ID)
 			return nil
@@ -225,7 +226,7 @@ var dbMigrations = []dbMigration{
 			var forecasts []Forecast
 			ret := db.Find(&forecasts)
 			if ret.Error != nil {
-				return fmt.Errorf("getting forecasts: %w", ret.Error)
+				return errors.Newf("getting forecasts: %w", ret.Error)
 			}
 			for _, f := range forecasts {
 				f.Created = f.Created.UTC()
@@ -252,7 +253,7 @@ var dbMigrations = []dbMigration{
 				}
 				ret = db.Save(f)
 				if ret.Error != nil {
-					return fmt.Errorf("saving %v: %w", f.ID, ret.Error)
+					return errors.Newf("saving %v: %w", f.ID, ret.Error)
 				}
 			}
 			return nil
@@ -268,14 +269,14 @@ var dbMigrations = []dbMigration{
 			var estimates []Estimate
 			ret := db.Find(&estimates)
 			if ret.Error != nil {
-				return fmt.Errorf("getting estimates: %w", ret.Error)
+				return errors.Newf("getting estimates: %w", ret.Error)
 			}
 			for _, e := range estimates {
 				e.Created = e.Created.UTC()
 				e.CreatedAt = e.CreatedAt.UTC()
 				ret = db.Save(e)
 				if ret.Error != nil {
-					return fmt.Errorf("saving %v: %w", e.ID, ret.Error)
+					return errors.Newf("saving %v: %w", e.ID, ret.Error)
 				}
 			}
 			return nil
@@ -290,13 +291,13 @@ var dbMigrations = []dbMigration{
 			var outcomes []Outcome
 			ret := db.Find(&outcomes)
 			if ret.Error != nil {
-				return fmt.Errorf("getting outcomes: %w", ret.Error)
+				return errors.Newf("getting outcomes: %w", ret.Error)
 			}
 			for _, o := range outcomes {
 				o.CreatedAt = o.CreatedAt.UTC()
 				ret = db.Save(o)
 				if ret.Error != nil {
-					return fmt.Errorf("saving %v: %w", o.ID, ret.Error)
+					return errors.Newf("saving %v: %w", o.ID, ret.Error)
 				}
 			}
 			return nil
@@ -311,13 +312,13 @@ var dbMigrations = []dbMigration{
 			var probabilities []Probability
 			ret := db.Find(&probabilities)
 			if ret.Error != nil {
-				return fmt.Errorf("getting probabilities: %w", ret.Error)
+				return errors.Newf("getting probabilities: %w", ret.Error)
 			}
 			for _, p := range probabilities {
 				p.CreatedAt = p.CreatedAt.UTC()
 				ret = db.Save(p)
 				if ret.Error != nil {
-					return fmt.Errorf("saving %v: %w", p.ID, ret.Error)
+					return errors.Newf("saving %v: %w", p.ID, ret.Error)
 				}
 			}
 			return nil
@@ -366,7 +367,7 @@ var dbMigrations = []dbMigration{
 				Scan(&estimateBriers)
 
 			if ret.Error != nil {
-				return fmt.Errorf("error calculating brier score: %w", ret.Error)
+				return errors.Newf("error calculating brier score: %w", ret.Error)
 			}
 
 			for _, r := range estimateBriers {
@@ -374,7 +375,7 @@ var dbMigrations = []dbMigration{
 					Where("id = ?", r.ID).
 					Update("brier_score", r.Brier)
 				if ret.Error != nil {
-					return fmt.Errorf("error updating brier score: %w", ret.Error)
+					return errors.Newf("error updating brier score: %w", ret.Error)
 				}
 			}
 

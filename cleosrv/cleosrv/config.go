@@ -1,11 +1,12 @@
 package cleosrv
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/adrg/xdg"
 	"github.com/spf13/viper"
+
+	"github.com/cleodora-forecasting/cleodora/cleoutils/errors"
 )
 
 const DefaultConfigFileName = "cleosrv"
@@ -41,7 +42,7 @@ func (c *Config) LoadWithViper(v *viper.Viper) error {
 				// Note that ConfigFileNotFoundError is not returned when
 				// explicitly specifying a config path (--config), which should
 				// (and does) cause an error if it doesn't exist.
-				return fmt.Errorf("error reading config file: %w", err)
+				return errors.Newf("error reading config file: %w", err)
 			}
 		}
 	}

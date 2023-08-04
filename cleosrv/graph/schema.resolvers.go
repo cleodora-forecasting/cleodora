@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"html"
 	"time"
@@ -15,6 +14,7 @@ import (
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/generated"
 	"github.com/cleodora-forecasting/cleodora/cleosrv/graph/model"
 	"github.com/cleodora-forecasting/cleodora/cleoutils"
+	errors2 "github.com/cleodora-forecasting/cleodora/cleoutils/errors"
 	"gorm.io/gorm"
 )
 
@@ -22,14 +22,14 @@ import (
 func (r *mutationResolver) CreateForecast(ctx context.Context, forecast model.NewForecast, estimate model.NewEstimate) (*model.Forecast, error) {
 	err := validateNewForecast(&forecast)
 	if err != nil {
-		return nil, fmt.Errorf("error validating NewForecast: %w", err)
+		return nil, errors2.Newf("error validating NewForecast: %w", err)
 	}
 	// We want the first estimate to have the same 'Created' time as the
 	// forecast itself because it's logical that it would be that way.
 	estimate.Created = forecast.Created
 	err = validateNewEstimate(&estimate, true)
 	if err != nil {
-		return nil, fmt.Errorf("error validating NewEstimate: %w", err)
+		return nil, errors2.Newf("error validating NewEstimate: %w", err)
 	}
 	dbForecast := dbmodel.Forecast{
 		Title:       html.EscapeString(forecast.Title),
@@ -46,7 +46,7 @@ func (r *mutationResolver) CreateForecast(ctx context.Context, forecast model.Ne
 		return ret.Error
 	})
 	if err != nil {
-		return nil, fmt.Errorf("creating forecast: %w", err)
+		return nil, errors2.Newf("creating forecast: %w", err)
 	}
 
 	retForecast := model.Forecast{
@@ -71,7 +71,7 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 		}
 	}()
 	if err := tx.Error; err != nil {
-		return nil, fmt.Errorf("error creating transaction: %w", err)
+		return nil, errors2.Newf("error creating transaction: %w", err)
 	}
 
 	resolutionToSet := dbmodel.ResolutionResolved
@@ -81,12 +81,12 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 
 	if resolutionToSet == dbmodel.ResolutionUnresolved {
 		_ = tx.Rollback()
-		return nil, fmt.Errorf("resolution %v is not allowed", resolutionToSet)
+		return nil, errors2.Newf("resolution %v is not allowed", resolutionToSet)
 	}
 
 	if resolutionToSet == dbmodel.ResolutionResolved && correctOutcomeID == nil {
 		_ = tx.Rollback()
-		return nil, fmt.Errorf(
+		return nil, errors2.Newf(
 			"to resolve as %v, an Outcome must be specified",
 			resolutionToSet,
 		)
@@ -96,12 +96,12 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 	ret := tx.Where("id = ?", forecastID).First(&forecast)
 	if ret.Error != nil {
 		_ = tx.Rollback()
-		return nil, fmt.Errorf("error getting Forecast with ID %v: %w", forecastID, ret.Error)
+		return nil, errors2.Newf("error getting Forecast with ID %v: %w", forecastID, ret.Error)
 	}
 
 	if forecast.Resolution != dbmodel.ResolutionUnresolved {
 		_ = tx.Rollback()
-		return nil, errors.New("forecast has already been resolved")
+		return nil, errors2.New("forecast has already been resolved")
 	}
 
 	forecast.Resolution = resolutionToSet
@@ -115,7 +115,7 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 	ret = tx.Save(&forecast)
 	if ret.Error != nil {
 		_ = tx.Rollback()
-		return nil, fmt.Errorf("error setting resolution: %w", ret.Error)
+		return nil, errors2.Newf("error setting resolution: %w", ret.Error)
 	}
 
 	if resolutionToSet == dbmodel.ResolutionResolved {
@@ -123,7 +123,7 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 		ret = tx.Where("id = ?", correctOutcomeID).First(&outcome)
 		if ret.Error != nil {
 			_ = tx.Rollback()
-			return nil, fmt.Errorf("error getting outcome: %w", ret.Error)
+			return nil, errors2.Newf("error getting outcome: %w", ret.Error)
 		}
 
 		matchingForecast := dbmodel.Forecast{}
@@ -139,19 +139,19 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 
 		if ret.Error != nil {
 			_ = tx.Rollback()
-			return nil, fmt.Errorf("can't match forecast and outcome: %w", ret.Error)
+			return nil, errors2.Newf("can't match forecast and outcome: %w", ret.Error)
 		}
 
 		if ret.RowsAffected != 1 {
 			_ = tx.Rollback()
-			return nil, errors.New("can't match forecast and outcome")
+			return nil, errors2.New("can't match forecast and outcome")
 		}
 
 		outcome.Correct = true
 		ret = tx.Save(&outcome)
 		if ret.Error != nil {
 			_ = tx.Rollback()
-			return nil, fmt.Errorf("error updating outcome: %w", ret.Error)
+			return nil, errors2.Newf("error updating outcome: %w", ret.Error)
 		}
 
 		type EstimateBrier struct {
@@ -182,7 +182,7 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 
 		if ret.Error != nil {
 			_ = tx.Rollback()
-			return nil, fmt.Errorf("error calculating brier score: %w", ret.Error)
+			return nil, errors2.Newf("error calculating brier score: %w", ret.Error)
 		}
 
 		for _, r := range estimateBriers {
@@ -191,7 +191,7 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 				Update("brier_score", r.Brier)
 			if ret.Error != nil {
 				_ = tx.Rollback()
-				return nil, fmt.Errorf("error updating brier score: %w", ret.Error)
+				return nil, errors2.Newf("error updating brier score: %w", ret.Error)
 			}
 		}
 	}
@@ -200,7 +200,7 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 	ret = tx.Preload("Estimates.Probabilities.Outcome").Find(&forecast)
 	if ret.Error != nil {
 		_ = tx.Rollback()
-		return nil, fmt.Errorf("error preloading: %w", ret.Error)
+		return nil, errors2.Newf("error preloading: %w", ret.Error)
 	}
 
 	var estimates []*model.Estimate
@@ -243,7 +243,7 @@ func (r *mutationResolver) ResolveForecast(ctx context.Context, forecastID strin
 	}
 	ret = tx.Commit()
 	if ret.Error != nil {
-		return nil, fmt.Errorf("error committing: %w", ret.Error)
+		return nil, errors2.Newf("error committing: %w", ret.Error)
 	}
 	return &rf, nil
 }

@@ -11,7 +11,6 @@ package main
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -22,6 +21,7 @@ import (
 	"github.com/Khan/genqlient/graphql"
 
 	"github.com/cleodora-forecasting/cleodora/cleosrv/integrationtest"
+	"github.com/cleodora-forecasting/cleodora/cleoutils/errors"
 )
 
 func main() {
@@ -86,7 +86,7 @@ Example:
 
 	version, err := getVersion(c)
 	if err != nil {
-		return fmt.Errorf("getting version: %w", err)
+		return errors.Newf("getting version: %w", err)
 	}
 	fmt.Println("cleosrv version:", version)
 
@@ -96,7 +96,7 @@ Example:
 
 	err = cleosrvCmd.Process.Kill()
 	if err != nil {
-		return fmt.Errorf("stopping cleosrvCmd: %w", err)
+		return errors.Newf("stopping cleosrvCmd: %w", err)
 	}
 
 	err = integrationtest.CopyFile(dbPath, resultDb)
@@ -137,10 +137,10 @@ func executeQueries(c graphql.Client, version string) error {
 	}
 	resp, err := integrationtest.CreateForecast(context.Background(), c, f1, e1)
 	if err != nil {
-		return fmt.Errorf("create f1: %w", err)
+		return errors.Newf("create f1: %w", err)
 	}
 	if resp.CreateForecast.Id == "" {
-		return fmt.Errorf("unexpected response f1: %v", resp)
+		return errors.Newf("unexpected response f1: %v", resp)
 	}
 
 	// Create another forecast with 'created', 'resolves' and 'closes' in the
@@ -149,7 +149,7 @@ func executeQueries(c graphql.Client, version string) error {
 
 	newYork, err := time.LoadLocation("America/New_York")
 	if err != nil {
-		return fmt.Errorf("can't get TZ loc: %w", err)
+		return errors.Newf("can't get TZ loc: %w", err)
 	}
 
 	f2 := integrationtest.NewForecast{
@@ -177,10 +177,10 @@ func executeQueries(c graphql.Client, version string) error {
 	}
 	resp, err = integrationtest.CreateForecast(context.Background(), c, f2, e2)
 	if err != nil {
-		return fmt.Errorf("create f2: %w", err)
+		return errors.Newf("create f2: %w", err)
 	}
 	if resp.CreateForecast.Id == "" {
-		return fmt.Errorf("unexpected response f2: %v", resp)
+		return errors.Newf("unexpected response f2: %v", resp)
 	}
 
 	f3 := integrationtest.NewForecast{
@@ -211,10 +211,10 @@ func executeQueries(c graphql.Client, version string) error {
 	}
 	resp, err = integrationtest.CreateForecast(context.Background(), c, f3, e3)
 	if err != nil {
-		return fmt.Errorf("create f3: %w", err)
+		return errors.Newf("create f3: %w", err)
 	}
 	if resp.CreateForecast.Id == "" {
-		return fmt.Errorf("unexpected response f3: %v", resp)
+		return errors.Newf("unexpected response f3: %v", resp)
 	}
 
 	// Resolve the forecast f3
@@ -226,7 +226,7 @@ func executeQueries(c graphql.Client, version string) error {
 		}
 	}
 	if yesOutcomeId == "" {
-		return fmt.Errorf("could not find outcome 'Yes': %v", resp)
+		return errors.Newf("could not find outcome 'Yes': %v", resp)
 	}
 
 	// Backport this script to 0.2.0 then overwrite the DB
@@ -239,14 +239,14 @@ func executeQueries(c graphql.Client, version string) error {
 		&resolutionResolved,
 	)
 	if err != nil {
-		return fmt.Errorf("resolve f3 err: %w", err)
+		return errors.Newf("resolve f3 err: %w", err)
 	}
 
 	if resolveResp.ResolveForecast.Resolution != integrationtest.ResolutionResolved {
-		return fmt.Errorf("resolution is not RESOLVED: %v", resolveResp)
+		return errors.Newf("resolution is not RESOLVED: %v", resolveResp)
 	}
 	if resolveResp.ResolveForecast.Id != f3Id {
-		return fmt.Errorf("the IDs don't match: %v", resolveResp)
+		return errors.Newf("the IDs don't match: %v", resolveResp)
 	}
 
 	return nil

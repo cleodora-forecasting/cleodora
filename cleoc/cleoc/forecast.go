@@ -2,7 +2,6 @@ package cleoc
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -11,6 +10,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 
 	"github.com/cleodora-forecasting/cleodora/cleoc/gqclient"
+	"github.com/cleodora-forecasting/cleodora/cleoutils/errors"
 )
 
 // AddForecast creates a new forecast.
@@ -18,13 +18,13 @@ import (
 func (a *App) AddForecast(opts AddForecastOptions) error {
 	resolvesT, err := time.Parse(time.RFC3339, opts.Resolves)
 	if err != nil {
-		return fmt.Errorf("could not parse 'resolves': %w", err)
+		return errors.Newf("could not parse 'resolves': %w", err)
 	}
 	var closesT *time.Time
 	if opts.Closes != "" {
 		parsedTime, err := time.Parse(time.RFC3339, opts.Closes)
 		if err != nil {
-			return fmt.Errorf("could not parse 'closes': %w", err)
+			return errors.Newf("could not parse 'closes': %w", err)
 		}
 		closesT = &parsedTime
 	}
@@ -42,7 +42,7 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 
 	reqProbabilities, err := parseProbabilities(opts.Probabilities)
 	if err != nil {
-		return fmt.Errorf("error parsing probabilities: %w", err)
+		return errors.Newf("error parsing probabilities: %w", err)
 	}
 
 	estimate := gqclient.NewEstimate{
@@ -51,7 +51,7 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 	}
 	resp, err := gqclient.CreateForecast(ctx, client, forecast, estimate)
 	if err != nil {
-		return fmt.Errorf("error calling the API: %w", err)
+		return errors.Newf("error calling the API: %w", err)
 	}
 	_, err = fmt.Fprint(a.Out, resp.CreateForecast.Id+"\n")
 	if err != nil {
@@ -141,7 +141,7 @@ func (opts *AddForecastOptions) Validate() error {
 	if sumProbabilities != 100 {
 		validationErr = multierror.Append(
 			validationErr,
-			fmt.Errorf(
+			errors.Newf(
 				"all probabilities must add up to 100 (here only %v)",
 				sumProbabilities,
 			),
