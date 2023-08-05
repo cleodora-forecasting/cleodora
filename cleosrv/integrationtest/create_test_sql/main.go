@@ -86,7 +86,7 @@ Example:
 
 	version, err := getVersion(c)
 	if err != nil {
-		return errors.Newf("getting version: %w", err)
+		return errors.Wrap(err, "getting version")
 	}
 	fmt.Println("cleosrv version:", version)
 
@@ -96,7 +96,7 @@ Example:
 
 	err = cleosrvCmd.Process.Kill()
 	if err != nil {
-		return errors.Newf("stopping cleosrvCmd: %w", err)
+		return errors.Wrap(err, "stopping cleosrvCmd")
 	}
 
 	err = integrationtest.CopyFile(dbPath, resultDb)
@@ -137,7 +137,7 @@ func executeQueries(c graphql.Client, version string) error {
 	}
 	resp, err := integrationtest.CreateForecast(context.Background(), c, f1, e1)
 	if err != nil {
-		return errors.Newf("create f1: %w", err)
+		return errors.Wrap(err, "create f1")
 	}
 	if resp.CreateForecast.Id == "" {
 		return errors.Newf("unexpected response f1: %v", resp)
@@ -149,7 +149,7 @@ func executeQueries(c graphql.Client, version string) error {
 
 	newYork, err := time.LoadLocation("America/New_York")
 	if err != nil {
-		return errors.Newf("can't get TZ loc: %w", err)
+		return errors.Wrap(err, "can't get TZ loc")
 	}
 
 	f2 := integrationtest.NewForecast{
@@ -177,7 +177,7 @@ func executeQueries(c graphql.Client, version string) error {
 	}
 	resp, err = integrationtest.CreateForecast(context.Background(), c, f2, e2)
 	if err != nil {
-		return errors.Newf("create f2: %w", err)
+		return errors.Wrap(err, "create f2")
 	}
 	if resp.CreateForecast.Id == "" {
 		return errors.Newf("unexpected response f2: %v", resp)
@@ -211,7 +211,7 @@ func executeQueries(c graphql.Client, version string) error {
 	}
 	resp, err = integrationtest.CreateForecast(context.Background(), c, f3, e3)
 	if err != nil {
-		return errors.Newf("create f3: %w", err)
+		return errors.Wrap(err, "create f3")
 	}
 	if resp.CreateForecast.Id == "" {
 		return errors.Newf("unexpected response f3: %v", resp)
@@ -239,7 +239,7 @@ func executeQueries(c graphql.Client, version string) error {
 		&resolutionResolved,
 	)
 	if err != nil {
-		return errors.Newf("resolve f3 err: %w", err)
+		return errors.Wrap(err, "resolve f3 err")
 	}
 
 	if resolveResp.ResolveForecast.Resolution != integrationtest.ResolutionResolved {

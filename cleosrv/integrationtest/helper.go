@@ -84,20 +84,20 @@ func CopyFile(src string, dst string) error {
 	// Open original file
 	srcF, err := os.Open(src)
 	if err != nil {
-		return errors.Newf("open src: %w", err)
+		return errors.Wrap(err, "open src")
 	}
 	defer func() { _ = srcF.Close() }()
 
 	// Create new file
 	dstF, err := os.Create(dst)
 	if err != nil {
-		return errors.Newf("open dst: %w", err)
+		return errors.Wrap(err, "open dst")
 	}
 	defer func() { _ = dstF.Close() }()
 
 	_, err = io.Copy(dstF, srcF)
 	if err != nil {
-		return errors.Newf("copying file: %w", err)
+		return errors.Wrap(err, "copying file")
 	}
 	return nil
 }
