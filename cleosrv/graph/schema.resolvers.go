@@ -22,14 +22,14 @@ import (
 func (r *mutationResolver) CreateForecast(ctx context.Context, forecast model.NewForecast, estimate model.NewEstimate) (*model.Forecast, error) {
 	err := validateNewForecast(&forecast)
 	if err != nil {
-		return nil, errors2.Newf("error validating NewForecast: %w", err)
+		return nil, errors2.Wrap(err, "error validating NewForecast")
 	}
 	// We want the first estimate to have the same 'Created' time as the
 	// forecast itself because it's logical that it would be that way.
 	estimate.Created = forecast.Created
 	err = validateNewEstimate(&estimate, true)
 	if err != nil {
-		return nil, errors2.Newf("error validating NewEstimate: %w", err)
+		return nil, errors2.Wrap(err, "error validating NewEstimate: %w")
 	}
 	dbForecast := dbmodel.Forecast{
 		Title:       html.EscapeString(forecast.Title),

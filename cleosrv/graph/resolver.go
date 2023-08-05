@@ -55,7 +55,7 @@ func createEstimate(
 	estimate model.NewEstimate,
 ) (*model.Estimate, error) {
 	if err := validateNewEstimate(&estimate, false); err != nil {
-		return nil, errors.Newf("error validating NewEstimate: %w", err)
+		return nil, errors.Wrap(err, "error validating NewEstimate")
 	}
 	forecast := dbmodel.Forecast{}
 	ret := tx.Where("id = ?", forecastID).First(&forecast)
