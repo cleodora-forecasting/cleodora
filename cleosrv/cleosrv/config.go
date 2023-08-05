@@ -42,7 +42,7 @@ func (c *Config) LoadWithViper(v *viper.Viper) error {
 				// Note that ConfigFileNotFoundError is not returned when
 				// explicitly specifying a config path (--config), which should
 				// (and does) cause an error if it doesn't exist.
-				return errors.Newf("error reading config file: %w", err)
+				return errors.Wrap(err, "error reading config file")
 			}
 		}
 	}

@@ -60,7 +60,7 @@ func createEstimate(
 	forecast := dbmodel.Forecast{}
 	ret := tx.Where("id = ?", forecastID).First(&forecast)
 	if ret.Error != nil {
-		return nil, errors.Newf("error getting Forecast with ID %v: %w", forecastID, ret.Error)
+		return nil, errors.Wrapf(ret.Error, "error getting Forecast with ID %v", forecastID)
 	}
 
 	if estimate.Created.Before(forecast.Created) {
@@ -92,7 +92,7 @@ func createEstimate(
 	).Where("estimates.forecast_id = ?", forecastID).
 		Distinct().Pluck("outcomes.id", &validOutcomeIds)
 	if ret.Error != nil {
-		return nil, errors.Newf("error getting outcome IDs: %w", ret.Error)
+		return nil, errors.Wrap(ret.Error, "error getting outcome IDs")
 	}
 
 	var submittedOutcomeIds []string
@@ -115,7 +115,7 @@ func createEstimate(
 	for _, p := range estimate.Probabilities {
 		outcomeID, err := strconv.ParseUint(*p.OutcomeID, 10, 64)
 		if err != nil {
-			return nil, errors.Newf("can't parse %v as uint: %w", outcomeID, err)
+			return nil, errors.Wrapf(err, "can't parse %v as uint", outcomeID)
 		}
 		probabilities = append(
 			probabilities,
@@ -134,7 +134,7 @@ func createEstimate(
 
 	err := tx.Model(&forecast).Association("Estimates").Append(&dbEstimate)
 	if err != nil {
-		return nil, errors.Newf("error creating Estimate: %w", err)
+		return nil, errors.Wrap(err, "error creating Estimate")
 	}
 
 	return convertEstimateDBToGQL(dbEstimate), nil

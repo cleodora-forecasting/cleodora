@@ -18,13 +18,13 @@ import (
 func (a *App) AddForecast(opts AddForecastOptions) error {
 	resolvesT, err := time.Parse(time.RFC3339, opts.Resolves)
 	if err != nil {
-		return errors.Newf("could not parse 'resolves': %w", err)
+		return errors.Wrap(err, "could not parse 'resolves'")
 	}
 	var closesT *time.Time
 	if opts.Closes != "" {
 		parsedTime, err := time.Parse(time.RFC3339, opts.Closes)
 		if err != nil {
-			return errors.Newf("could not parse 'closes': %w", err)
+			return errors.Wrap(err, "could not parse 'closes'")
 		}
 		closesT = &parsedTime
 	}
@@ -42,7 +42,7 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 
 	reqProbabilities, err := parseProbabilities(opts.Probabilities)
 	if err != nil {
-		return errors.Newf("error parsing probabilities: %w", err)
+		return errors.Wrap(err, "error parsing probabilities")
 	}
 
 	estimate := gqclient.NewEstimate{
@@ -51,7 +51,7 @@ func (a *App) AddForecast(opts AddForecastOptions) error {
 	}
 	resp, err := gqclient.CreateForecast(ctx, client, forecast, estimate)
 	if err != nil {
-		return errors.Newf("error calling the API: %w", err)
+		return errors.Wrap(err, "error calling the API")
 	}
 	_, err = fmt.Fprint(a.Out, resp.CreateForecast.Id+"\n")
 	if err != nil {
