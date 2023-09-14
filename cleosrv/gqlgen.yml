@@ -23,6 +23,8 @@ resolver:
   dir: graph
   package: graph
 
+omit_gqlgen_version_in_file_notice: true
+
 # Optional: turn on use ` + "`" + `gqlgen:"fieldName"` + "`" + ` tags in your models
 # struct_tag: json
 
