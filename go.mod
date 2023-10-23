@@ -3,7 +3,7 @@ module github.com/cleodora-forecasting/cleodora
 go 1.20
 
 require (
-	github.com/99designs/gqlgen v0.17.37
+	github.com/99designs/gqlgen v0.17.39
 	github.com/Khan/genqlient v0.6.0
 	github.com/adrg/xdg v0.4.0
 	github.com/carolynvs/magex v0.9.0
@@ -339,6 +339,7 @@ require (
 	github.com/skeema/knownhosts v1.1.1 // indirect
 	github.com/slack-go/slack v0.12.3 // indirect
 	github.com/sonatard/noctx v0.0.2 // indirect
+	github.com/sosodev/duration v1.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/sourcegraph/go-diff v0.7.0 // indirect
 	github.com/spf13/afero v1.10.0 // indirect
