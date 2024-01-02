@@ -48,6 +48,9 @@ type Metadata struct {
 	Version string `json:"version"`
 }
 
+type Mutation struct {
+}
+
 type NewEstimate struct {
 	Reason        string            `json:"reason"`
 	Probabilities []*NewProbability `json:"probabilities"`
@@ -99,6 +102,9 @@ type Probability struct {
 	ID      string   `json:"id"`
 	Value   int      `json:"value"`
 	Outcome *Outcome `json:"outcome"`
+}
+
+type Query struct {
 }
 
 type Resolution string

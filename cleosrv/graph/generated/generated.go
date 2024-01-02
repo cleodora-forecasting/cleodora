@@ -3845,8 +3845,6 @@ func (ec *executionContext) unmarshalInputNewEstimate(ctx context.Context, obj i
 		}
 		switch k {
 		case "reason":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reason"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
@@ -3854,8 +3852,6 @@ func (ec *executionContext) unmarshalInputNewEstimate(ctx context.Context, obj i
 			}
 			it.Reason = data
 		case "probabilities":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("probabilities"))
 			data, err := ec.unmarshalNNewProbability2ᚕᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewProbabilityᚄ(ctx, v)
 			if err != nil {
@@ -3863,8 +3859,6 @@ func (ec *executionContext) unmarshalInputNewEstimate(ctx context.Context, obj i
 			}
 			it.Probabilities = data
 		case "created":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("created"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
@@ -3892,8 +3886,6 @@ func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj i
 		}
 		switch k {
 		case "title":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
@@ -3901,8 +3893,6 @@ func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj i
 			}
 			it.Title = data
 		case "description":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
@@ -3910,8 +3900,6 @@ func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj i
 			}
 			it.Description = data
 		case "resolves":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("resolves"))
 			data, err := ec.unmarshalNTime2timeᚐTime(ctx, v)
 			if err != nil {
@@ -3919,8 +3907,6 @@ func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj i
 			}
 			it.Resolves = data
 		case "closes":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("closes"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
@@ -3928,8 +3914,6 @@ func (ec *executionContext) unmarshalInputNewForecast(ctx context.Context, obj i
 			}
 			it.Closes = data
 		case "created":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("created"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
@@ -3957,8 +3941,6 @@ func (ec *executionContext) unmarshalInputNewOutcome(ctx context.Context, obj in
 		}
 		switch k {
 		case "text":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("text"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
@@ -3986,8 +3968,6 @@ func (ec *executionContext) unmarshalInputNewProbability(ctx context.Context, ob
 		}
 		switch k {
 		case "value":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("value"))
 			data, err := ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
@@ -3995,8 +3975,6 @@ func (ec *executionContext) unmarshalInputNewProbability(ctx context.Context, ob
 			}
 			it.Value = data
 		case "outcome":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("outcome"))
 			data, err := ec.unmarshalONewOutcome2ᚖgithubᚗcomᚋcleodoraᚑforecastingᚋcleodoraᚋcleosrvᚋgraphᚋmodelᚐNewOutcome(ctx, v)
 			if err != nil {
@@ -4004,8 +3982,6 @@ func (ec *executionContext) unmarshalInputNewProbability(ctx context.Context, ob
 			}
 			it.Outcome = data
 		case "outcomeId":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("outcomeId"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
