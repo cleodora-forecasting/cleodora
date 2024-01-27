@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.21.5
 
 require (
-	github.com/99designs/gqlgen v0.17.42
+	github.com/99designs/gqlgen v0.17.43
 	github.com/Khan/genqlient v0.6.0
 	github.com/adrg/xdg v0.4.0
 	github.com/carolynvs/magex v0.9.0
