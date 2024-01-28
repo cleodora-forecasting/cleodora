@@ -17,7 +17,7 @@ console.log('API_URL: ' + API_URL);
 // The function was found here:
 // https://github.com/apollographql/apollo-client/issues/4017#issuecomment-1260987147
 async function loggingFetch(
-    input: RequestInfo,
+    input: RequestInfo | URL,
     init?: RequestInit
 ): Promise<Response> {
     interface Request {
