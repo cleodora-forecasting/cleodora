@@ -2,6 +2,9 @@
 
 package main
 
+// gopls is showing a warning above because it does not understand the mage build
+// tag. It's a known issue: https://stackoverflow.com/q/76730583
+
 import (
 	"bufio"
 	"bytes"
