@@ -434,14 +434,6 @@ func ensureGitDiffEmpty() {
 	}
 }
 
-func ensureOnMainBranch() {
-	out, err := shx.Output("git", "rev-parse", "--abbrev-ref", "HEAD")
-	mgx.Must(err)
-	if out != "main" {
-		mgx.Must(errors.New("Not on main! Exiting"))
-	}
-}
-
 // ask a yes/no question.
 func ask(question string, defaultYes bool) bool {
 	choices := "Y/n"
