@@ -135,51 +135,29 @@ func InstallDeps() {
 
 // MergeDependabot merges all open dependabot PRs.
 func MergeDependabot() error {
-	ensureOnMainBranch()
-	ensureGitDiffEmpty()
-
-	_ = must.RunV("git", "fetch")
-	_ = must.RunV("git", "remote", "prune", "origin")
-
-	skipContent, err := os.ReadFile("dependabot_pr_skip")
-	if err != nil && !errors.Is(err, os.ErrNotExist) {
-		return err
-	}
-	prsToSkip := strings.Split(string(skipContent), "\n")
-
-	out, err := shx.Output(
-		"git",
-		"for-each-ref",
-		"--format=%(refname)",
-		"refs/remotes/origin/dependabot/",
-	)
+	out, err := shx.Output("gh", "pr", "list", "--search", "review:none", "--json", "number", "--jq", ".[].number")
 	mgx.Must(err)
-	if out == "" {
-		fmt.Println("Nothing to merge")
-		return nil
-	}
-
-PRLoop:
 	for _, pr := range strings.Split(out, "\n") {
-		fmt.Printf("PR: %v\n", pr)
-		for _, prToSkip := range prsToSkip {
-			prToSkip = strings.TrimSpace(prToSkip)
-			if prToSkip != "" && strings.HasSuffix(pr, prToSkip) {
-				fmt.Println("***** Skipping this PR! *****")
-				continue PRLoop
-			}
-		}
-		err = shx.Run("git", "merge-base", "--is-ancestor", pr, "HEAD")
-		if err == nil {
-			fmt.Println("Already merged")
+		pr = strings.TrimSpace(pr)
+		if pr == "" {
 			continue
 		}
-		_ = must.RunV("git", "merge", pr, "-m", "Merge dependabot update")
-		fmt.Println()
+		out, err := shx.Output("gh", "pr", "diff", "--color=always", pr)
+		mgx.Must(err)
+		pager := exec.Command("less", "-r")
+		pager.Stdin = strings.NewReader(out)
+		pager.Stdout = os.Stdout
+		pager.Stderr = os.Stderr
+		mgx.Must(pager.Run())
+		fmt.Print("Approve ", pr, "? (y/N): ")
+		var userInput string
+		_, err = fmt.Scanln(&userInput)
+		mgx.Must(err)
+		if userInput == "y" {
+			_ = must.RunV("gh", "pr", "review", "-a", pr)
+			_ = must.RunV("gh", "pr", "comment", "-b", "@dependabot merge", pr)
+		}
 	}
-	fmt.Println("All PRs merged")
-	mg.Deps(All)
-	fmt.Println("Successfully done. You must run 'git push' to publish the changes.")
 	return nil
 }
 
