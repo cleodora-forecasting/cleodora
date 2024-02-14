@@ -8,7 +8,7 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.15.10",
-    "@mui/material": "^5.15.9",
+    "@mui/material": "^5.15.10",
     "@mui/x-date-pickers": "^6.19.4",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
