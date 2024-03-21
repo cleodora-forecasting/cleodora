@@ -9,6 +9,6 @@
     "cypress": "^13.6.4",
     "eslint": "^8.56.0",
     "eslint-plugin-cypress": "^2.15.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.3"
   }
 }
