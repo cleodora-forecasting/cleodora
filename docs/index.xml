@@ -1,10 +1,71 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docs on Cleodora Forecasting</title><link>https://cleodora.org/docs/</link><description>Recent content in Docs on Cleodora Forecasting</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://cleodora.org/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Use Cases</title><link>https://cleodora.org/docs/use-cases/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/use-cases/</guid><description>Use Cases # Some examples how Cleodora could be used.
-Mindy the engineer # Mindy is an engineer who works at a company that just hired a new CEO on January 1st 2022. She predicts he will leave the company by the end of the year.
-Mindy makes the following forecast on January 2nd 2022:
-Will Tom, our new CEO, leave the company by December 31st 2022? Prediction: Yes Confidence: 60% Reasoning: His track record shows that he switched companies 8 times in the last 10 years and I have a bad gut feeling about him.</description></item><item><title>Comparison with other tools</title><link>https://cleodora.org/docs/comparison/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/comparison/</guid><description>Comparison with other tools # Manifold Markets # Cleodora is different from Manifold Markets because:
-Running it locally on your computer is the default and all forecasts are private whereas, on Manifold everything is public. Cleodora is about your own forecasts, not other people&amp;rsquo;s. You can directly measure the quality of your forecasts instead of only indirectly via the amount of M$ (mana) you earn over time, meaning you can better drill down where exactly you failed in specific instances.</description></item><item><title>Contact &amp; Feedback</title><link>https://cleodora.org/docs/contact/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/contact/</guid><description>Contact &amp;amp; Feedback # Feedback and suggestions are very welcome!
-Open a ticket on GitHub or send an e-mail (info@cleodora.org).</description></item><item><title>FAQ - Frequently Asked Questions</title><link>https://cleodora.org/docs/faq/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/faq/</guid><description>FAQ - Frequently Asked Questions # Why care about forecasting? # Forecasting is an important skill. Essentially all decisions we take are based on vague gut-level predictions. For example before leaving for the airport you predict how much the traffic will delay you on your way, timing your departure appropriately. You also make a prediction about how likely you think it is your car will suffer a catastrophic engine failure on the road.</description></item><item><title>Credits</title><link>https://cleodora.org/docs/credits/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/credits/</guid><description> Credits # All the wonderful people who have contributed to this project. &amp;lsquo;External link&amp;rsquo; icon, used in the menu, free with attribution from flaticon.com</description></item><item><title>Changelog</title><link>https://cleodora.org/docs/changelog/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/changelog/</guid><description>Changelog # All notable changes to this project will be documented in this file.
-The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
-Unreleased # Added # API: Allow adding new estimates to existing forecasts. (#276) Git history
-v0.3.0 # Release date: 2023-05-25
-Added # API, Frontend: Estimates from forecasts that have been resolved now include the Brier score. (#298, #499) The cleosrv binary now also supports a --version/-v flag in addition to the identical version subcommand because it&amp;rsquo;s more convenient.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docs on Cleodora Forecasting</title><link>https://cleodora.org/docs/</link><description>Recent content in Docs on Cleodora Forecasting</description><generator>Hugo</generator><language>en-us</language><atom:link href="https://cleodora.org/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Use Cases</title><link>https://cleodora.org/docs/use-cases/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/use-cases/</guid><description>&lt;h1 id="use-cases"&gt;Use Cases&lt;a class="anchor" href="#use-cases"&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Some examples how Cleodora could be used.&lt;/p&gt;
+&lt;h2 id="mindy-the-engineer"&gt;Mindy the engineer&lt;a class="anchor" href="#mindy-the-engineer"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Mindy is an engineer who works at a company that just hired a new CEO on
+January 1st 2022. She predicts he will leave the company by the end of the
+year.&lt;/p&gt;
+&lt;p&gt;Mindy makes the following forecast on January 2nd 2022:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Will Tom, our new CEO, leave the company by December 31st 2022?&lt;/li&gt;
+&lt;li&gt;Prediction: Yes&lt;/li&gt;
+&lt;li&gt;Confidence: 60%&lt;/li&gt;
+&lt;li&gt;Reasoning: His track record shows that he switched companies 8 times in the
+last 10 years and I have a bad gut feeling about him.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;On March 12th 2022 Mindy updates her forecast:&lt;/p&gt;</description></item><item><title>Comparison with other tools</title><link>https://cleodora.org/docs/comparison/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/comparison/</guid><description>&lt;h1 id="comparison-with-other-tools"&gt;Comparison with other tools&lt;a class="anchor" href="#comparison-with-other-tools"&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id="manifold-markets"&gt;Manifold Markets&lt;a class="anchor" href="#manifold-markets"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Cleodora is different from &lt;a href="https://manifold.markets"&gt;Manifold Markets&lt;/a&gt;
+because:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Running it locally on your computer is the default and all forecasts are
+private whereas, on Manifold everything is public.&lt;/li&gt;
+&lt;li&gt;Cleodora is about your own forecasts, not other people&amp;rsquo;s.&lt;/li&gt;
+&lt;li&gt;You can directly measure the quality of your forecasts instead of only
+indirectly via the amount of M$ (mana) you earn over time, meaning you can
+better drill down where exactly you failed in specific instances.&lt;/li&gt;
+&lt;li&gt;If the probability you currently predict is the same as the market, then in
+Manifold there is nothing you can do. Your ability to make a forecast depends
+on other people, whereas in Cleodora it&amp;rsquo;s only about you.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="metaculus"&gt;Metaculus&lt;a class="anchor" href="#metaculus"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Cleodora is different from &lt;a href="https://metaculus.com"&gt;Metaculus&lt;/a&gt; because:&lt;/p&gt;</description></item><item><title>Contact &amp; Feedback</title><link>https://cleodora.org/docs/contact/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/contact/</guid><description>&lt;h1 id="contact--feedback"&gt;Contact &amp;amp; Feedback&lt;a class="anchor" href="#contact--feedback"&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Feedback and suggestions are very welcome!&lt;/p&gt;
+&lt;p&gt;Open a &lt;a href="https://github.com/cleodora-forecasting/cleodora/issues"&gt;ticket on
+GitHub&lt;/a&gt; or &lt;a href="mailto:info@cleodora.org"&gt;send an
+e-mail (info@cleodora.org)&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>FAQ - Frequently Asked Questions</title><link>https://cleodora.org/docs/faq/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/faq/</guid><description>&lt;h1 id="faq---frequently-asked-questions"&gt;FAQ - Frequently Asked Questions&lt;a class="anchor" href="#faq---frequently-asked-questions"&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id="why-care-about-forecasting"&gt;Why care about forecasting?&lt;a class="anchor" href="#why-care-about-forecasting"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Forecasting is an important skill. Essentially all decisions we take are based
+on vague gut-level predictions. For example before leaving for the airport you
+predict how much the traffic will delay you on your way, timing your departure
+appropriately. You also make a prediction about how likely you think it is your
+car will suffer a catastrophic engine failure on the road. If you thought this
+was very likely to happen, you would take a cab instead.&lt;/p&gt;</description></item><item><title>Credits</title><link>https://cleodora.org/docs/credits/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/credits/</guid><description>&lt;h1 id="credits"&gt;Credits&lt;a class="anchor" href="#credits"&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;All the &lt;a href="https://github.com/cleodora-forecasting/cleodora#contributors"&gt;wonderful
+people&lt;/a&gt; who
+have contributed to this project.&lt;/li&gt;
+&lt;li&gt;&amp;lsquo;External link&amp;rsquo; icon, used in the menu, free with attribution from
+&lt;a href="https://www.flaticon.com/free-icon/link_2990159"&gt;flaticon.com&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Changelog</title><link>https://cleodora.org/docs/changelog/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cleodora.org/docs/changelog/</guid><description>&lt;h1 id="changelog"&gt;Changelog&lt;a class="anchor" href="#changelog"&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;All notable changes to this project will be documented in this file.&lt;/p&gt;
+&lt;p&gt;The format is based on &lt;a href="https://keepachangelog.com/en/1.1.0/"&gt;Keep a Changelog&lt;/a&gt;,
+and this project adheres to &lt;a href="https://semver.org/spec/v2.0.0.html"&gt;Semantic Versioning&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id="unreleased"&gt;Unreleased&lt;a class="anchor" href="#unreleased"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id="added"&gt;Added&lt;a class="anchor" href="#added"&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;API: Allow adding new estimates to existing forecasts.
+(&lt;a href="https://github.com/cleodora-forecasting/cleodora/issues/276"&gt;#276&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href="https://github.com/cleodora-forecasting/cleodora/compare/v0.3.0...HEAD"&gt;Git history&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="v030"&gt;v0.3.0&lt;a class="anchor" href="#v030"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Release date: 2023-05-25&lt;/p&gt;
+&lt;h3 id="added-1"&gt;Added&lt;a class="anchor" href="#added-1"&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;API, Frontend: Estimates from forecasts that have been resolved now include
+the Brier score.
+(&lt;a href="https://github.com/cleodora-forecasting/cleodora/issues/298"&gt;#298&lt;/a&gt;,
+&lt;a href="https://github.com/cleodora-forecasting/cleodora/issues/499"&gt;#499&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;cleosrv&lt;/code&gt; binary now also supports a &lt;code&gt;--version/-v&lt;/code&gt; flag in addition to
+the identical &lt;code&gt;version&lt;/code&gt; subcommand because it&amp;rsquo;s more convenient.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href="https://github.com/cleodora-forecasting/cleodora/compare/v0.2.0...v0.3.0"&gt;Git history&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>
