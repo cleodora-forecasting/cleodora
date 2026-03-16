@@ -10,7 +10,7 @@ require (
 	github.com/adrg/xdg v0.4.0
 	github.com/carolynvs/magex v0.9.0
 	github.com/cockroachdb/errors v1.11.1
-	github.com/glebarez/sqlite v1.10.0
+	github.com/glebarez/sqlite v1.11.0
 	github.com/go-chi/chi/v5 v5.0.11
 	github.com/golangci/golangci-lint v1.56.1
 	github.com/goreleaser/goreleaser v1.24.0
